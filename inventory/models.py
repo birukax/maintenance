@@ -25,6 +25,7 @@ class Contact(BaseCreatedUpdated):
 
 
 class Item(BaseCreatedUpdated):
+    no = models.CharField(default=1, max_length=20)
     name = models.CharField(max_length=100)
     uom = models.ForeignKey(
         UnitOfMeasure, on_delete=models.RESTRICT, related_name="items"
@@ -36,6 +37,15 @@ class Item(BaseCreatedUpdated):
         choices=choices.ITEM_CATEGORIES, max_length=25, null=True, blank=True
     )
     suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
+
+    def save(self, *args, **kwargs):
+
+        if self.type:
+            self.no = f"{self.type[0:3]}{self.id}"
+        else:
+            self.no = f"ITEM{id}"
+
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["name"]
@@ -56,6 +66,7 @@ class Inventory(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["-updated_at"]
+        verbose_name_plural = "inventories"
 
 
 class PurchaseSchedule(BaseCreatedUpdated):
