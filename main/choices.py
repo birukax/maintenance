@@ -1,0 +1,31 @@
+YESNO = ((True, "Yes"), (False, "No"))
+ITEM_TYPES = (("MECHANICAL", "MECHANICAL"), ("ELECTRICAL", "ELECTRICAL"))
+ITEM_CATEGORIES = (("TOOL", "TOOL"), ("SPAREPART", "SPAREPART"))
+MONTH_NAMES = (
+    ("JANUARY", "JANUARY"),
+    ("FEBRUARY", "FEBRUARY"),
+    ("MARCH", "MARCH"),
+    ("APRIL", "APRIL"),
+    ("MAY", "MAY"),
+    ("JUNE", "JUNE"),
+    ("JULY", "JULY"),
+    ("AUGUST", "AUGUST"),
+    ("SEPTEMBER", "SEPTEMBER"),
+    ("OCTOBER", "OCTOBER"),
+    ("NOVEMBER", "NOVEMBER"),
+    ("DECEMBER", "DECEMBER"),
+)
+
+PRIORITIES = (
+    ("URGENT", "URGENT"),
+    ("HIGH", "HIGH"),
+    ("MEDIUM", "MEDIUM"),
+    ("LOW", "LOW"),
+)
+
+PURCHASE_STATUS = (
+    ("PENDING-APPROVAL", "PENDING-APPROVAL"),
+    ("APPROVED", "APPROVED"),
+    ("REJECTED", "REJECTED"),
+    ("RECEIVED", "RECEIVED"),
+)
