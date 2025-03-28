@@ -7,8 +7,11 @@ from main.tasks import BaseCreatedUpdated
 
 
 class UnitOfMeasure(BaseCreatedUpdated):
-    code = models.CharField(max_length=10)
+    code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
 
 
 class Contact(BaseCreatedUpdated):
@@ -16,6 +19,9 @@ class Contact(BaseCreatedUpdated):
     email = models.EmailField()
     phone_no = models.CharField(max_length=20)
     location = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["name"]
 
 
 class Item(BaseCreatedUpdated):
@@ -29,9 +35,10 @@ class Item(BaseCreatedUpdated):
     category = models.CharField(
         choices=choices.ITEM_CATEGORIES, max_length=25, null=True, blank=True
     )
-    suppliers = models.ManyToManyField(
-        Contact, on_delete=models.RESTRICT, related_name="items", null=True
-    )
+    suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
+
+    class Meta:
+        ordering = ["name"]
 
 
 class Inventory(BaseCreatedUpdated):
@@ -47,6 +54,9 @@ class Inventory(BaseCreatedUpdated):
     )
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    class Meta:
+        ordering = ["-updated_at"]
+
 
 class PurchaseSchedule(BaseCreatedUpdated):
     item = models.OneToOneField(
@@ -59,6 +69,9 @@ class PurchaseSchedule(BaseCreatedUpdated):
         max_digits=10, decimal_places=2, null=True, blank=True
     )
 
+    class Meta:
+        ordering = ["-updated_at"]
+
 
 class MonthlyPurchaseSchedule(BaseCreatedUpdated):
     purchase_schedule = models.ForeignKey(
@@ -66,10 +79,13 @@ class MonthlyPurchaseSchedule(BaseCreatedUpdated):
         on_delete=models.RESTRICT,
         related_name="monthly_purchase_schedules",
     )
-    month = models.CharField(choices=choices.MONTH_NAMES, max_length=25)
+    month = models.CharField(choices=choices.MONTH_NAMES, max_length=25, default=1)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+
+    class Meta:
+        ordering = ["month"]
 
 
 class PurchaseRequest(BaseCreatedUpdated):
@@ -96,3 +112,6 @@ class PurchaseRequest(BaseCreatedUpdated):
     status = models.CharField(
         choices=choices.PURCHASE_STATUS, max_length=50, default="PENDING-APPROVAL"
     )
+
+    class Meta:
+        ordering = ["-updated_at"]
