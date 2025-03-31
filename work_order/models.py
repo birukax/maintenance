@@ -53,6 +53,11 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
         related_name="tool_work_orders",
     )
+    status = models.CharField(
+        choices=choices.WORK_ORDER_STATUS,
+        max_length=25,
+        default="Created",
+    )
     total_time_required = models.DurationField()
 
 

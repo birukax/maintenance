@@ -1,5 +1,4 @@
-from django.contrib.auth.models import User
-from rest_framework import status, generics, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import (
@@ -12,7 +11,6 @@ from .models import (
     PurchaseRequest,
 )
 from .serializers import (
-    UserSerializer,
     UnitOfMeasureSerializer,
     ContactSerializer,
     ItemSerializer,
@@ -21,11 +19,6 @@ from .serializers import (
     MonthlyPurchaseScheduleSerializer,
     PurchaseRequestSerializer,
 )
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
 
 
 class UnitOfMeasureViewSet(viewsets.ModelViewSet):

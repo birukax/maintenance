@@ -1,15 +1,10 @@
 from django.urls import path, include
 from rest_framework import routers
-from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
-
 router = routers.DefaultRouter()
-router.register(
-    r"users",
-    views.UserViewSet,
-    basename="user",
-)
+
+
 router.register(
     r"unit-of-measures",
     views.UnitOfMeasureViewSet,
@@ -26,7 +21,7 @@ router.register(
     basename="item",
 )
 router.register(
-    r"inventorys",
+    r"inventories",
     views.InventoryViewSet,
     basename="inventory",
 )

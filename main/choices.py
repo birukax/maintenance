@@ -37,3 +37,12 @@ WORK_ORDER_TYPES = (
     ("PM03", "Scheduled Work-Order"),
     ("PM04", "Project Work-Order"),
 )
+
+WORK_ORDER_STATUS = (
+    ("Requested", "Requested"),
+    ("Accepted", "Accepted"),
+    ("Created", "Created"),
+    ("Assigned", "Assigned"),
+    ("Incomplete", "Incomplete"),
+    ("Completed", "Completed"),
+)

@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from rest_framework import serializers
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -8,13 +8,6 @@ from .models import (
     MonthlyPurchaseSchedule,
     PurchaseRequest,
 )
-from rest_framework import serializers
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username"]
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
@@ -51,6 +44,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
+        model = Inventory
         fields = [
             "item",
             "purchased_quantity",
@@ -62,6 +56,7 @@ class InventorySerializer(serializers.ModelSerializer):
 
 class PurchaseScheduleSerializer(serializers.ModelSerializer):
     class Meta:
+        model = PurchaseSchedule
         fields = [
             "item",
             "minimum_stock_level",
@@ -71,6 +66,7 @@ class PurchaseScheduleSerializer(serializers.ModelSerializer):
 
 class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
     class Meta:
+        model = MonthlyPurchaseSchedule
         fields = [
             "purchase_schedule",
             "month",
@@ -80,6 +76,7 @@ class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
 
 class PurchaseRequestSerializer(serializers.ModelSerializer):
     class Meta:
+        model = PurchaseRequest
         fields = [
             "item",
             "quantity",
