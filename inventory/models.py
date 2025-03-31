@@ -126,3 +126,19 @@ class PurchaseRequest(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["-updated_at"]
+
+
+class Consumption(BaseCreatedUpdated):
+    item = models.ForeignKey(
+        Item, on_delete=models.RESTRICT, related_name="consumptions"
+    )
+    quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+
+
+class Return(BaseCreatedUpdated):
+    item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="returns")
+    quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
