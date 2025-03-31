@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -8,6 +9,12 @@ from .models import (
     PurchaseRequest,
 )
 from rest_framework import serializers
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username"]
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
@@ -71,7 +78,7 @@ class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
         ]
 
 
-class PurchaseRequestScheduleSerializer(serializers.ModelSerializer):
+class PurchaseRequestSerializer(serializers.ModelSerializer):
     class Meta:
         fields = [
             "item",
