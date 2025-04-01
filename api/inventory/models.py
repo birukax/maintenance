@@ -25,7 +25,7 @@ class Contact(BaseCreatedUpdated):
 
 
 class Item(BaseCreatedUpdated):
-    no = models.CharField(default=1, max_length=20)
+    no = models.CharField(default=1, max_length=20, unique=True)
     name = models.CharField(max_length=100)
     uom = models.ForeignKey(
         UnitOfMeasure, on_delete=models.RESTRICT, related_name="items"
