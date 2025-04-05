@@ -6,10 +6,10 @@ colorama==0.4.6
 cryptography==44.0.2
 defusedxml==0.7.1
 Django==5.1.7
+django-cors-headers==4.7.0
 django-decouple==2.1
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.5.0
-httpie==3.2.4
 idna==3.10
 markdown-it-py==3.0.0
 mdurl==0.1.2
