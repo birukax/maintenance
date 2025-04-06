@@ -1,13 +1,13 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {store} from '../store/store';
-
+import { setTokens } from '../store/slices/authSlice';
 interface Tokens {
     access: string;
     refresh: string;
 }
 
 const api: AxiosInstance = axios.create({
-    baseURL: 'http:localhost:8000',
+    baseURL: 'http://localhost:8000',
 });
 
 api.interceptors.request.use(
@@ -49,7 +49,8 @@ api.interceptors.response.use(
                     store.dispatch({type: 'auth/logout'});
                     return Promise.reject(refreshError);
                 }
-            }
+            } 
+            
         }
         return Promise.reject(error);
     }

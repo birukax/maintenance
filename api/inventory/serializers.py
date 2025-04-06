@@ -11,9 +11,12 @@ from .models import (
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = UnitOfMeasure
         fields = [
+            "id",
             "code",
             "name",
         ]
@@ -31,15 +34,27 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    uom = UnitOfMeasureSerializer(read_only=True)
+    uom_id = serializers.IntegerField(write_only=True)
+    suppliers = ContactSerializer(read_only=True, many=True, required=False)
+
     class Meta:
         model = Item
         fields = [
+            "no",
             "name",
             "uom",
+            "uom_id",
             "type",
             "category",
             "suppliers",
         ]
+
+    def create(self, validated_data):
+        uom_id = validated_data.pop("uom_id")
+        uom = UnitOfMeasure.objects.get(id=uom_id)
+        item = Item.objects.create(uom=uom, **validated_data)
+        return item
 
 
 class InventorySerializer(serializers.ModelSerializer):

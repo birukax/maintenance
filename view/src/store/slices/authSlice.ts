@@ -6,24 +6,24 @@ interface Tokens {
     refresh: string;
 }
 
-interface Item {
-    no: string;
-    name: string;
-    uom: string;
-    type: string;
-    category: string;
-    suppliers?: string[];
-}
+// interface Item {
+//     no: string;
+//     name: string;
+//     uom: string;
+//     type: string;
+//     category: string;
+//     suppliers?: string[];
+// }
 
-interface DataState<T> {
-    data: T[] | null;
+interface DataState {
+    data: [] | null;
     loading: boolean;
     error: string | null;
 }
 
 interface AuthState {
     tokens: Tokens | null;
-    items: DataState<Item>;
+    items: DataState;
 }
 
 const initialState: AuthState = {
@@ -31,7 +31,7 @@ const initialState: AuthState = {
     items: {data: null, loading: false, error: null},
 };
 
-export const fetchItems = createAsyncThunk<Item[], void, {rejectValue: string}>(
+export const fetchItems = createAsyncThunk<[], void, {rejectValue: string}>(
     'auth/fetchItems',
     async(_, {rejectWithValue }) => {
         try {
@@ -62,7 +62,7 @@ const authSlice = createSlice({
             state.items.loading = true;
             state.items.error = null;
         })
-        .addCase(fetchItems.fulfilled, (state, action: PayloadAction<Item[]>) => {
+        .addCase(fetchItems.fulfilled, (state, action: PayloadAction<[]>) => {
             state.items.loading = false;
             state.items.data = action.payload;
         })

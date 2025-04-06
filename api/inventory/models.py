@@ -13,6 +13,9 @@ class UnitOfMeasure(BaseCreatedUpdated):
     class Meta:
         ordering = ["code"]
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Contact(BaseCreatedUpdated):
     name = models.CharField(max_length=100)
@@ -39,12 +42,11 @@ class Item(BaseCreatedUpdated):
     suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
 
     def save(self, *args, **kwargs):
-
-        if self.type:
-            self.no = f"{self.type[0:3]}{self.id}"
-        else:
-            self.no = f"ITEM{id}"
-
+        if not self.no:
+            if self.type:
+                self.no = f"{self.type[0:3]}{self.id}"
+            else:
+                self.no = f"ITEM{self.id}"
         super().save(*args, **kwargs)
 
     class Meta:

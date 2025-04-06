@@ -1,13 +1,205 @@
-import { useState } from 'react'
-import './App.css'
+import React, { useState } from "react";
+import { Routes, Route, Navigate, useNavigate, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { AppState, AppDispatch } from "./store/store";
+import { logout } from "./store/slices/authSlice";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import CreateItem from "./pages/CreateItem";
+import ItemsPage from "./pages/ItemsPage";
+import "./index.css";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  Box,
+  CssBaseline,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
-function App() {
+const drawerWidth = 240;
+
+const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const tokens = useSelector((state: AppState) => state.auth.tokens);
+  return tokens ? <>{children}</> : <Navigate to="/login" />;
+};
+
+const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const tokens = useSelector((state) => state.auth.tokens);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  if (!tokens) {
+    return <Typography>Please log in to view the dashboard.</Typography>;
+  }
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  const drawer = (
+    <div>
+      <Toolbar /> {/* Spacer for AppBar */}
+      <List>
+        <ListItem button component={Link} to="/dashboard">
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem button component={Link} to="/items">
+          <ListItemIcon>
+            <InventoryIcon />
+          </ListItemIcon>
+          <ListItemText primary="Items" />
+        </ListItem>
+        <ListItem button onClick={handleLogout}>
+          <ListItemIcon>
+            <ExitToAppIcon />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </List>
+    </div>
+  );
 
   return (
-    <>
-     
-    </>
-  )
-}
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }}
+      >
+        <Toolbar className="justify-between">
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Maintenance System
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={handleLogout}
+            className="mt-4 bg-gray"
+          >
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
+        {/* Temporary drawer for mobile */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }} // Better mobile performance
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        {/* Persistent drawer for desktop */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          mt: 8, // Offset for AppBar
+        }}
+      >
+        {children}
+      </Box>
+    </Box>
+  );
+};
 
-export default App
+const App: React.FC = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <Dashboard />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/items"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ItemsPage />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/items/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateItem />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
+    </Routes>
+  );
+};
+
+export default App;
