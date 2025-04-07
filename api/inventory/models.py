@@ -28,7 +28,7 @@ class Contact(BaseCreatedUpdated):
 
 
 class Item(BaseCreatedUpdated):
-    no = models.CharField(default=1, max_length=20, unique=True)
+    no = models.CharField(blank=True, max_length=20, unique=True)
     name = models.CharField(max_length=100)
     uom = models.ForeignKey(
         UnitOfMeasure, on_delete=models.RESTRICT, related_name="items"
@@ -42,10 +42,14 @@ class Item(BaseCreatedUpdated):
     suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
 
     def save(self, *args, **kwargs):
-        if self.type:
-            self.no = f"{self.type[0:3]}{self.id}"
-        else:
-            self.no = f"ITEM{self.id}"
+        if self.pk is None:
+                if self.type:
+                    prefix = f'{self.type[0:4]}'
+                else:
+                    prefix = f"ITEM"
+                last_item = Item.objects.order_by('-pk').first()
+                next_id = last_item.pk + 1 if last_item else 1
+                self.no = f"{prefix}{next_id}"
         super().save(*args, **kwargs)
 
     class Meta:

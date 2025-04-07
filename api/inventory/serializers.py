@@ -23,6 +23,7 @@ class UnitOfMeasureSerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Contact
         fields = [
@@ -41,6 +42,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = [
+            'id',
             "no",
             "name",
             "uom",
