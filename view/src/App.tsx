@@ -5,8 +5,14 @@ import { AppState, AppDispatch } from "./store/store";
 import { logout } from "./store/slices/authSlice";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import CreateItem from "./pages/CreateItem";
-import ItemList from "./pages/Item/List";
+import ItemList from "./pages/item/List";
+import ItemDetail from "./pages/item/Detail";
+import CreateItem from "./pages/item/Create";
+import ItemEdit from "./pages/item/Edit";
+import CreateContact from "./pages/contact/Create";
+import ContactList from "./pages/contact/List";
+import ContactDetail from "./pages/contact/Detail";
+
 import {
   AppBar,
   Toolbar,
@@ -25,6 +31,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import ContactsIcon from "@mui/icons-material/Contacts";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 const drawerWidth = 240;
@@ -37,7 +44,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
 };
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const tokens = useSelector((state) => state.auth.tokens);
+  const tokens = useSelector((state: AppState) => state.auth.tokens);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -71,6 +78,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </ListItemIcon>
           <ListItemText primary="Items" />
         </ListItemButton>
+        <ListItemButton component={Link} to="/contacts">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Contacts" />
+        </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
             <ExitToAppIcon />
@@ -91,7 +104,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar className="justify-between">
+        <Toolbar className="justify-between bg-slate-700">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -105,9 +118,9 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             Maintenance System
           </Typography>
           <Button
+            className="mt-4 !bg-slate-700"
             variant="contained"
             onClick={handleLogout}
-            className="mt-4 bg-gray"
           >
             Logout
           </Button>
@@ -193,6 +206,56 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <CreateItem />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/item/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ItemDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/item/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ItemEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/contacts"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ContactList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/contacts/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateContact />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/contact/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ContactDetail />
             </AppLayout>
           </PrivateRoute>
         }

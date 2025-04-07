@@ -12,7 +12,6 @@ from .models import (
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-
     class Meta:
         model = UnitOfMeasure
         fields = [
@@ -27,6 +26,7 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = [
+            'id',
             "name",
             "email",
             "phone_no",
@@ -35,6 +35,7 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     uom = UnitOfMeasureSerializer(read_only=True)
     uom_id = serializers.IntegerField(write_only=True)
     suppliers = ContactSerializer(read_only=True, many=True, required=False)
@@ -60,9 +61,11 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class InventorySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Inventory
         fields = [
+            'id',
             "item",
             "purchased_quantity",
             "consumed_quantity",
@@ -72,9 +75,11 @@ class InventorySerializer(serializers.ModelSerializer):
 
 
 class PurchaseScheduleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = PurchaseSchedule
         fields = [
+            'id',
             "item",
             "minimum_stock_level",
             "quantity",
@@ -82,9 +87,11 @@ class PurchaseScheduleSerializer(serializers.ModelSerializer):
 
 
 class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = MonthlyPurchaseSchedule
         fields = [
+            'id',
             "purchase_schedule",
             "month",
             "quantity",
@@ -92,9 +99,11 @@ class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
 
 
 class PurchaseRequestSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = PurchaseRequest
         fields = [
+            'id',
             "item",
             "quantity",
             "received_quantity",

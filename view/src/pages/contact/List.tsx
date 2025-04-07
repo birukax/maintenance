@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Navigate } from "react-router-dom";
-import { fetchItems } from "../../store/slices/itemSlice";
+import { fetchContacts } from "../../store/slices/contactSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
   Typography,
@@ -18,61 +18,60 @@ import { Link } from "react-router-dom";
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { items } = useSelector((state: AppState) => state.item);
+  const { contacts } = useSelector((state: AppState) => state.contact);
   const dispatch = useDispatch<AppDispatch>();
   const navigte = useNavigate();
 
   useEffect(() => {
-    if (tokens && !items.data && !items.loading) {
-      dispatch(fetchItems());
+    if (tokens && !contacts.data && !contacts.loading) {
+      dispatch(fetchContacts());
     }
-  }, [tokens, items.data, items.loading, dispatch]);
+  }, [tokens, contacts.data, contacts.loading, dispatch]);
 
   const handleRefresh = () => {
-    dispatch(fetchItems());
+    dispatch(fetchContacts());
   };
 
   if (!tokens) {
-    return <Typography>Please log in to view items.</Typography>;
+    return <Typography>Please log in to view contacts.</Typography>;
   }
-  const headers = ["ID", "Name", "Type", "Category", "UoM Code", "Detail"];
+  const headers = ["Name", "Email", "Phone No.", "Location", "Detail"];
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between contacts-center">
         <Typography variant="h5" className="font-bold">
-          Inventory Items
+          Contacts
         </Typography>
-        <Button component={Link} to="/items/create">
-          Add Item
+        <Button component={Link} to="/contacts/create">
+          Add Contact
         </Button>
         <Button
           variant="outlined"
           startIcon={<RefreshIcon />}
           onClick={handleRefresh}
-          disabled={items.loading}
+          disabled={contacts.loading}
         >
           Refresh
         </Button>
       </div>
-      {items.loading && <CircularProgress />}
-      {items.error && (
+      {contacts.loading && <CircularProgress />}
+      {contacts.error && (
         <Typography variant="body2" className="text-red-500">
-          {items.error}
+          {contacts.error}
         </Typography>
       )}
       <ListTable headers={headers}>
         <TableBody>
-          {items.data &&
-            items.data.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.no}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.type}</TableCell>
-                <TableCell>{item.category}</TableCell>
-                <TableCell>{item.uom.code}</TableCell>
+          {contacts.data &&
+            contacts.data.map((contact) => (
+              <TableRow key={contact.id}>
+                <TableCell>{contact.name}</TableCell>
+                <TableCell>{contact.email}</TableCell>
+                <TableCell>{contact.phone_no}</TableCell>
+                <TableCell>{contact.location}</TableCell>
                 <TableCell>
-                  <Button component={Link} to={`/item/detail/${item.id}`}>
+                  <Button component={Link} to={`/contact/detail/${contact.id}`}>
                     Detail
                   </Button>
                 </TableCell>

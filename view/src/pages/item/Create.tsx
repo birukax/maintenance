@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchItems } from "../store/slices/authSlice";
-import api from "../utils/api";
-import { ITEM_TYPES, ITEM_CATEGORIES } from "../utils/choices";
+import { fetchItems } from "../../store/slices/itemSlice";
+import api from "../../utils/api";
+import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
   TextField,
   Button,
@@ -17,7 +17,7 @@ import {
   Box,
 } from "@mui/material";
 
-const ItemForm = () => {
+const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
     uom_id: "",
@@ -162,4 +162,4 @@ const ItemForm = () => {
   );
 };
 
-export default ItemForm;
+export default Create;
