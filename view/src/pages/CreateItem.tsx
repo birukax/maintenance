@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchItems } from "../store/slices/authSlice";
 import api from "../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../utils/choices";
 import {
@@ -13,13 +14,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  FormHelperText,
+  Box,
 } from "@mui/material";
 
 const ItemForm = () => {
   const [formData, setFormData] = useState({
     name: "",
-    uom_id: 0,
+    uom_id: "",
     type: "",
     category: "",
   });
@@ -59,6 +60,7 @@ const ItemForm = () => {
     setError(null);
     try {
       await api.post("/inventory/items/", formData);
+      dispatch(fetchItems());
       navigate("/items");
     } catch (err) {
       setError(err.response?.data.detail || err.message);
@@ -67,14 +69,19 @@ const ItemForm = () => {
     }
   };
   return (
-    <Container className="flex flex-col items-center justify-center min-h-screen">
+    <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
         Create Item
       </Typography>
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        className="w-full max-w-lg space-y-4"
+      >
         <TextField
           label="Name"
           name="name"
+          className="mb-8"
           variant="outlined"
           fullWidth
           value={formData.name}
@@ -150,7 +157,7 @@ const ItemForm = () => {
             {error}
           </Typography>
         )}
-      </form>
+      </Box>
     </Container>
   );
 };

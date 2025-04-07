@@ -6,8 +6,7 @@ import { logout } from "./store/slices/authSlice";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CreateItem from "./pages/CreateItem";
-import ItemsPage from "./pages/ItemsPage";
-import "./index.css";
+import ItemList from "./pages/Item/List";
 import {
   AppBar,
   Toolbar,
@@ -16,6 +15,7 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   IconButton,
@@ -57,26 +57,26 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const drawer = (
     <div>
-      <Toolbar /> {/* Spacer for AppBar */}
+      <Toolbar />
       <List>
-        <ListItem button component={Link} to="/dashboard">
+        <ListItemButton component={Link} to="/dashboard">
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem button component={Link} to="/items">
+        </ListItemButton>
+        <ListItemButton component={Link} to="/items">
           <ListItemIcon>
             <InventoryIcon />
           </ListItemIcon>
           <ListItemText primary="Items" />
-        </ListItem>
-        <ListItem button onClick={handleLogout}>
+        </ListItemButton>
+        <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
           <ListItemText primary="Logout" />
-        </ListItem>
+        </ListItemButton>
       </List>
     </div>
   );
@@ -182,7 +182,7 @@ const App: React.FC = () => {
         element={
           <PrivateRoute>
             <AppLayout>
-              <ItemsPage />
+              <ItemList />
             </AppLayout>
           </PrivateRoute>
         }
