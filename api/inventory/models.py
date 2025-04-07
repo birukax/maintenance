@@ -42,11 +42,10 @@ class Item(BaseCreatedUpdated):
     suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
 
     def save(self, *args, **kwargs):
-        if not self.no:
-            if self.type:
-                self.no = f"{self.type[0:3]}{self.id}"
-            else:
-                self.no = f"ITEM{self.id}"
+        if self.type:
+            self.no = f"{self.type[0:3]}{self.id}"
+        else:
+            self.no = f"ITEM{self.id}"
         super().save(*args, **kwargs)
 
     class Meta:
