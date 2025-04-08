@@ -104,7 +104,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ bgcolor: "primary.dark" }} className="justify-between">
+        <Toolbar sx={{ bgcolor: "white" }} className="justify-between">
           <IconButton
             aria-label="open drawer"
             edge="start"
@@ -113,17 +113,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography sx={{color:'primary.dark'}} variant="h6" noWrap>
             Maintenance System
           </Typography>
           <Button
-            sx={{
-              bordercolor: "white ",
-              color: "primary",
-              border: 2,
-            }}
             className="mt-4 "
-            variant="outlined"
+            variant="contained"
             onClick={handleLogout}
           >
             Logout

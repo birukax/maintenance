@@ -47,7 +47,7 @@ const List: React.FC = () => {
           Add Contact
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           startIcon={<RefreshIcon />}
           onClick={handleRefresh}
           disabled={contacts.loading}
