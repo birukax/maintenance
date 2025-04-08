@@ -5,7 +5,11 @@ import authReducer from './slices/authSlice';
 import itemReducer from './slices/itemSlice';
 import contactReducer from './slices/contactSlice';
 
-// type RootState = ReturnType<typeof itemReducer>;
+interface RootState {
+  auth: ReturnType<typeof authReducer>;
+  item: ReturnType<typeof itemReducer>;
+  contact: ReturnType<typeof contactReducer>;
+}
 
 const rootReducer = {
     auth: authReducer,
@@ -13,9 +17,10 @@ const rootReducer = {
     contact: contactReducer,
 }
 
-const persistConfig: PersistConfig = {
+const persistConfig: PersistConfig<RootState> = {
     key: 'root',
     storage,
+    whitelist: ['auth'],
 };
 
 const persistedReducer = persistReducer(persistConfig, combineReducers(rootReducer));
@@ -25,7 +30,6 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
           serializableCheck: {
-            // Ignore redux-persist actions for serializability check
             ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
           },
         }),

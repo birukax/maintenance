@@ -26,7 +26,7 @@ const List: React.FC = () => {
     if (tokens && !items.data && !items.loading) {
       dispatch(fetchItems());
     }
-  }, [tokens, items.data, items.loading, dispatch]);
+  }, []);
 
   const handleRefresh = () => {
     dispatch(fetchItems());
@@ -47,7 +47,7 @@ const List: React.FC = () => {
           Add Item
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           startIcon={<RefreshIcon />}
           onClick={handleRefresh}
           disabled={items.loading}

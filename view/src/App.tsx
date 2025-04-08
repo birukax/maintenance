@@ -104,9 +104,8 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar className="justify-between bg-slate-700">
+        <Toolbar sx={{ bgcolor: "primary.dark" }} className="justify-between">
           <IconButton
-            color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
@@ -118,8 +117,13 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             Maintenance System
           </Typography>
           <Button
-            className="mt-4 !bg-slate-700"
-            variant="contained"
+            sx={{
+              bordercolor: "white ",
+              color: "primary",
+              border: 2,
+            }}
+            className="mt-4 "
+            variant="outlined"
             onClick={handleLogout}
           >
             Logout

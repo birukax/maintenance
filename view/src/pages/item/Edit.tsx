@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchItem } from "../../store/slices/itemSlice";
+import {
+  fetchItem,
+  updateItem,
+  fetchItems,
+} from "../../store/slices/itemSlice";
+import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
@@ -29,7 +34,7 @@ const Create = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [uoms, setUoms] = useState([]);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
     value: ITEM_TYPES[key][0],
@@ -40,10 +45,15 @@ const Create = () => {
     label: ITEM_CATEGORIES[key][1],
   }));
   useEffect(() => {
-    if (tokens && !item.data && !item.loading) {
+    if (tokens && id && !item.data && !item.loading) {
       dispatch(fetchItem(id));
     }
-  }, [tokens, item.data, item.loading, dispatch, id]);
+    setFormData({
+      uom_id: item.data.uom.id,
+      type: item.data.type,
+      category: item.data.category,
+    });
+  }, [tokens, dispatch, id]);
 
   useEffect(() => {
     const fetchUoms = async () => {
@@ -61,13 +71,16 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      await api.post("/inventory/items/", formData);
-      navigate(`item/detail/${item.id}}`);
+      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
+      dispatch(updateItem({ id, formData }));
+      dispatch(fetchItems());
+      navigate(`/item/detail/${item.data.id}}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -77,7 +90,7 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Item
+        Edit Item
       </Typography>
       <Box
         component="form"
@@ -145,7 +158,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Item"}
+          {loading ? <CircularProgress size={24} /> : "Edit Item"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

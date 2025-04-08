@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchItems } from "../../store/slices/itemSlice";
+import { fetchItems, createItem } from "../../store/slices/itemSlice";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
@@ -59,7 +59,7 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/inventory/items/", formData);
+      dispatch(createItem(formData));
       dispatch(fetchItems());
       navigate("/items");
     } catch (err) {

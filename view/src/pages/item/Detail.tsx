@@ -8,33 +8,41 @@ import { Container, Button, Typography, CircularProgress } from "@mui/material";
 
 const Detail = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { item } = useSelector((state: AppState) => state.item.item);
+  const { item } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (tokens && !item.data && !item.loading) {
+    if (tokens && id && !item.data && !item.loading) {
       dispatch(fetchItem(id));
     }
-  }, [tokens, item.data, item.loading, dispatch, id]);
+  }, [tokens, dispatch, id]);
 
   if (!tokens) {
     return <Typography>Please log in to view items.</Typography>;
   }
+  if (!id) {
+    return <Typography>Item not found.</Typography>;
+  }
   return (
     <Container>
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h4" className="mb-6 text-slate-800">
         Item Detail
       </Typography>
       {item.loading ? (
         <CircularProgress />
       ) : item.data ? (
         <>
-          <Button component={Link} to={`/item/edit/${item.data.id}`}>
+          <Button
+            variant="contained"
+            component={Link}
+            to={`/item/edit/${item.data.id}`}
+            className="bg-slate-700"
+          >
             Edit Item
           </Button>
-          <Typography variant="body2" className="text-gray-500">
+          <Typography variant="body2" className="text-slate-500">
             {item.data.name}
           </Typography>
         </>
