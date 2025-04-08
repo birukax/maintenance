@@ -22,66 +22,85 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigte = useNavigate();
 
-  useEffect(() => {
-    if (tokens && !items.data && !items.loading) {
-      dispatch(fetchItems());
-    }
-  }, []);
+const rowStyle = {
+  textTransform: "capitalize",
+  fontSize: 16,
+};
 
-  const handleRefresh = () => {
+useEffect(() => {
+  if (tokens && !items.data && !items.loading) {
     dispatch(fetchItems());
-  };
-
-  if (!tokens) {
-    return <Typography>Please log in to view items.</Typography>;
   }
-  const headers = ["ID", "Name", "Type", "Category", "UoM Code", "Detail"];
+}, []);
 
-  return (
-    <>
-      <div className="flex justify-between items-center">
-        <Typography variant="h5" className="font-bold">
-          Inventory Items
-        </Typography>
-        <Button component={Link} to="/items/create">
-          Add Item
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<RefreshIcon />}
-          onClick={handleRefresh}
-          disabled={items.loading}
-        >
-          Refresh
-        </Button>
-      </div>
-      {items.loading && <CircularProgress />}
-      {items.error && (
-        <Typography variant="body2" className="text-red-500">
-          {items.error}
-        </Typography>
-      )}
-      <ListTable headers={headers}>
-        <TableBody>
-          {items.data &&
-            items.data.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.no}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.type}</TableCell>
-                <TableCell>{item.category}</TableCell>
-                <TableCell>{item.uom.code}</TableCell>
-                <TableCell>
-                  <Button component={Link} to={`/item/detail/${item.id}`}>
-                    Detail
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </ListTable>
-    </>
-  );
+const handleRefresh = () => {
+  dispatch(fetchItems());
+};
+
+if (!tokens) {
+  return <Typography>Please log in to view items.</Typography>;
+}
+const headers = ["ID", "Name", "Type", "Category", "UoM Code", "Detail"];
+
+return (
+  <>
+    <div className="flex justify-between items-center">
+      <Typography variant="h5" className="font-bold">
+        Inventory Items
+      </Typography>
+      <Button component={Link} to="/items/create">
+        Add Item
+      </Button>
+      <Button
+        variant="contained"
+        startIcon={<RefreshIcon />}
+        onClick={handleRefresh}
+        disabled={items.loading}
+      >
+        Refresh
+      </Button>
+    </div>
+    {items.loading && <CircularProgress />}
+    {items.error && (
+      <Typography variant="body2" className="text-red-500">
+        {items.error}
+      </Typography>
+    )}
+    <ListTable headers={headers}>
+      <TableBody>
+        {items.data &&
+          items.data.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                {" "}
+                <Typography sx={rowStyle}>{item.no}</Typography>
+              </TableCell>
+              <TableCell>
+                {" "}
+                <Typography sx={rowStyle}>{item.name}</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={rowStyle}>{item.type.toLowerCase()}</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={rowStyle}>
+                  {item.category.toLowerCase()}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography sx={rowStyle}>{item.uom.name}</Typography>
+              </TableCell>
+              <TableCell>
+                <Button component={Link} to={`/item/detail/${item.id}`}>
+                  Detail
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+      </TableBody>
+    </ListTable>
+  </>
+);
 };
 
 export default List;
