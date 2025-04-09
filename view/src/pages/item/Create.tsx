@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchItems, createItem } from "../../store/slices/itemSlice";
+import { createItem } from "../../store/slices/itemSlice";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
@@ -60,7 +60,6 @@ const Create = () => {
     setError(null);
     try {
       dispatch(createItem(formData));
-      dispatch(fetchItems());
       navigate("/items");
     } catch (err) {
       setError(err.response?.data.detail || err.message);

@@ -12,6 +12,7 @@ import ItemEdit from "./pages/item/Edit";
 import CreateContact from "./pages/contact/Create";
 import ContactList from "./pages/contact/List";
 import ContactDetail from "./pages/contact/Detail";
+import ContactEdit from "./pages/contact/Edit";
 
 import {
   AppBar,
@@ -113,14 +114,10 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography sx={{color:'primary.dark'}} variant="h6" noWrap>
+          <Typography sx={{ color: "primary.dark" }} variant="h6" noWrap>
             Maintenance System
           </Typography>
-          <Button
-            className="mt-4 "
-            variant="contained"
-            onClick={handleLogout}
-          >
+          <Button className="mt-4 " variant="contained" onClick={handleLogout}>
             Logout
           </Button>
         </Toolbar>
@@ -255,6 +252,16 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <ContactDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/contact/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ContactEdit />
             </AppLayout>
           </PrivateRoute>
         }
