@@ -13,6 +13,7 @@ import CreateContact from "./pages/contact/Create";
 import ContactList from "./pages/contact/List";
 import ContactDetail from "./pages/contact/Detail";
 import ContactEdit from "./pages/contact/Edit";
+import InventoryList from "./pages/inventory/List";
 
 import CreateUnitOfMeasure from "./pages/unit-of-measure/Create";
 import UnitOfMeasureList from "./pages/unit-of-measure/List";
@@ -95,6 +96,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Unit of Measures" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/inventories">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Inventory" />
         </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
@@ -313,6 +320,16 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <UnitOfMeasureEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/inventories"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <InventoryList />
             </AppLayout>
           </PrivateRoute>
         }

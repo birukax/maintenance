@@ -62,6 +62,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class InventorySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    item = ItemSerializer(read_only=True)
     class Meta:
         model = Inventory
         fields = [

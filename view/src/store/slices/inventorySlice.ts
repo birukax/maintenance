@@ -17,7 +17,7 @@ const initialState: InventoryState = {
   inventory: { data: null, loading: false, error: null },
 };
 
-export const fetchInventorys = createAsyncThunk<
+export const fetchInventories = createAsyncThunk<
   [],
   void,
   { rejectValue: string }
@@ -28,6 +28,21 @@ export const fetchInventorys = createAsyncThunk<
   } catch (error) {
     return rejectWithValue(
       error.response?.data?.detail || "Failed to fetch inventories"
+    );
+  }
+});
+
+export const revaluateStock = createAsyncThunk<
+  [],
+  void,
+  { rejectValue: string }
+>("inventory/revaluateStock", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get("/inventory/inventories/revaluate_stock/");
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(
+      error.response?.data?.detail || "Failed to reavaluate stock"
     );
   }
 });
@@ -84,18 +99,33 @@ const inventorySlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchInventorys.pending, (state) => {
+      .addCase(fetchInventories.pending, (state) => {
         state.inventories.loading = true;
         state.inventories.error = null;
       })
       .addCase(
-        fetchInventorys.fulfilled,
+        fetchInventories.fulfilled,
         (state, action: PayloadAction<[]>) => {
           state.inventories.loading = false;
           state.inventories.data = action.payload;
         }
       )
-      .addCase(fetchInventorys.rejected, (state, action) => {
+      .addCase(fetchInventories.rejected, (state, action) => {
+        state.inventories.loading = false;
+        state.inventories.error = action.payload || "Unknown error";
+      })
+      .addCase(revaluateStock.pending, (state) => {
+        state.inventories.loading = true;
+        state.inventories.error = null;
+      })
+      .addCase(
+        revaluateStock.fulfilled,
+        (state, action: PayloadAction<[]>) => {
+          state.inventories.loading = false;
+          state.inventories.data = action.payload;
+        }
+      )
+      .addCase(revaluateStock.rejected, (state, action) => {
         state.inventories.loading = false;
         state.inventories.error = action.payload || "Unknown error";
       })

@@ -59,13 +59,13 @@ class Item(BaseCreatedUpdated):
 class Inventory(BaseCreatedUpdated):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="items")
     purchased_quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
     consumed_quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
     returned_quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
