@@ -21,7 +21,7 @@ export const fetchContacts = createAsyncThunk<[], void, {rejectValue: string}>(
     'contact/fetchContacts',
     async(_, {rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/contacts/');
+            const response = await api.get('/inventory/purchase-schedules/');
             return response.data;
         }
         catch (error) {
@@ -35,7 +35,7 @@ export const fetchContact = createAsyncThunk<[], number, { rejectValue: string }
     'contact/fetchContact',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await api.get(`/inventory/contacts/${id}/`)
+            const response = await api.get(`/inventory/purchase-schedules/${id}/`)
             return response.data;
         }
         catch (error) {
@@ -48,7 +48,7 @@ export const createContact = createAsyncThunk<[],  formData  , { rejectValue: st
     'contact/createContact',
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/inventory/contacts/', formData);
+            const response = await api.post('/inventory/purchase-schedules/', formData);
             return response.data;
         }
         catch (error) {
@@ -61,7 +61,7 @@ export const updateContact = createAsyncThunk<[], { id: string, formData: { [key
     'contact/updateContact',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/inventory/contacts/${id}/`, formData);
+            const response = await api.patch(`/inventory/purchase-schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data.detail || error.message);
