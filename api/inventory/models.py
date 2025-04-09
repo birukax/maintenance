@@ -114,7 +114,7 @@ class PurchaseRequest(BaseCreatedUpdated):
         default=0,
     )
     received_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    requested_date = models.DateField(default=datetime.datetime.today)
+    requested_date = models.DateField(default=datetime.date.today)
     requested_by = models.ForeignKey(
         User,
         on_delete=models.RESTRICT,

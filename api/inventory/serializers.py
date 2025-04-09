@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -8,6 +9,12 @@ from .models import (
     MonthlyPurchaseSchedule,
     PurchaseRequest,
 )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "is_active"]
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
@@ -106,12 +113,17 @@ class PurchaseScheduleSerializer(serializers.ModelSerializer):
 
 class PurchaseRequestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    item_id = serializers.IntegerField(write_only=True)
     item = ItemSerializer(read_only=True)
+    requested_by = UserSerializer(read_only=True)
+    approved_by = UserSerializer(read_only=True)
+
     class Meta:
         model = PurchaseRequest
         fields = [
-            'id',
+            "id",
             "item",
+            "item_id",
             "quantity",
             "received_quantity",
             "requested_date",
@@ -121,3 +133,9 @@ class PurchaseRequestSerializer(serializers.ModelSerializer):
             "priority",
             "status",
         ]
+
+    def create(self, validated_data):
+        item_id = validated_data.pop("item_id")
+        item = Item.objects.get(id=item_id)
+        purchase_request = PurchaseRequest.objects.create(item=item, **validated_data)
+        return purchase_request

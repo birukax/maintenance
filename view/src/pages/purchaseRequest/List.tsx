@@ -31,7 +31,7 @@ const List: React.FC = () => {
   };
 
   useEffect(() => {
-    if (tokens && !purchaseRequests.data && !purchaseRequests.loading) {
+    if (tokens) {
       dispatch(fetchPurchaseRequests());
     }
   }, []);
@@ -116,13 +116,15 @@ const List: React.FC = () => {
 
                 <TableCell>
                   <Typography sx={rowStyle}>
-                    {purchaseRequest.requested_by}
+                    {purchaseRequest.requested_by !== null &&
+                      purchaseRequest.requested_by.username}
                   </Typography>
                 </TableCell>
 
                 <TableCell>
                   <Typography sx={rowStyle}>
-                    {purchaseRequest.approved_by}
+                    {purchaseRequest.approved_by !== null &&
+                      purchaseRequest.approved_by.username}
                   </Typography>
                 </TableCell>
 
