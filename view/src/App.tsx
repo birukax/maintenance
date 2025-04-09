@@ -14,6 +14,11 @@ import ContactList from "./pages/contact/List";
 import ContactDetail from "./pages/contact/Detail";
 import ContactEdit from "./pages/contact/Edit";
 
+import CreateUnitOfMeasure from "./pages/unit-of-measure/Create";
+import UnitOfMeasureList from "./pages/unit-of-measure/List";
+import UnitOfMeasureDetail from "./pages/unit-of-measure/Detail";
+import UnitOfMeasureEdit from "./pages/unit-of-measure/Edit";
+
 import {
   AppBar,
   Toolbar,
@@ -84,6 +89,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Contacts" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/unit-of-measures/">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Unit of Measures" />
         </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
@@ -197,7 +208,7 @@ const App: React.FC = () => {
         }
       />
       <Route
-        path="/items/create"
+        path="/item/create"
         element={
           <PrivateRoute>
             <AppLayout>
@@ -237,7 +248,7 @@ const App: React.FC = () => {
         }
       />
       <Route
-        path="/contacts/create"
+        path="/contact/create"
         element={
           <PrivateRoute>
             <AppLayout>
@@ -262,6 +273,46 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <ContactEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/unit-of-measures"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <UnitOfMeasureList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/unit-of-measure/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateUnitOfMeasure />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/unit-of-measure/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <UnitOfMeasureDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/unit-of-measure/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <UnitOfMeasureEdit />
             </AppLayout>
           </PrivateRoute>
         }

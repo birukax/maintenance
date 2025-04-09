@@ -37,8 +37,7 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/inventory/contacts/", formData);
-      dispatch(createContact());
+      dispatch(createContact(formData));
       navigate("/contacts");
     } catch (err) {
       setError(err.response?.data.detail || err.message);

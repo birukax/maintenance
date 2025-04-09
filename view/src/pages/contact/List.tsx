@@ -26,7 +26,7 @@ const List: React.FC = () => {
     if (tokens) {
       dispatch(fetchContacts());
     }
-  }, [tokens, dispatch]);
+  }, []);
 
   const handleRefresh = () => {
     dispatch(fetchContacts());
@@ -35,7 +35,7 @@ const List: React.FC = () => {
   if (!tokens) {
     return <Typography>Please log in to view contacts.</Typography>;
   }
-  const headers = ["Name", "Email", "Phone No.", "Location", "Detail"];
+  const headers = ["Name", "Email", "Phone No.", "Location", "Action"];
 
   return (
     <>
@@ -43,8 +43,8 @@ const List: React.FC = () => {
         <Typography variant="h5" className="font-bold">
           Contacts
         </Typography>
-        <Button component={Link} to="/contacts/create">
-          Add Contact
+        <Button component={Link} to="/contact/create">
+          New
         </Button>
         <Button
           variant="contained"

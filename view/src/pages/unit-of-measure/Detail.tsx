@@ -1,54 +1,56 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { fetchContact } from "../../store/slices/contactSlice";
+import { fetchUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import { Container, Button, Typography, CircularProgress } from "@mui/material";
 
 const Detail = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contact } = useSelector((state: AppState) => state.contact);
+  const { unitOfMeasure } = useSelector(
+    (state: AppState) => state.unitOfMeasure
+  );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    if (tokens && id && !contact.data && !contact.loading) {
-      dispatch(fetchContact(id));
+    if (tokens && id && !unitOfMeasure.data && !unitOfMeasure.loading) {
+      dispatch(fetchUnitOfMeasure(id));
     }
   }, [tokens, dispatch, id]);
 
   if (!tokens) {
-    return <Typography>Please log in to view contacts.</Typography>;
+    return <Typography>Please log in to view Unit Of Measures.</Typography>;
   }
   if (!id) {
-    return <Typography>Contact not found.</Typography>;
+    return <Typography>Unit Of Measure not found.</Typography>;
   }
 
   return (
     <Container>
       <Typography variant="h4" className="mb-6 text-slate-800">
-        Contact Detail
+        Unit of Measure Detail
       </Typography>
-      {contact.loading ? (
+      {unitOfMeasure.loading ? (
         <CircularProgress />
-      ) : contact.data ? (
+      ) : unitOfMeasure.data ? (
         <>
           <Button
             variant="contained"
             component={Link}
-            to={`/contact/edit/${contact.data.id}`}
+            to={`/unit-of-measure/edit/${unitOfMeasure.data.id}`}
             className="bg-slate-700"
           >
-            Edit Contact
+            Edit
           </Button>
           <Typography variant="body2" className="text-slate-500">
-            {contact.data.name}
+            {unitOfMeasure.data.name}
           </Typography>
         </>
       ) : (
-        contact.error
+        unitOfMeasure.error
       )}
     </Container>
   );

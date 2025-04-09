@@ -31,7 +31,7 @@ const Edit = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id && !contact.data && !contact.loading) {
+    if (tokens && id) {
       dispatch(fetchContact(id));
     }
     setFormData({
@@ -39,7 +39,7 @@ const Edit = () => {
       phone_no: contact.data.phone_no,
       location: contact.data.location,
     });
-  }, [tokens, dispatch, id]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +53,6 @@ const Edit = () => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       dispatch(updateContact({ id, formData }));
-      dispatch(fetchContacts());
       navigate(`/contact/detail/${contact.data.id}}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);

@@ -40,7 +40,7 @@ const Detail = () => {
             to={`/item/edit/${item.data.id}`}
             className="bg-slate-700"
           >
-            Edit Item
+            Edit
           </Button>
           <Typography variant="body2" className="text-slate-500">
             {item.data.name}

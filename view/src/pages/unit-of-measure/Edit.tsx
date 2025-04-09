@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  fetchContact,
-  updateContact,
-  fetchContacts,
-} from "../../store/slices/contactSlice";
+  fetchUnitOfMeasure,
+  updateUnitOfMeasure,
+} from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import {
@@ -19,27 +18,27 @@ import {
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    phone_no: "",
-    location: "",
+    code: "",
+    name: "",
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contact } = useSelector((state: AppState) => state.contact);
+  const { unitOfMeasure } = useSelector(
+    (state: AppState) => state.unitOfMeasure
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id && !contact.data && !contact.loading) {
-      dispatch(fetchContact(id));
+    if (tokens && id) {
+      dispatch(fetchUnitOfMeasure(id));
     }
     setFormData({
-      email: contact.data.email,
-      phone_no: contact.data.phone_no,
-      location: contact.data.location,
+      code: unitOfMeasure.data.code,
+      name: unitOfMeasure.data.name,
     });
-  }, [tokens, dispatch, id]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,9 +51,8 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateContact({ id, formData }));
-      dispatch(fetchContacts());
-      navigate(`/contact/detail/${contact.data.id}}`);
+      dispatch(updateUnitOfMeasure({ id, formData }));
+      navigate(`/unit-of-measure/detail/${unitOfMeasure.data.id}}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -64,49 +62,36 @@ const Edit = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Contact
+        Edit Unit Of Measure
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
+        {" "}
         <TextField
-          label="Email"
-          name="email"
-          type="email"
+          label="Code"
+          name="code"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.email}
+          value={formData.code}
           onChange={handleChange}
           required
           disabled={loading}
         />
         <TextField
-          label="Location"
-          name="location"
+          label="Name"
+          name="name"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.location}
+          value={formData.name}
           onChange={handleChange}
           required
           disabled={loading}
         />
-
-        <TextField
-          label="Phone No."
-          name="phone_no"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.phone_no}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
         <Button
           type="submit"
           variant="contained"
@@ -115,7 +100,7 @@ const Edit = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Edit Contact"}
+          {loading ? <CircularProgress size={24} /> : "Edit Unit of Measure"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

@@ -14,10 +14,10 @@ const Detail = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    if (tokens && id && !contact.data && !contact.loading) {
+    if (tokens && id) {
       dispatch(fetchContact(id));
     }
-  }, [tokens, dispatch, id]);
+  }, []);
 
   if (!tokens) {
     return <Typography>Please log in to view contacts.</Typography>;
@@ -41,7 +41,7 @@ const Detail = () => {
             to={`/contact/edit/${contact.data.id}`}
             className="bg-slate-700"
           >
-            Edit Contact
+            Edit
           </Button>
           <Typography variant="body2" className="text-slate-500">
             {contact.data.name}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createContact } from "../../store/slices/contactSlice";
+import { createUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
 import api from "../../utils/api";
 import {
   TextField,
@@ -9,19 +9,13 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 
 const Create = () => {
   const [formData, setFormData] = useState({
+    code: "",
     name: "",
-    email: "",
-    phone_no: "",
-    location: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -37,9 +31,8 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/inventory/contacts/", formData);
-      dispatch(createContact());
-      navigate("/contacts");
+      dispatch(createUnitOfMeasure(formData));
+      navigate("/unit-of-measures");
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -49,7 +42,7 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Contact
+        Create Unit of Measure
       </Typography>
       <Box
         component="form"
@@ -57,48 +50,24 @@ const Create = () => {
         className="w-full max-w-lg space-y-4"
       >
         <TextField
+          label="Code"
+          name="code"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.code}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
+
+        <TextField
           label="Name"
           name="name"
           className="mb-8"
           variant="outlined"
           fullWidth
           value={formData.name}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-        <TextField
-          label="Location"
-          name="location"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.location}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
-        <TextField
-          label="Phone No."
-          name="phone_no"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.phone_no}
           onChange={handleChange}
           required
           disabled={loading}
@@ -112,7 +81,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Contact"}
+          {loading ? <CircularProgress size={24} /> : "Create Unit of Measure"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

@@ -40,7 +40,7 @@ const handleRefresh = () => {
 if (!tokens) {
   return <Typography>Please log in to view items.</Typography>;
 }
-const headers = ["ID", "Name", "Type", "Category", "UoM Code", "Detail"];
+const headers = ["ID", "Name", "Type", "Category", "UoM Code", "Action"];
 
 return (
   <>
@@ -48,8 +48,8 @@ return (
       <Typography variant="h5" className="font-bold">
         Inventory Items
       </Typography>
-      <Button component={Link} to="/items/create">
-        Add Item
+      <Button component={Link} to="/item/create">
+        New
       </Button>
       <Button
         variant="contained"

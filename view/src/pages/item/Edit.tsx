@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  fetchItem,
-  updateItem,
-  fetchItems,
-} from "../../store/slices/itemSlice";
+import { fetchItem, updateItem } from "../../store/slices/itemSlice";
+import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
-  TextField,
   Button,
   Typography,
   Container,
@@ -33,7 +29,9 @@ const Create = () => {
   const { item } = useSelector((state: AppState) => state.item);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [uoms, setUoms] = useState([]);
+  const { unitOfMeasures } = useSelector(
+    (state: AppState) => state.unitOfMeasure
+  );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
@@ -45,7 +43,7 @@ const Create = () => {
     label: ITEM_CATEGORIES[key][1],
   }));
   useEffect(() => {
-    if (tokens && id && !item.data && !item.loading) {
+    if (tokens && id) {
       dispatch(fetchItem(id));
     }
     setFormData({
@@ -53,18 +51,12 @@ const Create = () => {
       type: item.data.type,
       category: item.data.category,
     });
-  }, [tokens, dispatch, id]);
+  }, []);
 
   useEffect(() => {
-    const fetchUoms = async () => {
-      try {
-        const response = await api.get("./inventory/unit-of-measures/");
-        setUoms(response.data);
-      } catch (err) {
-        setError(err.response?.data.detail || err.message);
-      }
-    };
-    fetchUoms();
+    if (tokens) {
+      dispatch(fetchUnitOfMeasures());
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -107,11 +99,12 @@ const Create = () => {
             onChange={handleChange}
             label="Unit of Measure"
           >
-            {uoms.map((uom) => (
-              <MenuItem key={uom.id} value={uom.id}>
-                {uom.name}
-              </MenuItem>
-            ))}
+            {unitOfMeasures.data &&
+              unitOfMeasures.data.map((uom) => (
+                <MenuItem key={uom.id} value={uom.id}>
+                  {uom.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Navigate } from "react-router-dom";
-import { fetchContacts } from "../../store/slices/contactSlice";
+import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
   Typography,
@@ -18,60 +18,63 @@ import { Link } from "react-router-dom";
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contacts } = useSelector((state: AppState) => state.contact);
+  const { unitOfMeasures } = useSelector(
+    (state: AppState) => state.unitOfMeasure
+  );
   const dispatch = useDispatch<AppDispatch>();
   const navigte = useNavigate();
 
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchContacts());
+      dispatch(fetchUnitOfMeasures());
     }
   }, [tokens, dispatch]);
 
   const handleRefresh = () => {
-    dispatch(fetchContacts());
+    dispatch(fetchUnitOfMeasures());
   };
 
   if (!tokens) {
-    return <Typography>Please log in to view contacts.</Typography>;
+    return <Typography>Please log in to view Unit Of Measures.</Typography>;
   }
-  const headers = ["Name", "Email", "Phone No.", "Location", "Detail"];
+  const headers = ["Code", "Name", "Action"];
 
   return (
     <>
       <div className="flex justify-between contacts-center">
         <Typography variant="h5" className="font-bold">
-          Contacts
+          Unit Of Measures
         </Typography>
-        <Button component={Link} to="/contacts/create">
-          Add Contact
+        <Button component={Link} to="/unit-of-measure/create">
+          New
         </Button>
         <Button
           variant="contained"
           startIcon={<RefreshIcon />}
           onClick={handleRefresh}
-          disabled={contacts.loading}
+          disabled={unitOfMeasures.loading}
         >
           Refresh
         </Button>
       </div>
-      {contacts.loading && <CircularProgress />}
-      {contacts.error && (
+      {unitOfMeasures.loading && <CircularProgress />}
+      {unitOfMeasures.error && (
         <Typography variant="body2" className="text-red-500">
-          {contacts.error}
+          {unitOfMeasures.error}
         </Typography>
       )}
       <ListTable headers={headers}>
         <TableBody>
-          {contacts.data &&
-            contacts.data.map((contact) => (
-              <TableRow key={contact.id}>
-                <TableCell>{contact.name}</TableCell>
-                <TableCell>{contact.email}</TableCell>
-                <TableCell>{contact.phone_no}</TableCell>
-                <TableCell>{contact.location}</TableCell>
+          {unitOfMeasures.data &&
+            unitOfMeasures.data.map((unitOfMeasure) => (
+              <TableRow key={unitOfMeasure.id}>
+                <TableCell>{unitOfMeasure.code}</TableCell>
+                <TableCell>{unitOfMeasure.name}</TableCell>
                 <TableCell>
-                  <Button component={Link} to={`/contact/detail/${contact.id}`}>
+                  <Button
+                    component={Link}
+                    to={`/unit-of-measure/detail/${unitOfMeasure.id}`}
+                  >
                     Detail
                   </Button>
                 </TableCell>

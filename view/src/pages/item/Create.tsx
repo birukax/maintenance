@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createItem } from "../../store/slices/itemSlice";
+import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
+import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
@@ -24,10 +26,13 @@ const Create = () => {
     type: "",
     category: "",
   });
+  const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [uoms, setUoms] = useState([]);
-  const dispatch = useDispatch();
+  const { unitOfMeasures } = useSelector(
+    (state: AppState) => state.unitOfMeasure
+  );
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
     value: ITEM_TYPES[key][0],
@@ -39,15 +44,9 @@ const Create = () => {
   }));
 
   useEffect(() => {
-    const fetchUoms = async () => {
-      try {
-        const response = await api.get("./inventory/unit-of-measures/");
-        setUoms(response.data);
-      } catch (err) {
-        setError(err.response?.data.detail || err.message);
-      }
-    };
-    fetchUoms();
+    if (tokens) {
+      dispatch(fetchUnitOfMeasures());
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -98,11 +97,12 @@ const Create = () => {
             onChange={handleChange}
             label="Unit of Measure"
           >
-            {uoms.map((uom) => (
-              <MenuItem key={uom.id} value={uom.id}>
-                {uom.name}
-              </MenuItem>
-            ))}
+            {unitOfMeasures.data &&
+              unitOfMeasures.data.map((uom) => (
+                <MenuItem key={uom.id} value={uom.id}>
+                  {uom.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
