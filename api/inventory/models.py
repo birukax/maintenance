@@ -109,17 +109,25 @@ class PurchaseRequest(BaseCreatedUpdated):
         Item, on_delete=models.RESTRICT, related_name="purchase_requests"
     )
     quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        max_digits=10,
+        decimal_places=2,
+        default=0,
     )
-    received_quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    received_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     requested_date = models.DateField(default=datetime.datetime.today)
     requested_by = models.ForeignKey(
-        User, on_delete=models.RESTRICT, related_name="purchase_requests"
+        User,
+        on_delete=models.RESTRICT,
+        related_name="purchase_requests",
+        null=True,
+        blank=True,
     )
     approved_by = models.ForeignKey(
-        User, on_delete=models.RESTRICT, related_name="approved_purchase_requests"
+        User,
+        on_delete=models.RESTRICT,
+        related_name="approved_purchase_requests",
+        null=True,
+        blank=True,
     )
     received_date = models.DateField(null=True, blank=True)
     priority = models.CharField(

@@ -28,6 +28,11 @@ import PurchaseScheduleList from "./pages/purchaseSchedule/List";
 import PurchaseScheduleDetail from "./pages/purchaseSchedule/Detail";
 import PurchaseScheduleEdit from "./pages/purchaseSchedule/Edit";
 
+import CreatePurchaseRequest from "./pages/purchaseRequest/Create";
+import PurchaseRequestList from "./pages/purchaseRequest/List";
+import PurchaseRequestDetail from "./pages/purchaseRequest/Detail";
+import PurchaseRequestEdit from "./pages/purchaseRequest/Edit";
+
 import {
   AppBar,
   Toolbar,
@@ -115,6 +120,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Purchase Schedule" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/purchase-requests">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Purchase Request" />
         </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
@@ -389,6 +400,47 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <PurchaseScheduleEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/purchase-requests"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseRequestList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/purchase-request/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreatePurchaseRequest />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/purchase-request/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseRequestDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/purchase-request/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseRequestEdit />
             </AppLayout>
           </PrivateRoute>
         }
