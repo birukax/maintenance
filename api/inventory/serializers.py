@@ -75,32 +75,38 @@ class InventorySerializer(serializers.ModelSerializer):
         ]
 
 
-class PurchaseScheduleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    class Meta:
-        model = PurchaseSchedule
-        fields = [
-            'id',
-            "item",
-            "minimum_stock_level",
-            "quantity",
-        ]
-
-
 class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     class Meta:
         model = MonthlyPurchaseSchedule
         fields = [
-            'id',
+            "id",
             "purchase_schedule",
             "month",
             "quantity",
         ]
 
 
+class PurchaseScheduleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    item = ItemSerializer(read_only=True)
+    monthly_purchase_schedules = MonthlyPurchaseScheduleSerializer(
+        read_only=True, many=True
+    )
+    class Meta:
+        model = PurchaseSchedule
+        fields = [
+            "id",
+            "item",
+            "minimum_stock_level",
+            "quantity",
+            "monthly_purchase_schedules",
+        ]
+
+
 class PurchaseRequestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    item = ItemSerializer(read_only=True)
     class Meta:
         model = PurchaseRequest
         fields = [

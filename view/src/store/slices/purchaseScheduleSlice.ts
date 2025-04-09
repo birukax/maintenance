@@ -7,32 +7,32 @@ interface DataState {
     error: string | null;
 }
 
-interface ContactState {
-    contacts: DataState;
-    contact: DataState;
+interface PurchaseScheduleState {
+    purchaseSchedules: DataState;
+    purchaseSchedule: DataState;
 }
 
-const initialState: ContactState = {
-    contacts: {data: null, loading: false, error: null},
-    contact: {data: null, loading: false, error: null},
+const initialState: PurchaseScheduleState = {
+    purchaseSchedules: {data: null, loading: false, error: null},
+    purchaseSchedule: {data: null, loading: false, error: null},
 };
 
-export const fetchContacts = createAsyncThunk<[], void, {rejectValue: string}>(
-    'contact/fetchContacts',
+export const fetchPurchaseSchedules = createAsyncThunk<[], void, {rejectValue: string}>(
+    'purchaseSchedule/fetchPurchaseSchedules',
     async(_, {rejectWithValue }) => {
         try {
             const response = await api.get('/inventory/purchase-schedules/');
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch contacts');
+            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch Purchase Schedule');
         }
     }
 )
 
 
-export const fetchContact = createAsyncThunk<[], number, { rejectValue: string }>(
-    'contact/fetchContact',
+export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: string }>(
+    'purchaseSchedule/fetchPurchaseSchedule',
     async (id, { rejectWithValue }) => {
         try {
             const response = await api.get(`/inventory/purchase-schedules/${id}/`)
@@ -44,8 +44,8 @@ export const fetchContact = createAsyncThunk<[], number, { rejectValue: string }
     }
 )
 
-export const createContact = createAsyncThunk<[],  formData  , { rejectValue: string }>(
-    'contact/createContact',
+export const createPurchaseSchedule = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+    'purchaseSchedule/createPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {
             const response = await api.post('/inventory/purchase-schedules/', formData);
@@ -57,8 +57,8 @@ export const createContact = createAsyncThunk<[],  formData  , { rejectValue: st
     }
 )
 
-export const updateContact = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
-    'contact/updateContact',
+export const updatePurchaseSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+    'purchaseSchedule/updatePurchaseSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/purchase-schedules/${id}/`, formData);
@@ -70,63 +70,63 @@ export const updateContact = createAsyncThunk<[], { id: string, formData: { [key
 )
 
 
-const contactSlice = createSlice({
-    name: 'contact',
+const purchaseScheduleSlice = createSlice({
+    name: 'purchaseSchedule',
     initialState,
     reducers: {},
     
     extraReducers: (builder) => {
         builder
-        .addCase(fetchContacts.pending, (state) => {
-            state.contacts.loading = true;
-            state.contacts.error = null;
+        .addCase(fetchPurchaseSchedules.pending, (state) => {
+            state.purchaseSchedules.loading = true;
+            state.purchaseSchedules.error = null;
         })
-        .addCase(fetchContacts.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.contacts.loading = false;
-            state.contacts.data = action.payload;
+        .addCase(fetchPurchaseSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.purchaseSchedules.loading = false;
+            state.purchaseSchedules.data = action.payload;
         })
-        .addCase(fetchContacts.rejected, (state, action) => {
-            state.contacts.loading = false;
-            state.contacts.error = action.payload || 'Unknown error';
+        .addCase(fetchPurchaseSchedules.rejected, (state, action) => {
+            state.purchaseSchedules.loading = false;
+            state.purchaseSchedules.error = action.payload || 'Unknown error';
         })
-        .addCase(fetchContact.pending, (state) => {
-                        state.contact.loading = true;
-                        state.contact.error = null;
+        .addCase(fetchPurchaseSchedule.pending, (state) => {
+                        state.purchaseSchedule.loading = true;
+                        state.purchaseSchedule.error = null;
                     })
-                    .addCase(fetchContact.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.contact.loading = false;
-                        state.contact.data = action.payload;
+                    .addCase(fetchPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.purchaseSchedule.loading = false;
+                        state.purchaseSchedule.data = action.payload;
                     })
-                    .addCase(fetchContact.rejected, (state, action) => {
-                        state.contact.loading = false;
-                        state.contact.error = action.payload || 'Unknown error';
+                    .addCase(fetchPurchaseSchedule.rejected, (state, action) => {
+                        state.purchaseSchedule.loading = false;
+                        state.purchaseSchedule.error = action.payload || 'Unknown error';
                     })
-                    .addCase(createContact.pending, (state) => {
-                        state.contact.loading = true;
-                        state.contact.error = null;
+                    .addCase(createPurchaseSchedule.pending, (state) => {
+                        state.purchaseSchedule.loading = true;
+                        state.purchaseSchedule.error = null;
                     })
-                    .addCase(createContact.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.contact.loading = false;
-                        state.contact.data = action.payload;
+                    .addCase(createPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.purchaseSchedule.loading = false;
+                        state.purchaseSchedule.data = action.payload;
                     })
-                    .addCase(createContact.rejected, (state, action) => {
-                        state.contact.loading = false;
-                        state.contact.error = action.payload || 'Unknown error';
+                    .addCase(createPurchaseSchedule.rejected, (state, action) => {
+                        state.purchaseSchedule.loading = false;
+                        state.purchaseSchedule.error = action.payload || 'Unknown error';
                     })
-                    .addCase(updateContact.pending, (state) => {
-                        state.contact.loading = true;
-                        state.contact.error = null;
+                    .addCase(updatePurchaseSchedule.pending, (state) => {
+                        state.purchaseSchedule.loading = true;
+                        state.purchaseSchedule.error = null;
                     })
-                    .addCase(updateContact.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.contact.loading = false;
-                        state.contact.data = action.payload;
+                    .addCase(updatePurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.purchaseSchedule.loading = false;
+                        state.purchaseSchedule.data = action.payload;
                     })
-                    .addCase(updateContact.rejected, (state, action) => {
-                        state.contact.loading = false;
-                        state.contact.error = action.payload || 'Unknown error';
+                    .addCase(updatePurchaseSchedule.rejected, (state, action) => {
+                        state.purchaseSchedule.loading = false;
+                        state.purchaseSchedule.error = action.payload || 'Unknown error';
                     })
     }
 })
 
-// export const { createContact, updateContact, deleteContact } = contactSlice.actions;
-export default contactSlice.reducer;
+// export const { createPurchaseSchedule, updatePurchaseSchedule, deletePurchaseSchedule } = purchaseScheduleSlice.actions;
+export default purchaseScheduleSlice.reducer;

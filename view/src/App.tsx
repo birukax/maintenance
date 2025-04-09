@@ -5,20 +5,28 @@ import { AppState, AppDispatch } from "./store/store";
 import { logout } from "./store/slices/authSlice";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+
 import ItemList from "./pages/item/List";
 import ItemDetail from "./pages/item/Detail";
 import CreateItem from "./pages/item/Create";
 import ItemEdit from "./pages/item/Edit";
+
 import CreateContact from "./pages/contact/Create";
 import ContactList from "./pages/contact/List";
 import ContactDetail from "./pages/contact/Detail";
 import ContactEdit from "./pages/contact/Edit";
+
 import InventoryList from "./pages/inventory/List";
 
-import CreateUnitOfMeasure from "./pages/unit-of-measure/Create";
-import UnitOfMeasureList from "./pages/unit-of-measure/List";
-import UnitOfMeasureDetail from "./pages/unit-of-measure/Detail";
-import UnitOfMeasureEdit from "./pages/unit-of-measure/Edit";
+import CreateUnitOfMeasure from "./pages/unitOfMeasure/Create";
+import UnitOfMeasureList from "./pages/unitOfMeasure/List";
+import UnitOfMeasureDetail from "./pages/unitOfMeasure/Detail";
+import UnitOfMeasureEdit from "./pages/unitOfMeasure/Edit";
+
+import CreatePurchaseSchedule from "./pages/purchaseSchedule/Create";
+import PurchaseScheduleList from "./pages/purchaseSchedule/List";
+import PurchaseScheduleDetail from "./pages/purchaseSchedule/Detail";
+import PurchaseScheduleEdit from "./pages/purchaseSchedule/Edit";
 
 import {
   AppBar,
@@ -27,7 +35,6 @@ import {
   Typography,
   Drawer,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -102,6 +109,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Inventory" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/purchase-schedules">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Purchase Schedule" />
         </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
@@ -194,6 +207,7 @@ const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+
       <Route
         path="/dashboard"
         element={
@@ -204,6 +218,7 @@ const App: React.FC = () => {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/items"
         element={
@@ -244,6 +259,7 @@ const App: React.FC = () => {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/contacts"
         element={
@@ -284,6 +300,7 @@ const App: React.FC = () => {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/unit-of-measures"
         element={
@@ -324,6 +341,7 @@ const App: React.FC = () => {
           </PrivateRoute>
         }
       />
+
       <Route
         path="/inventories"
         element={
@@ -334,6 +352,48 @@ const App: React.FC = () => {
           </PrivateRoute>
         }
       />
+
+      <Route
+        path="/purchase-schedules"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseScheduleList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/purchase-schedule/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreatePurchaseSchedule />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/purchase-schedule/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseScheduleDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/purchase-schedule/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseScheduleEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
       <Route path="/" element={<Navigate to="/dashboard" />} />
     </Routes>
   );

@@ -95,7 +95,7 @@ class MonthlyPurchaseSchedule(BaseCreatedUpdated):
         on_delete=models.RESTRICT,
         related_name="monthly_purchase_schedules",
     )
-    month = models.CharField(choices=choices.MONTH_NAMES, max_length=25, default=1)
+    month = models.IntegerField(choices=choices.MONTH_NAMES, default=1)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )

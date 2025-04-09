@@ -15,7 +15,7 @@ export const MONTH_NAMES = [
     [10, "OCTOBER"],
     [11, "NOVEMBER"],
     [12, "DECEMBER"],
-]
+] as const;
 
 export const PRIORITIES = [
     ["URGENT", "URGENT"],

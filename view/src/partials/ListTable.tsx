@@ -16,7 +16,9 @@ const ListTable = ({ headers, children }) => {
         <TableHead>
           <TableRow>
             {headers.map((header) => (
-              <TableCell key={header}>{header}</TableCell>
+              <TableCell key={header}>
+                <Typography noWrap>{header}</Typography>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
