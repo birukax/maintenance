@@ -25,7 +25,7 @@ export const fetchPurchaseSchedules = createAsyncThunk<[], void, {rejectValue: s
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch Purchase Schedule');
+            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Schedule');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createPurchaseSchedule = createAsyncThunk<[],  formData  , { reject
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,7 +64,7 @@ export const updatePurchaseSchedule = createAsyncThunk<[], { id: string, formDat
             const response = await api.patch(`/inventory/purchase-schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )

@@ -5,6 +5,7 @@ import authReducer from './slices/authSlice';
 import itemReducer from './slices/itemSlice';
 import returnReducer from './slices/returnSlice';
 import contactReducer from './slices/contactSlice';
+import locationReducer from './slices/locationSlice';
 import inventoryReducer from './slices/inventorySlice';
 import consumptionReducer from './slices/consumptionSlice';
 import unitOfMeasureReducer from './slices/unitOfMeasureSlice';
@@ -18,6 +19,7 @@ interface RootState {
   item: ReturnType<typeof itemReducer>;
   return: ReturnType<typeof returnReducer>;
   contact: ReturnType<typeof contactReducer>;
+  location: ReturnType<typeof locationReducer>;
   inventory: ReturnType<typeof inventoryReducer>;
   consumption: ReturnType<typeof consumptionReducer>;
   unitOfMeasure: ReturnType<typeof unitOfMeasureReducer>;
@@ -32,6 +34,7 @@ const rootReducer = {
     item: itemReducer,
     return: returnReducer,
     contact: contactReducer,
+    location: locationReducer,
     inventory: inventoryReducer,
     consumption: consumptionReducer,
     unitOfMeasure: unitOfMeasureReducer,

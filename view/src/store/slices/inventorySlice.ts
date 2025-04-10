@@ -27,7 +27,7 @@ export const fetchInventories = createAsyncThunk<
     return response.data;
   } catch (error) {
     return rejectWithValue(
-      error.response?.data?.detail || "Failed to fetch inventories"
+      error.response?.data || "Failed to fetch inventories"
     );
   }
 });
@@ -42,7 +42,7 @@ export const revaluateStock = createAsyncThunk<
     return response.data;
   } catch (error) {
     return rejectWithValue(
-      error.response?.data?.detail || "Failed to reavaluate stock"
+      error.response?.data || "Failed to reavaluate stock"
     );
   }
 });
@@ -56,7 +56,7 @@ export const fetchInventory = createAsyncThunk<
     const response = await api.get(`/inventory/inventories/${id}/`);
     return response.data;
   } catch (error) {
-    return rejectWithValue(error.response?.data.detail || error.message);
+    return rejectWithValue(error.response?.data || error.message);
   }
 });
 
@@ -69,7 +69,7 @@ export const createInventory = createAsyncThunk<
     const response = await api.post("/inventory/inventories/", formData);
     return response.data;
   } catch (error) {
-    return rejectWithValue(error.response?.data.detail || error.message);
+    return rejectWithValue(error.response?.data || error.message);
   }
 });
 
@@ -87,7 +87,7 @@ export const updateInventory = createAsyncThunk<
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data.detail || error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

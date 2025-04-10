@@ -25,7 +25,7 @@ export const fetchPurchaseApprovals = createAsyncThunk<[], void, {rejectValue: s
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch Purchase Approvals');
+            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Approvals');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchPurchaseApproval = createAsyncThunk<[], number, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const approvePurchaseApproval = createAsyncThunk<[], number, { rejectValu
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -65,7 +65,7 @@ export const rejectPurchaseApproval = createAsyncThunk<[], number, { rejectValue
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )

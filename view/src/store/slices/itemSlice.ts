@@ -26,7 +26,7 @@ export const fetchItems = createAsyncThunk<[], void, { rejectValue: string }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchItem = createAsyncThunk<[], number, { rejectValue: string }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createItem = createAsyncThunk<[],  formData  , { rejectValue: strin
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateItem = createAsyncThunk<[], { id: string, formData: { [key: s
             const response = await api.patch(`/inventory/items/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )

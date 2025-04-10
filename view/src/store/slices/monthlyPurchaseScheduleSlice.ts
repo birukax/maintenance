@@ -25,7 +25,7 @@ export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, {rejectV
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch Monthly Purchase Schedules');
+            return rejectWithValue(error.response?.data || 'Failed to fetch Monthly Purchase Schedules');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejec
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createMonthlyPurchaseSchedule = createAsyncThunk<[],  formData  , {
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateMonthlyPurchaseSchedule = createAsyncThunk<[], { id: string, 
             const response = await api.patch(`/inventory/monthly-purchase-schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )

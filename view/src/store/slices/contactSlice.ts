@@ -25,7 +25,7 @@ export const fetchContacts = createAsyncThunk<[], void, {rejectValue: string}>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch contacts');
+            return rejectWithValue(error.response?.data || 'Failed to fetch contacts');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchContact = createAsyncThunk<[], number, { rejectValue: string }
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createContact = createAsyncThunk<[],  formData  , { rejectValue: st
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateContact = createAsyncThunk<[], { id: string, formData: { [key
             const response = await api.patch(`/inventory/contacts/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )

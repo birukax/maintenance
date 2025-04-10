@@ -27,7 +27,7 @@ export const fetchUnitOfMeasures = createAsyncThunk<
     return response.data;
   } catch (error) {
     return rejectWithValue(
-      error.response?.data?.detail || "Failed to fetch unitOfMeasures"
+      error.response?.data || "Failed to fetch unitOfMeasures"
     );
   }
 });
@@ -41,7 +41,7 @@ export const fetchUnitOfMeasure = createAsyncThunk<
     const response = await api.get(`/inventory/unit-of-measures/${id}/`);
     return response.data;
   } catch (error) {
-    return rejectWithValue(error.response?.data.detail || error.message);
+    return rejectWithValue(error.response?.data || error.message);
   }
 });
 
@@ -56,7 +56,7 @@ export const createUnitOfMeasure = createAsyncThunk<
       const response = await api.post("/inventory/unit-of-measures/", formData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data.detail || error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -75,7 +75,7 @@ export const updateUnitOfMeasure = createAsyncThunk<
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data.detail || error.message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

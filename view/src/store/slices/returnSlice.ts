@@ -25,7 +25,7 @@ export const fetchReturns = createAsyncThunk<[], void, {rejectValue: string}>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch returns');
+            return rejectWithValue(error.response?.data || 'Failed to fetch returns');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchReturn = createAsyncThunk<[], number, { rejectValue: string }>
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createReturn = createAsyncThunk<[],  formData  , { rejectValue: str
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateReturn = createAsyncThunk<[], { id: string, formData: { [key:
             const response = await api.patch(`/inventory/returns/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )

@@ -25,7 +25,7 @@ export const fetchConsumptions = createAsyncThunk<[], void, {rejectValue: string
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch consumptions');
+            return rejectWithValue(error.response?.data || 'Failed to fetch consumptions');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchConsumption = createAsyncThunk<[], number, { rejectValue: stri
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createConsumption = createAsyncThunk<[],  formData  , { rejectValue
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateConsumption = createAsyncThunk<[], { id: string, formData: { 
             const response = await api.patch(`/inventory/consumptions/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
