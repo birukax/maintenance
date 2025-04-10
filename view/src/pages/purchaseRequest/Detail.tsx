@@ -69,6 +69,10 @@ const Detail = () => {
           <Typography variant="body2" className="text-slate-500">
             {purchaseRequest.data.item.name}
           </Typography>
+
+          <Typography variant="body2" className="text-slate-500">
+            {purchaseRequest.data.status}
+          </Typography>
           <Typography variant="body2" className="text-slate-500">
             {purchaseRequest.data.quantity}
           </Typography>

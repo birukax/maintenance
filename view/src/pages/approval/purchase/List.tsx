@@ -38,12 +38,12 @@ const List: React.FC = () => {
 
   const handleApprove = (id) => {
     dispatch(approvePurchaseApproval(id));
-    dispatch(fetchPurchaseApprovals());
+    handleRefresh();
   };
 
   const handleReject = (id) => {
     dispatch(rejectPurchaseApproval(id));
-    dispatch(fetchPurchaseApprovals());
+    handleRefresh();
   };
 
   const handleRefresh = () => {
@@ -66,7 +66,7 @@ const List: React.FC = () => {
     <>
       <div className="flex justify-between purchaseApprovals-center">
         <Typography variant="h5" className="font-bold">
-          PurchaseApproval List
+          Purchase Approval List
         </Typography>
 
         <Button

@@ -82,7 +82,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
             if purchases.filter(item=i.item).exists():
                 i.purchased_quantity = (
                     purchases.filter(item=i.item)
-                    .aggregate(total=Sum("re ceived_quantity"))
+                    .aggregate(total=Sum("received_quantity"))
                     .get("total")
                 )
             else:
@@ -174,6 +174,7 @@ class PurchaseRequestViewSet(viewsets.ModelViewSet):
             )
         purchase_request.received_quantity = received_quantity
         purchase_request.received_date = received_date
+        purchase_request.status = "RECEIVED"
         purchase_request.save()
         serializer = PurchaseRequestSerializer(purchase_request)
         return Response(serializer.data, status=status.HTTP_200_OK)
