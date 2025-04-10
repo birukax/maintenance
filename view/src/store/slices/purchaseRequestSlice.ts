@@ -25,7 +25,7 @@ export const fetchPurchaseRequests = createAsyncThunk<[], void, {rejectValue: st
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data?.detail || 'Failed to fetch Purchase Requests');
+            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Requests');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -52,7 +52,7 @@ export const createPurchaseRequest = createAsyncThunk<[],  formData  , { rejectV
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -64,10 +64,23 @@ export const updatePurchaseRequest = createAsyncThunk<[], { id: string, formData
             const response = await api.patch(`/inventory/purchase-requests/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data.detail || error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
+
+export const receivePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+    'purchaseRequest/receivePurchaseRequest',
+    async ({ id, formData }, { rejectWithValue }) => {
+        try {
+            const response = await api.patch(`/inventory/purchase-requests/${id}/receive/`, formData);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 
 
 const purchaseRequestSlice = createSlice({
@@ -122,6 +135,18 @@ const purchaseRequestSlice = createSlice({
                         state.purchaseRequest.data = action.payload;
                     })
                     .addCase(updatePurchaseRequest.rejected, (state, action) => {
+                        state.purchaseRequest.loading = false;
+                        state.purchaseRequest.error = action.payload || 'Unknown error';
+                    })
+                    .addCase(receivePurchaseRequest.pending, (state) => {
+                        state.purchaseRequest.loading = true;
+                        state.purchaseRequest.error = null;
+                    })
+                    .addCase(receivePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.purchaseRequest.loading = false;
+                        state.purchaseRequest.data = action.payload;
+                    })
+                    .addCase(receivePurchaseRequest.rejected, (state, action) => {
                         state.purchaseRequest.loading = false;
                         state.purchaseRequest.error = action.payload || 'Unknown error';
                     })

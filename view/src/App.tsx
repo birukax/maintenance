@@ -33,7 +33,6 @@ import PurchaseScheduleEdit from "./pages/purchaseSchedule/Edit";
 import CreatePurchaseRequest from "./pages/purchaseRequest/Create";
 import PurchaseRequestList from "./pages/purchaseRequest/List";
 import PurchaseRequestDetail from "./pages/purchaseRequest/Detail";
-import PurchaseRequestEdit from "./pages/purchaseRequest/Edit";
 
 import CreateConsumption from "./pages/consumption/Create";
 import ConsumptionList from "./pages/consumption/List";
@@ -472,16 +471,6 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <PurchaseRequestDetail />
-            </AppLayout>
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/purchase-request/edit/:id"
-        element={
-          <PrivateRoute>
-            <AppLayout>
-              <PurchaseRequestEdit />
             </AppLayout>
           </PrivateRoute>
         }

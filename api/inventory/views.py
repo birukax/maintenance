@@ -1,4 +1,6 @@
+import datetime
 from django.db.models import Sum
+from rest_framework import serializers
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -47,21 +49,23 @@ class ItemViewSet(viewsets.ModelViewSet):
         try:
             uom = UnitOfMeasure.objects.get(id=uom_id)
         except UnitOfMeasure.DoesNotExist:
-            raise serializer.ValidationError(
+            raise serializers.ValidationError(
                 {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
             )
         item = serializer.save(uom=uom)
         Inventory.objects.create(item=item)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
         uom_id = serializer.validated_data.pop("uom_id")
         try:
             uom = UnitOfMeasure.objects.get(id=uom_id)
         except UnitOfMeasure.DoesNotExist:
-            raise serializer.ValidationError(
+            raise serializers.ValidationError(
                 {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
             )
         serializer.save(uom=uom)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class InventoryViewSet(viewsets.ModelViewSet):
@@ -78,7 +82,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
             if purchases.filter(item=i.item).exists():
                 i.purchased_quantity = (
                     purchases.filter(item=i.item)
-                    .aggregate(total=Sum("received_quantity"))
+                    .aggregate(total=Sum("re ceived_quantity"))
                     .get("total")
                 )
             else:
@@ -125,14 +129,54 @@ class PurchaseRequestViewSet(viewsets.ModelViewSet):
         try:
             item = Item.objects.get(id=item_id)
         except Item.DoesNotExist:
-            raise serializer.ValidationError(
+            raise serializers.ValidationError(
                 {"item_id": f"Item with id {item_id} does not exist."}
             )
+        serializer.is_valid(raise_exception=True)
         purchase_request = serializer.save(
             requested_by=self.request.user,
             item=item,
         )
         Purchase.objects.create(purchase_request=purchase_request)
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["PATCH"])
+    def receive(self, request, pk=None):
+        purchase_request = self.get_object()
+        received_quantity = int(request.data.get("received_quantity"))
+        received_date = request.data.get("received_date")
+        if received_date:
+            try:
+                received_date = datetime.datetime.fromisoformat(
+                    received_date.replace("Z", "+00:00")
+                ).date()
+            except ValueError:
+                received_date = datetime.datetime.strptime(
+                    received_date, "%Y-%m-%d"
+                ).date()
+        else:
+            received_date = datetime.date.today()
+        if received_quantity is not None:
+            if received_quantity > purchase_request.quantity:
+                raise serializers.ValidationError(
+                    {
+                        "received_quantity": "Received quantity cannot be greater than requested quantity."
+                    }
+                )
+            if received_quantity <= 0:
+                raise serializers.ValidationError(
+                    {"received_quantity": "Received quantity cannot be less than 1."}
+                )
+
+        else:
+            raise serializers.ValidationError(
+                {"received_quantity": "Received quantity is required."}
+            )
+        purchase_request.received_quantity = received_quantity
+        purchase_request.received_date = received_date
+        purchase_request.save()
+        serializer = PurchaseRequestSerializer(purchase_request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ConsumptionViewSet(viewsets.ModelViewSet):
