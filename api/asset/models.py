@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from main import choices
-from main.tasks import BaseCreatedUpdated
+from main.models import BaseCreatedUpdated
 
 
 class Location(BaseCreatedUpdated):
@@ -10,6 +10,9 @@ class Location(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Machine(BaseCreatedUpdated):
@@ -24,6 +27,11 @@ class Machine(BaseCreatedUpdated):
     class Meta:
         ordering = ["code"]
 
+    def __str__(self):
+        if self.location:
+            return f"{self.name} - {self.location.name}"
+        return f"{self.name}"
+
 
 class Equipment(BaseCreatedUpdated):
     code = models.CharField(max_length=10, unique=True)
@@ -36,3 +44,8 @@ class Equipment(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["code"]
+
+    def __str__(self):
+        if self.machine:
+            return f"{self.name} - {self.machine.name}"
+        return f"{self.name}"

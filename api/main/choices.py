@@ -17,6 +17,13 @@ MONTH_NAMES = (
     (12, "DECEMBER"),
 )
 
+APPROVAL_STATUS = (
+    ("PENDING", "PENDING"),
+    ("REJECTED", "REJECTED"),
+    ("APPROVED", "APPROVED"),
+    ("CANCELED", "CANCELED"),
+)
+
 PRIORITIES = (
     ("URGENT", "URGENT"),
     ("HIGH", "HIGH"),

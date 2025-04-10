@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.functions import Lower
 from django.contrib.auth.models import User
 from main import choices
-from main.tasks import BaseCreatedUpdated
+from main.models import BaseCreatedUpdated
 
 
 class UnitOfMeasure(BaseCreatedUpdated):
@@ -26,6 +26,9 @@ class Contact(BaseCreatedUpdated):
     class Meta:
         ordering = ["name"]
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Item(BaseCreatedUpdated):
     no = models.CharField(blank=True, max_length=20, unique=True)
@@ -43,17 +46,20 @@ class Item(BaseCreatedUpdated):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-                if self.type:
-                    prefix = f'{self.type[0:4]}'
-                else:
-                    prefix = f"ITEM"
-                last_item = Item.objects.order_by('-pk').first()
-                next_id = last_item.pk + 1 if last_item else 1
-                self.no = f"{prefix}{next_id}"
+            if self.type:
+                prefix = f"{self.type[0:4]}"
+            else:
+                prefix = f"ITEM"
+            last_item = Item.objects.order_by("-pk").first()
+            next_id = last_item.pk + 1 if last_item else 1
+            self.no = f"{prefix}{next_id}"
         super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["name"]
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Inventory(BaseCreatedUpdated):
@@ -75,6 +81,9 @@ class Inventory(BaseCreatedUpdated):
         ordering = ["-updated_at"]
         verbose_name_plural = "inventories"
 
+    def __str__(self):
+        return f"{self.item.name}"
+
 
 class PurchaseSchedule(BaseCreatedUpdated):
     item = models.OneToOneField(
@@ -90,6 +99,10 @@ class PurchaseSchedule(BaseCreatedUpdated):
     class Meta:
         ordering = ["-updated_at"]
 
+    def __str__(self):
+        if self.item:
+            return f"{self.item.name}"
+
 
 class MonthlyPurchaseSchedule(BaseCreatedUpdated):
     purchase_schedule = models.ForeignKey(
@@ -104,6 +117,11 @@ class MonthlyPurchaseSchedule(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["month"]
+
+    def __str__(self):
+        if self.purchase_schedule:
+            return f"{self.purchase_schedule.item.name} - {self.month}"
+        return f"{self.month}"
 
 
 class PurchaseRequest(BaseCreatedUpdated):
@@ -142,6 +160,12 @@ class PurchaseRequest(BaseCreatedUpdated):
     class Meta:
         ordering = ["-updated_at"]
 
+    def __str__(self):
+        if self.item and self.requested_by:
+            return f"{self.item.name} - {self.requested_by}"
+        elif self.item:
+            return f"{self.item.name}"
+
 
 class Consumption(BaseCreatedUpdated):
     item = models.ForeignKey(
@@ -152,6 +176,10 @@ class Consumption(BaseCreatedUpdated):
         max_digits=10, decimal_places=2, null=True, blank=True
     )
 
+    def __str__(self):
+        if self.item:
+            return f"{self.item.name}"
+
 
 class Return(BaseCreatedUpdated):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="returns")
@@ -160,3 +188,7 @@ class Return(BaseCreatedUpdated):
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+
+    def __str__(self):
+        if self.item:
+            return f"{self.item.name}"

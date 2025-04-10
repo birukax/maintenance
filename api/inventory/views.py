@@ -2,6 +2,7 @@ from django.db.models import Sum
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from approval.models import Purchase
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -39,6 +40,28 @@ class ContactViewSet(viewsets.ModelViewSet):
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
+
+    def perform_create(self, serializer):
+        uom_id = serializer.validated_data.pop("uom_id")
+
+        try:
+            uom = UnitOfMeasure.objects.get(id=uom_id)
+        except UnitOfMeasure.DoesNotExist:
+            raise serializer.ValidationError(
+                {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
+            )
+        item = serializer.save(uom=uom)
+        Inventory.objects.create(item=item)
+
+    def perform_update(self, serializer):
+        uom_id = serializer.validated_data.pop("uom_id")
+        try:
+            uom = UnitOfMeasure.objects.get(id=uom_id)
+        except UnitOfMeasure.DoesNotExist:
+            raise serializer.ValidationError(
+                {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
+            )
+        serializer.save(uom=uom)
 
 
 class InventoryViewSet(viewsets.ModelViewSet):
@@ -96,6 +119,20 @@ class MonthlyPurchaseScheduleViewSet(viewsets.ModelViewSet):
 class PurchaseRequestViewSet(viewsets.ModelViewSet):
     serializer_class = PurchaseRequestSerializer
     queryset = PurchaseRequest.objects.all()
+
+    def perform_create(self, serializer):
+        item_id = serializer.validated_data.pop("item_id")
+        try:
+            item = Item.objects.get(id=item_id)
+        except Item.DoesNotExist:
+            raise serializer.ValidationError(
+                {"item_id": f"Item with id {item_id} does not exist."}
+            )
+        purchase_request = serializer.save(
+            requested_by=self.request.user,
+            item=item,
+        )
+        Purchase.objects.create(purchase_request=purchase_request)
 
 
 class ConsumptionViewSet(viewsets.ModelViewSet):

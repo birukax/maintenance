@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from main.serializers import UserSerializer
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -11,12 +11,6 @@ from .models import (
     Consumption,
     Return,
 )
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "email", "is_active"]
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
@@ -71,13 +65,6 @@ class ItemSerializer(serializers.ModelSerializer):
             # return InventorySerializer(inventory_obj, context=self.context).data
         except Inventory.DoesNotExist:
             return None
-
-    def create(self, validated_data):
-        uom_id = validated_data.pop("uom_id")
-        uom = UnitOfMeasure.objects.get(id=uom_id)
-        item = Item.objects.create(uom=uom, **validated_data)
-        return item
-
 
 class InventorySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -145,12 +132,6 @@ class PurchaseRequestSerializer(serializers.ModelSerializer):
             "priority",
             "status",
         ]
-
-    def create(self, validated_data):
-        item_id = validated_data.pop("item_id")
-        item = Item.objects.get(id=item_id)
-        purchase_request = PurchaseRequest.objects.create(item=item, **validated_data)
-        return purchase_request
 
 
 class ConsumptionSerializer(serializers.ModelSerializer):

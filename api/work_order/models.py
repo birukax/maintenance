@@ -1,5 +1,5 @@
 from django.db import models
-from main.tasks import BaseCreatedUpdated
+from main.models import BaseCreatedUpdated
 from main import choices
 
 
@@ -14,6 +14,9 @@ class ActivityType(BaseCreatedUpdated):
     class Meta:
         ordering = ["code"]
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Activity(BaseCreatedUpdated):
     code = models.CharField(max_length=10, unique=True)
@@ -27,6 +30,9 @@ class Activity(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.code}"
 
 
 class WorkOrder(BaseCreatedUpdated):
@@ -60,6 +66,14 @@ class WorkOrder(BaseCreatedUpdated):
     )
     total_time_required = models.DurationField()
 
+    class Meta:
+        ordering = ["-updated_at", "-created_at"]
+
+    def __str__(self):
+        if self.machine:
+            return f"{self.machine.name} - {self.status}"
+        return f"{self.status}"
+
 
 class WorkOrderActivity(BaseCreatedUpdated):
     # description = models.TextField(max_length=250)
@@ -71,3 +85,8 @@ class WorkOrderActivity(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["-updated_at"]
+
+    def __str__(self):
+        if self.activity:
+            return f"{self.activity} - {self.value}"
+        return f"{self.value}"
