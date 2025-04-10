@@ -9,6 +9,7 @@ import inventoryReducer from './slices/inventorySlice';
 import consumptionReducer from './slices/consumptionSlice';
 import unitOfMeasureReducer from './slices/unitOfMeasureSlice';
 import purchaseRequestReducer from './slices/purchaseRequestSlice';
+import purchaseApprovalReducer from './slices/purchaseApprovalSlice';
 import purchaseScheduleReducer from './slices/purchaseScheduleSlice';
 import monthlyPurchaseScheduleReducer from './slices/monthlyPurchaseScheduleSlice';
 
@@ -21,6 +22,7 @@ interface RootState {
   consumption: ReturnType<typeof consumptionReducer>;
   unitOfMeasure: ReturnType<typeof unitOfMeasureReducer>;
   purchaseRequest: ReturnType<typeof purchaseRequestReducer>;
+  purchaseApproval: ReturnType<typeof purchaseApprovalReducer>;
   purchaseSchedule: ReturnType<typeof purchaseScheduleReducer>;
   monthlyPurchaseSchedule: ReturnType<typeof monthlyPurchaseScheduleReducer>;
 }
@@ -34,6 +36,7 @@ const rootReducer = {
     consumption: consumptionReducer,
     unitOfMeasure: unitOfMeasureReducer,
     purchaseRequest: purchaseRequestReducer,
+    purchaseApproval: purchaseApprovalReducer,
     purchaseSchedule: purchaseScheduleReducer,
     monthlyPurchaseSchedule: monthlyPurchaseScheduleReducer,
 }

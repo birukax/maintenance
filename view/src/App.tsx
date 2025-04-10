@@ -18,6 +18,8 @@ import ContactEdit from "./pages/contact/Edit";
 
 import InventoryList from "./pages/inventory/List";
 
+import PurchaseApprovalList from "./pages/approval/purchase/List";
+
 import CreateUnitOfMeasure from "./pages/unitOfMeasure/Create";
 import UnitOfMeasureList from "./pages/unitOfMeasure/List";
 import UnitOfMeasureDetail from "./pages/unitOfMeasure/Detail";
@@ -32,7 +34,6 @@ import CreatePurchaseRequest from "./pages/purchaseRequest/Create";
 import PurchaseRequestList from "./pages/purchaseRequest/List";
 import PurchaseRequestDetail from "./pages/purchaseRequest/Detail";
 import PurchaseRequestEdit from "./pages/purchaseRequest/Edit";
-
 
 import CreateConsumption from "./pages/consumption/Create";
 import ConsumptionList from "./pages/consumption/List";
@@ -137,6 +138,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Purchase Request" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/purchase-approvals">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Purchase Approval" />
         </ListItemButton>
         <ListItemButton component={Link} to="/consumptions">
           <ListItemIcon>
@@ -382,6 +389,17 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <InventoryList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/purchase-approvals"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <PurchaseApprovalList />
             </AppLayout>
           </PrivateRoute>
         }

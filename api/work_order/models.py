@@ -84,7 +84,7 @@ class WorkOrderActivity(BaseCreatedUpdated):
     remark = models.TextField(max_length=250)
 
     class Meta:
-        ordering = ["-updated_at"]
+        ordering = ["-updated_at", "-created_at"]
 
     def __str__(self):
         if self.activity:
