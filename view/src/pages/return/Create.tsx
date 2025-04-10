@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createPurchaseRequest } from "../../store/slices/purchaseRequestSlice";
+import { createReturn } from "../../store/slices/returnSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
@@ -12,15 +12,19 @@ import {
   Container,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   InputLabel,
   Select,
   MenuItem,
   Box,
+  Switch,
 } from "@mui/material";
 
 const Create = () => {
   const [formData, setFormData] = useState({
     item_id: "",
+    reason: "",
+    used: true,
     quantity: "",
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -37,16 +41,18 @@ const Create = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, checked } = e.target;
+    if (name === "used") {
+      setFormData({ ...formData, [name]: checked });
+    } else setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      dispatch(createPurchaseRequest(formData));
-      navigate("/purchase-requests");
+      dispatch(createReturn(formData));
+      navigate("/returns");
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -56,13 +62,22 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Purchase Request
+        Create Return
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
+        <FormControlLabel
+          labelPlacement="start"
+          label="Used"
+          onChange={handleChange}
+          checked={formData.used}
+          disabled={loading}
+          required
+          control={<Switch name="used" />}
+        />
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="uom-select-label">Item</InputLabel>
           <Select
@@ -81,10 +96,11 @@ const Create = () => {
               ))}
           </Select>
         </FormControl>
+
         <TextField
           label="Quantity"
-          name="quantity"
           type="number"
+          name="quantity"
           className="mb-8"
           variant="outlined"
           fullWidth
@@ -93,7 +109,18 @@ const Create = () => {
           required
           disabled={loading}
         />
-
+        <TextField
+          multiline
+          label="Reason"
+          name="reason"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.reason}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
         <Button
           type="submit"
           variant="contained"
@@ -102,7 +129,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Item"}
+          {loading ? <CircularProgress size={24} /> : "Create Return"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

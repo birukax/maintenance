@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createPurchaseRequest } from "../../store/slices/purchaseRequestSlice";
+import { createConsumption } from "../../store/slices/consumptionSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
@@ -21,6 +21,7 @@ import {
 const Create = () => {
   const [formData, setFormData] = useState({
     item_id: "",
+    reason: "",
     quantity: "",
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -45,8 +46,8 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createPurchaseRequest(formData));
-      navigate("/purchase-requests");
+      dispatch(createConsumption(formData));
+      navigate("/consumptions");
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -56,7 +57,7 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Purchase Request
+        Create Consumption
       </Typography>
       <Box
         component="form"
@@ -83,8 +84,8 @@ const Create = () => {
         </FormControl>
         <TextField
           label="Quantity"
-          name="quantity"
           type="number"
+          name="quantity"
           className="mb-8"
           variant="outlined"
           fullWidth
@@ -93,7 +94,18 @@ const Create = () => {
           required
           disabled={loading}
         />
-
+        <TextField
+          multiline
+          label="Reason"
+          name="reason"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.reason}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
         <Button
           type="submit"
           variant="contained"
@@ -102,7 +114,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Item"}
+          {loading ? <CircularProgress size={24} /> : "Create Consumption"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

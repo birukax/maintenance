@@ -33,6 +33,17 @@ import PurchaseRequestList from "./pages/purchaseRequest/List";
 import PurchaseRequestDetail from "./pages/purchaseRequest/Detail";
 import PurchaseRequestEdit from "./pages/purchaseRequest/Edit";
 
+
+import CreateConsumption from "./pages/consumption/Create";
+import ConsumptionList from "./pages/consumption/List";
+import ConsumptionDetail from "./pages/consumption/Detail";
+import ConsumptionEdit from "./pages/consumption/Edit";
+
+import CreateReturn from "./pages/return/Create";
+import ReturnList from "./pages/return/List";
+import ReturnDetail from "./pages/return/Detail";
+import ReturnEdit from "./pages/return/Edit";
+
 import {
   AppBar,
   Toolbar,
@@ -126,6 +137,18 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Purchase Request" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/consumptions">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Consumption" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/returns">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Return" />
         </ListItemButton>
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
@@ -441,6 +464,88 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <PurchaseRequestEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/consumptions"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ConsumptionList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/consumption/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateConsumption />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/consumption/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ConsumptionDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/consumption/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ConsumptionEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/returns"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ReturnList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/return/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateReturn />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/return/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ReturnDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/return/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <ReturnEdit />
             </AppLayout>
           </PrivateRoute>
         }

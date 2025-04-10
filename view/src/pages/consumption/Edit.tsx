@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createPurchaseRequest } from "../../store/slices/purchaseRequestSlice";
-import { fetchItems } from "../../store/slices/itemSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  fetchConsumption,
+  updateConsumption,
+  fetchConsumptions,
+} from "../../store/slices/consumptionSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import {
@@ -11,42 +14,46 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 
-const Create = () => {
+const Edit = () => {
   const [formData, setFormData] = useState({
-    item_id: "",
-    quantity: "",
+    email: "",
+    phone_no: "",
+    location: "",
   });
+  const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
+  const { consumption } = useSelector((state: AppState) => state.consumption);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchItems());
+    if (tokens && id) {
+      dispatch(fetchConsumption(id));
     }
+    setFormData({
+      email: consumption.data.email,
+      phone_no: consumption.data.phone_no,
+      location: consumption.data.location,
+    });
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      dispatch(createPurchaseRequest(formData));
-      navigate("/purchase-requests");
+      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
+      dispatch(updateConsumption({ id, formData }));
+      navigate(`/consumption/detail/${consumption.data.id}}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -56,39 +63,44 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Purchase Request
+        Edit Consumption
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="uom-select-label">Item</InputLabel>
-          <Select
-            labelId="uom-select-label"
-            id="uom-select"
-            name="item_id"
-            value={formData.item_id}
-            onChange={handleChange}
-            label="Unit of Measure"
-          >
-            {items.data &&
-              items.data.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
         <TextField
-          label="Quantity"
-          name="quantity"
-          type="number"
+          label="Email"
+          name="email"
+          type="email"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.quantity}
+          value={formData.email}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
+        <TextField
+          label="Location"
+          name="location"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.location}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
+
+        <TextField
+          label="Phone No."
+          name="phone_no"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.phone_no}
           onChange={handleChange}
           required
           disabled={loading}
@@ -102,7 +114,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Item"}
+          {loading ? <CircularProgress size={24} /> : "Edit Consumption"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">
@@ -114,4 +126,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;

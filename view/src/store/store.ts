@@ -3,8 +3,10 @@ import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/authSlice';
 import itemReducer from './slices/itemSlice';
+import returnReducer from './slices/returnSlice';
 import contactReducer from './slices/contactSlice';
 import inventoryReducer from './slices/inventorySlice';
+import consumptionReducer from './slices/consumptionSlice';
 import unitOfMeasureReducer from './slices/unitOfMeasureSlice';
 import purchaseRequestReducer from './slices/purchaseRequestSlice';
 import purchaseScheduleReducer from './slices/purchaseScheduleSlice';
@@ -13,8 +15,10 @@ import monthlyPurchaseScheduleReducer from './slices/monthlyPurchaseScheduleSlic
 interface RootState {
   auth: ReturnType<typeof authReducer>;
   item: ReturnType<typeof itemReducer>;
+  return: ReturnType<typeof returnReducer>;
   contact: ReturnType<typeof contactReducer>;
   inventory: ReturnType<typeof inventoryReducer>;
+  consumption: ReturnType<typeof consumptionReducer>;
   unitOfMeasure: ReturnType<typeof unitOfMeasureReducer>;
   purchaseRequest: ReturnType<typeof purchaseRequestReducer>;
   purchaseSchedule: ReturnType<typeof purchaseScheduleReducer>;
@@ -24,8 +28,10 @@ interface RootState {
 const rootReducer = {
     auth: authReducer,
     item: itemReducer,
+    return: returnReducer,
     contact: contactReducer,
     inventory: inventoryReducer,
+    consumption: consumptionReducer,
     unitOfMeasure: unitOfMeasureReducer,
     purchaseRequest: purchaseRequestReducer,
     purchaseSchedule: purchaseScheduleReducer,

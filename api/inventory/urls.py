@@ -41,6 +41,16 @@ router.register(
     basename="purchase-request",
 )
 
+router.register(
+    r"consumptions",
+    views.ConsumptionViewSet,
+    basename="consumption",
+)
+router.register(
+    r"returns",
+    views.ReturnViewSet,
+    basename="return",
+)
 urlpatterns = [
     path("", include(router.urls)),
 ]
