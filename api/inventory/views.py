@@ -21,6 +21,8 @@ from .serializers import (
     PurchaseScheduleSerializer,
     MonthlyPurchaseScheduleSerializer,
     PurchaseRequestSerializer,
+    ConsumptionSerializer,
+    ReturnSerializer,
 )
 
 
@@ -94,3 +96,13 @@ class MonthlyPurchaseScheduleViewSet(viewsets.ModelViewSet):
 class PurchaseRequestViewSet(viewsets.ModelViewSet):
     serializer_class = PurchaseRequestSerializer
     queryset = PurchaseRequest.objects.all()
+
+
+class ConsumptionViewSet(viewsets.ModelViewSet):
+    serializer_class = ConsumptionSerializer
+    queryset = Consumption.objects.all()
+
+
+class ReturnViewSet(viewsets.ModelViewSet):
+    serializer_class = ReturnSerializer
+    queryset = Return.objects.all()

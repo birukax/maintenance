@@ -46,6 +46,7 @@ const List: React.FC = () => {
   const headers = [
     "Item",
     "UoM",
+    "Current Balance",
     "Min Stock Level",
     "Quantity",
     "January",
@@ -102,6 +103,14 @@ const List: React.FC = () => {
                     {purchaseSchedule.item.uom.code}
                   </Typography>
                 </TableCell>
+                <TableCell>
+                  <Typography sx={rowStyle}>
+                    {purchaseSchedule.item.inventory
+                      ? purchaseSchedule.item.inventory.balance
+                      : 0}
+                  </Typography>
+                </TableCell>
+
                 <TableCell>
                   <Typography sx={rowStyle}>
                     {purchaseSchedule.minimum_stock_level}

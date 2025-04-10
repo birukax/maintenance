@@ -57,7 +57,9 @@ class Item(BaseCreatedUpdated):
 
 
 class Inventory(BaseCreatedUpdated):
-    item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="items")
+    item = models.OneToOneField(
+        Item, on_delete=models.RESTRICT, related_name="inventory"
+    )
     purchased_quantity = models.DecimalField(
         default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
@@ -145,6 +147,7 @@ class Consumption(BaseCreatedUpdated):
     item = models.ForeignKey(
         Item, on_delete=models.RESTRICT, related_name="consumptions"
     )
+    reason = models.TextField(max_length=250)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
@@ -152,6 +155,8 @@ class Consumption(BaseCreatedUpdated):
 
 class Return(BaseCreatedUpdated):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="returns")
+    reason = models.TextField(max_length=250)
+    used = models.BooleanField(default=True)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
