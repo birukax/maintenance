@@ -49,6 +49,12 @@ import LocationList from "./pages/location/List";
 import LocationDetail from "./pages/location/Detail";
 import LocationEdit from "./pages/location/Edit";
 
+
+import CreateMachine from "./pages/machine/Create";
+import MachineList from "./pages/machine/List";
+import MachineDetail from "./pages/machine/Detail";
+import MachineEdit from "./pages/location/Edit";
+
 import {
   AppBar,
   Toolbar,
@@ -168,6 +174,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Location" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/machines">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Machine" />
         </ListItemButton>
       </List>
     </div>
@@ -601,6 +613,47 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <LocationEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/machines"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <MachineList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/machine/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateMachine />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/machine/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <MachineDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/machine/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <MachineEdit />
             </AppLayout>
           </PrivateRoute>
         }
