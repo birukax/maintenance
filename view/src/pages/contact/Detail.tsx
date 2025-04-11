@@ -1,56 +1,58 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
 import { fetchContact } from "../../store/slices/contactSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
-import { Container, Button, Typography, CircularProgress } from "@mui/material";
+import { AppState } from "../../store/store";
+import { useEntityDetail } from "../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contact } = useSelector((state: AppState) => state.contact);
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const entityState = useEntityDetail({
+    detailSelector: (state: AppState) => state.contact.contact,
+    fetchDetailAction: fetchContact,
+  });
+  const renderButtons = () => (
+    <>
+      <Button
+        variant="contained"
+        component={Link}
+        to={`/contact/edit/${entityState.id}`}
+        className="bg-slate-700"
+      >
+        Edit
+      </Button>
+    </>
+  );
 
-  useEffect(() => {
-    if (tokens && id) {
-      dispatch(fetchContact(id));
-    }
-  }, []);
-
-  if (!tokens) {
-    return <Typography>Please log in to view contacts.</Typography>;
-  }
-  if (!id) {
-    return <Typography>Contact not found.</Typography>;
-  }
-
-  return (
-    <Container>
-      <Typography variant="h4" className="mb-6 text-slate-800">
-        Contact Detail
+  const renderDetails = (data) => (
+    <>
+      <Typography variant="h6">Name:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.name}
       </Typography>
-      {contact.loading ? (
-        <CircularProgress />
-      ) : contact.data ? (
-        <>
-          <Button
-            variant="contained"
-            component={Link}
-            to={`/contact/edit/${contact.data.id}`}
-            className="bg-slate-700"
-          >
-            Edit
-          </Button>
-          <Typography variant="body2" className="text-slate-500">
-            {contact.data.name}
-          </Typography>
-        </>
-      ) : (
-        contact.error
-      )}
-    </Container>
+      <Typography variant="h6">Email:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.email}
+      </Typography>
+      <Typography variant="h6">Phone No.:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.phone_no}
+      </Typography>
+      <Typography variant="h6">Location:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.location}
+      </Typography>
+    </>
+  );
+  return (
+    <GenericDetailPage
+      titleBase="Contact"
+      id={entityState.id}
+      entityState={entityState}
+      renderButtons={renderButtons}
+      renderDetails={renderDetails}
+    />
   );
 };
 

@@ -1,56 +1,54 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
 import { fetchMachine } from "../../store/slices/machineSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
-import { Container, Button, Typography, CircularProgress } from "@mui/material";
+import { AppState } from "../../store/store";
+import { useEntityDetail } from "../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { machine } = useSelector((state: AppState) => state.machine);
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const entityState = useEntityDetail({
+    detailSelector: (state: AppState) => state.machine.machine,
+    fetchDetailAction: fetchMachine,
+  });
+  const renderButtons = () => (
+    <>
+      <Button
+        variant="contained"
+        component={Link}
+        to={`/machine/edit/${entityState.id}`}
+        className="bg-slate-700"
+      >
+        Edit
+      </Button>
+    </>
+  );
 
-  useEffect(() => {
-    if (tokens && id) {
-      dispatch(fetchMachine(id));
-    }
-  }, []);
-
-  if (!tokens) {
-    return <Typography>Please log in to view machines.</Typography>;
-  }
-  if (!id) {
-    return <Typography>Machine not found.</Typography>;
-  }
-
-  return (
-    <Container>
-      <Typography variant="h4" className="mb-6 text-slate-800">
-        Machine Detail
+  const renderDetails = (data) => (
+    <>
+      <Typography variant="h6">Code:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.code}
       </Typography>
-      {machine.loading ? (
-        <CircularProgress />
-      ) : machine.data ? (
-        <>
-          <Button
-            variant="contained"
-            component={Link}
-            to={`/machine/edit/${machine.data.id}`}
-            className="bg-slate-700"
-          >
-            Edit
-          </Button>
-          <Typography variant="body2" className="text-slate-500">
-            {machine.data.item.name}
-          </Typography>
-        </>
-      ) : (
-        machine.error
-      )}
-    </Container>
+      <Typography variant="h6">Name:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.name}
+      </Typography>
+      <Typography variant="h6">Location:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.location.name}
+      </Typography>
+    </>
+  );
+  return (
+    <GenericDetailPage
+      titleBase="Machine"
+      id={entityState.id}
+      entityState={entityState}
+      renderButtons={renderButtons}
+      renderDetails={renderDetails}
+    />
   );
 };
 

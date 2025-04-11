@@ -72,7 +72,7 @@ const Create = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       dispatch(updateItem({ id, formData }));
       dispatch(fetchItems());
-      navigate(`/item/detail/${item.data.id}}`);
+      navigate(`/item/detail/${item.data.id}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {

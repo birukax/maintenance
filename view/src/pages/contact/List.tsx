@@ -1,85 +1,36 @@
 // src/pages/List.tsx
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Navigate } from "react-router-dom";
 import { fetchContacts } from "../../store/slices/contactSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { AppState } from "../../store/store";
+import { useEntityList } from "../../hooks/useEntityList";
 import {
-  Typography,
-  CircularProgress,
-  TableBody,
-  TableRow,
-  TableCell,
-  Button,
-} from "@mui/material";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import ListTable from "../../partials/ListTable";
-import { Link } from "react-router-dom";
+  GenericListPage,
+  ColumnDefination,
+} from "../../components/GenericListPage";
+
+const contactColumns = [
+  { header: "Name", accessor: "name" },
+  { header: "Email", accessor: "email" },
+  { header: "Phone No.", accessor: "phone_no" },
+  { header: "Location", accessor: "location" },
+];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contacts } = useSelector((state: AppState) => state.contact);
-  const dispatch = useDispatch<AppDispatch>();
-  const navigte = useNavigate();
-
-  useEffect(() => {
-    if (tokens) {
-      dispatch(fetchContacts());
-    }
-  }, []);
-
-  const handleRefresh = () => {
-    dispatch(fetchContacts());
-  };
-
-  if (!tokens) {
-    return <Typography>Please log in to view contacts.</Typography>;
-  }
-  const headers = ["Name", "Email", "Phone No.", "Location", "Action"];
+  const entityState = useEntityList({
+    listSelector: (state: AppState) => state.contact.contacts,
+    fetchListAction: fetchContacts,
+  });
 
   return (
-    <>
-      <div className="flex justify-between contacts-center">
-        <Typography variant="h5" className="font-bold">
-          Contacts
-        </Typography>
-        <Button component={Link} to="/contact/create">
-          New
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<RefreshIcon />}
-          onClick={handleRefresh}
-          disabled={contacts.loading}
-        >
-          Refresh
-        </Button>
-      </div>
-      {contacts.loading && <CircularProgress />}
-      {contacts.error && (
-        <Typography variant="body2" className="text-red-500">
-          {contacts.error}
-        </Typography>
-      )}
-      <ListTable headers={headers}>
-        <TableBody>
-          {contacts.data &&
-            contacts.data.map((contact) => (
-              <TableRow key={contact.id}>
-                <TableCell>{contact.name}</TableCell>
-                <TableCell>{contact.email}</TableCell>
-                <TableCell>{contact.phone_no}</TableCell>
-                <TableCell>{contact.location}</TableCell>
-                <TableCell>
-                  <Button component={Link} to={`/contact/detail/${contact.id}`}>
-                    Detail
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </ListTable>
-    </>
+    <GenericListPage
+      title="Contacts"
+      entityState={entityState}
+      columns={contactColumns}
+      createRoute="/contact/create"
+      detailRouteBase="/contact/detail"
+      onRefresh={entityState.refresh}
+      getKey={(contact) => contact.id}
+    />
   );
 };
 

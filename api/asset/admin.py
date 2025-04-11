@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Location, Machine, Equipment
 
-# Register your models here.
+
+admin.site.register(Location)
+admin.site.register(Machine)
+admin.site.register(Equipment)

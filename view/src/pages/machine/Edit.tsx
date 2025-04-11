@@ -6,14 +6,19 @@ import {
   updateMachine,
   fetchMachines,
 } from "../../store/slices/machineSlice";
+import { fetchLocations } from "../../store/slices/locationSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import {
-  TextField,
   Button,
   Typography,
   Container,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
   Box,
 } from "@mui/material";
 
@@ -24,6 +29,7 @@ const Edit = () => {
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
+  const { locations } = useSelector((state: AppState) => state.location);
   const { machine } = useSelector((state: AppState) => state.machine);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,6 +45,12 @@ const Edit = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (tokens) {
+      dispatch(fetchLocations());
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -51,7 +63,7 @@ const Edit = () => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       dispatch(updateMachine({ id, formData }));
-      navigate(`/machine/detail/${machine.data.id}}`);
+      navigate(`/machine/detail/${machine.data.id}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -68,18 +80,25 @@ const Edit = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
-        <TextField
-          multiline
-          label="Code"
-          name="code"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.code}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <InputLabel id="location-select-label">Location</InputLabel>
+          <Select
+            labelId="location-select-label"
+            id="location-select"
+            name="location_id"
+            value={formData.location_id}
+            onChange={handleChange}
+            label="Location"
+          >
+            {locations.data &&
+              locations.data.map((location) => (
+                <MenuItem key={location.id} value={location.id}>
+                  {location.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+
         <TextField
           multiline
           label="Name"

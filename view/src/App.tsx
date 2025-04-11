@@ -49,11 +49,15 @@ import LocationList from "./pages/location/List";
 import LocationDetail from "./pages/location/Detail";
 import LocationEdit from "./pages/location/Edit";
 
-
 import CreateMachine from "./pages/machine/Create";
 import MachineList from "./pages/machine/List";
 import MachineDetail from "./pages/machine/Detail";
-import MachineEdit from "./pages/location/Edit";
+import MachineEdit from "./pages/machine/Edit";
+
+import CreateEquipment from "./pages/equipment/Create";
+import EquipmentList from "./pages/equipment/List";
+import EquipmentDetail from "./pages/equipment/Detail";
+import EquipmentEdit from "./pages/equipment/Edit";
 
 import {
   AppBar,
@@ -180,6 +184,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <ContactsIcon />
           </ListItemIcon>
           <ListItemText primary="Machine" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/equipments">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Equipment" />
         </ListItemButton>
       </List>
     </div>
@@ -654,6 +664,47 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <MachineEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/equipments"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <EquipmentList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/equipment/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateEquipment />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/equipment/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <EquipmentDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/equipment/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <EquipmentEdit />
             </AppLayout>
           </PrivateRoute>
         }

@@ -49,7 +49,7 @@ const Edit = () => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       dispatch(updateLocation({ id, formData }));
-      navigate(`/location/detail/${location.data.id}}`);
+      navigate(`/location/detail/${location.data.id}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {

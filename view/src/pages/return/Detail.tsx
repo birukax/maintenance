@@ -1,56 +1,62 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
 import { fetchReturn } from "../../store/slices/returnSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
-import { Container, Button, Typography, CircularProgress } from "@mui/material";
+import { AppState } from "../../store/store";
+import { useEntityDetail } from "../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { ret } = useSelector((state: AppState) => state.return.return);
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const entityState = useEntityDetail({
+    detailSelector: (state: AppState) => state.return.return,
+    fetchDetailAction: fetchReturn,
+  });
+  const renderButtons = () => (
+    <>
+      <Button
+        variant="contained"
+        component={Link}
+        to={`/return/edit/${entityState.id}`}
+        className="bg-slate-700"
+      >
+        Edit
+      </Button>
+    </>
+  );
 
-  useEffect(() => {
-    if (tokens && id) {
-      dispatch(fetchReturn(id));
-    }
-  }, []);
-
-  if (!tokens) {
-    return <Typography>Please log in to view returns.</Typography>;
-  }
-  if (!id) {
-    return <Typography>Return not found.</Typography>;
-  }
-
-  return (
-    <Container>
-      <Typography variant="h4" className="mb-6 text-slate-800">
-        Return Detail
+  const renderDetails = (data) => (
+    <>
+      <Typography variant="h6">Item:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.item.name}
       </Typography>
-      {ret.loading ? (
-        <CircularProgress />
-      ) : ret.data ? (
-        <>
-          <Button
-            variant="contained"
-            component={Link}
-            to={`/return/edit/${ret.data.id}`}
-            className="bg-slate-700"
-          >
-            Edit
-          </Button>
-          <Typography variant="body2" className="text-slate-500">
-            {ret.data.item.name}
-          </Typography>
-        </>
-      ) : (
-        ret.error
-      )}
-    </Container>
+      <Typography variant="h6">UoM:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.item.uom.name}
+      </Typography>
+      <Typography variant="h6">Quantity:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.quantity}
+      </Typography>
+      <Typography variant="h6">Reason:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.reason}
+      </Typography>
+      <Typography variant="h6">Used:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.used ? "Yes" : "No"}
+      </Typography>
+    </>
+  );
+  return (
+    <GenericDetailPage
+      titleBase="Return"
+      id={entityState.id}
+      entityState={entityState}
+      renderButtons={renderButtons}
+      renderDetails={renderDetails}
+    />
   );
 };
 

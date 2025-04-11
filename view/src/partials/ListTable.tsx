@@ -12,18 +12,19 @@ import {
 const ListTable = ({ headers, children }) => {
   return (
     <>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {headers.map((header) => (
-              <TableCell key={header}>
-                <Typography noWrap>{header}</Typography>
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        {children}
-      </Table>
+      <TableHead>
+        <TableRow>
+          {headers.map((header) => (
+            <TableCell key={header}>
+              <Typography noWrap>{header}</Typography>
+            </TableCell>
+          ))}
+          <TableCell>
+            <Typography noWrap>Actions</Typography>
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      {children}
     </>
   );
 };

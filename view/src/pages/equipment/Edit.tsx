@@ -2,42 +2,53 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  fetchUnitOfMeasure,
-  updateUnitOfMeasure,
-} from "../../store/slices/unitOfMeasureSlice";
+  fetchEquipment,
+  updateEquipment,
+  fetchEquipments,
+} from "../../store/slices/equipmentSlice";
+import { fetchMachines } from "../../store/slices/machineSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import {
-  TextField,
   Button,
   Typography,
   Container,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
   Box,
 } from "@mui/material";
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    code: "",
     name: "",
+    machine_id: "",
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { unitOfMeasure } = useSelector(
-    (state: AppState) => state.unitOfMeasure
-  );
+  const { machines } = useSelector((state: AppState) => state.machine);
+  const { equipment } = useSelector((state: AppState) => state.equipment);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
     if (tokens && id) {
-      dispatch(fetchUnitOfMeasure(id));
+      dispatch(fetchEquipment(id));
     }
     setFormData({
-      code: unitOfMeasure.data.code,
-      name: unitOfMeasure.data.name,
+      name: equipment.data.name,
+      machine_id: equipment.data.machine.id,
     });
+  }, []);
+
+  useEffect(() => {
+    if (tokens) {
+      dispatch(fetchMachines());
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -51,8 +62,8 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateUnitOfMeasure({ id, formData }));
-      navigate(`/unit-of-measure/detail/${unitOfMeasure.data.id}`);
+      dispatch(updateEquipment({ id, formData }));
+      navigate(`/equipment/detail/${equipment.data.id}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -62,26 +73,34 @@ const Edit = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Unit Of Measure
+        Edit Equipment
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
-        {" "}
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <InputLabel id="machine-select-label">Machine</InputLabel>
+          <Select
+            labelId="machine-select-label"
+            id="machine-select"
+            name="machine_id"
+            value={formData.machine_id}
+            onChange={handleChange}
+            label="Machine"
+          >
+            {machines.data &&
+              machines.data.map((machine) => (
+                <MenuItem key={machine.id} value={machine.id}>
+                  {machine.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+
         <TextField
-          label="Code"
-          name="code"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.code}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-        <TextField
+          multiline
           label="Name"
           name="name"
           className="mb-8"
@@ -100,7 +119,7 @@ const Edit = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Edit Unit of Measure"}
+          {loading ? <CircularProgress size={24} /> : "Edit Equipment"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

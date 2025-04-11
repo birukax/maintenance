@@ -1,58 +1,54 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { fetchUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
-import { Container, Button, Typography, CircularProgress } from "@mui/material";
+import { AppState } from "../../store/store";
+import { useEntityDetail } from "../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { Typography, Button, Modal } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { unitOfMeasure } = useSelector(
-    (state: AppState) => state.unitOfMeasure
+  const entityState = useEntityDetail({
+    detailSelector: (state: AppState) => state.unitOfMeasure.unitOfMeasure,
+    fetchDetailAction: fetchUnitOfMeasure,
+  });
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+
+  const renderButtons = () => (
+    <>
+      <Button
+        variant="contained"
+        component={Link}
+        to={`/unit-of-measure/edit/${entityState.id}`}
+        className="bg-slate-700"
+      >
+        Edit
+      </Button>
+    </>
   );
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { id } = useParams();
 
-  useEffect(() => {
-    if (tokens && id && !unitOfMeasure.data && !unitOfMeasure.loading) {
-      dispatch(fetchUnitOfMeasure(id));
-    }
-  }, [tokens, dispatch, id]);
-
-  if (!tokens) {
-    return <Typography>Please log in to view Unit Of Measures.</Typography>;
-  }
-  if (!id) {
-    return <Typography>Unit Of Measure not found.</Typography>;
-  }
-
-  return (
-    <Container>
-      <Typography variant="h4" className="mb-6 text-slate-800">
-        Unit of Measure Detail
+  const renderDetails = (data) => (
+    <>
+      <Typography variant="h6">Code:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.code}
       </Typography>
-      {unitOfMeasure.loading ? (
-        <CircularProgress />
-      ) : unitOfMeasure.data ? (
-        <>
-          <Button
-            variant="contained"
-            component={Link}
-            to={`/unit-of-measure/edit/${unitOfMeasure.data.id}`}
-            className="bg-slate-700"
-          >
-            Edit
-          </Button>
-          <Typography variant="body2" className="text-slate-500">
-            {unitOfMeasure.data.name}
-          </Typography>
-        </>
-      ) : (
-        unitOfMeasure.error
-      )}
-    </Container>
+      <Typography variant="h6">Name:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.name}
+      </Typography>
+    </>
+  );
+  return (
+    <GenericDetailPage
+      titleBase="Purchase Request"
+      id={entityState.id}
+      entityState={entityState}
+      renderButtons={renderButtons}
+      renderDetails={renderDetails}
+    />
   );
 };
 

@@ -1,56 +1,50 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
 import { fetchLocation } from "../../store/slices/locationSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
-import { Container, Button, Typography, CircularProgress } from "@mui/material";
+import { AppState } from "../../store/store";
+import { useEntityDetail } from "../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { location } = useSelector((state: AppState) => state.location);
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const entityState = useEntityDetail({
+    detailSelector: (state: AppState) => state.location.location,
+    fetchDetailAction: fetchLocation,
+  });
+  const renderButtons = () => (
+    <>
+      <Button
+        variant="contained"
+        component={Link}
+        to={`/location/edit/${entityState.id}`}
+        className="bg-slate-700"
+      >
+        Edit
+      </Button>
+    </>
+  );
 
-  useEffect(() => {
-    if (tokens && id) {
-      dispatch(fetchLocation(id));
-    }
-  }, []);
-
-  if (!tokens) {
-    return <Typography>Please log in to view locations.</Typography>;
-  }
-  if (!id) {
-    return <Typography>Location not found.</Typography>;
-  }
-
-  return (
-    <Container>
-      <Typography variant="h4" className="mb-6 text-slate-800">
-        Location Detail
+  const renderDetails = (data) => (
+    <>
+      <Typography variant="h6">Code:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.code}
       </Typography>
-      {location.loading ? (
-        <CircularProgress />
-      ) : location.data ? (
-        <>
-          <Button
-            variant="contained"
-            component={Link}
-            to={`/location/edit/${location.data.id}`}
-            className="bg-slate-700"
-          >
-            Edit
-          </Button>
-          <Typography variant="body2" className="text-slate-500">
-            {location.data.name}
-          </Typography>
-        </>
-      ) : (
-        location.error
-      )}
-    </Container>
+      <Typography variant="h6">Name:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.name}
+      </Typography>
+    </>
+  );
+  return (
+    <GenericDetailPage
+      titleBase="Location"
+      id={entityState.id}
+      entityState={entityState}
+      renderButtons={renderButtons}
+      renderDetails={renderDetails}
+    />
   );
 };
 
