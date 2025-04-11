@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "./store/store";
@@ -44,6 +44,11 @@ import ReturnList from "./pages/return/List";
 import ReturnDetail from "./pages/return/Detail";
 import ReturnEdit from "./pages/return/Edit";
 
+import CreateLocation from "./pages/location/Create";
+import LocationList from "./pages/location/List";
+import LocationDetail from "./pages/location/Detail";
+import LocationEdit from "./pages/location/Edit";
+
 import {
   AppBar,
   Toolbar,
@@ -79,9 +84,11 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  if (!tokens) {
-    return <Typography>Please log in to view the dashboard.</Typography>;
-  }
+  useEffect(() => {
+    if (!tokens) {
+      navigate("/login");
+    }
+  }, [tokens, navigate]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -156,11 +163,11 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </ListItemIcon>
           <ListItemText primary="Return" />
         </ListItemButton>
-        <ListItemButton onClick={handleLogout}>
+        <ListItemButton component={Link} to="/locations">
           <ListItemIcon>
-            <ExitToAppIcon />
+            <ContactsIcon />
           </ListItemIcon>
-          <ListItemText primary="Logout" />
+          <ListItemText primary="Location" />
         </ListItemButton>
       </List>
     </div>
@@ -553,6 +560,47 @@ const App: React.FC = () => {
           <PrivateRoute>
             <AppLayout>
               <ReturnEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/locations"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <LocationList />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/location/create"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <CreateLocation />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/location/detail/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <LocationDetail />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/location/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <LocationEdit />
             </AppLayout>
           </PrivateRoute>
         }

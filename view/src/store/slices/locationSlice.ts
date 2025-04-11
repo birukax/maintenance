@@ -21,7 +21,7 @@ export const fetchLocations = createAsyncThunk<[], void, {rejectValue: string}>(
     'location/fetchLocations',
     async(_, {rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/locations/');
+            const response = await api.get('/asset/locations/');
             return response.data;
         }
         catch (error) {
@@ -35,7 +35,7 @@ export const fetchLocation = createAsyncThunk<[], number, { rejectValue: string 
     'location/fetchLocation',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await api.get(`/inventory/locations/${id}/`)
+            const response = await api.get(`/asset/locations/${id}/`)
             return response.data;
         }
         catch (error) {
@@ -48,7 +48,7 @@ export const createLocation = createAsyncThunk<[],  formData  , { rejectValue: s
     'location/createLocation',
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/inventory/locations/', formData);
+            const response = await api.post('/asset/locations/', formData);
             return response.data;
         }
         catch (error) {
@@ -61,7 +61,7 @@ export const updateLocation = createAsyncThunk<[], { id: string, formData: { [ke
     'location/updateLocation',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/inventory/locations/${id}/`, formData);
+            const response = await api.patch(`/asset/locations/${id}/`, formData);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -93,38 +93,38 @@ const locationSlice = createSlice({
                         state.location.loading = true;
                         state.location.error = null;
                     })
-                    .addCase(fetchLocation.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.location.loading = false;
-                        state.location.data = action.payload;
-                    })
-                    .addCase(fetchLocation.rejected, (state, action) => {
-                        state.location.loading = false;
-                        state.location.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createLocation.pending, (state) => {
-                        state.location.loading = true;
-                        state.location.error = null;
-                    })
-                    .addCase(createLocation.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.location.loading = false;
-                        state.location.data = action.payload;
-                    })
-                    .addCase(createLocation.rejected, (state, action) => {
-                        state.location.loading = false;
-                        state.location.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateLocation.pending, (state) => {
-                        state.location.loading = true;
-                        state.location.error = null;
-                    })
-                    .addCase(updateLocation.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.location.loading = false;
-                        state.location.data = action.payload;
-                    })
-                    .addCase(updateLocation.rejected, (state, action) => {
-                        state.location.loading = false;
-                        state.location.error = action.payload || 'Unknown error';
-                    })
+        .addCase(fetchLocation.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.location.loading = false;
+            state.location.data = action.payload;
+        })
+        .addCase(fetchLocation.rejected, (state, action) => {
+            state.location.loading = false;
+            state.location.error = action.payload || 'Unknown error';
+        })
+        .addCase(createLocation.pending, (state) => {
+            state.location.loading = true;
+            state.location.error = null;
+        })
+        .addCase(createLocation.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.location.loading = false;
+            state.location.data = action.payload;
+        })
+        .addCase(createLocation.rejected, (state, action) => {
+            state.location.loading = false;
+            state.location.error = action.payload || 'Unknown error';
+        })
+        .addCase(updateLocation.pending, (state) => {
+            state.location.loading = true;
+            state.location.error = null;
+        })
+        .addCase(updateLocation.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.location.loading = false;
+            state.location.data = action.payload;
+        })
+        .addCase(updateLocation.rejected, (state, action) => {
+            state.location.loading = false;
+            state.location.error = action.payload || 'Unknown error';
+        })
     }
 })
 

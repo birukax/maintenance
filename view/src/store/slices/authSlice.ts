@@ -24,11 +24,18 @@ const authSlice = createSlice({
         setTokens: (state, action: PayloadAction<Tokens>) => {
             state.tokens = action.payload;
         },
-        logout: (state) => {
+        clearTokens: (state) => {
             state.tokens = null;
         },
     },
 })
 
-export const { setTokens, logout } = authSlice.actions;
+
+export const logout = () => async (dispatch) => {
+    dispatch(clearTokens());
+    window.location.href = '/login';
+}
+
+
+export const { setTokens, clearTokens } = authSlice.actions;
 export default authSlice.reducer;

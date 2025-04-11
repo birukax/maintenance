@@ -1,6 +1,6 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {store} from '../store/store';
-import { setTokens } from '../store/slices/authSlice';
+import { setTokens, logout } from '../store/slices/authSlice';
 interface Tokens {
     access: string;
     refresh: string;
@@ -9,6 +9,8 @@ interface Tokens {
 const api: AxiosInstance = axios.create({
     baseURL: 'http://localhost:8000',
 });
+
+let isLoggingOut = false;
 
 api.interceptors.request.use(
     (config: AxiosRequestConfig) => {
@@ -26,7 +28,7 @@ api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response?.status == 401 && !originalRequest._retry){
+        if (error.response?.status == 401 && !originalRequest._retry && !isLoggingOut){
             originalRequest._retry = true;
             const state = store.getState();
             const tokens: Tokens | null = state.auth.tokens;
@@ -46,11 +48,15 @@ api.interceptors.response.use(
                     return api(originalRequest);
                 }
                 catch (refreshError) {
+                    isLoggingOut = true;
                     store.dispatch({type: 'auth/logout'});
                     return Promise.reject(refreshError);
                 }
+            } else {
+                isLoggingOut = true;
+                store.dispatch(logout());
+                return Promise.reject(error);
             } 
-            
         }
         return Promise.reject(error);
     }
