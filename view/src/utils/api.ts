@@ -49,7 +49,7 @@ api.interceptors.response.use(
                 }
                 catch (refreshError) {
                     isLoggingOut = true;
-                    store.dispatch({type: 'auth/logout'});
+                    store.dispatch(logout());
                     return Promise.reject(refreshError);
                 }
             } else {

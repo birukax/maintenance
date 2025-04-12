@@ -35,9 +35,9 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.name}
       </Typography>
-      <Typography variant="h6">Location:</Typography>
+      <Typography variant="h6">Machine:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.location.name}
+        {data.machine.name}
       </Typography>
     </>
   );

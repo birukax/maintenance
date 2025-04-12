@@ -44,7 +44,7 @@ export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue:
     }
 )
 
-export const createPurchaseSchedule = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createPurchaseSchedule = createAsyncThunk<[],  {formData,monthFormData}  , { rejectValue: string }>(
     'purchaseSchedule/createPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {

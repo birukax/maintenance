@@ -31,11 +31,16 @@ const authSlice = createSlice({
 })
 
 
-export const logout = () => async (dispatch) => {
-    dispatch(clearTokens());
-    window.location.href = '/login';
-}
-
-
+export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
+    'auth/logout',
+    async (_, { dispatch }) => {
+        try{
+            dispatch(clearTokens());
+        }
+        catch (err) {
+            throw new Error(err.message || "Logout failed");
+        }
+    }
+)
 export const { setTokens, clearTokens } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,5 +1,7 @@
 import React from "react";
+import { AppState } from "../store/store";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   Typography,
   CircularProgress,
@@ -25,6 +27,7 @@ export const GenericListPage = ({
   title,
   entityState,
   columns,
+  extraColumns = [],
   createRoute = "",
   hasDetail = true,
   detailRouteBase = "",
@@ -32,6 +35,7 @@ export const GenericListPage = ({
   getKey,
 }) => {
   const headers = columns.map((col) => col.header);
+  const extraHeaders = extraColumns.map((extraColumn) => extraColumn.headers);
   return (
     <>
       <div className="flex gap-8">
@@ -76,6 +80,11 @@ export const GenericListPage = ({
                 <Typography noWrap>{header}</Typography>
               </TableCell>
             ))}
+            {extraHeaders.map((header) => (
+              <TableCell key={header}>
+                <Typography noWrap>{header}</Typography>
+              </TableCell>
+            ))}
             {hasDetail && (
               <TableCell align="right">
                 <Typography noWrap>Detail</Typography>
@@ -99,6 +108,18 @@ export const GenericListPage = ({
                         : "N/A"}
                     </TableCell>
                   ))}
+                  {extraColumns !== [] &&
+                    extraColumns.map((extraColumn) => {
+                      const schedule = row.monthly_purchase_schedules.find(
+                        (s) => s.month === extraColumn.number
+                      );
+
+                      return (
+                        <TableCell component="th" scope="row">
+                          {schedule ? schedule.quantity : "0.00"}
+                        </TableCell>
+                      );
+                    })}
                   {hasDetail && (
                     <TableCell align="right">
                       <Button

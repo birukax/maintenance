@@ -90,6 +90,10 @@ const Create = () => {
           fullWidth
           value={formData.quantity}
           onChange={handleChange}
+          inputProps={{
+            min: 0,
+            step: 1,
+          }}
           required
           disabled={loading}
         />
