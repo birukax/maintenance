@@ -28,8 +28,8 @@ api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response?.status == 401 && !originalRequest._retry && !isLoggingOut){
-            originalRequest._retry = true;
+        if (error.response?.status == 401 && !isLoggingOut){
+            isLoggingOut = true;
             const state = store.getState();
             const tokens: Tokens | null = state.auth.tokens;
 

@@ -4,7 +4,11 @@ from . import views
 
 router = routers.DefaultRouter()
 
-router.register(r"activity-types", views.ActivityTypeVeiwSet, basename="activity-type")
+router.register(
+    r"activity-types",
+    views.ActivityTypeVeiwSet,
+    basename="activity-type",
+)
 router.register(
     r"activities",
     views.ActivityVeiwSet,

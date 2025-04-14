@@ -108,7 +108,7 @@ export const GenericListPage = ({
                         : "N/A"}
                     </TableCell>
                   ))}
-                  {extraColumns !== [] &&
+                  {extraColumns &&
                     extraColumns.map((extraColumn) => {
                       const schedule = row.monthly_purchase_schedules.find(
                         (s) => s.month === extraColumn.number

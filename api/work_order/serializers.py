@@ -1,76 +1,78 @@
 from rest_framework import serializers
 from .models import ActivityType, Activity, WorkOrder, WorkOrderActivity
 from inventory.models import Item
+from asset.serializers import MachineSerializer, EquipmentSerializer
+from inventory.serializers import ItemSerializer
+
+
+class WorkOrderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    machine = MachineSerializer(read_only=True)
+    machine_id = serializers.IntegerField(write_only=True)
+    equipment = EquipmentSerializer(read_only=True)
+    equipment_id = serializers.IntegerField(write_only=True)
+    materials_required = ItemSerializer(many=True, read_only=True)
+    materials_required_id = serializers.ListField(
+        child=serializers.IntegerField(),
+        allow_empty=True,
+        write_only=True,
+    )
+    tools_required = ItemSerializer(many=True, read_only=True)
+    tools_required_id = serializers.ListField(
+        child=serializers.IntegerField(),
+        allow_empty=True,
+        write_only=True,
+    )
+
+    class Meta:
+        model = WorkOrder
+        fields = [
+            "id",
+            "machine",
+            "machine_id",
+            "equipment",
+            "equipment_id",
+            "materials_required",
+            "materials_required_id",
+            "tools_required_id",
+            "total_time_required",
+        ]
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = ActivityType
         fields = [
+            "id",
             "code",
             "name",
             "work_order_type",
         ]
 
 
-class ActivitySerializer(serializers.HyperlinkedModelSerializer):
-    activity_type = serializers.HyperlinkedIdentityField(
-        view_name="activity_types",
-        lookup_field="id",
-    )
+class ActivitySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    activity_type = ActivityTypeSerializer(read_only=True)
+    activity_type_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Activity
         fields = [
+            "id",
             "code",
             "description",
             "activity_type",
         ]
 
 
-class WorkOrderSerializer(serializers.HyperlinkedModelSerializer):
-    machine = serializers.HyperlinkedIdentityField(
-        view_name="machines",
-        lookup_field="id",
-    )
-    equipment = serializers.HyperlinkedIdentityField(
-        view_name="equipments",
-        lookup_field="id",
-    )
-    materials_required = serializers.HyperlinkedRelatedField(
-        view_name="items",
-        queryset=Item.objects.filter(category="SPAREPART"),
-        lookup_field="id",
-        many=True,
-    )
-    tools_required = serializers.HyperlinkedRelatedField(
-        view_name="items",
-        queryset=Item.objects.filter(category="TOOL"),
-        lookup_field="id",
-        many=True,
-    )
-
-    class Meta:
-        model = WorkOrder
-        fields = [
-            "machine",
-            "equipment",
-            "materials_required",
-            "tools_required",
-            "total_time_required",
-        ]
-
-
-class WorkOrderActivitySerializer(serializers.HyperlinkedModelSerializer):
-
-    work_order = serializers.HyperlinkedIdentityField(
-        view_name="work_orders",
-        lookup_field="id",
-    )
-    activity = serializers.HyperlinkedIdentityField(
-        view_name="activities",
-        lookup_field="id",
-    )
+class WorkOrderActivitySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    work_order = WorkOrderSerializer(read_only=True)
+    work_order_id = serializers.IntegerField(write_only=True)
+    activity = ActivitySerializer(read_only=True)
+    activity_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = WorkOrderActivity

@@ -53,14 +53,7 @@ const List: React.FC = () => {
   if (!tokens) {
     return <Typography>Please log in to view purchaseApprovals.</Typography>;
   }
-  const headers = [
-    "Item",
-    "UoM",
-    "Quantity",
-    "Requested By",
-    "Status",
-    "Action",
-  ];
+  const headers = ["Item", "UoM", "Quantity", "Requested By", "Status"];
 
   return (
     <>
