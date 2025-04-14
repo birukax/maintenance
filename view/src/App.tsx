@@ -9,6 +9,7 @@ import UnitOfMeasureRoutes from "./routes/UnitOfMeasureRoutes";
 import ConsumptionRoutes from "./routes/ConsumptionRoutes";
 import ReturnRoutes from "./routes/ReturnRoutes";
 import LocationRoutes from "./routes/LocationRoutes";
+import ActivityRoutes from "./routes/ActivityRoutes";
 import MachineRoutes from "./routes/MachineRoutes";
 import EquipmentRoutes from "./routes/EquipmentRoutes";
 import OtherRoutes from "./routes/OtherRoutes";
@@ -19,6 +20,7 @@ const App: React.FC = () => {
       <Route path="/login" element={<Login />} />
       {ItemRoutes}
       {ContactRoutes}
+      {ActivityRoutes}
       {PurchaseRequestRoutes}
       {PurchaseScheduleRoutes}
       {UnitOfMeasureRoutes}

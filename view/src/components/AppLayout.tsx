@@ -125,6 +125,12 @@ const AppLayout = ({ children }) => {
           </ListItemIcon>
           <ListItemText primary="Equipment" />
         </ListItemButton>
+        <ListItemButton component={Link} to="/activities">
+          <ListItemIcon>
+            <ContactsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Activity" />
+        </ListItemButton>
       </List>
     </div>
   );
