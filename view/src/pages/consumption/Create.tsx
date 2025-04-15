@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { createConsumption } from "../../store/slices/consumptionSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,

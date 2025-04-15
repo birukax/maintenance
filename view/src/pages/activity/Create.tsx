@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { AppState, AppDispatch } from "../../store/store";
 import { createActivity } from "../../store/slices/activitySlice";
-import api from "../../utils/api";
-import { WORK_ORDER_TYPES } from "../../utils/choices";
+import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
 import {
   TextField,
   Button,
@@ -21,12 +21,19 @@ const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     description: "",
-    activity_type: "",
+    activity_type_id: "",
   });
   const [loading, setLoading] = useState(false);
+  const { activityTypes } = useSelector(
+    (state: AppState) => state.activityType
+  );
   const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchActivityTypes());
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,48 +63,43 @@ const Create = () => {
         className="w-full max-w-lg space-y-4"
       >
         <TextField
-          label="Name"
-          name="name"
+          label="code"
+          name="code"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.name}
+          value={formData.code}
           onChange={handleChange}
           required
           disabled={loading}
         />
 
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
+          <Select
+            labelId="activity-type-select-label"
+            id="activity-type-select"
+            name="activity_type_id"
+            value={formData.activity_type_id}
+            onChange={handleChange}
+            label="Activity Type"
+          >
+            {activityTypes.data &&
+              activityTypes.data.map((activityType) => (
+                <MenuItem key={activityType.id} value={activityType.id}>
+                  {activityType.code} - {activityType.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
         <TextField
-          label="Email"
-          name="email"
-          type="email"
+          multiline
+          label="DescriptIon"
+          name="description"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-        <TextField
-          label="Location"
-          name="location"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.location}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
-        <TextField
-          label="Phone No."
-          name="phone_no"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.phone_no}
+          value={formData.description}
           onChange={handleChange}
           required
           disabled={loading}

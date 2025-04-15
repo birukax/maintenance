@@ -94,7 +94,7 @@ const Create = () => {
             name="work_order_type_id"
             value={formData.work_order_type_id}
             onChange={handleChange}
-            label="Unit of Measure"
+            label="Work Order Type"
           >
             {workOrderTypes.data &&
               workOrderTypes.data.map((workOrderType) => (

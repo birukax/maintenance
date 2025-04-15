@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  fetchContact,
-  updateContact,
-  fetchContacts,
-} from "../../store/slices/contactSlice";
+  fetchActivity,
+  updateActivity,
+} from "../../store/slices/activitySlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -19,25 +17,21 @@ import {
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    phone_no: "",
-    location: "",
+    description: "",
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contact } = useSelector((state: AppState) => state.contact);
+  const { activity } = useSelector((state: AppState) => state.activity);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
     if (tokens && id) {
-      dispatch(fetchContact(id));
+      dispatch(fetchActivity(id));
     }
     setFormData({
-      email: contact.data.email,
-      phone_no: contact.data.phone_no,
-      location: contact.data.location,
+      description: activity.data.description,
     });
   }, []);
 
@@ -52,8 +46,8 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateContact({ id, formData }));
-      navigate(`/contact/detail/${contact.data.id}`);
+      dispatch(updateActivity({ id, formData }));
+      navigate(`/activity/detail/${activity.data.id}`);
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -63,7 +57,7 @@ const Edit = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Contact
+        Edit Activity Type
       </Typography>
       <Box
         component="form"
@@ -71,41 +65,17 @@ const Edit = () => {
         className="w-full max-w-lg space-y-4"
       >
         <TextField
-          label="Email"
-          name="email"
-          type="email"
+          multiline
+          label="Description"
+          name="description"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.email}
+          value={formData.description}
           onChange={handleChange}
           required
           disabled={loading}
         />
-        <TextField
-          label="Location"
-          name="location"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.location}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
-        <TextField
-          label="Phone No."
-          name="phone_no"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.phone_no}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
         <Button
           type="submit"
           variant="contained"
@@ -114,7 +84,7 @@ const Edit = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Edit Contact"}
+          {loading ? <CircularProgress size={24} /> : "Edit Activity"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

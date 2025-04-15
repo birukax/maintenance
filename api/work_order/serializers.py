@@ -71,14 +71,14 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "machine_id",
             "equipment",
             "equipment_id",
-            "materials_required",
-            "materials_required_id",
-            "work_order_type",
-            "work_order_type_id",
             "activity_type",
             "activity_type_id",
+            "work_order_type",
+            "work_order_type_id",
             "tools_required_id",
             "total_time_required",
+            "materials_required",
+            "materials_required_id",
         ]
 
 
@@ -95,6 +95,7 @@ class ActivitySerializer(serializers.ModelSerializer):
             "code",
             "description",
             "activity_type",
+            "activity_type_id",
         ]
 
 
@@ -110,8 +111,10 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkOrderActivity
         fields = [
-            "work_order",
-            "activity",
             "value",
             "remark",
+            "activity",
+            "activity_id",
+            "work_order",
+            "work_order_id",
         ]

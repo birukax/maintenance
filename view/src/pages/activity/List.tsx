@@ -10,7 +10,7 @@ import {
 
 const activityColumns = [
   { header: "Code", accessor: "code" },
-  { header: "Activity Type", accessor: "activity_type" },
+  { header: "Activity Type", accessor: "activity_type.name" },
 ];
 
 const List: React.FC = () => {
@@ -21,7 +21,7 @@ const List: React.FC = () => {
 
   return (
     <GenericListPage
-      title="Activities"
+      title="Activity"
       entityState={entityState}
       columns={activityColumns}
       createRoute="/activity/create"
