@@ -25,6 +25,12 @@ router.register(
     basename="work-order-activity",
 )
 
+router.register(
+    r"work-order-types",
+    views.WorkOrderTypeVeiwSet,
+    basename="work-order-type",
+)
+
 urlpatterns = [
     path("", include(router.urls)),
 ]

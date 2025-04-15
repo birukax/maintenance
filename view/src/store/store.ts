@@ -11,6 +11,7 @@ import activityReducer from './slices/activitySlice';
 import equipmentReducer from './slices/equipmentSlice';
 import inventoryReducer from './slices/inventorySlice';
 import consumptionReducer from './slices/consumptionSlice';
+import activityTypeReducer from './slices/activityTypeSlice';
 import unitOfMeasureReducer from './slices/unitOfMeasureSlice';
 import purchaseRequestReducer from './slices/purchaseRequestSlice';
 import purchaseApprovalReducer from './slices/purchaseApprovalSlice';
@@ -28,6 +29,7 @@ interface RootState {
   equipment: ReturnType<typeof equipmentReducer>;
   inventory: ReturnType<typeof inventoryReducer>;
   consumption: ReturnType<typeof consumptionReducer>;
+  activityType: ReturnType<typeof activityTypeReducer>;
   unitOfMeasure: ReturnType<typeof unitOfMeasureReducer>;
   purchaseRequest: ReturnType<typeof purchaseRequestReducer>;
   purchaseApproval: ReturnType<typeof purchaseApprovalReducer>;
@@ -46,6 +48,7 @@ const rootReducer = {
     equipment: equipmentReducer,
     inventory: inventoryReducer,
     consumption: consumptionReducer,
+    activityType: activityTypeReducer,
     unitOfMeasure: unitOfMeasureReducer,
     purchaseRequest: purchaseRequestReducer,
     purchaseApproval: purchaseApprovalReducer,

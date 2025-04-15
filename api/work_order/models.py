@@ -3,12 +3,26 @@ from main.models import BaseCreatedUpdated
 from main import choices
 
 
+class WorkOrderType(BaseCreatedUpdated):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+
+
 class ActivityType(BaseCreatedUpdated):
     code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100)
-    work_order_type = models.CharField(
-        choices=choices.WORK_ORDER_TYPES,
-        max_length=30,
+    work_order_type = models.ForeignKey(
+        WorkOrderType,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="activity_types",
     )
 
     class Meta:
@@ -26,6 +40,7 @@ class Activity(BaseCreatedUpdated):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
+        related_name="activities",
     )
 
     class Meta:
@@ -53,7 +68,20 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
         related_name="material_work_orders",
     )
-
+    work_order_type = models.ForeignKey(
+        WorkOrderType,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="work_orders",
+    )
+    activity_type = models.ForeignKey(
+        ActivityType,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="work_orders",
+    )
     tools_required = models.ManyToManyField(
         "inventory.Item",
         blank=True,
@@ -65,7 +93,6 @@ class WorkOrder(BaseCreatedUpdated):
         default="Created",
     )
     total_time_required = models.DurationField()
-
     class Meta:
         ordering = ["-updated_at", "-created_at"]
 

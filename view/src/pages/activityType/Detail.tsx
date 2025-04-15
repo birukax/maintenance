@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { fetchActivity } from "../../store/slices/activitySlice";
+import { fetchActivityType } from "../../store/slices/activityTypeSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
@@ -9,15 +9,15 @@ import { Link } from "react-router-dom";
 
 const Detail = () => {
   const entityState = useEntityDetail({
-    detailSelector: (state: AppState) => state.activity.activity,
-    fetchDetailAction: fetchActivity,
+    detailSelector: (state: AppState) => state.activityType.activityType,
+    fetchDetailAction: fetchActivityType,
   });
   const renderButtons = () => (
     <>
       <Button
         variant="contained"
         component={Link}
-        to={`/activity/edit/${entityState.id}`}
+        to={`/activity-type/edit/${entityState.id}`}
         className="bg-slate-700"
       >
         Edit
@@ -31,20 +31,20 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.code}
       </Typography>
-      <Typography variant="h6">Description:</Typography>
+      <Typography variant="h6">Name:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.description}
+        {data.name}
       </Typography>
 
-      <Typography variant="h6">Activity Type:</Typography>
+      <Typography variant="h6">Work Order Type:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.activity_type.code} - {data.activity_type.name}
+        {data.work_order_type}
       </Typography>
     </>
   );
   return (
     <GenericDetailPage
-      titleBase="Activity"
+      titleBase="ActivityType"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}

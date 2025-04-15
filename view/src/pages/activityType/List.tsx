@@ -1,6 +1,6 @@
 // src/pages/List.tsx
 import React, { useEffect } from "react";
-import { fetchActivities } from "../../store/slices/activitySlice";
+import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
 import { AppState } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
 import {
@@ -8,26 +8,26 @@ import {
   ColumnDefination,
 } from "../../components/GenericListPage";
 
-const activityColumns = [
+const activityTypeColumns = [
   { header: "Code", accessor: "code" },
-  { header: "Activity Type", accessor: "activity_type" },
+  { header: "Work Order Type", accessor: "work_order_type" },
 ];
 
 const List: React.FC = () => {
   const entityState = useEntityList({
-    listSelector: (state: AppState) => state.activity.activities,
-    fetchListAction: fetchActivities,
+    listSelector: (state: AppState) => state.activityType.activityTypes,
+    fetchListAction: fetchActivityTypes,
   });
 
   return (
     <GenericListPage
-      title="Activities"
+      title="Activity Types"
       entityState={entityState}
-      columns={activityColumns}
-      createRoute="/activity/create"
-      detailRouteBase="/activity/detail"
+      columns={activityTypeColumns}
+      createRoute="/activity-type/create"
+      detailRouteBase="/activity-type/detail"
       onRefresh={entityState.refresh}
-      getKey={(activity) => activity.id}
+      getKey={(activityType) => activityType.id}
     />
   );
 };
