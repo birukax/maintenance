@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { fetchActivityType } from "../../store/slices/activityTypeSlice";
+import { fetchWorkOrderType } from "../../store/slices/workOrderTypeSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
@@ -9,15 +9,15 @@ import { Link } from "react-router-dom";
 
 const Detail = () => {
   const entityState = useEntityDetail({
-    detailSelector: (state: AppState) => state.activityType.activityType,
-    fetchDetailAction: fetchActivityType,
+    detailSelector: (state: AppState) => state.workOrderType.workOrderType,
+    fetchDetailAction: fetchWorkOrderType,
   });
   const renderButtons = () => (
     <>
       <Button
         variant="contained"
         component={Link}
-        to={`/activity-type/edit/${entityState.id}`}
+        to={`/work-order-type/edit/${entityState.id}`}
         className="bg-slate-700"
       >
         Edit
@@ -35,16 +35,11 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500">
         {data.name}
       </Typography>
-
-      <Typography variant="h6">Work Order Type:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data.work_order_type.code} - {data.work_order_type.name}
-      </Typography>
     </>
   );
   return (
     <GenericDetailPage
-      titleBase="ActivityType"
+      titleBase="Work Order Type"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}

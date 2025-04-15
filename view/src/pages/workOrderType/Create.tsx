@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createConsumption } from "../../store/slices/consumptionSlice";
-import { fetchItems } from "../../store/slices/itemSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { createWorkOrderType } from "../../store/slices/workOrderTypeSlice";
 import api from "../../utils/api";
 import {
   TextField,
@@ -20,19 +18,13 @@ import {
 
 const Create = () => {
   const [formData, setFormData] = useState({
-    item_id: "",
-    reason: "",
-    quantity: "",
+    code: "",
+    name: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { items } = useSelector((state: AppState) => state.item);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(fetchItems());
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,8 +35,8 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createConsumption(formData));
-      navigate("/consumptions");
+      dispatch(createWorkOrderType(formData));
+      navigate("/work-order-types");
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -54,55 +46,36 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Consumption
+        Create Work Order Type
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="item-select-label">Item</InputLabel>
-          <Select
-            labelId="item-select-label"
-            id="item-select"
-            name="item_id"
-            value={formData.item_id}
-            onChange={handleChange}
-            label="Unit of Measure"
-          >
-            {items.data &&
-              items.data.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
         <TextField
-          label="Quantity"
-          type="number"
-          name="quantity"
+          label="Code"
+          name="code"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.quantity}
+          value={formData.code}
           onChange={handleChange}
           required
           disabled={loading}
         />
         <TextField
-          multiline
-          label="Reason"
-          name="reason"
+          label="Name"
+          name="name"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.reason}
+          value={formData.name}
           onChange={handleChange}
           required
           disabled={loading}
         />
+
         <Button
           type="submit"
           variant="contained"
@@ -111,7 +84,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Consumption"}
+          {loading ? <CircularProgress size={24} /> : "Create Work Order Type"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

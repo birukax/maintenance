@@ -10,7 +10,8 @@ import {
 
 const activityTypeColumns = [
   { header: "Code", accessor: "code" },
-  { header: "Work Order Type", accessor: "work_order_type" },
+  { header: "Name", accessor: "name" },
+  { header: "Work Order Type", accessor: "work_order_type.name" },
 ];
 
 const List: React.FC = () => {

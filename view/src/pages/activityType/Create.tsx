@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createActivity } from "../../store/slices/activitySlice";
-import api from "../../utils/api";
-import { WORK_ORDER_TYPES } from "../../utils/choices";
+import { AppState, AppDispatch } from "../../store/store";
+import { createActivityType } from "../../store/slices/activityTypeSlice";
+import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
 import {
   TextField,
   Button,
@@ -20,13 +20,20 @@ import {
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
-    description: "",
-    activity_type: "",
+    name: "",
+    work_order_type_id: "",
   });
   const [loading, setLoading] = useState(false);
+  const { workOrderTypes } = useSelector(
+    (state: AppState) => state.workOrderType
+  );
   const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchWorkOrderTypes());
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,8 +44,8 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createActivity(formData));
-      navigate("/activities");
+      dispatch(createActivityType(formData));
+      navigate("/activity-types");
     } catch (err) {
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -48,13 +55,24 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Activity
+        Create Activity Type
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="w-full max-w-lg space-y-4"
       >
+        <TextField
+          label="code"
+          name="code"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.code}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
         <TextField
           label="Name"
           name="name"
@@ -66,43 +84,26 @@ const Create = () => {
           required
           disabled={loading}
         />
-
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-        <TextField
-          label="Location"
-          name="location"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.location}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
-        <TextField
-          label="Phone No."
-          name="phone_no"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.phone_no}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <InputLabel id="work-order-type-select-label">
+            Work Order Type
+          </InputLabel>
+          <Select
+            labelId="work-order-type-select-label"
+            id="work-order-type-select"
+            name="work_order_type_id"
+            value={formData.work_order_type_id}
+            onChange={handleChange}
+            label="Unit of Measure"
+          >
+            {workOrderTypes.data &&
+              workOrderTypes.data.map((workOrderType) => (
+                <MenuItem key={workOrderType.id} value={workOrderType.id}>
+                  {workOrderType.code} - {workOrderType.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
         <Button
           type="submit"
           variant="contained"
@@ -111,7 +112,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Activity"}
+          {loading ? <CircularProgress size={24} /> : "Create Activity Type"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">
