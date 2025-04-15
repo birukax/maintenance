@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
   return tokens ? (
     <AppLayout>{children}</AppLayout>
   ) : (
-    <Navigate to="./login" replace />
+    <Navigate to="/login" replace />
   );
 };
 

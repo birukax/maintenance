@@ -10,6 +10,7 @@ import locationReducer from './slices/locationSlice';
 import activityReducer from './slices/activitySlice';
 import equipmentReducer from './slices/equipmentSlice';
 import inventoryReducer from './slices/inventorySlice';
+import workOrderReducer from './slices/workOrderSlice';
 import consumptionReducer from './slices/consumptionSlice';
 import activityTypeReducer from './slices/activityTypeSlice';
 import workOrderTypeReducer from './slices/workOrderTypeSlice';
@@ -29,6 +30,7 @@ interface RootState {
   activity: ReturnType<typeof activityReducer>;
   equipment: ReturnType<typeof equipmentReducer>;
   inventory: ReturnType<typeof inventoryReducer>;
+  workOrder: ReturnType<typeof workOrderReducer>;
   consumption: ReturnType<typeof consumptionReducer>;
   activityType: ReturnType<typeof activityTypeReducer>;
   workOrderType: ReturnType<typeof workOrderTypeReducer>;
@@ -49,6 +51,7 @@ const rootReducer = {
     activity: activityReducer,
     equipment: equipmentReducer,
     inventory: inventoryReducer,
+    workOrder: workOrderReducer,
     consumption: consumptionReducer,
     activityType: activityTypeReducer,
     workOrderType: workOrderTypeReducer,

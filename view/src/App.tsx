@@ -8,6 +8,7 @@ import ContactRoutes from "./routes/ContactRoutes";
 import MachineRoutes from "./routes/MachineRoutes";
 import LocationRoutes from "./routes/LocationRoutes";
 import ActivityRoutes from "./routes/ActivityRoutes";
+import WorkOrderRoutes from "./routes/WorkOrderRoutes";
 import EquipmentRoutes from "./routes/EquipmentRoutes";
 import ConsumptionRoutes from "./routes/ConsumptionRoutes";
 import ActivityTypeRoutes from "./routes/ActivityTypeRoutes";
@@ -27,6 +28,7 @@ const App: React.FC = () => {
       {MachineRoutes}
       {ActivityRoutes}
       {LocationRoutes}
+      {WorkOrderRoutes}
       {EquipmentRoutes}
       {ConsumptionRoutes}
       {ActivityTypeRoutes}

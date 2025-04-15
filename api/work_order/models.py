@@ -45,6 +45,7 @@ class Activity(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["code"]
+        verbose_name_plural = "Activities"
 
     def __str__(self):
         return f"{self.code}"
@@ -104,14 +105,23 @@ class WorkOrder(BaseCreatedUpdated):
 
 class WorkOrderActivity(BaseCreatedUpdated):
     # description = models.TextField(max_length=250)
-    work_order = models.ForeignKey(WorkOrder, on_delete=models.CASCADE)
-    activity = models.ForeignKey(Activity, on_delete=models.RESTRICT)
+    work_order = models.ForeignKey(
+        WorkOrder,
+        on_delete=models.CASCADE,
+        related_name="work_order_activities",
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.RESTRICT,
+        related_name="work_order_activities",
+    )
     value = models.BooleanField(choices=choices.YES_NO_NONE, default=None)
     # extra = models.BooleanField(choices=choices.YESNO, default=False)
     remark = models.TextField(max_length=250)
 
     class Meta:
         ordering = ["-updated_at", "-created_at"]
+        verbose_name_plural = "Work Order Activities"
 
     def __str__(self):
         if self.activity:

@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Activity, ActivityType, WorkOrder, WorkOrderType, WorkOrderActivity
 
-# Register your models here.
+admin.site.register(Activity)
+admin.site.register(ActivityType)
+admin.site.register(WorkOrder)
+admin.site.register(WorkOrderType)
+admin.site.register(WorkOrderActivity)

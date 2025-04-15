@@ -34,6 +34,42 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
         ]
 
 
+class WorkOrderActivitySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    work_order = serializers.SerializerMethodField(read_only=True)
+    activity = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = WorkOrderActivity
+        fields = [
+            "value",
+            "remark",
+            "activity",
+            "work_order",
+        ]
+
+    def get_activity(self, obj):
+        try:
+            activity_obj = obj.activity
+            return {
+                "id": activity_obj.id,
+                "code": activity_obj.code,
+                "description": activity_obj.description,
+            }
+        except Activity.DoesNotExist:
+            return None
+
+    def get_work_order(self, obj):
+        try:
+            work_order_obj = obj.work_order
+            return {
+                "id": work_order_obj.id,
+            }
+        except WorkOrder.DoesNotExist:
+            return None
+
+
 class WorkOrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
@@ -63,6 +99,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
+    work_order_activities = WorkOrderActivitySerializer(many=True, read_only=True)
+
     class Meta:
         model = WorkOrder
         fields = [
@@ -75,10 +113,12 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "activity_type_id",
             "work_order_type",
             "work_order_type_id",
+            "tools_required",
             "tools_required_id",
             "total_time_required",
             "materials_required",
             "materials_required_id",
+            "work_order_activities",
         ]
 
 
@@ -96,25 +136,4 @@ class ActivitySerializer(serializers.ModelSerializer):
             "description",
             "activity_type",
             "activity_type_id",
-        ]
-
-
-class WorkOrderActivitySerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-
-    work_order = WorkOrderSerializer(read_only=True)
-    work_order_id = serializers.IntegerField(write_only=True)
-
-    activity = ActivitySerializer(read_only=True)
-    activity_id = serializers.IntegerField(write_only=True)
-
-    class Meta:
-        model = WorkOrderActivity
-        fields = [
-            "value",
-            "remark",
-            "activity",
-            "activity_id",
-            "work_order",
-            "work_order_id",
         ]

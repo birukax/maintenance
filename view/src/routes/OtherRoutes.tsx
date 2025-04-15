@@ -1,9 +1,9 @@
 // src/routes/OtherRoutes.tsx
 import { Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
-import InventoryList from '../pages/inventory/List';
-import PurchaseApprovalList from '../pages/approval/purchase/List';
-import ProtectedRoute from '../components/ProtectedRoute';
+import InventoryList from "../pages/inventory/List";
+import PurchaseApprovalList from "../pages/approval/purchase/List";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const OtherRoutes = [
   <Route
