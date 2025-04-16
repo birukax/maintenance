@@ -43,11 +43,11 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.activity_type.code} - {data.activity_type.name}
       </Typography>
-      <Typography variant="h6">Materials Required:</Typography>
-      {data.materials_required.map((material) => {
+      <Typography variant="h6">Spareparts Required:</Typography>
+      {data.spareparts_required.map((sparepart) => {
         return (
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {material.name}
+            {sparepart.name}
           </Typography>
         );
       })}

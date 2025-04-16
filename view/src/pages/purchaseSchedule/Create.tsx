@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { AppState, AppDispatch } from "../../store/store";
+import { MONTH_NAMES } from "../../utils/choices";
 import { createPurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
-import { MONTH_NAMES } from "../../utils/choices";
 import {
   TextField,
   Button,
@@ -48,9 +47,7 @@ const Create = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchItems());
-    }
+    dispatch(fetchItems());
   }, []);
 
   const handleChange = (e) => {
@@ -83,14 +80,14 @@ const Create = () => {
         className="w-full max-w-lg space-y-4"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="uom-select-label">Item</InputLabel>
+          <InputLabel id="item-select-label">Item</InputLabel>
           <Select
-            labelId="uom-select-label"
-            id="uom-select"
+            labelId="item-select-label"
+            id="item-select"
             name="item_id"
             value={formData.item_id}
             onChange={handleChange}
-            label="Unit of Measure"
+            label="Item"
           >
             {items.data &&
               items.data.map((item) => (

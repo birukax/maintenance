@@ -145,17 +145,6 @@ class PurchaseRequestViewSet(viewsets.ModelViewSet):
         purchase_request = self.get_object()
         received_quantity = int(request.data.get("received_quantity"))
         received_date = request.data.get("received_date")
-        if received_date:
-            try:
-                received_date = datetime.datetime.fromisoformat(
-                    received_date.replace("Z", "+00:00")
-                ).date()
-            except ValueError:
-                received_date = datetime.datetime.strptime(
-                    received_date, "%Y-%m-%d"
-                ).date()
-        else:
-            received_date = datetime.date.today()
         if received_quantity is not None:
             if received_quantity > purchase_request.quantity:
                 raise serializers.ValidationError(

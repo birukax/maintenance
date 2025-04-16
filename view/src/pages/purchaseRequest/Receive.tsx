@@ -31,7 +31,7 @@ const style = {
 const Receive = ({ id, setModalOpen }) => {
   const [formData, setFormData] = useState({
     received_quantity: 0,
-    received_date: dayjs(),
+    received_date: "",
   });
   const { purchaseRequest } = useSelector(
     (state: AppState) => state.purchaseRequest
@@ -46,9 +46,11 @@ const Receive = ({ id, setModalOpen }) => {
   };
 
   const handleDateChange = (value) => {
+    const formattedDate = value ? value.format("YYYY-MM-DD") : null;
+
     setFormData({
       ...formData,
-      received_date: value,
+      received_date: formattedDate,
     });
   };
 
@@ -60,7 +62,7 @@ const Receive = ({ id, setModalOpen }) => {
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap();
       setModalOpen(false);
     } catch (err) {
-      setError(err || "Failed to receive the item.");
+      setError(err.response?.data.detail || "Failed to receive the item.");
     }
   };
   useEffect(() => {
@@ -98,7 +100,9 @@ const Receive = ({ id, setModalOpen }) => {
             disableFuture
             label="Receive Date"
             name="received_date"
-            value={formData.received_date}
+            value={
+              formData.received_date ? dayjs(formData.received_date) : null
+            }
             onChange={handleDateChange}
             slotProps={{
               textField: {

@@ -85,26 +85,15 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     activity_type = ActivityTypeSerializer(read_only=True)
     activity_type_id = serializers.IntegerField(write_only=True)
 
-    materials_required = ItemSerializer(many=True, read_only=True)
-    materials_required_id = serializers.ListField(
-        child=serializers.IntegerField(),
-        allow_empty=True,
-        write_only=True,
-    )
-
+    spareparts_required = ItemSerializer(many=True, read_only=True)
     tools_required = ItemSerializer(many=True, read_only=True)
-    tools_required_id = serializers.ListField(
-        child=serializers.IntegerField(),
-        allow_empty=True,
-        write_only=True,
-    )
-
     work_order_activities = WorkOrderActivitySerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkOrder
         fields = [
             "id",
+            "date",
             "machine",
             "machine_id",
             "equipment",
@@ -114,10 +103,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "work_order_type",
             "work_order_type_id",
             "tools_required",
-            "tools_required_id",
             "total_time_required",
-            "materials_required",
-            "materials_required_id",
+            "spareparts_required",
             "work_order_activities",
         ]
 

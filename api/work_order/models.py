@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from main.models import BaseCreatedUpdated
 from main import choices
@@ -64,10 +65,11 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
         related_name="work_orders",
     )
-    materials_required = models.ManyToManyField(
+    date = models.DateField(default=datetime.datetime.now)
+    spareparts_required = models.ManyToManyField(
         "inventory.Item",
         blank=True,
-        related_name="material_work_orders",
+        related_name="sparepart_work_orders",
     )
     work_order_type = models.ForeignKey(
         WorkOrderType,
