@@ -117,7 +117,7 @@ class WorkOrderActivity(BaseCreatedUpdated):
         on_delete=models.RESTRICT,
         related_name="work_order_activities",
     )
-    value = models.BooleanField(choices=choices.YES_NO_NONE, default=None)
+    value = models.BooleanField(choices=choices.YES_NO_NONE, null=True, blank=True)
     # extra = models.BooleanField(choices=choices.YESNO, default=False)
     remark = models.TextField(max_length=250)
 

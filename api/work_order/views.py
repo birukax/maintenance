@@ -121,7 +121,33 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
         )
         serializer.instance.spareparts_required.set(spareparts_required_id)
         serializer.instance.tools_required.set(tools_required_id)
+        activities = Activity.objects.filter(activity_type=activity_type)
+        if activities.exists:
+            for a in activities:
+                WorkOrderActivity.objects.create(
+                    work_order=serializer.instance,
+                    activity=a,
+                )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["POST"])
+    def create_activities(self, request, pk=None):
+        work_order = self.get_object()
+        activity_ids = request.data.get("activity_ids")
+        try:
+            for a in activity_ids:
+                activity = Activity.objects.get(id=a)
+
+                WorkOrderActivity.objects.create(
+                    work_order=work_order,
+                    activity=activity,
+                )
+        except Activity.DoesNotExist:
+            raise serializers.ValidationError(
+                {"activity_ids": f"Activity does not exist."}
+            )
+        serializer = WorkOrderSerializer(work_order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class WorkOrderActivityVeiwSet(viewsets.ModelViewSet):

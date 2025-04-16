@@ -43,6 +43,7 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkOrderActivity
         fields = [
+            "id",
             "value",
             "remark",
             "activity",

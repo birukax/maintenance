@@ -69,6 +69,18 @@ export const updateWorkOrder = createAsyncThunk<[], { id: string, formData: { [k
     }
 )
 
+export const createWorkOrderActivities = createAsyncThunk<[],{ id: string, formData: { [key: string] } }, { rejectValue: string }>(
+    'workOrder/createWorkOrderActivities',
+    async ({ id, formData }, { rejectWithValue}) => {
+        try {
+            const response = await api.post(`/work-order/work-orders/${id}/create-activities/`, formData)
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+
 
 const WorkOrderSlice = createSlice({
     name: 'workOrder',
@@ -122,6 +134,18 @@ const WorkOrderSlice = createSlice({
             state.workOrder.data = action.payload;
         })
         .addCase(updateWorkOrder.rejected, (state, action) => {
+            state.workOrder.loading = false;
+            state.workOrder.error = action.payload || 'Unknown error';
+        })
+        .addCase(createWorkOrderActivities.pending, (state) => {
+            state.workOrder.loading = true;
+            state.workOrder.error = null;
+        })
+        .addCase(createWorkOrderActivities.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.workOrder.loading = false;
+            state.workOrder.data = action.payload;
+        })
+        .addCase(createWorkOrderActivities.rejected, (state, action) => {
             state.workOrder.loading = false;
             state.workOrder.error = action.payload || 'Unknown error';
         })
