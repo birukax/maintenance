@@ -5,7 +5,13 @@ from rest_framework.response import Response
 from .models import Schedule
 from inventory.models import Item
 from asset.models import Machine, Equipment
-from work_order.models import WorkOrderType, ActivityType, Activity, WorkOrderActivity
+from work_order.models import (
+    WorkOrderType,
+    ActivityType,
+    Activity,
+    WorkOrderActivity,
+    WorkOrder,
+)
 from .serializers import ScheduleSerializer
 
 
@@ -66,3 +72,31 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
         serializer.instance.spareparts_required.set(spareparts_required_id)
         serializer.instance.tools_required.set(tools_required_id)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["POST"])
+    def create_work_order(self, request, pk=None):
+        schedule = self.get_object()
+        date = request.data.get("date")
+
+        try:
+            work_order = WorkOrder(
+                schedule=schedule,
+                date=date,
+                machine=schedule.machine,
+                equipment=schedule.equipment,
+                work_order_type=schedule.work_order_type,
+                activity_type=schedule.activity_type,
+                total_time_required=schedule.planned_time,
+            )
+            work_order.save()
+            work_order.tools_required.set(
+                [schedule.tools_required.all().values_list("id", flat=True)[0]]
+            )
+            work_order.spareparts_required.set(
+                [schedule.spareparts_required.all().values_list("id", flat=True)[0]]
+            )
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ScheduleSerializer(schedule)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -3,7 +3,7 @@ from .models import ActivityType, Activity, WorkOrderType, WorkOrder, WorkOrderA
 from inventory.models import Item
 from asset.serializers import MachineSerializer, EquipmentSerializer
 from inventory.serializers import ItemSerializer
-
+from schedule.models import Schedule
 
 class WorkOrderTypeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -13,6 +13,7 @@ class WorkOrderTypeSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "code",
+            "scheduled",
             "name",
         ]
 
@@ -74,6 +75,8 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
 class WorkOrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
+    schedule = serializers.SerializerMethodField(read_only=True)
+
     machine = MachineSerializer(read_only=True)
     machine_id = serializers.IntegerField(write_only=True)
 
@@ -95,6 +98,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "date",
+            "schedule",
             "machine",
             "machine_id",
             "equipment",
@@ -109,6 +113,17 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "work_order_activities",
         ]
 
+    def get_schedule(self, obj):
+        try:
+            schedule_obj = obj.schedule
+            return {
+                "id": schedule_obj.id,
+                "type": schedule_obj.type,
+                "description": schedule_obj.description,
+            }
+        except Schedule.DoesNotExist:
+            return None
+
 
 class ActivitySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -121,6 +136,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "code",
+            "name",
             "description",
             "activity_type",
             "activity_type_id",

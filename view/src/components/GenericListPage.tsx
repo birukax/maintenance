@@ -36,6 +36,10 @@ export const GenericListPage = ({
 }) => {
   const headers = columns.map((col) => col.header);
   const extraHeaders = extraColumns.map((extraColumn) => extraColumn.headers);
+  const { tokens } = useSelector((state: AppState) => state.auth);
+  if (!tokens) {
+    return <Typography>Unauthorized</Typography>;
+  }
   return (
     <>
       <div className="flex gap-8">

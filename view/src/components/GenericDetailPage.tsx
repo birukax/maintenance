@@ -2,6 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Container, Typography, CircularProgress, Box } from "@mui/material";
+import { useSelector } from "react-redux";
+import { AppState } from "../store/store";
 
 export function GenericDetailPage({
   titleBase,
@@ -10,6 +12,12 @@ export function GenericDetailPage({
   renderButtons,
   renderDetails,
 }) {
+  const { tokens } = useSelector((state: AppState) => state.auth);
+
+  if (!tokens) {
+    return <Typography>Unauthorized</Typography>;
+  }
+
   if (!id) {
     return <Typography>Error: ID parameter is missing.</Typography>;
   }

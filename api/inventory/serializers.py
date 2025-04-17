@@ -146,6 +146,7 @@ class ConsumptionSerializer(serializers.ModelSerializer):
             "id",
             "item",
             "item_id",
+            "date",
             "reason",
             "quantity",
         ]
@@ -163,6 +164,7 @@ class ReturnSerializer(serializers.ModelSerializer):
             "id",
             "item",
             "item_id",
+            "date",
             "reason",
             "used",
             "quantity",

@@ -46,3 +46,10 @@ export const WORK_ORDER_STATUS = [
     ["Incomplete", "Incomplete"],
     ["Completed", "Completed"],
 ]
+
+export const SCHEDULE_TYPES = [
+    ["DAILY", "Daily"],
+    ["WEEKLY", "Weekly"],
+    ["MONTHLY", "Monthly"],
+    ["YEARLY", "Yearly"],
+] as const;

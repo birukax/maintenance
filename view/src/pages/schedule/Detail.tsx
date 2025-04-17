@@ -1,22 +1,23 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { fetchWorkOrder } from "../../store/slices/workOrderSlice";
+import { fetchSchedule } from "../../store/slices/scheduleSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal } from "@mui/material";
 import { Link } from "react-router-dom";
-import AddActivity from "./AddActivity";
+import CreateWorkOrder from "../../pages/schedule/CreateWorkOrder";
 
 const Detail = () => {
   const entityState = useEntityDetail({
-    detailSelector: (state: AppState) => state.workOrder.workOrder,
-    fetchDetailAction: fetchWorkOrder,
+    detailSelector: (state: AppState) => state.schedule.schedule,
+    fetchDetailAction: fetchSchedule,
   });
-  const [modalOpen, setModalOpen] = useState(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
+
   const renderButtons = () => (
     <>
       <Modal
@@ -25,32 +26,23 @@ const Detail = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <AddActivity entityState={entityState} setModalOpen={setModalOpen} />
+        <CreateWorkOrder
+          entityState={entityState}
+          setModalOpen={setModalOpen}
+        />
       </Modal>
       <Button
         onClick={handleModalOpen}
         variant="contained"
         className="bg-slate-700"
       >
-        Add Activity
+        Create Work Order
       </Button>
     </>
   );
 
   const renderDetails = (data) => (
     <>
-      {data.schedule && (
-        <>
-          <Typography variant="h6">Machine:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.machine.code} - {data.machine.name}
-          </Typography>
-        </>
-      )}
-      <Typography variant="h6">Date:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.date}
-      </Typography>
       <Typography variant="h6">Machine:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.machine.code} - {data.machine.name}
@@ -70,7 +62,11 @@ const Detail = () => {
       <Typography variant="h6">Spareparts Required:</Typography>
       {data.spareparts_required.map((sparepart) => {
         return (
-          <Typography variant="body1" className="text-slate-500 mb-2">
+          <Typography
+            key={sparepart.id}
+            variant="body1"
+            className="text-slate-500 mb-2"
+          >
             {sparepart.name}
           </Typography>
         );
@@ -78,28 +74,24 @@ const Detail = () => {
       <Typography variant="h6">Tools Required:</Typography>
       {data.tools_required.map((tool) => {
         return (
-          <Typography variant="body1" className="text-slate-500 mb-2">
+          <Typography
+            key={tool.id}
+            variant="body1"
+            className="text-slate-500 mb-2"
+          >
             {tool.name}
           </Typography>
         );
       })}
-      <Typography variant="h6">Total Time Required (hh:mm:ss):</Typography>
+      <Typography variant="h6">Planned Time (hh:mm:ss):</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.total_time_required}
+        {data.planned_time}
       </Typography>
-      <Typography variant="h6">Work Order Activities:</Typography>
-      {data.work_order_activities.map((work_order_activity) => {
-        return (
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            * {work_order_activity.activity.description}
-          </Typography>
-        );
-      })}
     </>
   );
   return (
     <GenericDetailPage
-      titleBase="Work Order Type"
+      titleBase="Schedule"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}
