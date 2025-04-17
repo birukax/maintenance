@@ -171,6 +171,7 @@ class Consumption(BaseCreatedUpdated):
     item = models.ForeignKey(
         Item, on_delete=models.RESTRICT, related_name="consumptions"
     )
+    date = models.DateField(default=datetime.datetime.now)
     reason = models.TextField(max_length=250)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
@@ -183,6 +184,7 @@ class Consumption(BaseCreatedUpdated):
 
 class Return(BaseCreatedUpdated):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="returns")
+    date = models.DateField(default=datetime.datetime.now)
     reason = models.TextField(max_length=250)
     used = models.BooleanField(default=True)
     quantity = models.DecimalField(

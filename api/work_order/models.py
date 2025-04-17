@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from main.models import BaseCreatedUpdated
+from schedule.models import Schedule
 from main import choices
 
 
@@ -35,6 +36,7 @@ class ActivityType(BaseCreatedUpdated):
 
 class Activity(BaseCreatedUpdated):
     code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
     activity_type = models.ForeignKey(
         ActivityType,
@@ -53,6 +55,13 @@ class Activity(BaseCreatedUpdated):
 
 
 class WorkOrder(BaseCreatedUpdated):
+    schedule = models.ForeignKey(
+        Schedule,
+        on_delete=models.RESTRICT,
+        related_name="work_orders",
+        null=True,
+        blank=True,
+    )
     machine = models.ForeignKey(
         "asset.Machine",
         on_delete=models.RESTRICT,

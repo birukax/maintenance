@@ -53,3 +53,9 @@ WORK_ORDER_STATUS = (
     ("Incomplete", "Incomplete"),
     ("Completed", "Completed"),
 )
+SCHEDULE_TYPES = (
+    ("DAILY", "DAILY"),
+    ("WEEKLY", "WEEKLY"),
+    ("MONTHLY", "MONTHLY"),
+    ("YEARLY", "YEARLY"),
+)

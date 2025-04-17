@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "approval",
     "inventory",
     "work_order",
+    "schedule",
     "corsheaders",
 ]
 
