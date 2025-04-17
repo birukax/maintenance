@@ -8,6 +8,7 @@ from main import choices
 class WorkOrderType(BaseCreatedUpdated):
     code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100)
+    scheduled = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["code"]

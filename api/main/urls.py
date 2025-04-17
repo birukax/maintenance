@@ -27,4 +27,5 @@ urlpatterns = [
     path("inventory/", include("inventory.urls")),
     path("approval/", include("approval.urls")),
     path("asset/", include("asset.urls")),
+    path("schedule/", include("schedule.urls")),
 ]
