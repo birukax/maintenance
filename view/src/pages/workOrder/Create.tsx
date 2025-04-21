@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -19,6 +19,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -50,6 +51,7 @@ const Create = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("test");
 
   useEffect(() => {
     dispatch(fetchMachines());
@@ -59,7 +61,32 @@ const Create = () => {
     dispatch(fetchItems());
   }, []);
 
+  const toolOptions = useMemo(() => {
+    return items.data
+      ? items.data.filter((item) => item.category === "TOOL")
+      : [];
+  }, [items.data]);
+
+  const sparepartOptions = useMemo(() => {
+    return items.data
+      ? items.data.filter((item) => item.category === "SPAREPART")
+      : [];
+  }, [items.data]);
+
+  const selectedSpareparts = useMemo(() => {
+    return sparepartOptions.filter((option) =>
+      formData.spareparts_required_id.includes(option.id)
+    );
+  }, [formData.spareparts_required_id, sparepartOptions]);
+
+  const selectedTools = useMemo(() => {
+    return toolOptions.filter((option) =>
+      formData.tools_required_id.includes(option.id)
+    );
+  }, [formData.tools_required_id, toolOptions]);
+
   const handleChange = (e) => {
+    console.log(e.target.name);
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -70,6 +97,15 @@ const Create = () => {
       date: formattedDate,
     });
   };
+  const handleAutocompleteChange = (fieldName, newValue) => {
+    // Extract only the IDs from the selected objects
+    const selectedIds = newValue.map((item) => item.id);
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: selectedIds,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -224,25 +260,24 @@ const Create = () => {
           </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
-          <InputLabel id="tool-select-label">Tools Required</InputLabel>
-          <Select
+          <Autocomplete
             multiple
-            labelId="tool-select-label"
+            options={toolOptions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="tools Required"
+                placeholder="Search tools..."
+              />
+            )}
             id="tool-select"
-            name="tools_required_id"
-            value={formData.tools_required_id}
-            onChange={handleChange}
-            label="Tools Required"
-          >
-            {items.data &&
-              items.data
-                .filter((item) => item.category === "TOOL")
-                .map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-          </Select>
+            value={selectedTools}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("tools_required_id", newValue)
+            }
+          ></Autocomplete>
         </FormControl>
         <TextField
           label="Total Time Required (In minutes)"
