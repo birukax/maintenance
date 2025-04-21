@@ -14,6 +14,7 @@ interface AuthState {
 
 const initialState: AuthState = {
     tokens: null,
+    last_route: null,
 };
 
 

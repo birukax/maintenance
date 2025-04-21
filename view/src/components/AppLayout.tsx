@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../store/store";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
 import {
   AppBar,
@@ -29,6 +29,7 @@ const AppLayout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!tokens) {
@@ -36,6 +37,9 @@ const AppLayout = ({ children }) => {
     }
   }, [tokens, navigate]);
 
+  useEffect(() => {
+    sessionStorage.setItem("previousRoute", location.pathname);
+  }, [navigate]);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

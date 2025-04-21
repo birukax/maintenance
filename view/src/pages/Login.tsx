@@ -20,7 +20,11 @@ const Login = () => {
             const response = await api.post('/api/token/', {username, password });
             dispatch(setTokens(response.data));
             setError('');
-            navigate('/dashboard/');
+            if (sessionStorage.getItem("previousRoute")) {
+              navigate(sessionStorage.getItem("previousRoute"));
+            } else {
+              navigate("/dashboard/");
+            }
         }catch(err: any) {
             setError(err.response?.data?.detail || 'Login Failed');
         }finally {
