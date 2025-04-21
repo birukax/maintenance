@@ -77,7 +77,7 @@ export const createScheduledWorkOrder = createAsyncThunk<[], { id: string, formD
             const response = await api.post(`/schedule/schedules/${id}/create_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue( error.response?.data || {message: 'Failed to create work order.'});
         }
     }
 )

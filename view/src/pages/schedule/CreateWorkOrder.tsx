@@ -65,11 +65,6 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
       );
     }
   };
-  useEffect(() => {
-    if (schedule.error) {
-      setError(schedule.error);
-    }
-  }, [schedule.error]);
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -93,7 +88,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: schedule.loading,
-                helperText: error?.data,
+                helperText: error,
               },
             }}
           />
@@ -114,7 +109,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
+            {error}
           </Typography>
         )}
       </Box>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchActivities } from "../../store/slices/activitySlice";
+import { createWorkOrderActivities } from "../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
   Button,
@@ -52,7 +53,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      await dispatch(addWorkOrder({ id, formData })).unwrap();
+      await dispatch(createWorkOrderActivities({ id, formData })).unwrap();
       setModalOpen(false);
     } catch (err) {
       setError(

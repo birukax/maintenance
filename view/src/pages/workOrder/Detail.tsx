@@ -41,9 +41,9 @@ const Detail = () => {
     <>
       {data.schedule && (
         <>
-          <Typography variant="h6">Machine:</Typography>
+          <Typography variant="h6">Schedule:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.machine.code} - {data.machine.name}
+            {data.schedule.id}
           </Typography>
         </>
       )}
@@ -99,7 +99,7 @@ const Detail = () => {
   );
   return (
     <GenericDetailPage
-      titleBase="Work Order Type"
+      titleBase="Work Order"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}

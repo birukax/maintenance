@@ -79,6 +79,11 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
         date = request.data.get("date")
 
         try:
+            if WorkOrder.objects.filter(schedule=schedule, date=date).exists():
+                return Response(
+                    {"error": "Work order already exists for this schedule and date."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             work_order = WorkOrder(
                 schedule=schedule,
                 date=date,

@@ -54,6 +54,8 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
     def get_activity(self, obj):
         try:
             activity_obj = obj.activity
+            if activity_obj == None:
+                return None
             return {
                 "id": activity_obj.id,
                 "code": activity_obj.code,
@@ -64,7 +66,11 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
 
     def get_work_order(self, obj):
         try:
+
             work_order_obj = obj.work_order
+
+            if work_order_obj == None:
+                return None
             return {
                 "id": work_order_obj.id,
             }
@@ -116,6 +122,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     def get_schedule(self, obj):
         try:
             schedule_obj = obj.schedule
+            if schedule_obj == None:
+                return None
             return {
                 "id": schedule_obj.id,
                 "type": schedule_obj.type,

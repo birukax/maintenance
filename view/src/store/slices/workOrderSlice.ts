@@ -73,7 +73,7 @@ export const createWorkOrderActivities = createAsyncThunk<[],{ id: string, formD
     'workOrder/createWorkOrderActivities',
     async ({ id, formData }, { rejectWithValue}) => {
         try {
-            const response = await api.post(`/work-order/work-orders/${id}/create-activities/`, formData)
+            const response = await api.post(`/work-order/work-orders/${id}/create_activities/`, formData)
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
