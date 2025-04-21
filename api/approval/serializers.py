@@ -14,6 +14,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "purchase_request",
+            "remark",
             "status",
             "by",
         ]

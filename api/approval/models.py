@@ -15,6 +15,11 @@ class Purchase(BaseCreatedUpdated):
         max_length=20,
         default="PENDING",
     )
+    remark = models.TextField(
+        max_length=250,
+        blank=True,
+        null=True,
+    )
     by = models.ForeignKey(
         User,
         on_delete=models.RESTRICT,

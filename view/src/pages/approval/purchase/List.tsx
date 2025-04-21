@@ -31,9 +31,7 @@ const List: React.FC = () => {
   const navigte = useNavigate();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchPurchaseApprovals());
-    }
+    dispatch(fetchPurchaseApprovals());
   }, []);
 
   const handleApprove = (id) => {

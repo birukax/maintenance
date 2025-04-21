@@ -2,6 +2,7 @@ import React from "react";
 import { AppState } from "../store/store";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   CircularProgress,
@@ -37,8 +38,14 @@ export const GenericListPage = ({
   const headers = columns.map((col) => col.header);
   const extraHeaders = extraColumns.map((extraColumn) => extraColumn.headers);
   const { tokens } = useSelector((state: AppState) => state.auth);
+  const navigate = useNavigate();
+
   if (!tokens) {
     return <Typography>Unauthorized</Typography>;
+  }
+
+  if (entityState?.error?.code === "token_not_valid") {
+    navigate("/login");
   }
   return (
     <>
