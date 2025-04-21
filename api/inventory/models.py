@@ -21,7 +21,7 @@ class Contact(BaseCreatedUpdated):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone_no = models.CharField(max_length=20)
-    location = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
 
     class Meta:
         ordering = ["name"]
@@ -51,8 +51,10 @@ class Item(BaseCreatedUpdated):
             else:
                 prefix = f"ITEM"
             last_item = Item.objects.order_by("-pk").first()
-            next_id = last_item.pk + 1 if last_item else 1
-            self.no = f"{prefix}{next_id}"
+            # next_id = last_item.pk + 1 if last_item else 1
+            next_id = last_item.no.split("-")[-1] if last_item else 1
+            next_id = int(next_id) + 1
+            self.no = f"{prefix}-{next_id}"
         super().save(*args, **kwargs)
 
     class Meta:

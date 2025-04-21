@@ -77,7 +77,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
         inventories = Inventory.objects.all()
         purchases = PurchaseRequest.objects.all()
         consumptions = Consumption.objects.all()
-        returns = Return.objects.all()
+        returns = Return.objects.filter(used=False)
         for i in inventories:
             if purchases.filter(item=i.item).exists():
                 i.purchased_quantity = (
