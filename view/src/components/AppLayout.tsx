@@ -166,6 +166,7 @@ const AppLayout = ({ children }) => {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          
         }}
       >
         <Toolbar sx={{ bgcolor: "white" }} className="justify-between">
