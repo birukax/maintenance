@@ -121,15 +121,19 @@ export const GenericListPage = ({
                   key={getKey(row)}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {columns.map((col) => (
+                  {columns.map((col) => {
+                    
+                    return (
                     <TableCell key={col.header} component="th" scope="row">
+                      
+                      
                       {col.renderCell
                         ? col.renderCell(row)
                         : col.accessor
-                        ? getNestedValue(row, String(col.accessor))
+                        ? String(getNestedValue(row, String(col.accessor)))
                         : "N/A"}
                     </TableCell>
-                  ))}
+                  )})}
                   {extraColumns &&
                     extraColumns.map((extraColumn) => {
                       const schedule = row.monthly_purchase_schedules.find(

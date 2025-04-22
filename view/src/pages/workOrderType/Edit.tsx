@@ -12,28 +12,33 @@ import {
   Typography,
   Container,
   CircularProgress,
+  FormControlLabel,
+  Switch,
   Box,
 } from "@mui/material";
 import {toast} from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
+    scheduled: false,
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const { workOrderType } = useSelector(
     (state: AppState) => state.workOrderType
   );
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
-      dispatch(fetchWorkOrderType(id));
+    if (id) {
+      dispatch(fetchWorkOrderType(id)).unwrap();
     }
     setFormData({
-      name: workOrderType.data.name,
+      name: workOrderType?.data?.name,
+      scheduled: workOrderType?.data?.scheduled,
     });
   }, []);
 
@@ -69,6 +74,15 @@ const Edit = () => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
+        <FormControlLabel
+                          labelPlacement="start"
+                          label="Scheduled"
+                          onChange={handleChange}
+                          checked={formData.scheduled}
+                          disabled={loading}
+                          required
+                          control={<Switch name="scheduled" />}
+                        />
         <TextField
           label="Name"
           name="name"

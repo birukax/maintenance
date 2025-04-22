@@ -14,6 +14,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  FormControlLabel,
+Switch,
   Box,
 } from "@mui/material";
 
@@ -21,6 +23,7 @@ const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     name: "",
+    scheduled: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,6 +59,15 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
+        <FormControlLabel
+                  labelPlacement="start"
+                  label="Scheduled"
+                  onChange={handleChange}
+                  checked={formData.scheduled}
+                  disabled={loading}
+                  required
+                  control={<Switch name="scheduled" />}
+                />
         <TextField
           label="Code"
           name="code"
