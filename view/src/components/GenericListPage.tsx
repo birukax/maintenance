@@ -3,6 +3,7 @@ import { AppState } from "../store/store";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast,ToastContainer } from "react-toastify";
 import {
   Typography,
   CircularProgress,
@@ -47,6 +48,14 @@ export const GenericListPage = ({
   if (entityState?.error?.code === "token_not_valid") {
     navigate("/login");
   }
+
+  if(typeof(entityState.error) === "string"){
+      toast.warning(entityState.error)
+  }else{
+     toast.warning(JSON.stringify(entityState.error))
+  }
+  
+
   return (
     <>
       <div className="flex gap-8">
@@ -77,9 +86,7 @@ export const GenericListPage = ({
       {entityState.loading && <CircularProgress />}
       {entityState.error && (
         <Typography variant="body2" color="error" className="mb-2">
-          {typeof entityState.error === "string"
-            ? entityState.error
-            : JSON.stringify(entityState.error)}
+          {/* <ToastContainer/> */}
         </Typography>
       )}
 

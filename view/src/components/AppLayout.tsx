@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../store/store";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
+import { ToastContainer } from 'react-toastify';
 import {
   AppBar,
   Toolbar,
@@ -165,6 +166,7 @@ const AppLayout = ({ children }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+
       <AppBar
         position="fixed"
         sx={{
@@ -232,6 +234,7 @@ const AppLayout = ({ children }) => {
           mt: 8,
         }}
       >
+      <ToastContainer/>
         {children}
       </Box>
     </Box>

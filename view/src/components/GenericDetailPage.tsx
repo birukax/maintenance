@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Container, Typography, CircularProgress, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../store/store";
-
+import { toast } from "react-toastify";
 export function GenericDetailPage({
   titleBase,
   entityState,
@@ -33,8 +33,8 @@ export function GenericDetailPage({
       {entityState.error && (
         <Typography color="error">
           {typeof entityState.error === "string"
-            ? entityState.error.response.detail
-            : JSON.stringify(entityState.error.detail)}
+            ? toast.error(entityState.error.response.detail)
+            : toast.error(JSON.stringify(entityState.error.detail))}
         </Typography>
       )}
 
