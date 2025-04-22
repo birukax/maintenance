@@ -3,6 +3,7 @@ from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Activity, ActivityType, WorkOrderActivity, WorkOrder, WorkOrderType
+from django.contrib.auth.models import User
 from asset.models import Machine, Equipment
 from inventory.models import Item
 from .serializers import (
@@ -146,6 +147,18 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {"activity_ids": f"Activity does not exist."}
             )
+        serializer = WorkOrderSerializer(work_order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["POST"])
+    def assign_users(self, request, pk=None):
+        work_order = self.get_object()
+        user_ids = request.data.get("user_ids")
+        try:
+            users = User.objects.filter(id__in=user_ids)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user_ids": f"User does not exist."})
+        work_order.assigned_users.set(users)
         serializer = WorkOrderSerializer(work_order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

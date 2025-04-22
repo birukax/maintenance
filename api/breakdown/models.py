@@ -7,7 +7,7 @@ from main import choices
 
 class Breakdown(BaseCreatedUpdated):
     start_date = models.DateField(default=datetime.date.today)
-    end_date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(null=True, blank=True)
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
     equipment = models.ForeignKey(
         Equipment, on_delete=models.CASCADE, blank=True, null=True

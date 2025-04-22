@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.contrib.auth.models import User
 from main.models import BaseCreatedUpdated
 from schedule.models import Schedule
 from main import choices
@@ -99,6 +100,18 @@ class WorkOrder(BaseCreatedUpdated):
         "inventory.Item",
         blank=True,
         related_name="tool_work_orders",
+    )
+    assigned_users = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name="assigned_work_orders",
+    )
+    completed_by = models.ForeignKey(
+        User,
+        on_delete=models.RESTRICT,
+        null=True,
+        blank=True,
+        related_name="completed_work_orders",
     )
     status = models.CharField(
         choices=choices.WORK_ORDER_STATUS,
