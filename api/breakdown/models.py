@@ -26,4 +26,4 @@ class Breakdown(BaseCreatedUpdated):
         elif self.machine:
             return f"{self.machine.name} - {self.start_date}"
         else:
-            return f"{self.machine.name}"
+            return f"{self.start_date}"
