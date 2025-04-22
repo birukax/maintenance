@@ -3,7 +3,7 @@ import { AppState } from "../store/store";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast,ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   Typography,
   CircularProgress,
@@ -13,6 +13,7 @@ import {
   TableRow,
   TableCell,
   Button,
+  ButtonGroup,
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
@@ -32,8 +33,11 @@ export const GenericListPage = ({
   extraColumns = [],
   createRoute = "",
   hasDetail = true,
+  hasApproval = false,
   detailRouteBase = "",
   onRefresh,
+  onApprove = null,
+  onReject = null,
   getKey,
 }) => {
   const headers = columns.map((col) => col.header);
@@ -49,16 +53,14 @@ export const GenericListPage = ({
     navigate("/login");
   }
 
-  if(typeof(entityState.error) === "string"){
-      toast.error(entityState.error)
-  }else{
-    if(entityState.error!==null)
-      {
-        toast.error(JSON.stringify(entityState.error))
-      }
+  if (typeof entityState.error === "string") {
+    toast.error(entityState.error);
+  } else {
+    if (entityState.error !== null) {
+      toast.error(JSON.stringify(entityState.error));
+    }
   }
   console.log(entityState?.error);
-  
 
   return (
     <>
@@ -107,7 +109,7 @@ export const GenericListPage = ({
                 <Typography noWrap>{header}</Typography>
               </TableCell>
             ))}
-            {hasDetail && (
+            {(hasDetail || hasApproval) && (
               <TableCell align="right">
                 <Typography noWrap>Detail</Typography>
               </TableCell>
@@ -122,18 +124,16 @@ export const GenericListPage = ({
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   {columns.map((col) => {
-                    
                     return (
-                    <TableCell key={col.header} component="th" scope="row">
-                      
-                      
-                      {col.renderCell
-                        ? col.renderCell(row)
-                        : col.accessor
-                        ? String(getNestedValue(row, String(col.accessor)))
-                        : "N/A"}
-                    </TableCell>
-                  )})}
+                      <TableCell key={col.header} component="th" scope="row">
+                        {col.renderCell
+                          ? col.renderCell(row)
+                          : col.accessor
+                          ? String(getNestedValue(row, String(col.accessor)))
+                          : "N/A"}
+                      </TableCell>
+                    );
+                  })}
                   {extraColumns &&
                     extraColumns.map((extraColumn) => {
                       const schedule = row.monthly_purchase_schedules.find(
@@ -155,6 +155,28 @@ export const GenericListPage = ({
                       >
                         Detail
                       </Button>
+                    </TableCell>
+                  )}
+                  {hasApproval && row.status === "PENDING" && (
+                    <TableCell align="right">
+                      <ButtonGroup
+                        variant="contained"
+                        size="small"
+                        sx={{ display: "flex", gap: 1, boxShadow: 0 }}
+                      >
+                        <Button
+                          onClick={() => onApprove(row.id)}
+                          disabled={entityState.loading}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          onClick={() => onReject(row.id)}
+                          disabled={entityState.loading}
+                        >
+                          Reject
+                        </Button>
+                      </ButtonGroup>
                     </TableCell>
                   )}
                 </TableRow>

@@ -3,14 +3,11 @@ import React, { useEffect } from "react";
 import { fetchActivities } from "../../store/slices/activitySlice";
 import { AppState } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
-import {
-  GenericListPage,
-  ColumnDefination,
-} from "../../components/GenericListPage";
+import { GenericListPage } from "../../components/GenericListPage";
 
 const activityColumns = [
   { header: "Code", accessor: "code" },
-  { header: "Activity Name", accessor: "activity.name" },
+  { header: "Activity Name", accessor: "name" },
   { header: "Activity Type", accessor: "activity_type.name" },
 ];
 
