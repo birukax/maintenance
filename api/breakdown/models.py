@@ -22,8 +22,8 @@ class Breakdown(BaseCreatedUpdated):
 
     def __str__(self):
         if self.equipment:
-            return f"{self.machine.name} - {self.equipment.name} - {self.date}"
+            return f"{self.machine.name} - {self.equipment.name} - {self.start_date}"
         elif self.machine:
-            return f"{self.machine.name} - {self.date}"
+            return f"{self.machine.name} - {self.start_date}"
         else:
             return f"{self.machine.name}"
