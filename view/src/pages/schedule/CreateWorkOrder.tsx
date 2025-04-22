@@ -15,6 +15,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -58,8 +59,11 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createScheduledWorkOrder({ id, formData })).unwrap();
+      toast.success("Scheduled Work Order created successfully");
       setModalOpen(false);
     } catch (err) {
+      toast.error("Error creating Scheduled Work Order");
+      // setError(err.response?.data.detail || err.message);  
       setError(
         err.response?.data.detail || "Failed to create a scheduled work order."
       );
@@ -73,7 +77,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker

@@ -15,7 +15,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const style = {
   position: "absolute",
   top: "50%",
@@ -54,8 +54,10 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createWorkOrderActivities({ id, formData })).unwrap();
+      toast.success("Work Order Activities created successfully");
       setModalOpen(false);
     } catch (err) {
+      toast.error("Error creating work order activities");
       setError(
         err.response?.data.detail || "Failed to create work order activities."
       );
@@ -69,7 +71,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl
           fullWidth

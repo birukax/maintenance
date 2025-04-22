@@ -15,7 +15,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
@@ -35,9 +35,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createLocation(formData));
+      await dispatch(createLocation(formData)).unwrap();
+      toast.success("Location created successfully");
       navigate("/locations");
     } catch (err) {
+      toast.error("Error creating Location");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -51,7 +53,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Code"

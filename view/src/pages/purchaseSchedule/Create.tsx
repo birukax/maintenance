@@ -17,7 +17,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -61,9 +61,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createPurchaseSchedule({ formData, monthFormData }));
+     await dispatch(createPurchaseSchedule({ formData, monthFormData })).unwrap();
+      toast.success("Purchase Schedule created successfully");
       navigate("/purchase-schedules");
     } catch (err) {
+      toast.error("Error creating Purchase Schedule");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -77,7 +79,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="item-select-label">Item</InputLabel>

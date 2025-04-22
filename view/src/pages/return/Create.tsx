@@ -19,6 +19,11 @@ import {
   Box,
   Switch,
 } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { toast } from "react-toastify";
 
 const Create = () => {
   const [formData, setFormData] = useState({
@@ -46,14 +51,23 @@ const Create = () => {
       setFormData({ ...formData, [name]: checked });
     } else setFormData({ ...formData, [name]: value });
   };
+  const handleDateChange = (value) => {
+    const formattedDate = value ? value.format("YYYY-MM-DD") : null;
+    setFormData({
+      ...formData,
+      date: formattedDate,
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      dispatch(createReturn(formData));
+     await dispatch(createReturn(formData)).unwrap();
+      toast.success("Return created successfully");
       navigate("/returns");
     } catch (err) {
+      toast.error("Error creating return");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -67,7 +81,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControlLabel
           labelPlacement="start"
@@ -109,6 +123,23 @@ const Create = () => {
           required
           disabled={loading}
         />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            disablePast
+            label="Date"
+            name="date"
+            value={formData.date ? dayjs(formData.date) : null}
+            onChange={handleDateChange}
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+                required: true,
+                helperText: error?.date,
+              },
+            }}
+          />
+        </LocalizationProvider>
         <TextField
           multiline
           label="Reason"

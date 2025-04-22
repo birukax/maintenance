@@ -39,7 +39,7 @@ export const fetchWorkOrderType = createAsyncThunk<[], number, { rejectValue: st
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to fetch work order type');
         }
     }
 )
@@ -52,7 +52,7 @@ export const createWorkOrderType = createAsyncThunk<[],  formData  , { rejectVal
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to create work order type');
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateWorkOrderType = createAsyncThunk<[], { id: string, formData: 
             const response = await api.patch(`/work-order/work-order-types/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to update work order type');
         }
     }
 )

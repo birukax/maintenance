@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
+import { toast } from "react-toastify";
 import api from "../../utils/api";
 import {
   TextField,
@@ -31,9 +32,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createUnitOfMeasure(formData));
+      await dispatch(createUnitOfMeasure(formData)).unwrap();
+      toast.success("Unit of Measure created successfully");
       navigate("/unit-of-measures");
     } catch (err) {
+      toast.error("Error creating Unit of Measure");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -47,7 +50,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Code"

@@ -16,7 +16,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -48,9 +48,11 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateLocation({ id, formData }));
+      await dispatch(updateLocation({ id, formData })).unwrap();
+      toast.success("Location edited successfully");
       navigate(`/location/detail/${location.data.id}`);
     } catch (err) {
+      toast.error("Error editing Location");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -64,7 +66,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Name"

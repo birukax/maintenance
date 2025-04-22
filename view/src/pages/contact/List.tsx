@@ -12,7 +12,7 @@ const contactColumns = [
   { header: "Name", accessor: "name" },
   { header: "Email", accessor: "email" },
   { header: "Phone No.", accessor: "phone_no" },
-  { header: "Location", accessor: "location" },
+  { header: "address", accessor: "address" },
 ];
 
 const List: React.FC = () => {

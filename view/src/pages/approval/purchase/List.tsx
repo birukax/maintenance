@@ -21,6 +21,7 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ListTable from "../../../partials/ListTable";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -29,29 +30,35 @@ const List: React.FC = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const navigte = useNavigate();
-
-  useEffect(() => {
-    dispatch(fetchPurchaseApprovals());
-  }, []);
+  const [handlers, setHandlers] = React.useState(false);
 
   const handleApprove = (id) => {
-    dispatch(approvePurchaseApproval(id));
+    dispatch(approvePurchaseApproval(id)).unwrap();
+    toast.success("Purchase Approved");
+    setHandlers(prev=>!prev);
     handleRefresh();
   };
 
   const handleReject = (id) => {
-    dispatch(rejectPurchaseApproval(id));
+    dispatch(rejectPurchaseApproval(id)).unwrap();
+    toast.success("Purchase Rejected");
+    setHandlers(prev=>!prev);
     handleRefresh();
   };
 
-  const handleRefresh = () => {
+  useEffect(() => {
     dispatch(fetchPurchaseApprovals());
+  }, [handlers]);
+
+
+  const handleRefresh = () => {
+    dispatch(fetchPurchaseApprovals()).unwrap();
   };
 
   if (!tokens) {
     return <Typography>Please log in to view purchaseApprovals.</Typography>;
   }
-  const headers = ["Item", "UoM", "Quantity", "Requested By", "Status"];
+  const headers = ["Item", "UoM", "Quantity", "Requested By", "Priority","Status"];
 
   return (
     <>
@@ -76,7 +83,7 @@ const List: React.FC = () => {
         </Typography>
       )}
       <ListTable headers={headers}>
-        <TableBody>
+        {/* <TableBody> */}
           {purchaseApprovals.data &&
             purchaseApprovals.data.map((purchaseApproval) => (
               <TableRow key={purchaseApproval.id}>
@@ -97,11 +104,15 @@ const List: React.FC = () => {
                   {purchaseApproval.purchase_request &&
                     purchaseApproval.purchase_request.requested_by.username}
                 </TableCell>
+                <TableCell>
+                  {purchaseApproval.purchase_request &&
+                    purchaseApproval.purchase_request.priority}
+                </TableCell>
 
                 <TableCell>{purchaseApproval.status}</TableCell>
                 <TableCell>
                   {purchaseApproval.status === "PENDING" && (
-                    <ButtonGroup variant="contained" size="small">
+                    <ButtonGroup variant="contained" size="small" sx={{display: "flex", gap: 1,boxShadow:0}}>
                       <Button
                         onClick={() => handleApprove(purchaseApproval.id)}
                         disabled={purchaseApprovals.loading}
@@ -119,7 +130,7 @@ const List: React.FC = () => {
                 </TableCell>
               </TableRow>
             ))}
-        </TableBody>
+        {/* </TableBody> */}
       </ListTable>
     </>
   );

@@ -48,6 +48,10 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500">
         {data.category}
       </Typography>
+      <Typography variant="h6">Supplier:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.supplier}
+      </Typography>
     </>
   );
   return (

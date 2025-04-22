@@ -11,6 +11,7 @@ import {
 const consumptionColumns = [
   { header: "Item", accessor: "item.name" },
   { header: "Quantity", accessor: "quantity" },
+  { header: "Date", accessor: "date" },
 ];
 
 const List: React.FC = () => {

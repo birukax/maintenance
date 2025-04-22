@@ -17,7 +17,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     uom_id: "",
@@ -50,6 +50,7 @@ const Create = () => {
       uom_id: item.data.uom.id,
       type: item.data.type,
       category: item.data.category,
+      supplier: item.data.supplier,
     });
   }, []);
 
@@ -70,10 +71,12 @@ const Create = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateItem({ id, formData }));
-      dispatch(fetchItems());
+      await dispatch(updateItem({ id, formData })).unwrap();
+      toast.success("Item updated successfully");
+      await dispatch(fetchItems());
       navigate(`/item/detail/${item.data.id}`);
     } catch (err) {
+      toast.error("Error updating Item");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -87,7 +90,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="uom-select-label">Unit of Measure</InputLabel>

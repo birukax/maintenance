@@ -16,12 +16,17 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     item_id: "",
     reason: "",
     quantity: "",
+    date:""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -37,14 +42,23 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const handleDateChange = (value) => {
+    const formattedDate = value ? value.format("YYYY-MM-DD") : null;
+    setFormData({
+      ...formData,
+      date: formattedDate,
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      dispatch(createConsumption(formData));
+      await dispatch(createConsumption(formData)).unwrap();
+      toast.success("Consumption created successfully");
       navigate("/consumptions");
     } catch (err) {
+      toast.error("Error creating Consumption");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -58,7 +72,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="item-select-label">Item</InputLabel>
@@ -90,6 +104,23 @@ const Create = () => {
           required
           disabled={loading}
         />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            disablePast
+            label="Date"
+            name="date"
+            value={formData.date ? dayjs(formData.date) : null}
+            onChange={handleDateChange}
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+                required: true,
+                helperText: error?.date,
+              },
+            }}
+          />
+        </LocalizationProvider>
         <TextField
           multiline
           label="Reason"
@@ -102,6 +133,7 @@ const Create = () => {
           required
           disabled={loading}
         />
+        
         <Button
           type="submit"
           variant="contained"

@@ -15,13 +15,13 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone_no: "",
-    location: "",
+    address: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -37,9 +37,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createContact(formData));
+      await dispatch(createContact(formData)).unwrap();
+      toast.success("Contact created successfully");
       navigate("/contacts");
     } catch (err) {
+      toast.error("Error creating Contact");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -53,7 +55,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Name"
@@ -80,12 +82,12 @@ const Create = () => {
           disabled={loading}
         />
         <TextField
-          label="Location"
-          name="location"
+          label="address"
+          name="address"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.location}
+          value={formData.address}
           onChange={handleChange}
           required
           disabled={loading}

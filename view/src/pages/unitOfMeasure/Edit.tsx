@@ -6,6 +6,7 @@ import {
   updateUnitOfMeasure,
 } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
+import { toast } from "react-toastify";
 import api from "../../utils/api";
 import {
   TextField,
@@ -51,9 +52,13 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateUnitOfMeasure({ id, formData }));
+      await dispatch(updateUnitOfMeasure({ id, formData })).unwrap();
+      toast.success("Unit of Measure edited successfully");
       navigate(`/unit-of-measure/detail/${unitOfMeasure.data.id}`);
     } catch (err) {
+      toast.error("Error edit Unit of Measure");
+
+      // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -67,7 +72,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         {" "}
         <TextField

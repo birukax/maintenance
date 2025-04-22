@@ -14,7 +14,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-
+import {toast} from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -48,9 +48,12 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateWorkOrderType({ id, formData }));
+      await dispatch(updateWorkOrderType({ id, formData })).unwrap();
+      toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data.id}`);
     } catch (err) {
+      toast.error("Error edit Work Order Type");
+      // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -64,7 +67,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Name"

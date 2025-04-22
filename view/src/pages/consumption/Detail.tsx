@@ -25,6 +25,10 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500">
         {data.reason}
       </Typography>
+      <Typography variant="h6">Consumption:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.consumption}
+      </Typography>
     </>
   );
   return (

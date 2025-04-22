@@ -17,11 +17,13 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
+import { PRIORITIES } from "../../utils/choices";
 const Create = () => {
   const [formData, setFormData] = useState({
     item_id: "",
     quantity: "",
+    priority: "",
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -45,9 +47,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createPurchaseRequest(formData));
+      await dispatch(createPurchaseRequest(formData)).unwrap();
+      toast.success("Purchase Request created successfully");
       navigate("/purchase-requests");
     } catch (err) {
+      toast.error("Error creating Purchase Request");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -61,7 +65,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="uom-select-label">Item</InputLabel>
@@ -77,6 +81,23 @@ const Create = () => {
               items.data.map((item) => (
                 <MenuItem key={item.id} value={item.id}>
                   {item.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <InputLabel id="priority-select-label">Priority</InputLabel>
+          <Select
+            labelId="priority-select-label"
+            id="priority-select"
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+            label="Priority"
+          >
+            {PRIORITIES.map((priority,index) => (
+                <MenuItem key={index} value={priority[0]}>
+                  {priority[0]}
                 </MenuItem>
               ))}
           </Select>

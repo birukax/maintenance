@@ -21,7 +21,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -62,9 +62,11 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateEquipment({ id, formData }));
+      await dispatch(updateEquipment({ id, formData })).unwrap();
+      toast.success("Equipment edited successfully");
       navigate(`/equipment/detail/${equipment.data.id}`);
     } catch (err) {
+      toast.error("Error editing Equipment");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -78,7 +80,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="machine-select-label">Machine</InputLabel>

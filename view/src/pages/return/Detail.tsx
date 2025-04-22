@@ -39,6 +39,10 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.quantity}
       </Typography>
+      <Typography variant="h6">Date:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.date}
+      </Typography>
       <Typography variant="h6">Reason:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.reason}

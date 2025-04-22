@@ -16,12 +16,12 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     email: "",
     phone_no: "",
-    location: "",
+    address: "",
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -37,7 +37,7 @@ const Edit = () => {
     setFormData({
       email: contact.data.email,
       phone_no: contact.data.phone_no,
-      location: contact.data.location,
+      address: contact.data.address,
     });
   }, []);
 
@@ -52,9 +52,11 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      dispatch(updateContact({ id, formData }));
+      await dispatch(updateContact({ id, formData })).unwrap();
+      toast.success("Contact edited successfully");
       navigate(`/contact/detail/${contact.data.id}`);
     } catch (err) {
+      toast.error("Error editing Contact");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -68,7 +70,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Email"
@@ -82,13 +84,14 @@ const Edit = () => {
           required
           disabled={loading}
         />
+        
         <TextField
-          label="Location"
-          name="location"
+          label="address"
+          name="address"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.location}
+          value={formData.address}
           onChange={handleChange}
           required
           disabled={loading}

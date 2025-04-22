@@ -10,6 +10,7 @@ import {
 
 const activityColumns = [
   { header: "Code", accessor: "code" },
+  { header: "Activity Name", accessor: "activity.name" },
   { header: "Activity Type", accessor: "activity_type.name" },
 ];
 

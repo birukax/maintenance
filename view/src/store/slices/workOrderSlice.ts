@@ -39,7 +39,7 @@ export const fetchWorkOrder = createAsyncThunk<[], number, { rejectValue: string
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to fetch work order');
         }
     }
 )
@@ -52,7 +52,7 @@ export const createWorkOrder = createAsyncThunk<[],  formData  , { rejectValue: 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to create work order');
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateWorkOrder = createAsyncThunk<[], { id: string, formData: { [k
             const response = await api.patch(`/work-order/work-orders/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to update work order');
         }
     }
 )
@@ -76,7 +76,7 @@ export const createWorkOrderActivities = createAsyncThunk<[],{ id: string, formD
             const response = await api.post(`/work-order/work-orders/${id}/create_activities/`, formData)
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to create work order activities');
         }
     }
 )

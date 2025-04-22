@@ -21,7 +21,7 @@ import {
   Box,
 } from "@mui/material";
 import { SCHEDULE_TYPES } from "../../utils/choices";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     type: "",
@@ -74,8 +74,11 @@ const Create = () => {
     setError(null);
     try {
       await dispatch(createSchedule(formData)).unwrap();
+      toast.success("Schedule created successfully");
       navigate("/schedules");
     } catch (err) {
+      toast.error("Error creating Schedule");
+      // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -89,7 +92,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="types-select-label">Type</InputLabel>

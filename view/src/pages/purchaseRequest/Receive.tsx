@@ -15,7 +15,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const style = {
   position: "absolute",
   top: "50%",
@@ -60,8 +60,10 @@ const Receive = ({ id, setModalOpen }) => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap();
+      toast.success("Item received successfully");
       setModalOpen(false);
     } catch (err) {
+      toast.error("Error receiving item");
       setError(err.response?.data.detail || "Failed to receive the item.");
     }
   };
@@ -78,7 +80,7 @@ const Receive = ({ id, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Quantity"

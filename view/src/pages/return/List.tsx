@@ -12,6 +12,7 @@ const returnColumns = [
   { header: "Item", accessor: "item.name" },
   { header: "UoM", accessor: "item.uom.name" },
   { header: "Quantity", accessor: "quantity" },
+  { header: "Date", accessor: "date" },
 ];
 
 const List: React.FC = () => {

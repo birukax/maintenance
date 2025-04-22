@@ -16,12 +16,13 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     description: "",
     activity_type_id: "",
+    name: "",
   });
   const [loading, setLoading] = useState(false);
   const { activityTypes } = useSelector(
@@ -44,9 +45,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createActivity(formData));
+      await dispatch(createActivity(formData)).unwrap();
+      toast.success("Activity created successfully");
       navigate("/activities");
     } catch (err) {
+      toast.error("Error creating Activity");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -60,15 +63,26 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
-          label="code"
+          label="Code"
           name="code"
           className="mb-8"
           variant="outlined"
           fullWidth
           value={formData.code}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
+        <TextField
+          label="Name"
+          name="name"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.name}
           onChange={handleChange}
           required
           disabled={loading}

@@ -18,13 +18,14 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
     uom_id: "",
     type: "",
     category: "",
+    supplier:""
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -58,9 +59,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createItem(formData));
+      await dispatch(createItem(formData)).unwrap();
+      toast.success("Item created successfully");
       navigate("/items");
     } catch (err) {
+      toast.error("Error creating Item");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -74,7 +77,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Name"
@@ -141,6 +144,17 @@ const Create = () => {
             ))}
           </Select>
         </FormControl>
+        <TextField
+          label="Supplier"
+          name="supplier"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.supplier}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
         <Button
           type="submit"
           variant="contained"

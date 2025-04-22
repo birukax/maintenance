@@ -34,15 +34,7 @@ const ConsumptionRoutes = [
       </ProtectedRoute>
     }
   />,
-  <Route
-    key="consumption-edit"
-    path="/consumption/edit/:id"
-    element={
-      <ProtectedRoute>
-        <ConsumptionEdit />
-      </ProtectedRoute>
-    }
-  />,
+  
 ];
 
 export default ConsumptionRoutes;

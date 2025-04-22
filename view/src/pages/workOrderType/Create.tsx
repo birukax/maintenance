@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createWorkOrderType } from "../../store/slices/workOrderTypeSlice";
+import {toast} from "react-toastify";
 import api from "../../utils/api";
 import {
   TextField,
@@ -35,9 +36,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createWorkOrderType(formData));
+     await dispatch(createWorkOrderType(formData)).unwrap();
+      toast.success("Work Order Type created successfully");
       navigate("/work-order-types");
     } catch (err) {
+      toast.error("Error creating Work Order Type");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -51,7 +54,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <TextField
           label="Code"

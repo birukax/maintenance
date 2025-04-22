@@ -45,15 +45,19 @@ export const GenericListPage = ({
     return <Typography>Unauthorized</Typography>;
   }
 
-  if (entityState?.error?.code === "token_not_valid") {
+  if (entityState?.error?.data?.code === "token_not_valid") {
     navigate("/login");
   }
 
   if(typeof(entityState.error) === "string"){
-      toast.warning(entityState.error)
+      toast.error(entityState.error)
   }else{
-     toast.warning(JSON.stringify(entityState.error))
+    if(entityState.error!==null)
+      {
+        toast.error(JSON.stringify(entityState.error))
+      }
   }
+  console.log(entityState?.error);
   
 
   return (

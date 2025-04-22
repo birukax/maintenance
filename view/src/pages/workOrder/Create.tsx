@@ -25,7 +25,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     date: "",
@@ -112,8 +112,10 @@ const Create = () => {
     setError(null);
     try {
       await dispatch(createWorkOrder(formData)).unwrap();
+      toast.success("Work Order created successfully");
       navigate("/work-orders");
     } catch (err) {
+      toast.error("Error creating Work Order");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -127,7 +129,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker

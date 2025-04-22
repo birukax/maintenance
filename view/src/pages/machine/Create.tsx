@@ -17,7 +17,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -46,9 +46,11 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      dispatch(createMachine(formData));
+      await dispatch(createMachine(formData)).unwrap();
+      toast.success("Machine created successfully");
       navigate("/machines");
     } catch (err) {
+      toast.error("Error creating Machine");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -62,7 +64,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-4"
+        className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="location-select-label">Location</InputLabel>
