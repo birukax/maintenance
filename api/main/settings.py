@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "inventory",
     "work_order",
     "schedule",
+    "breakdown",
     "corsheaders",
 ]
 
