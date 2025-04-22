@@ -6,7 +6,8 @@ from main import choices
 
 
 class Breakdown(BaseCreatedUpdated):
-    date = models.DateField(default=datetime.date.today)
+    start_date = models.DateField(default=datetime.date.today)
+    end_date = models.DateField(default=datetime.date.today)
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
     equipment = models.ForeignKey(
         Equipment, on_delete=models.CASCADE, blank=True, null=True
@@ -17,7 +18,7 @@ class Breakdown(BaseCreatedUpdated):
     total_time = models.DurationField(null=True, blank=True)
 
     class Meta:
-        ordering = ["-date"]
+        ordering = ["-start_date"]
 
     def __str__(self):
         if self.equipment:
@@ -26,5 +27,3 @@ class Breakdown(BaseCreatedUpdated):
             return f"{self.machine.name} - {self.date}"
         else:
             return f"{self.machine.name}"
-
-

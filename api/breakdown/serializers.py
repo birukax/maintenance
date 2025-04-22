@@ -14,7 +14,8 @@ class BreakdownSerializer(serializers.ModelSerializer):
         model = Breakdown
         fields = [
             "id",
-            "date",
+            "start_date",
+            "end_date",
             "machine",
             "machine_id",
             "equipment",

@@ -58,6 +58,7 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
                 return None
             return {
                 "id": activity_obj.id,
+                "name": activity_obj.name,
                 "code": activity_obj.code,
                 "description": activity_obj.description,
             }

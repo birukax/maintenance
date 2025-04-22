@@ -91,7 +91,7 @@ const Detail = () => {
       {data.work_order_activities.map((work_order_activity) => {
         return (
           <Typography variant="body1" className="text-slate-500 mb-2">
-            * {work_order_activity.activity.description}
+            * {work_order_activity.activity.name}
           </Typography>
         );
       })}
