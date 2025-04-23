@@ -22,7 +22,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import ContactsIcon from "@mui/icons-material/Contacts";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Logo from "../assets/Images/logo.png"
 const drawerWidth = 240;
 
 const AppLayout = ({ children }) => {
@@ -50,6 +51,9 @@ const AppLayout = ({ children }) => {
   };
   const drawer = (
     <div>
+      <div className="logo" onClick={() => navigate("/dashboard")}>
+        <img src={Logo} alt="qualabels logo" width="80px" title="qualabels manufacturers plc logo"/>
+      </div>
       <Toolbar />
       <List>
         <ListItemButton component={Link} to="/dashboard">
@@ -234,6 +238,12 @@ const AppLayout = ({ children }) => {
           mt: 8,
         }}
       >
+        <div className="navigate-back">
+          <div className="back" onClick={() => navigate(-1)}>
+          <ArrowBackIcon sx={{fontSize:32,fill:"#5d4037"}}/>
+          </div>
+
+        </div>
       <ToastContainer/>
         {children}
       </Box>

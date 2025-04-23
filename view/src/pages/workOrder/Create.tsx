@@ -121,6 +121,8 @@ const Create = () => {
       setLoading(false);
     }
   };
+
+
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -238,7 +240,8 @@ const Create = () => {
                 ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+
+        {/* <FormControl fullWidth variant="outlined" disabled={loading}>
           <InputLabel id="sparepart-select-label">
             Spareparts Required
           </InputLabel>
@@ -260,7 +263,34 @@ const Create = () => {
                   </MenuItem>
                 ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
+
+              
+              <FormControl fullWidth variant="outlined" disabled={loading}>
+                <Autocomplete
+                  multiple
+                  options={sparepartOptions}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Spareparts Required"
+                      placeholder="Search spareparts..."
+                    />
+                  )}
+                  id="sparepart-autocomplete"
+                  value={selectedSpareparts}
+                  onChange={(event, newValue) =>
+                    handleAutocompleteChange("spareparts_required_id", newValue)
+                  }
+                ></Autocomplete>
+              </FormControl>
+
+
+
+
+        
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             multiple
