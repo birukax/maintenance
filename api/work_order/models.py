@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from main.models import BaseCreatedUpdated
 from schedule.models import Schedule
+from breakdown.models import Breakdown
 from main import choices
 
 
@@ -57,6 +58,13 @@ class Activity(BaseCreatedUpdated):
 
 
 class WorkOrder(BaseCreatedUpdated):
+    breakdown = models.OneToOneField(
+        Breakdown,
+        on_delete=models.RESTRICT,
+        related_name="work_orders",
+        null=True,
+        blank=True,
+    )
     schedule = models.ForeignKey(
         Schedule,
         on_delete=models.RESTRICT,
@@ -82,6 +90,11 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
         related_name="sparepart_work_orders",
     )
+    tools_required = models.ManyToManyField(
+        "inventory.Item",
+        blank=True,
+        related_name="tool_work_orders",
+    )
     work_order_type = models.ForeignKey(
         WorkOrderType,
         on_delete=models.CASCADE,
@@ -95,11 +108,6 @@ class WorkOrder(BaseCreatedUpdated):
         null=True,
         blank=True,
         related_name="work_orders",
-    )
-    tools_required = models.ManyToManyField(
-        "inventory.Item",
-        blank=True,
-        related_name="tool_work_orders",
     )
     assigned_users = models.ManyToManyField(
         User,
@@ -118,6 +126,9 @@ class WorkOrder(BaseCreatedUpdated):
         max_length=25,
         default="Created",
     )
+    start_time = models.TimeField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
     total_time_required = models.DurationField()
     class Meta:
         ordering = ["-updated_at", "-created_at"]

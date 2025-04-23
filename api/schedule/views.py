@@ -80,9 +80,8 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
 
         try:
             if WorkOrder.objects.filter(schedule=schedule, date=date).exists():
-                return Response(
-                    {"error": "Work order already exists for this schedule and date."},
-                    status=status.HTTP_400_BAD_REQUEST,
+                raise serializers.ValidationError(
+                    {"date": "Work order already exists for this schedule and date."}
                 )
             work_order = WorkOrder(
                 schedule=schedule,
@@ -102,6 +101,6 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
             )
 
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            raise serializers.ValidationError({"error": str(e)})
         serializer = ScheduleSerializer(schedule)
         return Response(serializer.data, status=status.HTTP_200_OK)
