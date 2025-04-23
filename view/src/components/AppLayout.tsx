@@ -188,7 +188,13 @@ const AppLayout = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography sx={{ color: "primary.dark" }} variant="h6" noWrap>
+          <Typography sx={{ color: "primary.dark",display:"flex",alignItems:"center",justifyContent:"center",gap:".5rem" }} variant="h6" noWrap>
+          <div className="navigate-back">
+          <div className="back" onClick={() => navigate(-1)}>
+          <ArrowBackIcon sx={{fontSize:32,fill:"#5d4037"}}/>
+          </div>
+
+        </div>
             Maintenance System
           </Typography>
           <Button className="mt-4" variant="contained" onClick={handleLogout}>
@@ -238,12 +244,7 @@ const AppLayout = ({ children }) => {
           mt: 8,
         }}
       >
-        <div className="navigate-back">
-          <div className="back" onClick={() => navigate(-1)}>
-          <ArrowBackIcon sx={{fontSize:32,fill:"#5d4037"}}/>
-          </div>
-
-        </div>
+        
       <ToastContainer/>
         {children}
       </Box>
