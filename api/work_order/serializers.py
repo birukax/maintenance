@@ -109,7 +109,11 @@ class WorkOrderSerializer(serializers.ModelSerializer):
         model = WorkOrder
         fields = [
             "id",
-            "date",
+            "start_date",
+            "start_time",
+            "end_date",
+            "end_time",
+            "breakdown",
             "schedule",
             "machine",
             "machine_id",

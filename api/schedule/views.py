@@ -76,16 +76,20 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     def create_work_order(self, request, pk=None):
         schedule = self.get_object()
-        date = request.data.get("date")
+        start_date = request.data.get("start_date")
 
         try:
-            if WorkOrder.objects.filter(schedule=schedule, date=date).exists():
+            if WorkOrder.objects.filter(
+                schedule=schedule, start_date=start_date
+            ).exists():
                 raise serializers.ValidationError(
-                    {"date": "Work order already exists for this schedule and date."}
+                    {
+                        "start_date": "Work order already exists for this schedule and start_date."
+                    }
                 )
             work_order = WorkOrder(
                 schedule=schedule,
-                date=date,
+                start_date=start_date,
                 machine=schedule.machine,
                 equipment=schedule.equipment,
                 work_order_type=schedule.work_order_type,
