@@ -49,9 +49,9 @@ const Detail = () => {
       )}
       {data.breakdown && (
         <>
-          <Typography variant="h6">Breakdown:</Typography>
+          <Typography variant="h6">Breakdown Reason:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.breakdown.id}
+            {data.breakdown.reason}
           </Typography>
         </>
       )}

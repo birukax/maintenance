@@ -5,6 +5,7 @@ from asset.serializers import MachineSerializer, EquipmentSerializer
 from inventory.serializers import ItemSerializer
 from main.serializers import UserSerializer
 from schedule.models import Schedule
+from breakdown.models import Breakdown
 
 class WorkOrderTypeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -84,6 +85,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
     schedule = serializers.SerializerMethodField(read_only=True)
+    breakdown = serializers.SerializerMethodField(read_only=True)
 
     machine = MachineSerializer(read_only=True)
     machine_id = serializers.IntegerField(write_only=True)
@@ -112,8 +114,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "start_time",
             "end_date",
             "end_time",
-            "breakdown",
             "schedule",
+            "breakdown",
             "machine",
             "machine_id",
             "equipment",
@@ -141,6 +143,18 @@ class WorkOrderSerializer(serializers.ModelSerializer):
                 "description": schedule_obj.description,
             }
         except Schedule.DoesNotExist:
+            return None
+        
+    def get_breakdown(self, obj):
+        try:
+            breakdown_obj = obj.breakdown
+            if breakdown_obj == None:
+                return None
+            return {
+                "id": breakdown_obj.id,
+                "reason": breakdown_obj.reason,
+            }
+        except Breakdown.DoesNotExist:
             return None
 
 
