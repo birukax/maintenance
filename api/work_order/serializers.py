@@ -16,6 +16,7 @@ class WorkOrderTypeSerializer(serializers.ModelSerializer):
             "id",
             "code",
             "scheduled",
+            "breakdown",
             "name",
         ]
 
