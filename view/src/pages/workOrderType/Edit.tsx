@@ -21,6 +21,7 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
     scheduled: false,
+    breakdown: false,
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -39,6 +40,7 @@ const Edit = () => {
     setFormData({
       name: workOrderType?.data?.name,
       scheduled: workOrderType?.data?.scheduled,
+      breakdown: workOrderType?.data?.breakdown,
     });
   }, []);
 
@@ -74,15 +76,46 @@ const Edit = () => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControlLabel
-                          labelPlacement="start"
-                          label="Scheduled"
-                          onChange={handleChange}
-                          checked={formData.scheduled}
-                          disabled={loading}
-                          required
-                          control={<Switch name="scheduled" />}
-                        />
+         <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+          <FormControlLabel
+            labelPlacement="start"
+            label="Scheduled"
+            control={
+              <Switch
+                name="scheduled"
+                checked={formData.scheduled}
+                onChange={(e) =>{
+                  if(formData.breakdown===true){
+                    setFormData({ ...formData, scheduled: e.target.checked ,breakdown: false})
+                  }else{
+                    setFormData({ ...formData, scheduled: e.target.checked })
+                                  }                }
+                  
+                }
+                disabled={loading}
+              />
+            }
+          />
+          <FormControlLabel
+            labelPlacement="start"
+            label="Breakdown"
+            control={
+              <Switch
+                name="breakdown"
+                checked={formData.breakdown || false}
+                onChange={(e) =>{
+                  if(formData.scheduled===true){
+                    setFormData({ ...formData, breakdown: e.target.checked ,scheduled: false})
+                  }else{
+                    setFormData({ ...formData, breakdown: e.target.checked })
+                  }
+                }
+                }
+                disabled={loading}
+              />
+            }
+          />
+        </Box>
         <TextField
           label="Name"
           name="name"

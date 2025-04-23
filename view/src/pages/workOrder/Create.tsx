@@ -85,7 +85,6 @@ const Create = () => {
   }, [formData.tools_required_id, toolOptions]);
 
   const handleChange = (e) => {
-    console.log(e.target.name);
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };

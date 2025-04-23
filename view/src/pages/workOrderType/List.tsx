@@ -12,6 +12,7 @@ const workOrderTypeColumns = [
   { header: "Code", accessor: "code" },
   { header: "Name", accessor: "name" },
   { header: "Scheduled", accessor: "scheduled" },
+  { header: "Breakdown", accessor: "breakdown" },
 ];
 
 const List: React.FC = () => {
@@ -20,7 +21,6 @@ const List: React.FC = () => {
     fetchListAction: fetchWorkOrderTypes,
   });
 
-  console.log(entityState, "workOrderTypeList");
   
   return (
     <GenericListPage

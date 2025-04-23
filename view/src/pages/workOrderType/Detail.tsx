@@ -27,6 +27,14 @@ const Detail = () => {
 
   const renderDetails = (data) => (
     <>
+      <Typography variant="h6">Scheduled:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {String(data.scheduled)}
+      </Typography>
+      <Typography variant="h6">Breakdown:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {String(data.breakdown)}
+      </Typography>
       <Typography variant="h6">Code:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.code}

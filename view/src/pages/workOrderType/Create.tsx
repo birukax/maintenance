@@ -24,6 +24,7 @@ const Create = () => {
     code: "",
     name: "",
     scheduled: false,
+    breakdown: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -49,6 +50,8 @@ const Create = () => {
       setLoading(false);
     }
   };
+
+  
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -59,15 +62,46 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControlLabel
-                  labelPlacement="start"
-                  label="Scheduled"
-                  onChange={handleChange}
-                  checked={formData.scheduled}
-                  disabled={loading}
-                  required
-                  control={<Switch name="scheduled" />}
-                />
+        <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+          <FormControlLabel
+            labelPlacement="start"
+            label="Scheduled"
+            control={
+              <Switch
+                name="scheduled"
+                checked={formData.scheduled}
+                onChange={(e) =>{
+                  if(formData.breakdown===true){
+                    setFormData({ ...formData, scheduled: e.target.checked ,breakdown: false})
+                  }else{
+                    setFormData({ ...formData, scheduled: e.target.checked })
+                                  }                }
+                  
+                }
+                disabled={loading}
+              />
+            }
+          />
+          <FormControlLabel
+            labelPlacement="start"
+            label="Breakdown"
+            control={
+              <Switch
+                name="breakdown"
+                checked={formData.breakdown || false}
+                onChange={(e) =>{
+                  if(formData.scheduled===true){
+                    setFormData({ ...formData, breakdown: e.target.checked ,scheduled: false})
+                  }else{
+                    setFormData({ ...formData, breakdown: e.target.checked })
+                  }
+                }
+                }
+                disabled={loading}
+              />
+            }
+          />
+        </Box>
         <TextField
           label="Code"
           name="code"

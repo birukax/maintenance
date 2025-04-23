@@ -60,7 +60,7 @@ export const GenericListPage = ({
       toast.error(JSON.stringify(entityState.error));
     }
   }
-  console.log(entityState?.error);
+
 
   return (
     <>
