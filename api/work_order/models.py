@@ -84,7 +84,6 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
         related_name="work_orders",
     )
-    date = models.DateField(default=datetime.datetime.now)
     spareparts_required = models.ManyToManyField(
         "inventory.Item",
         blank=True,
@@ -126,6 +125,7 @@ class WorkOrder(BaseCreatedUpdated):
         max_length=25,
         default="Created",
     )
+    start_date = models.DateField(default=datetime.datetime.now)
     start_time = models.TimeField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)

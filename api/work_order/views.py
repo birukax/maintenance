@@ -68,20 +68,10 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
         work_order_type_id = self.request.data.get("work_order_type_id")
         spareparts_required_id = self.request.data.get("spareparts_required_id")
         tools_required_id = self.request.data.get("tools_required_id")
-        work_order_date = self.request.data.get("date")
+        start_date = self.request.data.get("start_date")
         total_time_required = self.request.data.get("total_time_required")
         total_time_required = datetime.timedelta(minutes=int(total_time_required))
-        if work_order_date:
-            try:
-                work_order_date = datetime.datetime.fromisoformat(
-                    work_order_date.replace("Z", "+00:00")
-                ).date()
-            except ValueError:
-                work_order_date = datetime.datetime.strptime(
-                    work_order_date, "%Y-%m-%d"
-                ).date()
-        else:
-            work_order_date = datetime.date.today()
+
         try:
             if machine_id:
                 machine = Machine.objects.get(id=machine_id)
@@ -117,7 +107,7 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
             equipment=equipment,
             activity_type=activity_type,
             work_order_type=work_order_type,
-            date=work_order_date,
+            start_date=start_date,
             total_time_required=total_time_required,
         )
         serializer.instance.spareparts_required.set(spareparts_required_id)

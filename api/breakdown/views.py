@@ -17,7 +17,7 @@ class BreakdownViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     def create_work_order(self, request, pk=None):
         breakdown = self.get_object()
-        date = request.get("date")
+        start_date = request.get("start_date")
         spareparts_required_ids = request.get("spareparts_required_ids")
         tools_required_ids = request.get("tools_required_ids")
         work_order_type_id = request.get("work_order_type_id")
