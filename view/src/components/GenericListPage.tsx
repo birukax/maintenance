@@ -64,7 +64,7 @@ export const GenericListPage = ({
 
   return (
     <>
-      <div className="flex gap-8">
+      <div className="flex gap-8 justify-between">
         <Typography variant="h5" className="font-bold">
           {title}
         </Typography>
@@ -110,8 +110,8 @@ export const GenericListPage = ({
               </TableCell>
             ))}
             {(hasDetail || hasApproval) && (
-              <TableCell align="right">
-                <Typography noWrap>Detail</Typography>
+              <TableCell align="center">
+                <Typography noWrap>Action</Typography>
               </TableCell>
             )}
           </TableRow>
@@ -147,7 +147,7 @@ export const GenericListPage = ({
                       );
                     })}
                   {hasDetail && (
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <Button
                         component={Link}
                         to={`${detailRouteBase}/${getKey(row)}`}
@@ -158,7 +158,7 @@ export const GenericListPage = ({
                     </TableCell>
                   )}
                   {hasApproval && row.status === "PENDING" && (
-                    <TableCell align="right">
+                    <TableCell align="center">
                       <ButtonGroup
                         variant="contained"
                         size="small"
