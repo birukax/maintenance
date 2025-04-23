@@ -3,6 +3,7 @@ from .models import ActivityType, Activity, WorkOrderType, WorkOrder, WorkOrderA
 from inventory.models import Item
 from asset.serializers import MachineSerializer, EquipmentSerializer
 from inventory.serializers import ItemSerializer
+from main.serializers import UserSerializer
 from schedule.models import Schedule
 
 class WorkOrderTypeSerializer(serializers.ModelSerializer):
@@ -58,6 +59,7 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
                 return None
             return {
                 "id": activity_obj.id,
+                "name": activity_obj.name,
                 "code": activity_obj.code,
                 "description": activity_obj.description,
             }
@@ -95,9 +97,13 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     activity_type = ActivityTypeSerializer(read_only=True)
     activity_type_id = serializers.IntegerField(write_only=True)
 
+    completed_by = UserSerializer(read_only=True)
+    completed_by_id = serializers.IntegerField(write_only=True)
+
     spareparts_required = ItemSerializer(many=True, read_only=True)
     tools_required = ItemSerializer(many=True, read_only=True)
     work_order_activities = WorkOrderActivitySerializer(many=True, read_only=True)
+    assigned_users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkOrder
@@ -113,10 +119,13 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "activity_type_id",
             "work_order_type",
             "work_order_type_id",
+            "completed_by",
+            "completed_by_id",
             "tools_required",
             "total_time_required",
             "spareparts_required",
             "work_order_activities",
+            "assigned_users",
         ]
 
     def get_schedule(self, obj):

@@ -33,8 +33,8 @@ export function GenericDetailPage({
       {entityState.error && (
         <Typography color="error">
           {typeof entityState.error === "string"
-            ? toast.error(entityState.error.response.detail)
-            : toast.error(JSON.stringify(entityState.error.detail))}
+            ? toast.error(entityState.error?.response?.detail)
+            : toast.error(JSON.stringify(entityState.error?.detail))}
         </Typography>
       )}
 
