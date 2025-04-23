@@ -17,9 +17,9 @@ import WorkOrderTypeRoutes from "./routes/WorkOrderTypeRoutes";
 import UnitOfMeasureRoutes from "./routes/UnitOfMeasureRoutes";
 import PurchaseRequestRoutes from "./routes/PurchaseRequestRoutes";
 import PurchaseScheduleRoutes from "./routes/PurchaseScheduleRoutes";
-import breakdownRoutes from "./routes/breakdownRoutes";
+import BreakdownRoutes from "./routes/BreakdownRoutes";
 
-import "./App.css"
+import "./App.css";
 const App: React.FC = () => {
   return (
     <Routes>
@@ -40,7 +40,7 @@ const App: React.FC = () => {
       {WorkOrderTypeRoutes}
       {PurchaseRequestRoutes}
       {PurchaseScheduleRoutes}
-      {breakdownRoutes}
+      {BreakdownRoutes}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

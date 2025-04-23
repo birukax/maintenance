@@ -17,20 +17,18 @@ class BreakdownViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     def create_work_order(self, request, pk=None):
         breakdown = self.get_object()
-        start_date = request.get("start_date")
-        spareparts_required_ids = request.get("spareparts_required_ids")
-        tools_required_ids = request.get("tools_required_ids")
-        work_order_type_id = request.get("work_order_type_id")
-        activity_type_id = request.get("activity_type_id")
-        total_time_required = request.get("total_time_required")
+        start_date = request.data.get("start_date")
+        spareparts_required_id = request.data.get("spareparts_required_id")
+        tools_required_id = request.data.get("tools_required_id")
+        work_order_type_id = request.data.get("work_order_type_id")
+        activity_type_id = request.data.get("activity_type_id")
+        total_time_required = request.data.get("total_time_required")
         total_time_required = datetime.timedelta(minutes=int(total_time_required))
         try:
-            if spareparts_required_ids:
-                spareparts_required = Item.objects.filter(
-                    id__in=spareparts_required_ids
-                )
-            if tools_required_ids:
-                tools_required = Item.objects.filter(id__in=tools_required_ids)
+            if spareparts_required_id:
+                spareparts_required = Item.objects.filter(id__in=spareparts_required_id)
+            if tools_required_id:
+                tools_required = Item.objects.filter(id__in=tools_required_id)
             if work_order_type_id:
                 work_order_type = WorkOrderType.objects.get(id=work_order_type_id)
             if activity_type_id:
@@ -38,8 +36,8 @@ class BreakdownViewSet(viewsets.ModelViewSet):
         except Item.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "spareparts_required_ids": f"Item does not exist.",
-                    "tools_required_ids": f"Item does not exist.",
+                    "spareparts_required_id": f"Item does not exist.",
+                    "tools_required_id": f"Item does not exist.",
                 }
             )
         except ActivityType.DoesNotExist:
