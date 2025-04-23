@@ -59,7 +59,7 @@ class BreakdownViewSet(viewsets.ModelViewSet):
         try:
             work_order = WorkOrder(
                 breakdown=breakdown,
-                date=date,
+                start_date=start_date,
                 machine=breakdown.machine,
                 equipment=breakdown.equipment,
                 work_order_type=work_order_type,

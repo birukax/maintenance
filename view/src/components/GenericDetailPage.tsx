@@ -5,6 +5,7 @@ import { Container, Typography, CircularProgress, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../store/store";
 import { toast } from "react-toastify";
+
 export function GenericDetailPage({
   titleBase,
   entityState,
@@ -22,6 +23,14 @@ export function GenericDetailPage({
     return <Typography>Error: ID parameter is missing.</Typography>;
   }
 
+  // if(entityState.error) {
+  //   if(typeof(entityState.error) === "string"){
+  //      toast.error(entityState.error?.response?.detail)
+  //     }else{
+  //       toast.error(JSON.stringify(entityState.error?.detail))
+  //     }
+            
+  // }
   return (
     <Container>
       <Typography variant="h4" className="mb-6 text-slate-800">
@@ -29,14 +38,6 @@ export function GenericDetailPage({
       </Typography>
 
       {entityState.loading && <CircularProgress />}
-
-      {entityState.error && (
-        <Typography color="error">
-          {typeof entityState.error === "string"
-            ? toast.error(entityState.error?.response?.detail)
-            : toast.error(JSON.stringify(entityState.error?.detail))}
-        </Typography>
-      )}
 
       {!entityState.loading && !entityState.error && entityState.data && (
         <>

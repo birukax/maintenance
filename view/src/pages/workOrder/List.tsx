@@ -9,7 +9,7 @@ import {
 } from "../../components/GenericListPage";
 
 const workOrderColumns = [
-  { header: "Date", accessor: "date" },
+  { header: "Start Date", accessor: "start_date" },
   { header: "Machine", accessor: "machine.name" },
   { header: "Equipment", accessor: "equipment.name" },
   { header: "Work Order Type", accessor: "work_order_type.name" },

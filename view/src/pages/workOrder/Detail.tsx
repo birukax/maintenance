@@ -47,9 +47,29 @@ const Detail = () => {
           </Typography>
         </>
       )}
-      <Typography variant="h6">Date:</Typography>
+      {data.breakdown && (
+        <>
+          <Typography variant="h6">Breakdown:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data.breakdown.id}
+          </Typography>
+        </>
+      )}
+      <Typography variant="h6">Start Date:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.date}
+        {data.start_date}
+      </Typography>
+      <Typography variant="h6">Start Time:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.start_time}
+      </Typography>
+      <Typography variant="h6">End Date:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.end_date}
+      </Typography>
+      <Typography variant="h6">End Time:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.end_time}
       </Typography>
       <Typography variant="h6">Machine:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">

@@ -32,7 +32,7 @@ const style = {
 const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
-    date: "",
+    start_date: "",
   });
   const { schedule } = useSelector((state: AppState) => state.schedule);
   const [error, setError] = useState(null);
@@ -49,7 +49,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
 
     setFormData({
       ...formData,
-      date: formattedDate,
+      start_date: formattedDate,
     });
   };
 
@@ -82,8 +82,8 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             disablePast
-            label="Date"
-            name="date"
+            label="Start Date"
+            name="start_date"
             value={formData.date ? dayjs(formData.date) : null}
             onChange={handleDateChange}
             slotProps={{
@@ -111,11 +111,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             "Create Scheduled Work Order"
           )}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+        
       </Box>
     </Container>
   );

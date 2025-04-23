@@ -35,7 +35,7 @@ const Create = () => {
     work_order_type_id: "",
     spareparts_required_id: [],
     tools_required_id: [],
-    total_time_required: 0,
+    total_time_required: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -51,7 +51,6 @@ const Create = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("test");
 
   useEffect(() => {
     dispatch(fetchMachines());
@@ -136,16 +135,16 @@ const Create = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             disablePast
-            label="Date"
+            label="Start Date"
             name="start_date"
-            value={formData.date ? dayjs(formData.date) : null}
+            value={formData.start_date ? dayjs(formData.start_date) : null}
             onChange={handleDateChange}
             slotProps={{
               textField: {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                helperText: error?.date,
+                helperText: error?.start_date,
               },
             }}
           />

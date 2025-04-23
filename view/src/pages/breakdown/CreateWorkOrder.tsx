@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { createBreakdownWorkOrder } from "../../store/slices/breakdownSlice";
@@ -7,13 +7,24 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { fetchItems } from "../../store/slices/itemSlice";
+import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
+import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
+
+
+
 import {
+  TextField,
   Button,
   Typography,
   Container,
   CircularProgress,
-  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 
@@ -32,29 +43,83 @@ const style = {
 const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
-    date: "",
+    start_date: "",
+    work_order_type_id:"",
+    activity_type_id:"",
+    total_time_required:null,
+    tools_required_id:[],
+    spareparts_required_id:[]
   });
-  const { schedule } = useSelector((state: AppState) => state.schedule);
+  const { breakdown } = useSelector((state: AppState) => state.breakdown);
   const [error, setError] = useState(null);
+  const { items } = useSelector((state: AppState) => state.item);
+  const { activityTypes } = useSelector(
+    (state: AppState) => state.activityType
+  );
+  const { workOrderTypes } = useSelector(
+    (state: AppState) => state.workOrderType
+  );
+
+
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
+  useEffect(() => {
+      dispatch(fetchWorkOrderTypes());
+      dispatch(fetchActivityTypes());
+      dispatch(fetchItems());
+    }, []);
+
+    const toolOptions = useMemo(() => {
+        return items.data
+          ? items.data.filter((item) => item.category === "TOOL")
+          : [];
+      }, [items.data]);
+    
+      const sparepartOptions = useMemo(() => {
+        return items.data
+          ? items.data.filter((item) => item.category === "SPAREPART")
+          : [];
+      }, [items.data]);
+    
+      const selectedSpareparts = useMemo(() => {
+        return sparepartOptions.filter((option) =>
+          formData.spareparts_required_id.includes(option.id)
+        );
+      }, [formData.spareparts_required_id, sparepartOptions]);
+    
+      const selectedTools = useMemo(() => {
+        return toolOptions.filter((option) =>
+          formData.tools_required_id.includes(option.id)
+        );
+      }, [formData.tools_required_id, toolOptions]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleDateChange = (value) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
 
     setFormData({
       ...formData,
-      date: formattedDate,
+      start_date: formattedDate,
     });
   };
 
+  const handleAutocompleteChange = (fieldName, newValue) => {
+    // Extract only the IDs from the selected objects
+    const selectedIds = newValue.map((item) => item.id);
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: selectedIds,
+    }));
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setModalOpen(true);
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
@@ -82,30 +147,127 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             disablePast
-            label="Date"
-            name="date"
-            value={formData.date ? dayjs(formData.date) : null}
+            label="Start Date"
+            name="start_date"
+            value={formData.start_date ? dayjs(formData.start_date) : null}
             onChange={handleDateChange}
             slotProps={{
               textField: {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                disabled: schedule.loading,
+                disabled: breakdown.loading,
                 helperText: error,
               },
             }}
           />
         </LocalizationProvider>
+        <FormControl fullWidth variant="outlined" required disabled={breakdown.loading}>
+          <InputLabel id="work-order-type-select-label">
+            Work Order Type
+          </InputLabel>
+          <Select
+            labelId="work-order-type-select-label"
+            id="work-order-type-select"
+            name="work_order_type_id"
+            value={formData.work_order_type_id}
+            onChange={handleChange}
+            label="Work Order Type"
+          >
+            {workOrderTypes.data &&
+              workOrderTypes.data.map((workOrderType) => (
+                <MenuItem key={workOrderType.id} value={workOrderType.id}>
+                  {workOrderType.name}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth variant="outlined" required disabled={breakdown.loading}>
+          <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
+          <Select
+            labelId="activity-type-select-label"
+            id="activity-type-select"
+            name="activity_type_id"
+            value={formData.activity_type_id}
+            onChange={handleChange}
+            label="Activity Type"
+          >
+            {activityTypes.data &&
+              activityTypes.data
+                .filter(
+                  (activityType) =>
+                    activityType.work_order_type.id ===
+                    formData.work_order_type_id
+                )
+                .map((activityType) => (
+                  <MenuItem key={activityType.id} value={activityType.id}>
+                    {activityType.name}
+                  </MenuItem>
+                ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
+                        <Autocomplete
+                          multiple
+                          options={sparepartOptions}
+                          getOptionLabel={(option) => option.name}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              label="Spareparts Required"
+                              placeholder="Search spareparts..."
+                            />
+                          )}
+                          id="sparepart-autocomplete"
+                          value={selectedSpareparts}
+                          onChange={(event, newValue) =>
+                            handleAutocompleteChange("spareparts_required_id", newValue)
+                          }
+                        ></Autocomplete>
+                      </FormControl>
+                      <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
+          <Autocomplete
+            multiple
+            options={toolOptions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="tools Required"
+                placeholder="Search tools..."
+              />
+            )}
+            id="tool-select"
+            value={selectedTools}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("tools_required_id", newValue)
+            }
+          ></Autocomplete>
+        </FormControl>
+        <TextField
+                  label="Total Time Required (In minutes)"
+                  name="total_time_required"
+                  type="number"
+                  className="mb-8"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.total_time_required}
+                  onChange={handleChange}
+                  required
+                  disabled={breakdown.loading}
+                />
+        
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          disabled={schedule.loading}
+          disabled={breakdown.loading}
           className="mt-4"
         >
-          {schedule.loading ? (
+          {breakdown.loading ? (
             <CircularProgress size={24} />
           ) : (
             "Create Breakdown Work Order"

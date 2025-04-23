@@ -98,7 +98,6 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     activity_type_id = serializers.IntegerField(write_only=True)
 
     completed_by = UserSerializer(read_only=True)
-    completed_by_id = serializers.IntegerField(write_only=True)
 
     spareparts_required = ItemSerializer(many=True, read_only=True)
     tools_required = ItemSerializer(many=True, read_only=True)
@@ -124,7 +123,6 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "work_order_type",
             "work_order_type_id",
             "completed_by",
-            "completed_by_id",
             "tools_required",
             "total_time_required",
             "spareparts_required",
