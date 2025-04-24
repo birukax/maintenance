@@ -14,7 +14,6 @@ const itemColumns = [
   { header: "UoM", accessor: "uom.name" },
   { header: "Type", accessor: "type" },
   { header: "Category", accessor: "category" },
-  { header: "Supplier", accessor: "supplier" }
 ];
 
 const List: React.FC = () => {

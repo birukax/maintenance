@@ -48,10 +48,14 @@ const Detail = () => {
       <Typography variant="body1" className="text-slate-500">
         {data.category}
       </Typography>
-      <Typography variant="h6">Supplier:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data.supplier}
-      </Typography>
+      <Typography variant="h6">Suppliers:</Typography>
+      {data.suppliers.map((supplier,index) => {
+        return (
+          <Typography variant="body1" className="text-slate-500 mb-2" key={index}>
+            {supplier.name}
+          </Typography>
+        );
+      })}
     </>
   );
   return (

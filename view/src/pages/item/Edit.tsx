@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchItem, updateItem } from "../../store/slices/itemSlice";
 import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
+import { fetchContacts } from "../../store/slices/contactSlice";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import {
@@ -15,14 +16,17 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
+  Autocomplete,
+
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
-    uom_id: "",
     type: "",
     category: "",
+    suppliers_id:[]
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -32,6 +36,8 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
+    const { contacts } = useSelector((state: AppState) => state.contact);
+  
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
@@ -47,22 +53,44 @@ const Create = () => {
       dispatch(fetchItem(id));
     }
     setFormData({
-      uom_id: item.data.uom.id,
-      type: item.data.type,
-      category: item.data.category,
-      supplier: item.data.supplier,
+      type: item.data?.type,
+      category: item.data?.category,
+      suppliers_id: item.data?.suppliers.map((supplier) => supplier.id) || [],
     });
   }, []);
+
+
+    const supplierOptions = useMemo(() => {
+        return contacts.data
+          ? contacts.data
+          : [];
+      }, [contacts.data]);
+  
+    const selectedSuppliers = useMemo(() => {
+        return supplierOptions.filter((option) =>
+          formData.suppliers_id?.includes(option.id)
+        );
+      }, [formData.suppliers_id, supplierOptions]);
 
   useEffect(() => {
     if (tokens) {
       dispatch(fetchUnitOfMeasures());
+      dispatch(fetchContacts());
     }
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAutocompleteChange = (fieldName, newValue) => {
+    // Extract only the IDs from the selected objects
+    const selectedIds = newValue.map((item) => item.id);
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: selectedIds,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -73,7 +101,6 @@ const Create = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateItem({ id, formData })).unwrap();
       toast.success("Item updated successfully");
-      await dispatch(fetchItems());
       navigate(`/item/detail/${item.data.id}`);
     } catch (err) {
       toast.error("Error updating Item");
@@ -92,7 +119,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        {/* <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="uom-select-label">Unit of Measure</InputLabel>
           <Select
             labelId="uom-select-label"
@@ -109,7 +136,10 @@ const Create = () => {
                 </MenuItem>
               ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
+
+
+        
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="item-types-select-label">Item Type</InputLabel>
           <Select
@@ -146,6 +176,27 @@ const Create = () => {
             ))}
           </Select>
         </FormControl>
+
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+                                <Autocomplete
+                                  multiple
+                                  options={supplierOptions}
+                                  getOptionLabel={(option) => option.name}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      variant="outlined"
+                                      label="Suppliers"
+                                      placeholder="Search suppliers..."
+                                    />
+                                  )}
+                                  id="supplier-autocomplete"
+                                  value={selectedSuppliers}
+                                  onChange={(event, newValue) =>
+                                    handleAutocompleteChange("suppliers_id", newValue)
+                                  }
+                                ></Autocomplete>
+                              </FormControl>
         <Button
           type="submit"
           variant="contained"

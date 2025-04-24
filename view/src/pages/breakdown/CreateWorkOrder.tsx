@@ -146,7 +146,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            disablePast
+            minDate={dayjs(breakdown.data?.start_date)} 
             label="Start Date"
             name="start_date"
             value={formData.start_date ? dayjs(formData.start_date) : null}
@@ -175,7 +175,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             label="Work Order Type"
           >
             {workOrderTypes.data &&
-              workOrderTypes.data.map((workOrderType) => (
+              workOrderTypes.data.filter((workOrderType) => workOrderType.breakdown === true).map((workOrderType) => (
                 <MenuItem key={workOrderType.id} value={workOrderType.id}>
                   {workOrderType.name}
                 </MenuItem>

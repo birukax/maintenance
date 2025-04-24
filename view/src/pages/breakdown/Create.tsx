@@ -125,7 +125,7 @@ const Create = () => {
 
 <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            disablePast
+            disableFuture
             label="Start Date"
             name="start_date"
             value={formData.start_date ? dayjs(formData.start_date) : null}

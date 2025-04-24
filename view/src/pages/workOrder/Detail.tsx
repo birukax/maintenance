@@ -90,7 +90,7 @@ const Detail = () => {
       <Typography variant="h6">Spareparts Required:</Typography>
       {data.spareparts_required.map((sparepart) => {
         return (
-          <Typography variant="body1" className="text-slate-500 mb-2">
+          <Typography variant="body1" className="text-slate-500 mb-2" key={sparepart.id}>
             {sparepart.name}
           </Typography>
         );
@@ -98,7 +98,7 @@ const Detail = () => {
       <Typography variant="h6">Tools Required:</Typography>
       {data.tools_required.map((tool) => {
         return (
-          <Typography variant="body1" className="text-slate-500 mb-2">
+          <Typography variant="body1" className="text-slate-500 mb-2" key={tool.id}>
             {tool.name}
           </Typography>
         );
@@ -110,7 +110,7 @@ const Detail = () => {
       <Typography variant="h6">Work Order Activities:</Typography>
       {data.work_order_activities.map((work_order_activity) => {
         return (
-          <Typography variant="body1" className="text-slate-500 mb-2">
+          <Typography variant="body1" className="text-slate-500 mb-2" key={work_order_activity.id}>
             * {work_order_activity.activity.name}
           </Typography>
         );

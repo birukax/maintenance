@@ -207,7 +207,7 @@ const Create = () => {
             label="Work Order Type"
           >
             {workOrderTypes.data &&
-              workOrderTypes.data.map((workOrderType) => (
+              workOrderTypes.data.filter((workOrderType) => workOrderType.scheduled === false && workOrderType.breakdown === false).map((workOrderType) => (
                 <MenuItem key={workOrderType.id} value={workOrderType.id}>
                   {workOrderType.name}
                 </MenuItem>
