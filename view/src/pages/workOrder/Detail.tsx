@@ -8,6 +8,7 @@ import { Typography, Button, Modal } from "@mui/material";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import AddActivity from "./AddActivity";
+import AssignUsers from "./AssignUsers";
 
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -15,26 +16,47 @@ const Detail = () => {
     fetchDetailAction: fetchWorkOrder,
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const [modalOpen, setModalOpen] = useState(false);
+  
+  const [assignmodalOpen, setAssignModalOpen] = useState(false);
+  const handleAssignModalOpen = () => setAssignModalOpen(true);
+  const handleAssignModalClose = () => setAssignModalOpen(false);
 
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
+  const [activityModalOpen, setActivityModalOpen] = useState(false);
+  const handleActivitdyModalOpen = () => setActivityModalOpen(true);
+  const handleActivityModalClose = () => setActivityModalOpen(false);
+  
   const renderButtons = () => (
     <>
       <Modal
-        open={modalOpen}
-        onClose={handleModalClose}
+        open={activityModalOpen}
+        onClose={handleActivityModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <AddActivity entityState={entityState} setModalOpen={setModalOpen} />
+        <AddActivity entityState={entityState} setModalOpen={setActivityModalOpen} />
       </Modal>
       <Button
-        onClick={handleModalOpen}
+        onClick={handleActivitdyModalOpen}
         variant="contained"
         className="bg-slate-700"
       >
         Add Activity
+      </Button>
+      
+      <Modal
+        open={assignmodalOpen}
+        onClose={handleAssignModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <AssignUsers entityState={entityState} setModalOpen={setAssignModalOpen} />
+      </Modal>
+      <Button
+        onClick={handleAssignModalOpen}
+        variant="contained"
+        className="bg-slate-700"
+      >
+        Assign User
       </Button>
     </>
   );
