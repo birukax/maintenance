@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createItem } from "../../store/slices/itemSlice";
@@ -16,6 +16,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Autocomplete,
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
@@ -25,7 +26,7 @@ const Create = () => {
     uom_id: "",
     type: "",
     category: "",
-    supplier:""
+    suppliers_id:[]
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,9 @@ const Create = () => {
     label: ITEM_CATEGORIES[key][1],
   }));
 
+  const { contacts } = useSelector((state: AppState) => state.contact);
+
+
   useEffect(() => {
     if (tokens) {
       dispatch(fetchUnitOfMeasures());
@@ -54,6 +58,17 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleAutocompleteChange = (fieldName, newValue) => {
+    // Extract only the IDs from the selected objects
+    const selectedIds = newValue.map((item) => item.id);
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: selectedIds,
+    }));
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,6 +84,17 @@ const Create = () => {
       setLoading(false);
     }
   };
+  const supplierOptions = useMemo(() => {
+      return contacts.data
+        ? contacts.data
+        : [];
+    }, [contacts.data]);
+
+  const selectedSuppliers = useMemo(() => {
+      return supplierOptions.filter((option) =>
+        formData.suppliers_id.includes(option.id)
+      );
+    }, [formData.suppliers_id, supplierOptions]);
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -144,17 +170,26 @@ const Create = () => {
             ))}
           </Select>
         </FormControl>
-        <TextField
-          label="Supplier"
-          name="supplier"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.supplier}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+                        <Autocomplete
+                          multiple
+                          options={supplierOptions}
+                          getOptionLabel={(option) => option.name}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              label="Suppliers Required"
+                              placeholder="Search suppliers..."
+                            />
+                          )}
+                          id="supplier-autocomplete"
+                          value={selectedSuppliers}
+                          onChange={(event, newValue) =>
+                            handleAutocompleteChange("suppliers_required_id", newValue)
+                          }
+                        ></Autocomplete>
+                      </FormControl>
         <Button
           type="submit"
           variant="contained"
