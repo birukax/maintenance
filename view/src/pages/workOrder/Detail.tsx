@@ -6,6 +6,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal } from "@mui/material";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import AddActivity from "./AddActivity";
 
 const Detail = () => {
@@ -13,6 +14,7 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.workOrder.workOrder,
     fetchDetailAction: fetchWorkOrder,
   });
+  const { tokens } = useSelector((state: AppState) => state.auth);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleModalOpen = () => setModalOpen(true);
@@ -117,6 +119,9 @@ const Detail = () => {
       })}
     </>
   );
+
+  console.log(jwtDecode(tokens && tokens.access));
+  
   return (
     <GenericDetailPage
       titleBase="Work Order"

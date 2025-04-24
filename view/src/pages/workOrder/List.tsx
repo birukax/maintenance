@@ -25,7 +25,10 @@ const List: React.FC = () => {
   return (
     <GenericListPage
       title="Work Order"
-      entityState={entityState}
+      entityState={{
+        ...entityState
+        // data: entityState.data?.filter((workOrder) => workOrder.work_order_type.scheduled === true),
+      }}
       columns={workOrderColumns}
       createRoute="/work-order/create"
       detailRouteBase="/work-order/detail"
