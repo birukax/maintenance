@@ -3,7 +3,7 @@ from .models import ActivityType, Activity, WorkOrderType, WorkOrder, WorkOrderA
 from inventory.models import Item
 from asset.serializers import MachineSerializer, EquipmentSerializer
 from inventory.serializers import ItemSerializer
-from main.serializers import UserSerializer
+from account.serializers import UserSerializer
 from schedule.models import Schedule
 from breakdown.models import Breakdown
 
