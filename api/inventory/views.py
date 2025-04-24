@@ -44,7 +44,7 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         uom_id = serializer.validated_data.pop("uom_id")
-        suppliers_id = serializer.validated_data.pop("suppliers_id")
+        suppliers_id = self.request.data.get("suppliers_id")
         try:
             uom = UnitOfMeasure.objects.get(id=uom_id)
             suppliers = Contact.objects.filter(id__in=suppliers_id)

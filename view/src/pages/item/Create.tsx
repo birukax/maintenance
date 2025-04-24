@@ -20,6 +20,7 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { fetchContacts } from "../../store/slices/contactSlice";
 const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -34,6 +35,7 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
+  const { contacts } = useSelector((state: AppState) => state.contact);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
@@ -45,13 +47,11 @@ const Create = () => {
     label: ITEM_CATEGORIES[key][1],
   }));
 
-  const { contacts } = useSelector((state: AppState) => state.contact);
 
 
   useEffect(() => {
-    if (tokens) {
       dispatch(fetchUnitOfMeasures());
-    }
+      dispatch(fetchContacts());
   }, []);
 
   const handleChange = (e) => {
@@ -84,6 +84,10 @@ const Create = () => {
       setLoading(false);
     }
   };
+
+
+  console.log("contacts", contacts.data);
+  
   const supplierOptions = useMemo(() => {
       return contacts.data
         ? contacts.data
@@ -179,14 +183,14 @@ const Create = () => {
                             <TextField
                               {...params}
                               variant="outlined"
-                              label="Suppliers Required"
+                              label="Suppliers"
                               placeholder="Search suppliers..."
                             />
                           )}
                           id="supplier-autocomplete"
                           value={selectedSuppliers}
                           onChange={(event, newValue) =>
-                            handleAutocompleteChange("suppliers_required_id", newValue)
+                            handleAutocompleteChange("suppliers_id", newValue)
                           }
                         ></Autocomplete>
                       </FormControl>
