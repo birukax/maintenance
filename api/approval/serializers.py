@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.serializers import UserSerializer
+from account.serializers import UserSerializer
 from inventory.serializers import PurchaseRequestSerializer
 from .models import Purchase
 

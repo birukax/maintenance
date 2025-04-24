@@ -59,3 +59,13 @@ SCHEDULE_TYPES = (
     ("MONTHLY", "MONTHLY"),
     ("YEARLY", "YEARLY"),
 )
+
+
+ROLES = (
+    ("USER", "USER"),
+    ("ADMIN", "ADMIN"),
+    ("MANAGER", "MANAGER"),
+    ("PLANNER", "PLANNER"),
+    ("SUPERVISOR", "SUPERVISOR"),
+    ("ENGINEER", "ENGINEER"),
+)
