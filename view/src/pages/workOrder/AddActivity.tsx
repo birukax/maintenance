@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchActivities } from "../../store/slices/activitySlice";
@@ -13,15 +13,20 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
   Box,
+  Autocomplete,
+
 } from "@mui/material";
 import { toast } from "react-toastify";
 const style = {
+  boxSizing: "border-box",
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  minWidth: 300,
+  width:"40%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -43,9 +48,34 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     dispatch(fetchActivities());
   }, []);
 
+  const activityOptions = useMemo(() => {
+      return activities.data
+        ? activities.data.filter(
+          (activity) =>
+            activity.activity_type.id ===
+            entityState.data.activity_type.id
+        )
+        : [];
+    }, [activities.data]);
+
+    const selectedActivities = useMemo(() => {
+        return activityOptions.filter((option) =>
+          formData.activity_ids.includes(option.id)
+        );
+      }, [formData.activity_ids, activityOptions]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAutocompleteChange = (fieldName, newValue) => {
+    // Extract only the IDs from the selected objects
+    const selectedIds = newValue.map((item) => item.id);
+    setFormData((prevData) => ({
+      ...prevData,
+      [fieldName]: selectedIds,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -63,6 +93,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
       );
     }
   };
+
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -72,36 +103,28 @@ const AddActivity = ({ entityState, setModalOpen }) => {
         component="form"
         onSubmit={handleSubmit}
         className="form-gap"
+        sx={{minWidth:"90%"}}
       >
-        <FormControl
-          fullWidth
-          variant="outlined"
-          disabled={entityState.loading}
-        >
-          <InputLabel id="activity-select-label">Activities</InputLabel>
-          <Select
-            multiple
-            labelId="activity-select-label"
-            id="activity-select"
-            name="activity_ids"
-            value={formData.activity_ids}
-            onChange={handleChange}
-            label="Activities"
-          >
-            {activities.data &&
-              activities.data
-                .filter(
-                  (activity) =>
-                    activity.activity_type.id ===
-                    entityState.data.activity_type.id
-                )
-                .map((activity) => (
-                  <MenuItem key={activity.id} value={activity.id}>
-                    {activity.code}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={entityState.loading}>
+                        <Autocomplete
+                          multiple
+                          options={activityOptions}
+                          getOptionLabel={(option) => option.name}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              label="Activities"
+                              placeholder="Search activities..."
+                            />
+                          )}
+                          id="activity-autocomplete"
+                          value={selectedActivities}
+                          onChange={(event, newValue) =>
+                            handleAutocompleteChange("activity_ids", newValue)
+                          }
+                        ></Autocomplete>
+                      </FormControl>
         <Button
           type="submit"
           variant="contained"
