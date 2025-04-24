@@ -44,26 +44,47 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         uom_id = serializer.validated_data.pop("uom_id")
-
+        suppliers_id = serializer.validated_data.pop("suppliers_id")
         try:
             uom = UnitOfMeasure.objects.get(id=uom_id)
+            suppliers = Contact.objects.filter(id__in=suppliers_id)
         except UnitOfMeasure.DoesNotExist:
             raise serializers.ValidationError(
                 {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
             )
+        except Contact.DoesNotExist:
+            raise serializers.ValidationError(
+                {"suppliers_id": f"Contact with id {suppliers_id} does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+
         item = serializer.save(uom=uom)
+        if suppliers.exists():
+            item.suppliers.set(suppliers)
         Inventory.objects.create(item=item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
         uom_id = serializer.validated_data.pop("uom_id")
+        suppliers_id = serializer.validated_data.pop("suppliers_id")
         try:
             uom = UnitOfMeasure.objects.get(id=uom_id)
+            suppliers = Contact.objects.filter(id__in=suppliers_id)
         except UnitOfMeasure.DoesNotExist:
             raise serializers.ValidationError(
                 {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
             )
-        serializer.save(uom=uom)
+        except Contact.DoesNotExist:
+            raise serializers.ValidationError(
+                {"suppliers_id": f"Contact with id {suppliers_id} does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+
+        item = serializer.save(uom=uom)
+        if suppliers.exists():
+            item.suppliers.set(suppliers)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

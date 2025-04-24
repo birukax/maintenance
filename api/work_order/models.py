@@ -59,7 +59,7 @@ class Activity(BaseCreatedUpdated):
 
 
 class WorkOrder(BaseCreatedUpdated):
-    breakdown = models.OneToOneField(
+    breakdown = models.ForeignKey(
         Breakdown,
         on_delete=models.RESTRICT,
         related_name="work_orders",
@@ -126,6 +126,7 @@ class WorkOrder(BaseCreatedUpdated):
         max_length=25,
         default="Created",
     )
+    remark = models.TextField(max_length=250, null=True, blank=True)
     start_date = models.DateField(default=datetime.datetime.now)
     start_time = models.TimeField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
