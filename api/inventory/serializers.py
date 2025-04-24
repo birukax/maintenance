@@ -61,7 +61,7 @@ class ItemSerializer(serializers.ModelSerializer):
     def get_inventory(self, obj):
         try:
             inventory_obj = obj.inventory
-            return {"id": obj.inventory.id, "balance": obj.inventory.balance}
+            return {"id": inventory_obj.id, "balance": inventory_obj.balance}
             # return InventorySerializer(inventory_obj, context=self.context).data
         except Inventory.DoesNotExist:
             return None
