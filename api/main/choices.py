@@ -1,5 +1,5 @@
 YESNO = ((True, "Yes"), (False, "No"))
-YES_NO_NONE = ((True, "Yes"), (False, "No"), (None, "-"))
+YES_NO_NONE = ((True, "Yes"), (False, "No"))
 ITEM_TYPES = (("MECHANICAL", "MECHANICAL"), ("ELECTRICAL", "ELECTRICAL"))
 ITEM_CATEGORIES = (("TOOL", "TOOL"), ("SPAREPART", "SPAREPART"))
 MONTH_NAMES = (
