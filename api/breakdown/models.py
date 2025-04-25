@@ -13,6 +13,10 @@ class Breakdown(BaseCreatedUpdated):
         Equipment, on_delete=models.CASCADE, blank=True, null=True
     )
     reason = models.TextField(max_length=250)
+    remark = models.TextField(max_length=250, null=True, blank=True)
+    status = models.CharField(
+        max_length=20, choices=choices.BREAKDOWN_STATUS, default="CREATED"
+    )
     start_time = models.TimeField()
     end_time = models.TimeField(null=True, blank=True)
     total_time = models.DurationField(null=True, blank=True)
