@@ -29,7 +29,7 @@ const Edit = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchWorkOrderType(id));
     }
     setFormData({

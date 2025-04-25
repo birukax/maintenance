@@ -27,21 +27,27 @@ const Detail = () => {
   
   const renderButtons = () => (
     <>
-      <Modal
-        open={activityModalOpen}
-        onClose={handleActivityModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <AddActivity entityState={entityState} setModalOpen={setActivityModalOpen} />
-      </Modal>
-      <Button
-        onClick={handleActivitdyModalOpen}
-        variant="contained"
-        className="bg-slate-700"
-      >
-        Add Activity
-      </Button>
+    {entityState.data?.assigned_users?.length<=0&&
+    <>
+    <Modal
+      open={activityModalOpen}
+      onClose={handleActivityModalClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <AddActivity entityState={entityState} setModalOpen={setActivityModalOpen} />
+    </Modal>
+    <Button
+      onClick={handleActivitdyModalOpen}
+      variant="contained"
+      className="bg-slate-700"
+      sx={{marginRight:".5rem"}}
+    >
+      Add Activity
+    </Button>
+    </>
+  }
+      
       
       <Modal
         open={assignmodalOpen}
@@ -67,7 +73,7 @@ const Detail = () => {
         <>
           <Typography variant="h6">Schedule:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.schedule.id}
+            {data.schedule.type}
           </Typography>
         </>
       )}
@@ -136,6 +142,14 @@ const Detail = () => {
         return (
           <Typography variant="body1" className="text-slate-500 mb-2" key={work_order_activity.id}>
             * {work_order_activity.activity.name}
+          </Typography>
+        );
+      })}
+      <Typography variant="h6">Assigned Users:</Typography>
+      {data.assigned_users.map((assigned_user) => {
+        return (
+          <Typography variant="body1" className="text-slate-500 mb-2" key={assigned_user.id}>
+            * {assigned_user.username}
           </Typography>
         );
       })}

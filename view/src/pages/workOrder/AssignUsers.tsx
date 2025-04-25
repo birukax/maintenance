@@ -1,7 +1,8 @@
 import { useState, useEffect,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchProfiles,assignWorkOrderUsers } from "../../store/slices/profileSlice";
+import { fetchProfiles } from "../../store/slices/profileSlice";
+import { assignWorkOrderUsers } from "../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
   Button,
@@ -35,7 +36,7 @@ const style = {
 const AssignUsers = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
-    user_ids: [],
+    user_ids: entityState.data.assigned_users.map(user=>user.id) || [],
   });
   const { profiles } = useSelector((state: AppState) => state.profile);
   const [inputs, setInputs] = useState(5);
@@ -58,7 +59,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
 
     const selectedUsers = useMemo(() => {
         return userOptions.filter((option) =>
-          formData.user_ids.includes(option.id)
+          formData.user_ids.includes(option.user.id)
         );
       }, [formData.user_ids, userOptions]);
 
@@ -69,7 +70,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
 
   const handleAutocompleteChange = (fieldName, newValue) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item) => item.id);
+    const selectedIds = newValue.map((profile) => profile.user.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
