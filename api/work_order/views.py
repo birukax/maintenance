@@ -125,6 +125,7 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
     def create_activities(self, request, pk=None):
         work_order = self.get_object()
         activity_ids = request.data.get("activity_ids")
+        WorkOrderActivity.objects.filter(work_order=work_order).delete()
         try:
             for a in activity_ids:
                 activity = Activity.objects.get(id=a)
@@ -148,7 +149,47 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
             users = User.objects.filter(id__in=user_ids)
         except User.DoesNotExist:
             raise serializers.ValidationError({"user_ids": f"User does not exist."})
+        if users.exists():
+            work_order.status = "Assigned"
+        else:
+            work_order.status = "Created"
         work_order.assigned_users.set(users)
+        work_order.save()
+        serializer = WorkOrderSerializer(work_order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["POST"])
+    def submit_work_order(self, request, pk=None):
+        work_order = self.get_object()
+        remark = request.data.get("remark")
+        completed_by = request.user
+        try:
+            start_time = datetime.time(
+                *map(int, request.data.get("start_time").split(":"))
+            )
+            end_date = datetime.date(*map(int, request.data.get("end_date").split("-")))
+            end_time = datetime.time(*map(int, request.data.get("end_time").split(":")))
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
+        try:
+            start = datetime.datetime.combine(work_order.start_date, start_time)
+            end = datetime.datetime.combine(end_date, end_time)
+            if end < start:
+                raise serializers.ValidationError(
+                    {"end_time": "End time cannot be before start time."}
+                )
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
+        try:
+            work_order.start_time = start_time
+            work_order.end_date = end_date
+            work_order.end_time = end_time
+            work_order.remark = remark
+            work_order.completed_by = completed_by
+            work_order.status = "Completed"
+            work_order.save()
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
         serializer = WorkOrderSerializer(work_order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

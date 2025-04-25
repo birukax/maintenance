@@ -39,7 +39,6 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     activity_ids: [],
   });
   const { activities } = useSelector((state: AppState) => state.activity);
-  const [inputs, setInputs] = useState(5);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

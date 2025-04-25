@@ -4,7 +4,7 @@ import CreateWorkOrder from "../pages/workOrder/Create";
 import WorkOrderList from "../pages/workOrder/List";
 import WorkOrderDetail from "../pages/workOrder/Detail";
 import ProtectedRoute from "../components/ProtectedRoute";
-
+import CheckList from "../pages/workOrderActivity/CheckList";
 const WorkOrderRoutes = [
   <Route
     key="work-order-list"
@@ -33,7 +33,15 @@ const WorkOrderRoutes = [
       </ProtectedRoute>
     }
   />,
-  
+  <Route
+    key="work-order-check-list"
+    path="/work-order/check-list/:id"
+    element={
+      <ProtectedRoute>
+        <CheckList />
+      </ProtectedRoute>
+    }
+  />,
 ];
 
 export default WorkOrderRoutes;

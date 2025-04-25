@@ -132,13 +132,24 @@ class WorkOrder(BaseCreatedUpdated):
     end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     total_time_required = models.DurationField()
-    class Meta:
-        ordering = ["-created_at"]
+
+    @property
+    def total_time_taken(self):
+        try:
+            start = datetime.datetime.combine(self.start_date, self.start_time)
+            end = datetime.datetime.combine(self.end_date, self.end_time)
+            total = end - start
+            return f"{total}"
+        except Exception as e:
+            return f"{e}"
 
     def __str__(self):
         if self.machine:
             return f"{self.machine.name} - {self.status}"
         return f"{self.status}"
+
+    class Meta:
+        ordering = ["-created_at"]
 
 
 class WorkOrderActivity(BaseCreatedUpdated):

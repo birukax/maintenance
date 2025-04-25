@@ -6,6 +6,7 @@ import { AppState, AppDispatch } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import CheckListRows from "./CheckListRows";
+import Submit from "./Submit";
 import {
   Typography,
   Button,
@@ -26,28 +27,31 @@ const CheckList = () => {
     detailSelector: (state: AppState) => state.workOrder.workOrder,
     fetchDetailAction: fetchWorkOrder,
   });
-  const { tokens } = useSelector((state: AppState) => state.auth);
+
+  const [submitModalOpen, setSubmitModalOpen] = useState(false);
+  const handleSubmitModalOpen = () => setSubmitModalOpen(true);
+  const handleSubmitModalClose = () => setSubmitModalOpen(false);
   const dispatch = useDispatch<AppDispatch>();
 
   const renderButtons = () => (
     <>
       <>
-        {/* <Modal
-      open={activityModalOpen}
-      onClose={handleActivityModalClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <AddActivity entityState={entityState} setModalOpen={setActivityModalOpen} />
-    </Modal>
-    <Button
-      onClick={handleActivitdyModalOpen}
-      variant="contained"
-      className="bg-slate-700"
-      sx={{marginRight:".5rem"}}
-    >
-      Add Activity
-    </Button> */}
+        <Modal
+          open={submitModalOpen}
+          onClose={handleSubmitModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Submit entityState={entityState} setModalOpen={setSubmitModalOpen} />
+        </Modal>
+        <Button
+          onClick={handleSubmitModalOpen}
+          variant="contained"
+          className="bg-slate-700"
+          sx={{ marginRight: ".5rem" }}
+        >
+          Submit
+        </Button>
       </>
 
       {/* <Modal
@@ -94,11 +98,11 @@ const CheckList = () => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography noWrap>Activity Name</Typography>
+              <Typography noWrap>Activity</Typography>
             </TableCell>
 
             <TableCell>
-              <Typography noWrap>Value</Typography>
+              <Typography noWrap>Completed</Typography>
             </TableCell>
 
             <TableCell>
@@ -119,17 +123,20 @@ const CheckList = () => {
       </Table>
     </>
   );
-
-  return (
-    <GenericDetailPage
-      titleBase="WorkOrder Activity CheckList"
-      id={entityState.id}
-      entityState={entityState}
-      renderButtons={renderButtons}
-      renderDetails={renderDetails}
-      formDetail={true}
-    />
-  );
+  if (entityState?.data?.status !== "Assigned") {
+    return <Typography>The work order checklist is not available</Typography>;
+  } else {
+    return (
+      <GenericDetailPage
+        titleBase="Work-Order Checklist"
+        id={entityState.id}
+        entityState={entityState}
+        renderButtons={renderButtons}
+        renderDetails={renderDetails}
+        formDetail={true}
+      />
+    );
+  }
 };
 
 export default CheckList;

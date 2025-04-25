@@ -37,7 +37,6 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const { schedule } = useSelector((state: AppState) => state.schedule);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +45,6 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
 
   const handleDateChange = (value) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
-
     setFormData({
       ...formData,
       start_date: formattedDate,

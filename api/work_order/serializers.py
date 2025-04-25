@@ -116,6 +116,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "end_date",
             "end_time",
             "schedule",
+            "status",
+            "remark",
             "breakdown",
             "machine",
             "machine_id",
@@ -128,6 +130,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "completed_by",
             "tools_required",
             "total_time_required",
+            "total_time_taken",
             "spareparts_required",
             "work_order_activities",
             "assigned_users",
@@ -145,7 +148,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             }
         except Schedule.DoesNotExist:
             return None
-        
+
     def get_breakdown(self, obj):
         try:
             breakdown_obj = obj.breakdown
