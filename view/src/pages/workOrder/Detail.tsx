@@ -31,7 +31,7 @@ const Detail = () => {
   const handleAssignModalClose = () => setAssignModalOpen(false);
 
   const [activityModalOpen, setActivityModalOpen] = useState(false);
-  const handleActivitdyModalOpen = () => setActivityModalOpen(true);
+  const handleActivityModalOpen = () => setActivityModalOpen(true);
   const handleActivityModalClose = () => setActivityModalOpen(false);
 
   const renderButtons = () => (
@@ -51,7 +51,7 @@ const Detail = () => {
               />
             </Modal>
             <Button
-              onClick={handleActivitdyModalOpen}
+              onClick={handleActivityModalOpen}
               variant="contained"
               className="bg-slate-700"
               sx={{ mr: 1 }}

@@ -21,6 +21,8 @@ class BreakdownSerializer(serializers.ModelSerializer):
             "equipment",
             "equipment_id",
             "reason",
+            "remark",
+            "status",
             "start_time",
             "end_time",
             "total_time",

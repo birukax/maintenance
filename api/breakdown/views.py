@@ -69,5 +69,7 @@ class BreakdownViewSet(viewsets.ModelViewSet):
             work_order.spareparts_required.set(spareparts_required)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
+        breakdown.status = "WORK-ORDER CREATED"
+        breakdown.save()
         serializer = BreakdownSerializer(breakdown)
         return Response(serializer.data, status=status.HTTP_200_OK)
