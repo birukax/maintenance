@@ -5,6 +5,7 @@ import authReducer from './slices/authSlice';
 import itemReducer from './slices/itemSlice';
 import returnReducer from './slices/returnSlice';
 import contactReducer from './slices/contactSlice';
+import profileReducer from './slices/profileSlice';
 import machineReducer from './slices/machineSlice';
 import locationReducer from './slices/locationSlice';
 import activityReducer from './slices/activitySlice';
@@ -27,6 +28,7 @@ interface RootState {
   item: ReturnType<typeof itemReducer>;
   return: ReturnType<typeof returnReducer>;
   contact: ReturnType<typeof contactReducer>;
+  profile: ReturnType<typeof profileReducer>;
   machine: ReturnType<typeof machineReducer>;
   location: ReturnType<typeof locationReducer>;
   activity: ReturnType<typeof activityReducer>;
@@ -50,6 +52,7 @@ const rootReducer = {
     item: itemReducer,
     return: returnReducer,
     contact: contactReducer,
+    profile: profileReducer,
     machine: machineReducer,
     location: locationReducer,
     activity: activityReducer,

@@ -12,6 +12,7 @@ export function GenericDetailPage({
   id,
   renderButtons,
   renderDetails,
+  formDetail=false,
 }) {
   const { tokens } = useSelector((state: AppState) => state.auth);
 
@@ -37,9 +38,9 @@ export function GenericDetailPage({
         {titleBase} Detail
       </Typography>
 
-      {entityState.loading && <CircularProgress />}
+      {(entityState.loading && !formDetail) && <CircularProgress />}
 
-      {!entityState.loading && !entityState.error && entityState.data && (
+      {(!entityState.loading || formDetail) && !entityState.error && entityState.data && (
         <>
           <Box>{renderButtons()}</Box>
           <Box>{renderDetails(entityState.data)}</Box>

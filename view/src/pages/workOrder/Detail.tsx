@@ -8,6 +8,7 @@ import { Typography, Button, Modal } from "@mui/material";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import AddActivity from "./AddActivity";
+import AssignUsers from "./AssignUsers";
 
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -15,26 +16,53 @@ const Detail = () => {
     fetchDetailAction: fetchWorkOrder,
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const [modalOpen, setModalOpen] = useState(false);
+  
+  const [assignmodalOpen, setAssignModalOpen] = useState(false);
+  const handleAssignModalOpen = () => setAssignModalOpen(true);
+  const handleAssignModalClose = () => setAssignModalOpen(false);
 
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
+  const [activityModalOpen, setActivityModalOpen] = useState(false);
+  const handleActivitdyModalOpen = () => setActivityModalOpen(true);
+  const handleActivityModalClose = () => setActivityModalOpen(false);
+  
   const renderButtons = () => (
     <>
+    {entityState.data?.assigned_users?.length<=0&&
+    <>
+    <Modal
+      open={activityModalOpen}
+      onClose={handleActivityModalClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <AddActivity entityState={entityState} setModalOpen={setActivityModalOpen} />
+    </Modal>
+    <Button
+      onClick={handleActivitdyModalOpen}
+      variant="contained"
+      className="bg-slate-700"
+      sx={{marginRight:".5rem"}}
+    >
+      Add Activity
+    </Button>
+    </>
+  }
+      
+      
       <Modal
-        open={modalOpen}
-        onClose={handleModalClose}
+        open={assignmodalOpen}
+        onClose={handleAssignModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <AddActivity entityState={entityState} setModalOpen={setModalOpen} />
+        <AssignUsers entityState={entityState} setModalOpen={setAssignModalOpen} />
       </Modal>
       <Button
-        onClick={handleModalOpen}
+        onClick={handleAssignModalOpen}
         variant="contained"
         className="bg-slate-700"
       >
-        Add Activity
+        Assign User
       </Button>
     </>
   );
@@ -45,7 +73,7 @@ const Detail = () => {
         <>
           <Typography variant="h6">Schedule:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.schedule.id}
+            {data.schedule.type}
           </Typography>
         </>
       )}
@@ -114,6 +142,14 @@ const Detail = () => {
         return (
           <Typography variant="body1" className="text-slate-500 mb-2" key={work_order_activity.id}>
             * {work_order_activity.activity.name}
+          </Typography>
+        );
+      })}
+      <Typography variant="h6">Assigned Users:</Typography>
+      {data.assigned_users.map((assigned_user) => {
+        return (
+          <Typography variant="body1" className="text-slate-500 mb-2" key={assigned_user.id}>
+            * {assigned_user.username}
           </Typography>
         );
       })}

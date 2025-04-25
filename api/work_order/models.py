@@ -133,7 +133,7 @@ class WorkOrder(BaseCreatedUpdated):
     end_time = models.TimeField(null=True, blank=True)
     total_time_required = models.DurationField()
     class Meta:
-        ordering = ["-updated_at", "-created_at"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         if self.machine:
@@ -158,7 +158,7 @@ class WorkOrderActivity(BaseCreatedUpdated):
     remark = models.TextField(max_length=250)
 
     class Meta:
-        ordering = ["-updated_at", "-created_at"]
+        ordering = ["-created_at"]
         verbose_name_plural = "Work Order Activities"
 
     def __str__(self):

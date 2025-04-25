@@ -5,6 +5,7 @@ import ActivityList from "../pages/activity/List";
 import ActivityDetail from "../pages/activity/Detail";
 import ActivityEdit from "../pages/activity/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
+import CheckList from "../pages/workOrderActivity/CheckList";
 
 const ActivityRoutes = [
   <Route
@@ -22,6 +23,15 @@ const ActivityRoutes = [
     element={
       <ProtectedRoute>
         <CreateActivity />
+      </ProtectedRoute>
+    }
+  />,
+  <Route
+    key="activity-checklist"
+    path="/activity/checklist/:id"
+    element={
+      <ProtectedRoute>
+        <CheckList />
       </ProtectedRoute>
     }
   />,
