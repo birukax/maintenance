@@ -43,7 +43,7 @@ export function GenericDetailPage({
       {(!entityState.loading || formDetail) && !entityState.error && entityState.data && (
         <>
           <Box>{renderButtons()}</Box>
-          <Box>{renderDetails(entityState.data)}</Box>
+          <Box className="detail-container">{renderDetails(entityState.data)}</Box>
         </>
       )}
 
