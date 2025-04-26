@@ -85,23 +85,45 @@ const Detail = () => {
 
   const renderDetails = (data) => (
     <>
-      <Typography variant="h6">Status:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.status}
-      </Typography>
-      <Typography variant="h6">Machine:</Typography>
+
+    <h2>
+      Primary Information
+    </h2>
+    <div className="rw">
+      <div className="clmn">
+        <Typography variant="h6">Machine:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.machine.code} - {data.machine.name}
       </Typography>
+      </div>
+      <div className="clmn">
       <Typography variant="h6">Equipment:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.equipment.code} - {data.equipment.name}
       </Typography>
-      <Typography variant="h6">Start:</Typography>
+
+      </div>
+      <div className="clmn">
+      <Typography variant="h6">Status:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.status}
+      </Typography>
+      </div>
+    </div>
+
+    <h2>
+      Timeline
+    </h2>
+
+    <div className="rw">
+      <div className="clmn">
+<Typography variant="h6">Start:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {start()}
       </Typography>
-      {data.end_date && (
+      </div>
+      <div className="clmn">
+{data.end_date && (
         <>
           <Typography variant="h6">End:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
@@ -109,11 +131,20 @@ const Detail = () => {
           </Typography>
         </>
       )}
+      </div>
+    </div>
+      
+      <h2>Detail</h2>
+      <div className="rw">
+        <div className="clmn">
+
       <Typography variant="h6">Reason:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.reason}
       </Typography>
-      {data.remark && (
+        </div>
+        <div className="clmn">
+{data.remark && (
         <>
           <Typography variant="h6">Remark:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
@@ -121,6 +152,10 @@ const Detail = () => {
           </Typography>
         </>
       )}
+        </div>
+      </div>
+      
+      
     </>
   );
   return (
