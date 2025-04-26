@@ -43,31 +43,71 @@ const Detail = () => {
 
   const renderDetails = (data) => (
     <>
+
+<h2>Primary Information</h2>
+    <div className="rw">
+      <div className="clmn">
       <Typography variant="h6">Item:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.item.name}
       </Typography>
-      <Typography variant="h6">Unit of Measure:</Typography>
+      
+      </div>
+      <div className="clmn">
+<Typography variant="h6">Unit of Measure:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.item.uom.name}
       </Typography>
-      <Typography variant="h6">Priority:</Typography>
+      
+      </div>
+      <div className="clmn">
+<Typography variant="h6">Priority:</Typography>
       <Typography variant="body1" className="text-slate-500">
         {data.priority}
       </Typography>
-      <Typography variant="h6">Status:</Typography>
+      
+      </div>
+      <div className="clmn">
+<Typography variant="h6">Status:</Typography>
       <Typography variant="body1" className="text-slate-500">
         {data.status}
       </Typography>
-      <Typography variant="h6">Requested Quantity:</Typography>
+      </div>
+    </div>
+
+
+<h2>Timeline</h2>
+    <div className="rw">
+      <div className="clmn">
+      {data.received_date ? (
+        <>
+          <Typography variant="h6">Received Date:</Typography>
+          
+        </>
+      ):<Typography variant="body1" className="text-slate-500">
+            Not Received Yet
+          </Typography>
+          }
+      </div>
+    </div>
+
+<h2>Deatils</h2>
+    <div className="rw">
+      <div className="clmn">
+        <Typography variant="h6">Requested Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500">
         {data.quantity}
       </Typography>
-      <Typography variant="h6">Received Quantity:</Typography>
+      
+      </div>
+      <div className="clmn">
+        <Typography variant="h6">Received Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500">
         {data.received_quantity}
       </Typography>
-      {data.requested_by && (
+      </div>
+      <div className="clmn">
+        {data.requested_by && (
         <>
           <Typography variant="h6">Requested By:</Typography>
           <Typography variant="body1" className="text-slate-500">
@@ -75,23 +115,28 @@ const Detail = () => {
           </Typography>
         </>
       )}
-
-      {data.approved_by && (
+      </div>
+      <div className="clmn">
+      {data.approved_by ? (
         <>
           <Typography variant="h6">Approved By:</Typography>
           <Typography variant="body1" className="text-slate-500">
             {data.approved_by.username}
           </Typography>
         </>
-      )}
-      {data.received_date && (
-        <>
-          <Typography variant="h6">Received Date:</Typography>
-          <Typography variant="body1" className="text-slate-500">
-            {data.received_date}
+      ):
+      <Typography variant="body1" className="text-slate-500">
+            Not Approved Yet
           </Typography>
-        </>
-      )}
+      }
+      </div>
+    </div>
+      
+      
+      
+
+      
+      
     </>
   );
   return (

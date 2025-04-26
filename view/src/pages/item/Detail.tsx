@@ -66,7 +66,7 @@ const Detail = () => {
           {data.suppliers.map((supplier, index) => {
             return (
               <Typography variant="body1" className="text-slate-500 mb-2" key={index}>
-                <div className="boolean"></div> {supplier.name}
+                <li className="boolean"></li> {supplier.name}
               </Typography>
             );
           })}</div>

@@ -29,29 +29,29 @@ const Detail = () => {
 
   const renderDetails = (data) => (
     <>
-      <Typography variant="h6">Item:</Typography>
+
+    <div className="rw">
+      <div className="clmn">
+        <Typography variant="h6">Item:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.item.name}
       </Typography>
-      <Typography variant="h6">UoM:</Typography>
+      
+      </div>
+      <div className="clmn">
+<Typography variant="h6">UoM:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
         {data.item.uom.name}
       </Typography>
-      <Typography variant="h6">Current Balance:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.item.inventory.balance}
-      </Typography>
-      <Typography variant="h6">Quantity:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data.quantity}
-      </Typography>
-
-      <Typography variant="h6">Minimum Stock Level:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data.minimum_stock_level}
-      </Typography>
-
-      <Typography variant="h6">Schedule:</Typography>
+      </div>
+    </div>
+      
+      
+      
+<h2>Timeline</h2>
+<div className="rw">
+  <div className="clmn">
+    <Typography variant="h6">Schedule:</Typography>
       <Typography variant="body1" className="text-slate-500">
         <Grid
           container
@@ -65,13 +65,44 @@ const Detail = () => {
 
             return (
               <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                <Paper>{monthName}</Paper>
-                <Paper>{schedule ? schedule.quantity : 0.0}</Paper>
+                <Paper sx={{padding:".5rem",borderBottomLeftRadius:"0",borderBottomRightRadius:"0"}}>{monthName}</Paper>
+                <Paper  sx={{padding:".5rem",borderTopLeftRadius:"0",borderTopRightRadius:"0",borderBottomLeftRadius:"0",borderBottomRightRadius:"0"}}>{schedule ? schedule.quantity : 0.0}</Paper>
               </Grid>
             );
           })}
         </Grid>
       </Typography>
+  </div>
+</div>
+
+<h2>Details</h2>
+      <div className="rw">
+        <div className="clmn">
+<Typography variant="h6">Current Balance:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.item.inventory.balance}
+      </Typography>
+      
+
+      
+
+        </div>
+        <div className="clmn">
+<Typography variant="h6">Minimum Stock Level:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.minimum_stock_level}
+      </Typography>
+
+        </div>
+        <div className="clmn">
+
+<Typography variant="h6">Quantity:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.quantity}
+      </Typography>
+        </div>
+      </div>
+      
     </>
   );
   return (

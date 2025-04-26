@@ -211,7 +211,7 @@ const Detail = () => {
 </div>
 
       
-      <h2>Work Detail</h2>
+      <h2>Work Details</h2>
       <div className="rw">
       <div className="clmn">
         
@@ -223,7 +223,7 @@ const Detail = () => {
               className="text-slate-500 mb-2"
               key={work_order_activity.id}
             >
-              <div className="boolean"></div> {work_order_activity.activity.name} -{" "}
+              <li className="boolean"></li> {work_order_activity.activity.name} -{" "}
               {JSON.stringify(work_order_activity.value)}
             </Typography>
           );
@@ -240,7 +240,7 @@ const Detail = () => {
                   className="text-slate-500 mb-2"
                   key={assigned_user.id}
                 >
-                  <div className="boolean"></div> {assigned_user.username}
+                  <li className="boolean"></li> {assigned_user.username}
                 </Typography>
               );
             })}
@@ -257,7 +257,7 @@ const Detail = () => {
             className="text-slate-500 mb-2"
             key={sparepart.id}
           >
-           <div className="boolean"></div> {sparepart.name}
+           <li className="boolean"></li> {sparepart.name}
           </Typography>
         );
       })}

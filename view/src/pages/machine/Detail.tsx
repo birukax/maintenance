@@ -27,18 +27,30 @@ const Detail = () => {
 
   const renderDetails = (data) => (
     <>
-      <Typography variant="h6">Code:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data.code}
-      </Typography>
-      <Typography variant="h6">Name:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.name}
-      </Typography>
-      <Typography variant="h6">Location:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data.location.name}
-      </Typography>
+
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Code:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data.code}
+          </Typography>
+        </div>
+        <div className="clmn">
+          <Typography variant="h6">Name:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data.name}
+          </Typography></div>
+      </div>
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Location:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data.location.name}
+          </Typography>
+          </div>
+      </div>
+
+
     </>
   );
   return (
