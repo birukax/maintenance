@@ -50,7 +50,7 @@ class Item(BaseCreatedUpdated):
                 prefix = f"{self.type[0:4]}"
             else:
                 prefix = f"ITEM"
-            last_item = Item.objects.order_by("-pk").first()
+            last_item = Item.objects.filter(type=self.type).order_by("-no").first()
             # next_id = last_item.pk + 1 if last_item else 1
             next_id = last_item.no.split("-")[-1] if last_item else 1
             next_id = int(next_id) + 1
@@ -58,7 +58,7 @@ class Item(BaseCreatedUpdated):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["-created_at", "name"]
 
     def __str__(self):
         return f"{self.name}"
