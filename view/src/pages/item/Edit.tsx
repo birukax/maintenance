@@ -26,6 +26,7 @@ const Create = () => {
   const [formData, setFormData] = useState({
     type: "",
     category: "",
+    minimum_stock_level: 0,
     suppliers_id:[]
   });
   const { id } = useParams();
@@ -55,6 +56,7 @@ const Create = () => {
     setFormData({
       type: item.data?.type,
       category: item.data?.category,
+      minimum_stock_level: item.data?.minimum_stock_level || 0,
       suppliers_id: item.data?.suppliers.map((supplier) => supplier.id) || [],
     });
   }, []);
@@ -176,7 +178,22 @@ const Create = () => {
             ))}
           </Select>
         </FormControl>
-
+        <TextField
+          label="Minimum Stock Level"
+          name="minimum_stock_level"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.minimum_stock_level}
+          onChange={handleChange}
+          inputProps={{
+            min: 0,
+            step: 1,
+          }}
+          required
+          disabled={loading}
+        />
         <FormControl fullWidth variant="outlined" disabled={loading}>
                                 <Autocomplete
                                   multiple

@@ -62,6 +62,12 @@ const Detail = () => {
             {data.uom.name}
           </Typography>
         </div>
+        <div className="clmn">
+          <Typography variant="h6">Minimum Stock Level:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data.minimum_stock_level}
+          </Typography>
+        </div>
         <div className="clmn"><Typography variant="h6">Suppliers:</Typography>
           {data.suppliers.map((supplier, index) => {
             return (

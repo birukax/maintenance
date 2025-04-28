@@ -19,11 +19,9 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
+  const year = new Date().getFullYear();
   const [formData, setFormData] = useState({
-    name: "",
-    item_id: "",
-    type: "",
-    category: "",
+    year:year
   });
   const [monthFormData, setMonthFormData] = useState({
     1: 0,
@@ -81,42 +79,28 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="item-select-label">Item</InputLabel>
-          <Select
-            labelId="item-select-label"
-            id="item-select"
-            name="item_id"
-            value={formData.item_id}
-            onChange={handleChange}
-            label="Item"
-          >
-            {items.data &&
-              items.data.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-        {MONTH_NAMES.map(([monthNumber, monthName]) => (
-          <TextField
-            label={monthName}
-            name={monthNumber}
-            type="number"
-            className="mb-8"
-            variant="outlined"
-            fullWidth
-            value={monthFormData[monthNumber]}
-            onChange={handleChange}
-            inputProps={{
-              min: 0,
-              step: 1,
-            }}
-            required
-            disabled={loading}
-          />
-        ))}
+        <TextField
+          label="Year"
+          name="year"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.year || ""}
+          onChange={(e) => {
+        const currentYear = new Date().getFullYear();
+        const selectedYear = parseInt(e.target.value, 10);
+        if (selectedYear >= currentYear) {
+          setFormData({ ...formData, year: e.target.value });
+        }
+          }}
+          inputProps={{
+        min: new Date().getFullYear(),
+        step: 1,
+          }}
+          required
+          disabled={loading}
+        />
 
         <Button
           type="submit"
@@ -130,7 +114,7 @@ const Create = () => {
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
+        {error}
           </Typography>
         )}
       </Box>
