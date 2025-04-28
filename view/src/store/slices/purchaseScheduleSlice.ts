@@ -71,11 +71,11 @@ export const updatePurchaseSchedule = createAsyncThunk<[], { id: string, formDat
 )
 
 
-export const createAnnualSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const createAnnualSchedule = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: string }>(
     'purchaseSchedule/createAnnualSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/purchase/schedules/${id}/create_annual_schedule/`, formData);
+            const response = await api.post(`/purchase/schedules/create_annual_schedule/`, formData);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Failed to create annual schedule');
