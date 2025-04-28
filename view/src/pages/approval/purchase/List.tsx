@@ -32,27 +32,27 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [handlers, setHandlers] = React.useState(false);
 
-  const handleApprove = (id) => {
-    dispatch(approvePurchaseApproval(id)).unwrap();
+  const handleApprove = async (id) => {
+    await dispatch(approvePurchaseApproval(id)).unwrap();
     toast.success("Purchase Approved");
-    setHandlers((prev) => !prev);
-    handleRefresh();
-  };
-
-  const handleReject = (id) => {
-    dispatch(rejectPurchaseApproval(id)).unwrap();
-    toast.success("Purchase Rejected");
-    setHandlers((prev) => !prev);
-    handleRefresh();
-  };
-
-  useEffect(() => {
     dispatch(fetchPurchaseApprovals());
-  }, [handlers]);
+    // setHandlers((prev) => !prev);
+    handleRefresh();
+  };
+
+  const handleReject = async (id) => {
+    await dispatch(rejectPurchaseApproval(id)).unwrap();
+    toast.success("Purchase Rejected");
+    dispatch(fetchPurchaseApprovals());
+    // setHandlers((prev) => !prev);
+    handleRefresh();
+  };
 
   const handleRefresh = () => {
     dispatch(fetchPurchaseApprovals()).unwrap();
   };
+  
+
 
   return (
     <GenericListPage
