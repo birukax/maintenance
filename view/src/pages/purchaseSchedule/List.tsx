@@ -42,6 +42,7 @@ const List: React.FC = () => {
       columns={purchaseScheduleColumns}
       createRoute="/purchase-schedule/create"
       // detailRouteBase="/purchase-schedule/detail"
+      hasDetail={false}
       onRefresh={entityState.refresh}
       getKey={(purchaseSchedule) => purchaseSchedule.id}
     />

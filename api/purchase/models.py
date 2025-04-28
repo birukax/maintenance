@@ -20,7 +20,7 @@ class Schedule(BaseCreatedUpdated):
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        ordering = ["-updated_at"]
+        ordering = ["year", "item__name"]
         unique_together = ["item", "year"]
 
     def __str__(self):
