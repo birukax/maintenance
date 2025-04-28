@@ -15,6 +15,7 @@ import {
 const inventoryColumns = [
   { header: "Item", accessor: "item.name" },
   { header: "UoM", accessor: "item.uom.name" },
+  { header: "MSL", accessor: "item.minimum_stock_level" },
   { header: "Balance", accessor: "balance" },
   { header: "Purchased Quantity", accessor: "purchased_quantity" },
   { header: "Consumed Quantity", accessor: "consumed_quantity" },

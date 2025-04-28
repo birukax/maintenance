@@ -33,8 +33,16 @@ import RequestPageIcon from '@mui/icons-material/RequestPage';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
+import ScaleIcon from '@mui/icons-material/Scale';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import UndoIcon from '@mui/icons-material/Undo';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const AppLayout = ({ children }) => {
   const [openSections, setOpenSections] = useState({
@@ -73,19 +81,19 @@ const AppLayout = ({ children }) => {
     dispatch(logout());
   };
   const drawer = (
-    <div>
+    <div  style={{minWidth:"fit-content"}}>
       {/* <div className="logo" onClick={() => navigate("/dashboard")}>
         <img src={Logo} alt="qualabels logo" width="80px" title="qualabels manufacturers plc logo"/>
       </div> */}
-      <Toolbar />
-      <List>
+      <Toolbar  sx={{minWidth:"fit-content"}}/>
+      <List  sx={{ minWidth:"fit-content"}}>
         <ListItemButton component={Link} to="/dashboard">
           <ListItemIcon>
         <DashboardIcon />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItemButton>
-        <ListItemButton component={Link} to="/contacts">
+        <ListItemButton component={Link} to="/contacts" >
               <ListItemIcon>
               <ContactsIcon />
               </ListItemIcon>
@@ -97,7 +105,7 @@ const AppLayout = ({ children }) => {
         {openSections.inventory ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItemButton>
           {openSections.inventory && (
-        <List component="div" disablePadding>
+        <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
           <ListItemButton component={Link} to="/items" sx={{ pl: 4 }}>
             <ListItemIcon>
           <CategoryIcon />
@@ -119,17 +127,17 @@ const AppLayout = ({ children }) => {
         </List>
           )}
 
-          <ListItemButton onClick={() => toggleSection("purchase")}>
+          <ListItemButton onClick={() => toggleSection("purchase")} >
         <ListItemText primary="Purchase" />
         {openSections.purchase ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItemButton>
           {openSections.purchase && (
-        <List component="div" disablePadding>
+        <List component="div" disablePadding sx={{minWidth:"fit-content"}}>
           <ListItemButton component={Link} to="/purchase-schedules" sx={{ pl: 4 }}>
             <ListItemIcon>
           < CalendarMonthIcon/>
             </ListItemIcon>
-            <ListItemText primary="Purchase Schedule" />
+            <ListItemText primary="Purchase Schedule"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
           <ListItemButton component={Link} to="/purchase-requests" sx={{ pl: 4 }}>
             <ListItemIcon>
@@ -137,11 +145,11 @@ const AppLayout = ({ children }) => {
             </ListItemIcon>
             <ListItemText primary="Purchase Request" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/purchase-approvals" sx={{ pl: 4 }}>
+          <ListItemButton component={Link} to="/purchase-approvals" sx={{ pl: 4 ,minWidth:"fit-content"}}>
             <ListItemIcon>
           <CheckCircleIcon />
             </ListItemIcon>
-            <ListItemText primary="Purchase Approval" />
+            <ListItemText primary="Purchase Approval"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
         </List>
           )}
@@ -151,7 +159,7 @@ const AppLayout = ({ children }) => {
         {openSections.maintenance ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItemButton>
           {openSections.maintenance && (
-        <List component="div" disablePadding>
+        <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
           <ListItemButton component={Link} to="/machines" sx={{ pl: 4 }}>
             <ListItemIcon>
           <PrecisionManufacturingIcon />
@@ -166,21 +174,21 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
           <ListItemButton component={Link} to="/units-of-measures" sx={{ pl: 4 }}>
               <ListItemIcon>
-              <ContactsIcon />
+              <ScaleIcon />
               </ListItemIcon>
-              <ListItemText primary="Unit of Measures" />
+              <ListItemText primary="Unit of Measures"  sx={{minWidth:"fit-content"}}/>
             </ListItemButton>
           <ListItemButton component={Link} to="/activities" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon />
+          <PlaylistAddCheckIcon />
             </ListItemIcon>
             <ListItemText primary="Activity" />
           </ListItemButton>
           <ListItemButton component={Link} to="/work-order-types" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon />
+          <EngineeringIcon />
             </ListItemIcon>
-            <ListItemText primary="Work Order Type" />
+            <ListItemText primary="Work Order Type"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
           <ListItemButton component={Link} to="/activity-types" sx={{ pl: 4 }}>
             <ListItemIcon>
@@ -190,19 +198,19 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
           <ListItemButton component={Link} to="/work-orders" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon />
+          <ConstructionIcon />
             </ListItemIcon>
             <ListItemText primary="Work Order" />
           </ListItemButton>
           <ListItemButton component={Link} to="/schedules" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon />
+          <EditCalendarIcon />
             </ListItemIcon>
             <ListItemText primary="Schedule" />
           </ListItemButton>
           <ListItemButton component={Link} to="/breakdowns" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon />
+          <HardwareIcon />
             </ListItemIcon>
             <ListItemText primary="Breakdown" />
           </ListItemButton>
@@ -215,16 +223,16 @@ const AppLayout = ({ children }) => {
         {openSections.consumption ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItemButton>
           {openSections.consumption && (
-        <List component="div" disablePadding>
-          <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }}>
+        <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
+          <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }} >
             <ListItemIcon>
-          <ContactsIcon />
+          <LocalShippingIcon />
             </ListItemIcon>
             <ListItemText primary="Consumption" />
           </ListItemButton>
           <ListItemButton component={Link} to="/returns" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon />
+          <UndoIcon />
             </ListItemIcon>
             <ListItemText primary="Return" />
           </ListItemButton>

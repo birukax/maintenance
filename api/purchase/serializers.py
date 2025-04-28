@@ -15,7 +15,7 @@ class MonthlyScheduleSerializer(serializers.ModelSerializer):
         model = MonthlySchedule
         fields = [
             "id",
-            "purchase_schedule",
+            "schedule",
             "january",
             "february",
             "march",
@@ -34,7 +34,7 @@ class MonthlyScheduleSerializer(serializers.ModelSerializer):
 class ScheduleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     item = ItemSerializer(read_only=True)
-    monthly_purchase_schedule = MonthlyScheduleSerializer(read_only=True)
+    monthly_schedule = MonthlyScheduleSerializer(read_only=True)
 
     class Meta:
         model = Schedule
