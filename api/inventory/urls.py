@@ -26,22 +26,6 @@ router.register(
     basename="inventory",
 )
 router.register(
-    r"purchase-schedules",
-    views.PurchaseScheduleViewSet,
-    basename="purchase-schedule",
-)
-router.register(
-    r"monthly-purchase-schedules",
-    views.MonthlyPurchaseScheduleViewSet,
-    basename="monthly-purchase-schedule",
-)
-router.register(
-    r"purchase-requests",
-    views.PurchaseRequestViewSet,
-    basename="purchase-request",
-)
-
-router.register(
     r"consumptions",
     views.ConsumptionViewSet,
     basename="consumption",

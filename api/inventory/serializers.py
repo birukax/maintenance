@@ -5,9 +5,6 @@ from .models import (
     Contact,
     Item,
     Inventory,
-    PurchaseSchedule,
-    MonthlyPurchaseSchedule,
-    PurchaseRequest,
     Consumption,
     Return,
 )
@@ -53,6 +50,7 @@ class ItemSerializer(serializers.ModelSerializer):
             "uom",
             "uom_id",
             "inventory",
+            "minimum_stock_level",
             "type",
             "category",
             "suppliers",
@@ -78,59 +76,6 @@ class InventorySerializer(serializers.ModelSerializer):
             "consumed_quantity",
             "returned_quantity",
             "balance",
-        ]
-
-
-class MonthlyPurchaseScheduleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    class Meta:
-        model = MonthlyPurchaseSchedule
-        fields = [
-            "id",
-            "purchase_schedule",
-            "month",
-            "quantity",
-        ]
-
-
-class PurchaseScheduleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    item = ItemSerializer(read_only=True)
-    monthly_purchase_schedules = MonthlyPurchaseScheduleSerializer(
-        read_only=True, many=True
-    )
-    class Meta:
-        model = PurchaseSchedule
-        fields = [
-            "id",
-            "item",
-            "minimum_stock_level",
-            "quantity",
-            "monthly_purchase_schedules",
-        ]
-
-
-class PurchaseRequestSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    item_id = serializers.IntegerField(write_only=True)
-    item = ItemSerializer(read_only=True)
-    requested_by = UserSerializer(read_only=True)
-    approved_by = UserSerializer(read_only=True)
-
-    class Meta:
-        model = PurchaseRequest
-        fields = [
-            "id",
-            "item",
-            "item_id",
-            "quantity",
-            "received_quantity",
-            "requested_date",
-            "requested_by",
-            "approved_by",
-            "received_date",
-            "priority",
-            "status",
         ]
 
 

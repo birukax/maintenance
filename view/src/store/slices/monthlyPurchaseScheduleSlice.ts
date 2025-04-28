@@ -21,7 +21,7 @@ export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, {rejectV
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedules',
     async(_, {rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/monthly-purchase-schedules/');
+            const response = await api.get('/purchase/monthly-schedules/');
             return response.data;
         }
         catch (error) {
@@ -35,11 +35,11 @@ export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejec
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedule',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await api.get(`/inventory/monthly-purchase-schedules/${id}/`)
+            const response = await api.get(`/purchase/monthly-schedules/${id}/`)
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to fetch Monthly Purchase Schedule');
         }
     }
 )
@@ -48,11 +48,11 @@ export const createMonthlyPurchaseSchedule = createAsyncThunk<[],  formData  , {
     'monthlyPurchaseSchedule/createMonthlyPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/inventory/monthly-purchase-schedules/', formData);
+            const response = await api.post('/purchase/monthly-schedules/', formData);
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to create Monthly Purchase Schedule');
         }
     }
 )
@@ -61,10 +61,10 @@ export const updateMonthlyPurchaseSchedule = createAsyncThunk<[], { id: string, 
     'monthlyPurchaseSchedule/updateMonthlyPurchaseSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/inventory/monthly-purchase-schedules/${id}/`, formData);
+            const response = await api.patch(`/purchase/monthly-schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to update Monthly Purchase Schedule');
         }
     }
 )

@@ -6,7 +6,7 @@ from main.choices import APPROVAL_STATUS
 
 class Purchase(BaseCreatedUpdated):
     purchase_request = models.ForeignKey(
-        "inventory.PurchaseRequest",
+        "purchase.Request",
         on_delete=models.RESTRICT,
         related_name="purchase_approvals",
     )

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "asset",
     "approval",
     "inventory",
+    "purchase",
     "work_order",
     "schedule",
     "breakdown",
