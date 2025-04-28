@@ -135,6 +135,13 @@ class ConsumptionViewSet(viewsets.ModelViewSet):
     serializer_class = ConsumptionSerializer
     queryset = Consumption.objects.all()
 
+    def perform_create(self, serializer):
+        quantity = serializer.validated_data.get("quantity")
+        item_id = serializer.validated_data.get("item_id")
+        if Item.objects.get(id=item_id).inventory.balance < quantity:
+            raise serializers.ValidationError({"quantity": f"Insufficient balance."})
+        return super().perform_create(serializer)
+
 
 class ReturnViewSet(viewsets.ModelViewSet):
     serializer_class = ReturnSerializer

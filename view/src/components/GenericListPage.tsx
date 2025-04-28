@@ -30,7 +30,6 @@ export const GenericListPage = ({
   title,
   entityState,
   columns,
-  extraColumns = [],
   createRoute = "",
   hasDetail = true,
   hasApproval = false,
@@ -41,7 +40,6 @@ export const GenericListPage = ({
   getKey,
 }) => {
   const headers = columns.map((col) => col.header);
-  const extraHeaders = extraColumns.map((extraColumn) => extraColumn.headers);
   const { tokens } = useSelector((state: AppState) => state.auth);
   const navigate = useNavigate();
 
@@ -60,7 +58,6 @@ export const GenericListPage = ({
       toast.error(JSON.stringify(entityState.error));
     }
   }
-
 
   return (
     <>
@@ -104,11 +101,6 @@ export const GenericListPage = ({
                 <Typography noWrap>{header}</Typography>
               </TableCell>
             ))}
-            {extraHeaders.map((header) => (
-              <TableCell key={header}>
-                <Typography noWrap>{header}</Typography>
-              </TableCell>
-            ))}
             {(hasDetail || hasApproval) && (
               <TableCell align="center">
                 <Typography noWrap>Action</Typography>
@@ -134,18 +126,7 @@ export const GenericListPage = ({
                       </TableCell>
                     );
                   })}
-                  {extraColumns &&
-                    extraColumns.map((extraColumn) => {
-                      const schedule = row.monthly_purchase_schedules.find(
-                        (s) => s.month === extraColumn.number
-                      );
 
-                      return (
-                        <TableCell component="th" scope="row">
-                          {schedule ? schedule.quantity : "0.00"}
-                        </TableCell>
-                      );
-                    })}
                   {hasDetail && (
                     <TableCell align="center">
                       <Button

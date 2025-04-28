@@ -69,11 +69,7 @@ const Create = () => {
       <Typography variant="h4" className="mb-6 text-gray-800">
         Create Consumption
       </Typography>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        className="form-gap"
-      >
+      <Box component="form" onSubmit={handleSubmit} className="form-gap">
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="item-select-label">Item</InputLabel>
           <Select
@@ -106,7 +102,7 @@ const Create = () => {
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            disablePast
+            disableFuture
             label="Date"
             name="date"
             value={formData.date ? dayjs(formData.date) : null}
@@ -133,7 +129,7 @@ const Create = () => {
           required
           disabled={loading}
         />
-        
+
         <Button
           type="submit"
           variant="contained"

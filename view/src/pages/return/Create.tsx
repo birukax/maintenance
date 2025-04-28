@@ -78,11 +78,7 @@ const Create = () => {
       <Typography variant="h4" className="mb-6 text-gray-800">
         Create Return
       </Typography>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        className="form-gap"
-      >
+      <Box component="form" onSubmit={handleSubmit} className="form-gap">
         <FormControlLabel
           labelPlacement="start"
           label="Used"
@@ -125,7 +121,7 @@ const Create = () => {
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            disablePast
+            disableFuture
             label="Date"
             name="date"
             value={formData.date ? dayjs(formData.date) : null}
