@@ -68,7 +68,7 @@ const Create = () => {
           onChange={(e) => {
         const currentYear = new Date().getFullYear();
         const selectedYear = parseInt(e.target.value, 10);
-        if (selectedYear >= currentYear) {
+        if (selectedYear >= currentYear && selectedYear <= 9999) {
           setFormData({ ...formData, year: Number(e.target.value) });
         }
           }}

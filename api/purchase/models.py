@@ -8,7 +8,7 @@ from inventory.models import Item
 
 
 class Schedule(BaseCreatedUpdated):
-    item = models.OneToOneField(
+    item = models.ForeignKey(
         Item, on_delete=models.RESTRICT, related_name="purchase_schedule"
     )
     year = models.IntegerField(
@@ -21,6 +21,7 @@ class Schedule(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["-updated_at"]
+        unique_together = ["item", "year"]
 
     def __str__(self):
         if self.item:
@@ -30,7 +31,7 @@ class Schedule(BaseCreatedUpdated):
 class MonthlySchedule(BaseCreatedUpdated):
     schedule = models.OneToOneField(
         Schedule,
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         related_name="monthly_schedule",
     )
     january = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -45,7 +46,7 @@ class MonthlySchedule(BaseCreatedUpdated):
     october = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     november = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     december = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-                    
+
     class Meta:
         ordering = ["schedule__year"]
 

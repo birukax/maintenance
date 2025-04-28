@@ -53,7 +53,7 @@ class Item(BaseCreatedUpdated):
                 prefix = f"{self.type[0:4]}"
             else:
                 prefix = f"ITEM"
-            last_item = Item.objects.filter(type=self.type).order_by("-no").first()
+            last_item = Item.objects.filter(type=self.type).order_by("-id").first()
             # next_id = last_item.pk + 1 if last_item else 1
             next_id = last_item.no.split("-")[-1] if last_item else 1
             next_id = int(next_id) + 1

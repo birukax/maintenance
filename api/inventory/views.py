@@ -58,10 +58,16 @@ class ItemViewSet(viewsets.ModelViewSet):
             if suppliers.exists():
                 item.suppliers.set(suppliers)
             Inventory.objects.create(item=item)
-            schedule = Schedule.objects.create(
-                item=item, year=datetime.date.today().year
-            )
-            MonthlySchedule.objects.create(schedule=schedule)
+            years_dict = Schedule.objects.all().values("year").distinct()
+            years = [
+                d["year"] for d in years_dict if d["year"] >= datetime.date.today().year
+            ]
+            years = list(set(years))
+
+            for year in years:
+                schedule = Schedule(item=item, year=year)
+                schedule.save()
+                MonthlySchedule.objects.create(schedule=schedule)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         return Response(serializer.data, status=status.HTTP_200_OK)
