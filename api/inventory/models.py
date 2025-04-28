@@ -43,7 +43,7 @@ class Item(BaseCreatedUpdated):
     )
 
     minimum_stock_level = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        max_digits=10, decimal_places=2, default=0
     )
     suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
 

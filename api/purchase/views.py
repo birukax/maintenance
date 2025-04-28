@@ -17,6 +17,24 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
 
+    @action(detail=False, methods=["POST"])
+    def create_annual_schedule(self, request):
+        year = int(request.data.get("year"))
+        try:
+            if year is None:
+                raise serializers.ValidationError({"year": "Year is required."})
+            if Schedule.objects.filter(year=year).exists():
+                raise serializers.ValidationError(
+                    {"year": "Schedule already exists for this year."}
+                )
+            items = Item.objects.all()
+            for item in items:
+                schedule = Schedule.objects.create(item=item, year=year)
+                MonthlySchedule.objects.create(schedule=schedule)
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+        return Response(status=status.HTTP_200_OK)
+
 
 class MonthlyScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = MonthlyScheduleSerializer
