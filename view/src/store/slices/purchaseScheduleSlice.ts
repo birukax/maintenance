@@ -106,8 +106,8 @@ const purchaseScheduleSlice = createSlice({
             state.purchaseSchedules.error = action.payload || 'Unknown error';
         })
         .addCase(fetchPurchaseSchedule.pending, (state) => {
-                        state.purchaseSchedule.loading = true;
-                        state.purchaseSchedule.error = null;
+            state.purchaseSchedule.loading = true;
+            state.purchaseSchedule.error = null;
         })
         .addCase(fetchPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
             state.purchaseSchedule.loading = false;

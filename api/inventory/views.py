@@ -4,7 +4,7 @@ from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from approval.models import Purchase
-from purchase.models import Request
+from purchase.models import Request, Schedule, MonthlySchedule
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -53,16 +53,21 @@ class ItemViewSet(viewsets.ModelViewSet):
             )
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
-
-        item = serializer.save(uom=uom)
-        if suppliers.exists():
-            item.suppliers.set(suppliers)
-        Inventory.objects.create(item=item)
+        try:
+            item = serializer.save(uom=uom)
+            if suppliers.exists():
+                item.suppliers.set(suppliers)
+            Inventory.objects.create(item=item)
+            schedule = Schedule.objects.create(
+                item=item, year=datetime.date.today().year
+            )
+            MonthlySchedule.objects.create(schedule=schedule)
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
         suppliers_id = self.request.data.get("suppliers_id")
-        
         try:
             suppliers = Contact.objects.filter(id__in=suppliers_id)
         except Contact.DoesNotExist:
