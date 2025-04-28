@@ -21,7 +21,7 @@ export const fetchPurchaseRequests = createAsyncThunk<[], void, {rejectValue: st
     'purchaseRequest/fetchPurchaseRequests',
     async(_, {rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/purchase-requests/');
+            const response = await api.get('/purchase/requests/');
             return response.data;
         }
         catch (error) {
@@ -35,11 +35,11 @@ export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: 
     'purchaseRequest/fetchPurchaseRequest',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await api.get(`/inventory/purchase-requests/${id}/`)
+            const response = await api.get(`/purchase/requests/${id}/`)
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Request');
         }
     }
 )
@@ -48,11 +48,11 @@ export const createPurchaseRequest = createAsyncThunk<[],  formData  , { rejectV
     'purchaseRequest/createPurchaseRequest',
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/inventory/purchase-requests/', formData);
+            const response = await api.post('/purchase/requests/', formData);
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to create Purchase Request');
         }
     }
 )
@@ -61,10 +61,10 @@ export const updatePurchaseRequest = createAsyncThunk<[], { id: string, formData
     'purchaseRequest/updatePurchaseRequest',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/inventory/purchase-requests/${id}/`, formData);
+            const response = await api.patch(`/purchase/requests/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to update Purchase Request');
         }
     }
 )
@@ -73,10 +73,10 @@ export const receivePurchaseRequest = createAsyncThunk<[], { id: string, formDat
     'purchaseRequest/receivePurchaseRequest',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/inventory/purchase-requests/${id}/receive/`, formData);
+            const response = await api.patch(`/purchase/requests/${id}/receive/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to receive Purchase Request');
         }
     }
 )
