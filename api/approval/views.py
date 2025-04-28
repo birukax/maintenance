@@ -16,6 +16,7 @@ class PurchaseViewSet(viewsets.ReadOnlyModelViewSet):
         purchase.by = request.user
         purchase.save()
         purchase.purchase_request.status = "APPROVED"
+        purchase.purchase_request.approved_by = request.user
         purchase.purchase_request.save()
         serializer = self.get_serializer(purchase)
         return Response(serializer.data, status=status.HTTP_200_OK)

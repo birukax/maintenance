@@ -17,9 +17,7 @@ class Schedule(BaseCreatedUpdated):
             MaxValueValidator(datetime.date.today().year + 1),
         ],
     )
-    quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         ordering = ["-updated_at"]
@@ -47,7 +45,7 @@ class MonthlySchedule(BaseCreatedUpdated):
     october = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     november = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     december = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
+                    
     class Meta:
         ordering = ["schedule__year"]
 

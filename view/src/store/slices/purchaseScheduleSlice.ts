@@ -1,3 +1,4 @@
+import { createAnnualSchedule } from './purchaseScheduleSlice';
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 
@@ -70,6 +71,21 @@ export const updatePurchaseSchedule = createAsyncThunk<[], { id: string, formDat
 )
 
 
+export const createAnnualSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+    'purchaseSchedule/createAnnualSchedule',
+    async ({ id, formData }, { rejectWithValue }) => {
+        try {
+            const response = await api.patch(`/purchase/schedules/${id}/create_annual_schedule/`, formData);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || 'Failed to create annual schedule');
+        }
+    }
+)
+
+
+
+
 const purchaseScheduleSlice = createSlice({
     name: 'purchaseSchedule',
     initialState,
@@ -92,39 +108,51 @@ const purchaseScheduleSlice = createSlice({
         .addCase(fetchPurchaseSchedule.pending, (state) => {
                         state.purchaseSchedule.loading = true;
                         state.purchaseSchedule.error = null;
-                    })
-                    .addCase(fetchPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseSchedule.loading = false;
-                        state.purchaseSchedule.data = action.payload;
-                    })
-                    .addCase(fetchPurchaseSchedule.rejected, (state, action) => {
-                        state.purchaseSchedule.loading = false;
-                        state.purchaseSchedule.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createPurchaseSchedule.pending, (state) => {
-                        state.purchaseSchedule.loading = true;
-                        state.purchaseSchedule.error = null;
-                    })
-                    .addCase(createPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseSchedule.loading = false;
-                        state.purchaseSchedule.data = action.payload;
-                    })
-                    .addCase(createPurchaseSchedule.rejected, (state, action) => {
-                        state.purchaseSchedule.loading = false;
-                        state.purchaseSchedule.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updatePurchaseSchedule.pending, (state) => {
-                        state.purchaseSchedule.loading = true;
-                        state.purchaseSchedule.error = null;
-                    })
-                    .addCase(updatePurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseSchedule.loading = false;
-                        state.purchaseSchedule.data = action.payload;
-                    })
-                    .addCase(updatePurchaseSchedule.rejected, (state, action) => {
-                        state.purchaseSchedule.loading = false;
-                        state.purchaseSchedule.error = action.payload || 'Unknown error';
-                    })
+        })
+        .addCase(fetchPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.data = action.payload;
+        })
+        .addCase(fetchPurchaseSchedule.rejected, (state, action) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.error = action.payload || 'Unknown error';
+        })
+        .addCase(createPurchaseSchedule.pending, (state) => {
+            state.purchaseSchedule.loading = true;
+            state.purchaseSchedule.error = null;
+        })
+        .addCase(createPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.data = action.payload;
+        })
+        .addCase(createPurchaseSchedule.rejected, (state, action) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.error = action.payload || 'Unknown error';
+        })
+        .addCase(updatePurchaseSchedule.pending, (state) => {
+            state.purchaseSchedule.loading = true;
+            state.purchaseSchedule.error = null;
+        })
+        .addCase(updatePurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.data = action.payload;
+        })
+        .addCase(updatePurchaseSchedule.rejected, (state, action) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.error = action.payload || 'Unknown error';
+        })
+        .addCase(createAnnualSchedule.pending, (state) => {
+            state.purchaseSchedule.loading = true;
+            state.purchaseSchedule.error = null;
+        })
+        .addCase(createAnnualSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.data = action.payload;
+        })
+        .addCase(createAnnualSchedule.rejected, (state, action) => {
+            state.purchaseSchedule.loading = false;
+            state.purchaseSchedule.error = action.payload || 'Unknown error';
+        })
     }
 })
 
