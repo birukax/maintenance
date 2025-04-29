@@ -18,6 +18,7 @@ const purchaseScheduleColumns = [
   { header: "Min Stock Level", accessor: "item.minimum_stock_level" },
   { header: "Year", accessor: "year" },
   { header: "Quantity", accessor: "quantity" },
+  { header: "Purchased Quantity", accessor: "purchased_quantity" },
   { header: "January", accessor: "january" },
   { header: "February", accessor: "february" },
   { header: "March", accessor: "march" },

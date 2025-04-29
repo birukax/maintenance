@@ -21,10 +21,10 @@ import {
 } from "@mui/material";
 import { Link, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { fetchPurchaseSchedules,updatePurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
+import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
 
 const Edit = () => {
-  const { purchaseSchedules} = useSelector( (state:AppState) => state.purchaseSchedule)
+  const { purchaseSchedules } = useSelector((state: AppState) => state.purchaseSchedule)
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const handleSubmitModalOpen = () => setSubmitModalOpen(true);
   const handleSubmitModalClose = () => setSubmitModalOpen(false);
@@ -70,7 +70,7 @@ const Edit = () => {
   );
   useEffect(() => {
     dispatch(fetchPurchaseSchedules())
-  },[])
+  }, [])
   const handleRefresh = async () => {
     try {
       await dispatch(fetchPurchaseSchedules()).unwrap();
@@ -79,7 +79,7 @@ const Edit = () => {
     }
   };
 
-  const handlePurchaseSchedule = async (id,field,newValue) => {
+  const handlePurchaseSchedule = async (id, field, newValue) => {
     const formData = {
       [field]: newValue,
     };
@@ -90,46 +90,46 @@ const Edit = () => {
       console.error("Failed to update activity:", error);
     }
 
-    
+
   };
   const purchaseScheduleColumns = [
     "Item No",
-     "Item",
-     "UoM",
-     "Balance",
-     "Min Stock Level",
-     "Year",
-     "Quantity",
-     "January",
-     "February",
-     "March",
-     "April",
-     "May",
-     "June",
-     "July",
-     "August",
-     "September",
-     "October",
-     "November",
-     "December",
+    "Item",
+    "UoM",
+    "Balance",
+    "Min Stock Level",
+    "Year",
+    "Quantity",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
-const [ searchParams, setSearchParams ] = useSearchParams()
- return (
+  const [searchParams, setSearchParams] = useSearchParams()
+  return (
     <>
-    <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>
-     <Button
-                 variant="outlined"
-                 onClick={()=>{
-                  setSearchParams({ });
-                 }}
-                 sx={{ mr: 1 }}
-     
-     
-                 >
-                   Save
-                 </Button>
+      <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setSearchParams({});
+          }}
+          sx={{ mr: 1 }}
 
-    </div>
+
+        >
+          Save
+        </Button>
+
+      </div>
       <Table sx={{ minWidth: 650 }} aria-label={` table`}>
         <TableHead>
           <TableRow>

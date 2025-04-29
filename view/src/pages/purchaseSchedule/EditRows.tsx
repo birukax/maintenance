@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, Checkbox, TextField } from "@mui/material";
 
-const CheckListRows = ({ row, handleUpdateSchedule }) => {
+const EditRows = ({ row, handleUpdateSchedule }) => {
+  const [quantity, setQuantity] = useState(row.quantity || 0);
 
-
-  const [monthValue,setMonthValue] = useState({
+  const [monthValue, setMonthValue] = useState({
     january: row.january || 0,
     february: row.february || 0,
     march: row.march || 0,
@@ -19,9 +19,34 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
     december: row.december || 0,
   });
   useEffect(() => {
-    // setRemark(row.remark || "");
-  }, [monthValue]);
-
+    setQuantity(
+        Number(monthValue.january) +
+          Number(monthValue.february) +
+          Number(monthValue.march) +
+          Number(monthValue.april) +
+          Number(monthValue.may) +
+          Number(monthValue.june) +
+          Number(monthValue.july) +
+          Number(monthValue.august) +
+          Number(monthValue.september) +
+          Number(monthValue.october) +
+          Number(monthValue.november) +
+          Number(monthValue.december)
+    );
+  }, [
+    monthValue.january,
+    monthValue.february,
+    monthValue.march,
+    monthValue.april,
+    monthValue.may,
+    monthValue.june,
+    monthValue.july,
+    monthValue.august,
+    monthValue.september,
+    monthValue.october,
+    monthValue.november,
+    monthValue.december,
+  ]);
 
   return (
     <TableRow key={row.id}>
@@ -34,29 +59,25 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
       <TableCell align="left" nowrap="true">
         {row.item.uom.name}
       </TableCell>
-      <TableCell align="left">
-        {row.item.inventory.balance}
-      </TableCell>
-      <TableCell align="left">
-        {row.item.minimum_stock_level}
-      </TableCell>
-      <TableCell align="left">
-        {row.year}
-      </TableCell>
-      <TableCell align="left">
-        {row.quantity}
-      </TableCell>
+      <TableCell align="left">{row.item.inventory.balance}</TableCell>
+      <TableCell align="left">{row.item.minimum_stock_level}</TableCell>
+      <TableCell align="left">{row.year}</TableCell>
+      <TableCell align="left">{quantity}</TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
         <TextField
           name="january"
           type="number"
           value={monthValue.january}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, january: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, january: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "january", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "january",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -67,11 +88,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.february}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, february: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, february: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "february", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "february",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -82,11 +107,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.march}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, march: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, march: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "march", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "march",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -97,11 +126,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.april}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, april: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, april: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "april", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "april",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -112,11 +145,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.may}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, may: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, may: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "may", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "may",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -127,11 +164,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.june}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, june: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, june: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "june", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "june",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -142,11 +183,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.july}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, july: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, july: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "july", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "july",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -157,11 +202,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.august}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, august: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, august: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "august", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "august",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -172,11 +221,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.september}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, september: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, september: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "september", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "september",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -187,11 +240,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.october}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, october: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, october: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "october", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "october",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -202,11 +259,15 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.november}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, november: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, november: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "november", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "november",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
@@ -217,16 +278,20 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.december}
           onChange={(event) => {
-        const value = Math.max(0, event.target.value);
-        setMonthValue({ ...monthValue, december: value });
+            const value = Math.max(0, event.target.value);
+            setMonthValue({ ...monthValue, december: value });
           }}
           onBlur={(event) => {
-        handleUpdateSchedule(row.id, "december", Math.max(0, event.target.value));
+            handleUpdateSchedule(
+              row.id,
+              "december",
+              Math.max(0, event.target.value)
+            );
           }}
           sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
-      
+
       {/* <TableCell align="left">
         <TextField
           name="remark"
@@ -245,4 +310,4 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
   );
 };
 
-export default CheckListRows;
+export default EditRows;
