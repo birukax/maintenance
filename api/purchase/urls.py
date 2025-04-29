@@ -4,6 +4,13 @@ from . import views
 
 router = routers.DefaultRouter()
 
+
+router.register(
+    r"years",
+    views.YearViewSet,
+    basename="year",
+)
+
 router.register(
     r"schedules",
     views.ScheduleViewSet,

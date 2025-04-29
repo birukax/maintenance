@@ -13,6 +13,11 @@ from .serializers import (
 )
 
 
+class YearViewSet(viewsets.ModelViewSet):
+    serializer_class = YearSerializer
+    queryset = Year.objects.all()
+
+
 class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
