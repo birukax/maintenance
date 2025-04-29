@@ -10,11 +10,6 @@ router.register(
     basename="schedule",
 )
 router.register(
-    r"monthly-schedules",
-    views.MonthlyScheduleViewSet,
-    basename="monthly-schedule",
-)
-router.register(
     r"requests",
     views.RequestViewSet,
     basename="request",

@@ -3,8 +3,7 @@ from django.db.models import Sum
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from approval.models import Purchase
-from purchase.models import Request, Schedule, MonthlySchedule
+from purchase.models import Request, Schedule
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -63,11 +62,8 @@ class ItemViewSet(viewsets.ModelViewSet):
                 d["year"] for d in years_dict if d["year"] >= datetime.date.today().year
             ]
             years = list(set(years))
-
             for year in years:
-                schedule = Schedule(item=item, year=year)
-                schedule.save()
-                MonthlySchedule.objects.create(schedule=schedule)
+                Schedule.objects.create(item=item, year=year)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         return Response(serializer.data, status=status.HTTP_200_OK)

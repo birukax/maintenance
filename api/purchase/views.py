@@ -5,10 +5,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from approval.models import Purchase
 from inventory.models import Item
-from .models import Schedule, MonthlySchedule, Request
+from .models import Schedule, Request
 from .serializers import (
     ScheduleSerializer,
-    MonthlyScheduleSerializer,
     RequestSerializer,
 )
 
@@ -30,16 +29,10 @@ class ScheduleViewSet(viewsets.ModelViewSet):
                 )
             items = Item.objects.all()
             for item in items:
-                schedule = Schedule.objects.create(item=item, year=year)
-                MonthlySchedule.objects.create(schedule=schedule)
+                Schedule.objects.create(item=item, year=year)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         return Response(status=status.HTTP_200_OK)
-
-
-class MonthlyScheduleViewSet(viewsets.ModelViewSet):
-    serializer_class = MonthlyScheduleSerializer
-    queryset = MonthlySchedule.objects.all()
 
 
 class RequestViewSet(viewsets.ModelViewSet):
