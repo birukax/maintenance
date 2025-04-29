@@ -25,16 +25,16 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["POST"])
     def create_annual_schedule(self, request):
-        year = int(request.data.get("year"))
+        year = request.data.get("year")
         try:
             if year is None:
                 raise serializers.ValidationError({"year": "Year is required."})
-            if Year.objects.filter(year=year).exists():
+            if Year.objects.filter(no=year).exists():
                 raise serializers.ValidationError(
                     {"year": "Schedule already exists for this year."}
                 )
             else:
-                year_obj = Year(year=year)
+                year_obj = Year(no=year)
                 year_obj.save()
             items = Item.objects.all()
             for item in items:
