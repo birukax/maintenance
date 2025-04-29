@@ -51,17 +51,26 @@ class Request(BaseCreatedUpdated):
             return f"{self.item.name}"
 
 
-class Schedule(BaseCreatedUpdated):
-    item = models.ForeignKey(
-        Item, on_delete=models.RESTRICT, related_name="purchase_schedule"
-    )
-    year = models.IntegerField(
+class Year(BaseCreatedUpdated):
+    no = models.IntegerField(
         validators=[
             MinValueValidator(2025),
             MaxValueValidator(datetime.date.today().year + 1),
         ],
     )
 
+    class Meta:
+        ordering = ["-no"]
+
+    def __str__(self):
+        return str(self.no)
+
+
+class Schedule(BaseCreatedUpdated):
+    item = models.ForeignKey(
+        Item, on_delete=models.RESTRICT, related_name="purchase_schedules"
+    )
+    year = models.ForeignKey(Year, on_delete=models.CASCADE, related_name="schedules")
     january = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     february = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     march = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -106,7 +115,7 @@ class Schedule(BaseCreatedUpdated):
         )
 
     class Meta:
-        ordering = ["-year", "item__name"]
+        ordering = ["-year__no", "item__name"]
         unique_together = ["item", "year"]
 
     def __str__(self):
