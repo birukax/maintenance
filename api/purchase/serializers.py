@@ -18,6 +18,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
             "item",
             "year",
             "quantity",
+            "purchased_quantity",
             "january",
             "february",
             "march",
