@@ -3,19 +3,21 @@ from account.serializers import UserSerializer
 from inventory.serializers import ItemSerializer
 from .models import (
     Schedule,
-    MonthlySchedule,
     Request,
 )
 
 
-class MonthlyScheduleSerializer(serializers.ModelSerializer):
+class ScheduleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    item = ItemSerializer(read_only=True)
 
     class Meta:
-        model = MonthlySchedule
+        model = Schedule
         fields = [
             "id",
-            "schedule",
+            "item",
+            "year",
+            "quantity",
             "january",
             "february",
             "march",
@@ -28,22 +30,6 @@ class MonthlyScheduleSerializer(serializers.ModelSerializer):
             "october",
             "november",
             "december",
-        ]
-
-
-class ScheduleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    item = ItemSerializer(read_only=True)
-    monthly_schedule = MonthlyScheduleSerializer(read_only=True)
-
-    class Meta:
-        model = Schedule
-        fields = [
-            "id",
-            "item",
-            "year",
-            "quantity",
-            "monthly_schedule",
         ]
 
 

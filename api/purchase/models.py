@@ -19,21 +19,6 @@ class Schedule(BaseCreatedUpdated):
     )
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    class Meta:
-        ordering = ["-year", "item__name"]
-        unique_together = ["item", "year"]
-
-    def __str__(self):
-        if self.item:
-            return f"{self.item.name}"
-
-
-class MonthlySchedule(BaseCreatedUpdated):
-    schedule = models.OneToOneField(
-        Schedule,
-        on_delete=models.CASCADE,
-        related_name="monthly_schedule",
-    )
     january = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     february = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     march = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -48,11 +33,12 @@ class MonthlySchedule(BaseCreatedUpdated):
     december = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        ordering = ["schedule__year"]
+        ordering = ["-year", "item__name"]
+        unique_together = ["item", "year"]
 
     def __str__(self):
-        if self.schedule:
-            return f"{self.schedule.item.name}"
+        if self.item:
+            return f"{self.item.name}"
 
 
 class Request(BaseCreatedUpdated):
