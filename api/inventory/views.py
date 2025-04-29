@@ -3,7 +3,7 @@ from django.db.models import Sum
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from purchase.models import Request, Schedule
+from purchase.models import Request, Schedule, Year
 from .models import (
     UnitOfMeasure,
     Contact,
@@ -57,11 +57,7 @@ class ItemViewSet(viewsets.ModelViewSet):
             if suppliers.exists():
                 item.suppliers.set(suppliers)
             Inventory.objects.create(item=item)
-            years_dict = Schedule.objects.all().values("year").distinct()
-            years = [
-                d["year"] for d in years_dict if d["year"] >= datetime.date.today().year
-            ]
-            years = list(set(years))
+            years = Year.objects.filter(no__gte=datetime.date.today().year)
             for year in years:
                 Schedule.objects.create(item=item, year=year)
         except Exception as e:

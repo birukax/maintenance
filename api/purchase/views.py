@@ -5,31 +5,40 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from approval.models import Purchase
 from inventory.models import Item
-from .models import Schedule, Request
+from .models import Schedule, Request, Year
 from .serializers import (
     ScheduleSerializer,
     RequestSerializer,
+    YearSerializer,
 )
+
+
+class YearViewSet(viewsets.ModelViewSet):
+    serializer_class = YearSerializer
+    queryset = Year.objects.all()
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
-    filterset_fields = ["year"]
+    filterset_fields = ["year__no"]
 
     @action(detail=False, methods=["POST"])
     def create_annual_schedule(self, request):
-        year = int(request.data.get("year"))
+        year = request.data.get("year")
         try:
             if year is None:
                 raise serializers.ValidationError({"year": "Year is required."})
-            if Schedule.objects.filter(year=year).exists():
+            if Year.objects.filter(no=year).exists():
                 raise serializers.ValidationError(
                     {"year": "Schedule already exists for this year."}
                 )
+            else:
+                year_obj = Year(no=year)
+                year_obj.save()
             items = Item.objects.all()
             for item in items:
-                Schedule.objects.create(item=item, year=year)
+                Schedule.objects.create(item=item, year=year_obj)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         return Response(status=status.HTTP_200_OK)

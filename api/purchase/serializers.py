@@ -4,12 +4,20 @@ from inventory.serializers import ItemSerializer
 from .models import (
     Schedule,
     Request,
+    Year,
 )
+
+
+class YearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Year
+        fields = ["id", "no"]
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     item = ItemSerializer(read_only=True)
+    year = YearSerializer(read_only=True)
 
     class Meta:
         model = Schedule
