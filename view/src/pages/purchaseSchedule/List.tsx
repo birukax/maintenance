@@ -8,6 +8,8 @@ import {
   GenericListPage,
   ColumnDefination,
 } from "../../components/GenericListPage";
+import { useSearchParams } from "react-router-dom";
+import Edit from "./Edit";
 
 const purchaseScheduleColumns = [
   { header: "Item", accessor: "item.name" },
@@ -34,8 +36,17 @@ const List: React.FC = () => {
     listSelector: (state: AppState) => state.purchaseSchedule.purchaseSchedules,
     fetchListAction: fetchPurchaseSchedules,
   });
+  
+  const [searchParams, setSearchParams] = useSearchParams()
+  const handleEdit=()=>{
+    // Handle edit action here
+    
+    setSearchParams({ edit: "true" });
+  }
 
+if(!searchParams.get("edit")){
   return (
+    
     <GenericListPage
       title="Purchase Schedules"
       entityState={entityState}
@@ -44,9 +55,16 @@ const List: React.FC = () => {
       // detailRouteBase="/purchase-schedule/detail"
       hasDetail={false}
       onRefresh={entityState.refresh}
+      onEdit={handleEdit}
       getKey={(purchaseSchedule) => purchaseSchedule.id}
     />
   );
+}else{
+  return(
+
+   <Edit/>
+  )
+}
 };
 
 export default List;

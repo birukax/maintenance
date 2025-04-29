@@ -33,6 +33,8 @@ const List: React.FC = () => {
     dispatch(revaluateStock());
   };
 
+
+
   return (
     <GenericListPage
       title="Inventory"
