@@ -25,10 +25,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
 
   return (
     <TableRow key={row.id}>
-      <TableCell align="left">
+      <TableCell align="left" nowrap="true">
+        {row.item.no}
+      </TableCell>
+      <TableCell align="left" nowrap="true">
         {row.item.name}
       </TableCell>
-      <TableCell align="left">
+      <TableCell align="left" nowrap="true">
         {row.item.uom.name}
       </TableCell>
       <TableCell align="left">
@@ -49,13 +52,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.january}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, january: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, january: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "january", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "january", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -64,13 +67,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.february}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, february: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, february: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "february", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "february", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -79,13 +82,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.march}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, march: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, march: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "march", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "march", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -94,13 +97,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.april}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, april: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, april: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "april", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "april", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -109,13 +112,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.may}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, may: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, may: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "may", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "may", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -124,13 +127,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.june}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, june: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, june: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "june", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "june", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -139,13 +142,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.july}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, july: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, july: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "july", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "july", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -154,13 +157,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.august}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, august: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, august: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "august", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "august", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -169,13 +172,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.september}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, september: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, september: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "september", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "september", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -184,13 +187,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.october}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, october: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, october: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "october", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "october", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -199,13 +202,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.november}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, november: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, november: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "november", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "november", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
@@ -214,13 +217,13 @@ const CheckListRows = ({ row, handleUpdateSchedule }) => {
           type="number"
           value={monthValue.december}
           onChange={(event) => {
-        setMonthValue({ ...monthValue, december: event.target.value });
-        
+        const value = Math.max(0, event.target.value);
+        setMonthValue({ ...monthValue, december: value });
           }}
-          onBlur={(event)=>{
-            handleUpdateSchedule(row.id, "december", event.target.value);
+          onBlur={(event) => {
+        handleUpdateSchedule(row.id, "december", Math.max(0, event.target.value));
           }}
-          sx={{width: "80px",minWidth:"fit-content"}}
+          sx={{ width: "110px", minWidth: "fit-content" }}
         />
       </TableCell>
       

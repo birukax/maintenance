@@ -19,9 +19,9 @@ import {
   TextField,
   Checkbox,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { fetchPurchaseSchedules } from "../../store/slices/purchaseScheduleSlice";
+import { fetchPurchaseSchedules,updatePurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
 
 const Edit = () => {
   const { purchaseSchedules} = useSelector( (state:AppState) => state.purchaseSchedule)
@@ -71,29 +71,29 @@ const Edit = () => {
   useEffect(() => {
     dispatch(fetchPurchaseSchedules())
   },[])
-  // const handleRefresh = async () => {
-  //   try {
-  //     await dispatch(fetchWorkOrder(entityState.id)).unwrap();
-  //   } catch (error) {
-  //     console.error("Failed to refresh work order:", error);
-  //   }
-  // };
+  const handleRefresh = async () => {
+    try {
+      await dispatch(fetchPurchaseSchedules()).unwrap();
+    } catch (error) {
+      console.error("Failed to refresh work order:", error);
+    }
+  };
 
-  const handlePurchaseSchedule = async () => {
-    // const formData = {
-    //   [field]: newValue,
-    // };
-    // try {
-    //   await dispatch(updateWorkOrderActivity({ id, formData })).unwrap();
-    //   handleRefresh();
-    // } catch (error) {
-    //   console.error("Failed to update activity:", error);
-    // }
+  const handlePurchaseSchedule = async (id,field,newValue) => {
+    const formData = {
+      [field]: newValue,
+    };
+    try {
+      await dispatch(updatePurchaseSchedule({ id, formData })).unwrap();
+      handleRefresh();
+    } catch (error) {
+      console.error("Failed to update activity:", error);
+    }
 
-    console.log("updated");
     
   };
   const purchaseScheduleColumns = [
+    "Item No",
      "Item",
      "UoM",
      "Balance",
@@ -113,9 +113,23 @@ const Edit = () => {
      "November",
      "December",
   ];
-
+const [ searchParams, setSearchParams ] = useSearchParams()
  return (
     <>
+    <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"flex-end"}}>
+     <Button
+                 variant="outlined"
+                 onClick={()=>{
+                  setSearchParams({ });
+                 }}
+                 sx={{ mr: 1 }}
+     
+     
+                 >
+                   Save
+                 </Button>
+
+    </div>
       <Table sx={{ minWidth: 650 }} aria-label={` table`}>
         <TableHead>
           <TableRow>
