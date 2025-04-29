@@ -9,6 +9,7 @@ from .models import (
 
 
 class YearSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Year
         fields = ["id", "no"]

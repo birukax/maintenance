@@ -1,5 +1,5 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchPurchaseSchedules } from "../../store/slices/purchaseScheduleSlice";
 import { AppState } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
@@ -16,7 +16,7 @@ const purchaseScheduleColumns = [
   { header: "UoM", accessor: "item.uom.name" },
   { header: "Balance", accessor: "item.inventory.balance" },
   { header: "Min Stock Level", accessor: "item.minimum_stock_level" },
-  { header: "Year", accessor: "year" },
+  { header: "Year", accessor: "year.no" },
   { header: "Quantity", accessor: "quantity" },
   { header: "Purchased Quantity", accessor: "purchased_quantity" },
   { header: "January", accessor: "january" },
@@ -36,21 +36,35 @@ const List: React.FC = () => {
   const entityState = useEntityList({
     listSelector: (state: AppState) => state.purchaseSchedule.purchaseSchedules,
     fetchListAction: fetchPurchaseSchedules,
+    
+    
   });
   
   const [searchParams, setSearchParams] = useSearchParams()
+  const [params,setParams]=useState({
+    year:new Date().getFullYear()
+  })
   const handleEdit=()=>{
-    // Handle edit action here
     
-    setSearchParams({ edit: "true" });
+  
+
+    // setSearchParams({year: searchParams.get('year'), edit: "true"});
+  
+    setSearchParams({edit:"true"});
+
+    
   }
-  const handleFillter=(value)=>{
+  const handleFilter= async (field,value)=>{
     // Handle filter action here
-    setSearchParams({ year: value });
-    console.log(value);
     
+    
+    setParams({ ...params,[field]: value })
+    sessionStorage.setItem("params", JSON.stringify({ ...params,[field]: value }))
+    entityState.filter('params');
   }
 
+  console.log("params",searchParams.get("edit"));
+  
 if(!searchParams.get("edit")){
   return (
     
@@ -63,7 +77,7 @@ if(!searchParams.get("edit")){
       hasDetail={false}
       onRefresh={entityState.refresh}
       onEdit={handleEdit}
-      fillter={handleFillter}
+      filter={handleFilter}
       getKey={(purchaseSchedule) => purchaseSchedule.id}
     />
   );

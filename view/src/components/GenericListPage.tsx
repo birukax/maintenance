@@ -39,7 +39,7 @@ export const GenericListPage = ({
   detailRouteBase = "",
   onRefresh,
   onEdit,
-  fillter,
+  filter,
   onApprove = null,
   onReject = null,
   getKey,
@@ -74,11 +74,11 @@ export const GenericListPage = ({
           {title}
         </Typography>
         <div>
-            {fillter && (
+            {filter && (
             <TextField
               select
               label="Select Year"
-              onChange={(e) => fillter(e.target.value)}
+              onChange={(e) => filter("year",e.target.value)}
               variant="outlined"
               size="small"
               sx={{ marginRight: "8px", minWidth: "130px" }}

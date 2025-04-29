@@ -1,4 +1,3 @@
-import { createAnnualSchedule } from './purchaseScheduleSlice';
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 
@@ -18,10 +17,15 @@ const initialState: PurchaseScheduleState = {
     purchaseSchedule: {data: null, loading: false, error: null},
 };
 
-export const fetchPurchaseSchedules = createAsyncThunk<[], void, {rejectValue: string}>(
+
+export const fetchPurchaseSchedules = createAsyncThunk<[], {params:{}}, {rejectValue: string}>(
     'purchaseSchedule/fetchPurchaseSchedules',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
+            if (params.year ) {
+                const response = await api.get(`/purchase/schedules/?year=${params.year}`);
+                return response.data;
+            }
             const response = await api.get('/purchase/schedules/');
             return response.data;
         }

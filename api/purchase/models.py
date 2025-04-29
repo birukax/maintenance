@@ -106,8 +106,8 @@ class Schedule(BaseCreatedUpdated):
         purchases = Request.objects.filter(
             item=self.item,
             received_date__range=[
-                datetime.date(self.year, 1, 1),
-                datetime.date(self.year, 12, 31),
+                datetime.date(self.year.no, 1, 1),
+                datetime.date(self.year.no, 12, 31),
             ],
         )
         return (

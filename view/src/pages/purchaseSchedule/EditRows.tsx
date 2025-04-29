@@ -61,7 +61,7 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
       </TableCell>
       <TableCell align="left">{row.item.inventory.balance}</TableCell>
       <TableCell align="left">{row.item.minimum_stock_level}</TableCell>
-      <TableCell align="left">{row.year}</TableCell>
+      <TableCell align="left">{row.year.no}</TableCell>
       <TableCell align="left">{quantity}</TableCell>
       <TableCell align="left" style={{ padding: "8px" }}>
         <TextField
