@@ -12,6 +12,8 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  TextField,
+  MenuItem,
   Button,
   ButtonGroup,
 } from "@mui/material";
@@ -37,6 +39,7 @@ export const GenericListPage = ({
   detailRouteBase = "",
   onRefresh,
   onEdit,
+  fillter,
   onApprove = null,
   onReject = null,
   getKey,
@@ -71,6 +74,23 @@ export const GenericListPage = ({
           {title}
         </Typography>
         <div>
+            {fillter && (
+            <TextField
+              select
+              label="Select Year"
+              onChange={(e) => fillter(e.target.value)}
+              variant="outlined"
+              size="small"
+              sx={{ marginRight: "8px", minWidth: "130px" }}
+              defaultValue={new Date().getFullYear()}
+            >
+              {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+              ))}
+            </TextField>
+            )}
           {createRoute && (
             <Button
               component={Link}

@@ -44,6 +44,12 @@ const List: React.FC = () => {
     
     setSearchParams({ edit: "true" });
   }
+  const handleFillter=(value)=>{
+    // Handle filter action here
+    setSearchParams({ year: value });
+    console.log(value);
+    
+  }
 
 if(!searchParams.get("edit")){
   return (
@@ -57,6 +63,7 @@ if(!searchParams.get("edit")){
       hasDetail={false}
       onRefresh={entityState.refresh}
       onEdit={handleEdit}
+      fillter={handleFillter}
       getKey={(purchaseSchedule) => purchaseSchedule.id}
     />
   );
