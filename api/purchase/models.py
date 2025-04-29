@@ -101,7 +101,9 @@ class Schedule(BaseCreatedUpdated):
                 datetime.date(self.year, 12, 31),
             ],
         )
-        return purchases.aggregate(Sum("received_quantity"))["received_quantity__sum"]
+        return (
+            purchases.aggregate(Sum("received_quantity"))["received_quantity__sum"] or 0
+        )
 
     class Meta:
         ordering = ["-year", "item__name"]
