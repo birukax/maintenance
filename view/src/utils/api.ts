@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios, {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 import {store} from '../store/store';
 import { setTokens, logout } from '../store/slices/authSlice';
 interface Tokens {
@@ -13,7 +13,7 @@ const api: AxiosInstance = axios.create({
 let isLoggingOut = false;
 
 api.interceptors.request.use(
-    (config: AxiosRequestConfig) => {
+    (config: InternalAxiosRequestConfig) => {
     const state = store.getState();
     const tokens: Tokens | null = state.auth.tokens;
     if (tokens?.access) {
@@ -28,38 +28,44 @@ api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response?.status == 401 && !isLoggingOut){
+        if (error.response?.status == 401 && !originalRequest._retry && !isLoggingOut){
+            originalRequest._retry = true;
             isLoggingOut = true;
-            const state = store.getState();
-            const tokens: Tokens | null = state.auth.tokens;
 
-            if (tokens?.refresh) {
-                try {
-                    const response = await api.post<Tokens>(
-                        '/api/token/refresh/',
-                        {refresh: tokens.refresh}
-                    );
-                    const newTokens: Tokens = {
-                        access: response.data.access,
-                        refresh: tokens.refresh,
-                    }
-                    store.dispatch(setTokens(newTokens));
-                    originalRequest.headers.Authorization = `Bearer ${newTokens.access}`;
-                    return api(originalRequest);
+            try {
+                const state = store.getState();
+                const tokens: Tokens | null = state.auth.tokens;
+        
+                if (tokens?.refresh) {
+                  const response = await api.post<Tokens>('/api/token/refresh/', {
+                    refresh: tokens.refresh,
+                  });
+        
+                  const newTokens: Tokens = {
+                    access: response.data.access,
+                    refresh: tokens.refresh, 
+                  };
+        
+                  store.dispatch(setTokens(newTokens));
+        
+                  originalRequest.headers.Authorization = `Bearer ${newTokens.access}`;
+        
+                  isLoggingOut = false;
+        
+                  return api(originalRequest);
+                } else {
+                  store.dispatch(logout());
+                  return Promise.reject(error);
                 }
-                catch (refreshError) {
-                    isLoggingOut = true;
-                    store.dispatch(logout());
-                    return Promise.reject(refreshError);
-                }
-            } else {
-                isLoggingOut = true;
+              } catch (refreshError) {
                 store.dispatch(logout());
-                return Promise.reject(error);
-            } 
-        }
-        return Promise.reject(error);
-    }
-)
-
-export default api;
+                isLoggingOut = false; 
+                return Promise.reject(refreshError);
+              }
+            }
+        
+            return Promise.reject(error);
+          }
+        );
+        
+        export default api;
