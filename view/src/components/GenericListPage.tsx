@@ -74,23 +74,22 @@ export const GenericListPage = ({
           {title}
         </Typography>
         <div>
-            {filter && (
+          {filter && (
             <TextField
               select
-              label="Select Year"
-              onChange={(e) => filter("year",e.target.value)}
+              onChange={(e) => filter("year__no", e.target.value)}
               variant="outlined"
               size="small"
               sx={{ marginRight: "8px", minWidth: "130px" }}
-              defaultValue={new Date().getFullYear()}
+              value={searchParams.get("year__no")}
             >
               {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
-              <MenuItem key={year} value={year}>
-                {year}
-              </MenuItem>
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
               ))}
             </TextField>
-            )}
+          )}
           {createRoute && (
             <Button
               component={Link}
@@ -101,17 +100,13 @@ export const GenericListPage = ({
               New
             </Button>
           )}
-          {onEdit && !searchParams.get("edit") && (
-            <Button
-            variant="outlined"
-            onClick={onEdit}
-            sx={{ mr: 1 }}
-
-
-            >
-              Edit
-            </Button>
-          )}
+          {onEdit &&
+            (searchParams.get("edit") === false ||
+              searchParams.get("edit") === null) && (
+              <Button variant="outlined" onClick={onEdit} sx={{ mr: 1 }}>
+                Edit
+              </Button>
+            )}
           <Button
             variant="contained"
             startIcon={<RefreshIcon />}

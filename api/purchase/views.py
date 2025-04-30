@@ -22,6 +22,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
     filterset_fields = ["year__no"]
+    search_fields = ["year__no"]
 
     @action(detail=False, methods=["POST"])
     def create_annual_schedule(self, request):

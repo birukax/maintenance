@@ -18,16 +18,14 @@ const initialState: PurchaseScheduleState = {
 };
 
 
-export const fetchPurchaseSchedules = createAsyncThunk<[], {params:{}}, {rejectValue: string}>(
+export const fetchPurchaseSchedules = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'purchaseSchedule/fetchPurchaseSchedules',
     async(params, {rejectWithValue }) => {
         try {
-            if (params.year ) {
-                const response = await api.get(`/purchase/schedules/?year=${params.year}`);
+                const response = await api.get('/purchase/schedules/', {params: params});
                 return response.data;
-            }
-            const response = await api.get('/purchase/schedules/');
-            return response.data;
+            
+            
         }
         catch (error) {
             return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Schedules');
@@ -77,7 +75,7 @@ export const updatePurchaseSchedule = createAsyncThunk<[], { id: string, formDat
 
 export const createAnnualSchedule = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: string }>(
     'purchaseSchedule/createAnnualSchedule',
-    async ({ id, formData }, { rejectWithValue }) => {
+    async ({  formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/purchase/schedules/create_annual_schedule/`, formData);
             return response.data;

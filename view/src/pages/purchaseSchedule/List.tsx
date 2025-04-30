@@ -1,13 +1,10 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { fetchPurchaseSchedules } from "../../store/slices/purchaseScheduleSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
-import { MONTH_NAMES } from "../../utils/choices";
-import {
-  GenericListPage,
-  ColumnDefination,
-} from "../../components/GenericListPage";
+import { AppState, AppDispatch } from "../../store/store";
+import { GenericListPage } from "../../components/GenericListPage";
 import { useSearchParams } from "react-router-dom";
 import Edit from "./Edit";
 
@@ -33,60 +30,66 @@ const purchaseScheduleColumns = [
   { header: "December", accessor: "december" },
 ];
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.purchaseSchedule.purchaseSchedules,
-    fetchListAction: fetchPurchaseSchedules,
-    
-    
-  });
-  
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [params,setParams]=useState({
-    year:new Date().getFullYear()
-  })
-  const handleEdit=()=>{
-    
-  
-
-    // setSearchParams({year: searchParams.get('year'), edit: "true"});
-  
-    setSearchParams({edit:"true"});
-
-    
-  }
-  const handleFilter= async (field,value)=>{
-    // Handle filter action here
-    
-    
-    setParams({ ...params,[field]: value })
-    sessionStorage.setItem("params", JSON.stringify({ ...params,[field]: value }))
-    entityState.filter('params');
-  }
-
-  console.log("params",searchParams.get("edit"));
-  
-if(!searchParams.get("edit")){
-  return (
-    
-    <GenericListPage
-      title="Purchase Schedules"
-      entityState={entityState}
-      columns={purchaseScheduleColumns}
-      createRoute="/purchase-schedule/create"
-      // detailRouteBase="/purchase-schedule/detail"
-      hasDetail={false}
-      onRefresh={entityState.refresh}
-      onEdit={handleEdit}
-      filter={handleFilter}
-      getKey={(purchaseSchedule) => purchaseSchedule.id}
-    />
+  const { tokens } = useSelector((state: AppState) => state.auth);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const entityState = useSelector(
+    (state: AppState) => state.purchaseSchedule.purchaseSchedules
   );
-}else{
-  return(
+  const dispatch = useDispatch<AppDispatch>();
+  const [params, setParams] = useState({
+    year__no: searchParams.get("year__no") || new Date().getFullYear(),
+  });
+  const [edit, setEdit] = useState(searchParams.get("edit") || false);
 
-   <Edit/>
-  )
-}
+  useEffect(() => {
+    if (tokens) {
+      dispatch(fetchPurchaseSchedules(params));
+      setSearchParams(params)
+    }
+  },[]);
+
+  const handleRefresh = () => {
+  if (tokens) {
+    dispatch(fetchPurchaseSchedules(params));
+}}
+
+  const handleEdit = () => {
+    // setSearchParams({year: searchParams.get('year'), edit: "true"});
+    const currentParams = Object.fromEntries(searchParams.entries());
+
+    setEdit(true);
+    setSearchParams({ ...currentParams, edit: true });
+  };
+  const handleFilter = async (field, value) => {
+    // Handle filter action here
+    if (field === "year__no") {
+      const params = {
+        year__no: value,
+      };
+      await setSearchParams({ ...searchParams, [field]: value });
+
+      await dispatch(fetchPurchaseSchedules(params));
+    }
+  };
+
+  if (!edit) {
+    return (
+      <GenericListPage
+        title="Purchase Schedules"
+        entityState={entityState}
+        columns={purchaseScheduleColumns}
+        createRoute="/purchase-schedule/create"
+        // detailRouteBase="/purchase-schedule/detail"
+        hasDetail={false}
+        onRefresh={handleRefresh}
+        onEdit={handleEdit}
+        filter={handleFilter}
+        getKey={(purchaseSchedule) => purchaseSchedule.id}
+      />
+    );
+  } else {
+    return <Edit params={params} setEdit={setEdit} />;
+  }
 };
 
 export default List;
