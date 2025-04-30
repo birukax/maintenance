@@ -83,7 +83,7 @@ const List: React.FC = () => {
         hasDetail={false}
         onRefresh={handleRefresh}
         onEdit={handleEdit}
-        filter={handleFilter}
+        yearFilter={handleFilter}
         getKey={(purchaseSchedule) => purchaseSchedule.id}
       />
     );

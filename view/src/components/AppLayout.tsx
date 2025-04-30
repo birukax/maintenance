@@ -118,12 +118,25 @@ const AppLayout = ({ children }) => {
             </ListItemIcon>
             <ListItemText primary="Inventory" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
+          <ListItemButton component={Link} to="/unit-of-measures" sx={{ pl: 4 }}>
+              <ListItemIcon>
+              <ScaleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Unit of Measures"  sx={{minWidth:"fit-content"}}/>
+            </ListItemButton>
+            <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }} >
             <ListItemIcon>
-          <LocationOnIcon />
+          <LocalShippingIcon />
             </ListItemIcon>
-            <ListItemText primary="Location" />
+            <ListItemText primary="Consumption" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/returns" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <UndoIcon />
+            </ListItemIcon>
+            <ListItemText primary="Return" />
+          </ListItemButton>
+          
         </List>
           )}
 
@@ -172,17 +185,18 @@ const AppLayout = ({ children }) => {
             </ListItemIcon>
             <ListItemText primary="Equipment" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/units-of-measures" sx={{ pl: 4 }}>
-              <ListItemIcon>
-              <ScaleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Unit of Measures"  sx={{minWidth:"fit-content"}}/>
-            </ListItemButton>
+         
           <ListItemButton component={Link} to="/activities" sx={{ pl: 4 }}>
             <ListItemIcon>
           <PlaylistAddCheckIcon />
             </ListItemIcon>
             <ListItemText primary="Activity" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <LocationOnIcon />
+            </ListItemIcon>
+            <ListItemText primary="Location" />
           </ListItemButton>
           <ListItemButton component={Link} to="/work-order-types" sx={{ pl: 4 }}>
             <ListItemIcon>
@@ -217,27 +231,6 @@ const AppLayout = ({ children }) => {
         </List>
           )}
             
-            
-          <ListItemButton onClick={() => toggleSection("consumption")}>
-        <ListItemText primary="Consumption" />
-        {openSections.consumption ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItemButton>
-          {openSections.consumption && (
-        <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
-          <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }} >
-            <ListItemIcon>
-          <LocalShippingIcon />
-            </ListItemIcon>
-            <ListItemText primary="Consumption" />
-          </ListItemButton>
-          <ListItemButton component={Link} to="/returns" sx={{ pl: 4 }}>
-            <ListItemIcon>
-          <UndoIcon />
-            </ListItemIcon>
-            <ListItemText primary="Return" />
-          </ListItemButton>
-        </List>
-          )}
         </List>
       </List>
     </div>

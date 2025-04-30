@@ -39,7 +39,7 @@ export const GenericListPage = ({
   detailRouteBase = "",
   onRefresh,
   onEdit,
-  filter,
+  yearFilter,
   onApprove = null,
   onReject = null,
   getKey,
@@ -71,24 +71,27 @@ export const GenericListPage = ({
     <>
       <div className="flex gap-8 justify-between">
         <Typography variant="h5" className="font-bold">
-          {title}
+          {title} {yearFilter && (<sub style={{fontSize:"large",color:"red",marginInlineStart:"1rem"}}> <span style={{color:"black"}}> Year:</span>  {searchParams.get("year__no")}</sub>)}
         </Typography>
         <div>
-          {filter && (
-            <TextField
+          {yearFilter && (
+            
+               <TextField
               select
-              onChange={(e) => filter("year__no", e.target.value)}
+              onChange={(e) => yearFilter("year__no", e.target.value)}
               variant="outlined"
               size="small"
-              sx={{ marginRight: "8px", minWidth: "130px" }}
+              focused
+              sx={{ marginRight: "8px", minWidth: "130px",outlineColor:"blue"}}
               value={searchParams.get("year__no")}
             >
               {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
-                <MenuItem key={year} value={year}>
+                <MenuItem key={year} value={year} sx={{fontWeight:"bold" }}>
                   {year}
                 </MenuItem>
               ))}
             </TextField>
+           
           )}
           {createRoute && (
             <Button
@@ -102,7 +105,7 @@ export const GenericListPage = ({
           )}
           {onEdit &&
             (searchParams.get("edit") === false ||
-              searchParams.get("edit") === null) && (
+              searchParams.get("edit") === null) && entityState.data?.length>0 &&(
               <Button variant="outlined" onClick={onEdit} sx={{ mr: 1 }}>
                 Edit
               </Button>
