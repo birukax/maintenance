@@ -24,14 +24,7 @@ export function GenericDetailPage({
     return <Typography>Error: ID parameter is missing.</Typography>;
   }
 
-  // if(entityState.error) {
-  //   if(typeof(entityState.error) === "string"){
-  //      toast.error(entityState.error?.response?.detail)
-  //     }else{
-  //       toast.error(JSON.stringify(entityState.error?.detail))
-  //     }
-            
-  // }
+
   return (
     <Container>
       <Typography variant="h4" className="mb-6 text-slate-800">

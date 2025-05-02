@@ -35,7 +35,9 @@ const Create = () => {
     work_order_type_id: "",
     spareparts_required_id: [],
     tools_required_id: [],
-    total_time_required: null,
+    total_hours: 0,
+    total_days: 0,
+    total_minutes: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -108,7 +110,9 @@ const Create = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
+
+    if(formData?.total_days>0 ||formData?.total_hours>0 || formData?.total_minutes>0){
+      try {
       await dispatch(createWorkOrder(formData)).unwrap();
       toast.success("Work Order created successfully");
       navigate("/work-orders");
@@ -118,6 +122,11 @@ const Create = () => {
     } finally {
       setLoading(false);
     }
+    }else{
+      toast.warning("At least one field of total time required must be greater than 0 ")
+      setLoading(false);
+    }
+    
   };
 
 
@@ -309,18 +318,44 @@ const Create = () => {
             }
           ></Autocomplete>
         </FormControl>
+
+        <div className="total-time-group">
         <TextField
-          label="Total Time Required (In minutes)"
-          name="total_time_required"
+          label="Total Days"
+          name="total_days"
           type="number"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.total_time_required}
+          value={formData.total_days}
           onChange={handleChange}
-          required
           disabled={loading}
         />
+        <TextField
+          label="Total Hours"
+          name="total_hours"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.total_hours}
+          onChange={handleChange}
+          disabled={loading}
+        />
+        <TextField
+          label="Total Minutes"
+          name="total_minutes"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.total_minutes}
+          onChange={handleChange}
+          disabled={loading}
+        />
+        </div>
+
+        
 
         <Button
           type="submit"

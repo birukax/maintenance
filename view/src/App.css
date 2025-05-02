@@ -149,3 +149,8 @@ padding: 0;
 .btn-refresh{
    min-width: fit-content !important;
 }
+
+.planned-time-group,.total-time-group{
+   display: flex;
+   gap: .5rem;
+}

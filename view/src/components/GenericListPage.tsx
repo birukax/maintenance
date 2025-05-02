@@ -60,7 +60,7 @@ export const GenericListPage = ({
   if (typeof entityState.error === "string") {
     toast.error(entityState.error);
   } else {
-    if (entityState.error !== null) {
+    if (entityState.error !== null && entityState.error.code!=="token_not_valid") {
       toast.error(JSON.stringify(entityState.error));
     }
   }

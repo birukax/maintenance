@@ -32,7 +32,9 @@ const Create = () => {
     activity_type_id: "",
     spareparts_required_id: [],
     tools_required_id: [],
-    planned_time: null,
+    planned_days: 0,
+    planned_hours: 0,
+    planned_minutes: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -72,6 +74,8 @@ const Create = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    if(formData.planned_days>0 || formData.planned_hours>0 || formData.planned_minutes>0){
     try {
       await dispatch(createSchedule(formData)).unwrap();
       toast.success("Schedule created successfully");
@@ -83,6 +87,10 @@ const Create = () => {
     } finally {
       setLoading(false);
     }
+  }else{
+    setLoading(false)
+    toast.warning("At least one field of planned time must be greater than 0")
+  }
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
@@ -259,18 +267,41 @@ const Create = () => {
                 ))}
           </Select>
         </FormControl>
+        <div className="planned-time-group">
         <TextField
-          label="Planned Time (In minutes)"
-          name="planned_time"
+          label="Planned Days"
+          name="planned_days"
           type="number"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.planned_time}
+          value={formData.planned_days}
           onChange={handleChange}
-          required
           disabled={loading}
         />
+        <TextField
+          label="Planned Hours"
+          name="planned_hours"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.planned_hours}
+          onChange={handleChange}
+          disabled={loading}
+        />
+        <TextField
+          label="Planned Minutes"
+          name="planned_minutes"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.planned_minutes}
+          onChange={handleChange}
+          disabled={loading}
+        />
+        </div>
 
         <Button
           type="submit"
