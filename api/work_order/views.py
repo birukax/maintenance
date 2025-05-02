@@ -69,8 +69,15 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
         spareparts_required_id = self.request.data.get("spareparts_required_id")
         tools_required_id = self.request.data.get("tools_required_id")
         start_date = self.request.data.get("start_date")
-        total_time_required = self.request.data.get("total_time_required")
-        total_time_required = datetime.timedelta(minutes=int(total_time_required))
+        # total_time_required = self.request.data.get("total_time_required")
+        total_days = self.request.data.get("total_days")
+        total_hours = self.request.data.get("total_hours")
+        total_minutes = self.request.data.get("total_minutes")
+        total_time_required = datetime.timedelta(
+            days=int(total_days) or 0,
+            hours=int(total_hours) or 0,
+            minutes=int(total_minutes) or 0,
+        )
 
         try:
             if machine_id:

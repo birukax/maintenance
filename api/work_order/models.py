@@ -141,7 +141,8 @@ class WorkOrder(BaseCreatedUpdated):
             total = end - start
             return f"{total}"
         except Exception as e:
-            return f"{e}"
+            print(e)
+        return None
 
     def __str__(self):
         if self.machine:
