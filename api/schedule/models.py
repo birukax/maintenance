@@ -42,7 +42,7 @@ class Schedule(BaseCreatedUpdated):
         blank=True,
         related_name="sparepart_schedules",
     )
-    planned_time = models.DurationField()
+    planned_time = models.DurationField(null=True, blank=True)
 
     class Meta:
         ordering = ["-updated_at", "-created_at"]
