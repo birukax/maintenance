@@ -28,8 +28,15 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
         work_order_type_id = self.request.data.get("work_order_type_id")
         spareparts_required_id = self.request.data.get("spareparts_required_id")
         tools_required_id = self.request.data.get("tools_required_id")
-        planned_time = self.request.data.get("planned_time")
-        planned_time = datetime.timedelta(minutes=int(planned_time))
+        # planned_time = self.request.data.get("planned_time")
+        planned_days = self.request.data.get("planned_days")
+        planned_hours = self.request.data.get("planned_hours")
+        planned_minutes = self.request.data.get("planned_minutes")
+        planned_time = datetime.timedelta(
+            days=int(planned_days) or 0,
+            hours=int(planned_hours) or 0,
+            minutes=int(planned_minutes) or 0,
+        )
         try:
             if machine_id:
                 machine = Machine.objects.get(id=machine_id)
