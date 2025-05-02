@@ -17,7 +17,8 @@ import {
 import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
-    description: "",
+    name:"",
+    description: ""
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -31,6 +32,7 @@ const Edit = () => {
       dispatch(fetchActivity(id));
     }
     setFormData({
+      name: activity.data.name,
       description: activity.data.description,
     });
   }, []);
@@ -59,13 +61,25 @@ const Edit = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Activity Type
+        Edit Activity
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="form-gap"
       >
+        <TextField
+          multiline
+          label="Name"
+          name="name"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.name}
+          onChange={handleChange}
+          required
+          disabled={loading}
+        />
         <TextField
           multiline
           label="Description"

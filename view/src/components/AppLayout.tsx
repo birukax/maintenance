@@ -173,6 +173,13 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
           {openSections.maintenance && (
         <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
+          <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <LocationOnIcon />
+            </ListItemIcon>
+            <ListItemText primary="Location" />
+          </ListItemButton>
+
           <ListItemButton component={Link} to="/machines" sx={{ pl: 4 }}>
             <ListItemIcon>
           <PrecisionManufacturingIcon />
@@ -186,30 +193,28 @@ const AppLayout = ({ children }) => {
             <ListItemText primary="Equipment" />
           </ListItemButton>
          
+         
           <ListItemButton component={Link} to="/activities" sx={{ pl: 4 }}>
             <ListItemIcon>
           <PlaylistAddCheckIcon />
             </ListItemIcon>
             <ListItemText primary="Activity" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
-            <ListItemIcon>
-          <LocationOnIcon />
-            </ListItemIcon>
-            <ListItemText primary="Location" />
-          </ListItemButton>
-          <ListItemButton component={Link} to="/work-order-types" sx={{ pl: 4 }}>
-            <ListItemIcon>
-          <EngineeringIcon />
-            </ListItemIcon>
-            <ListItemText primary="Work Order Type"  sx={{minWidth:"fit-content"}}/>
-          </ListItemButton>
+          
           <ListItemButton component={Link} to="/activity-types" sx={{ pl: 4 }}>
             <ListItemIcon>
           <ContactsIcon />
             </ListItemIcon>
             <ListItemText primary="Activity Type" />
           </ListItemButton>
+          
+          <ListItemButton component={Link} to="/work-order-types" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <EngineeringIcon />
+            </ListItemIcon>
+            <ListItemText primary="Work Order Type"  sx={{minWidth:"fit-content"}}/>
+          </ListItemButton>
+          
           <ListItemButton component={Link} to="/work-orders" sx={{ pl: 4 }}>
             <ListItemIcon>
           <ConstructionIcon />

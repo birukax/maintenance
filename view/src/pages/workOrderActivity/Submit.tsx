@@ -98,6 +98,24 @@ const Submit = ({ entityState, setModalOpen }) => {
         className="form-gap"
         sx={{ minWidth: "90%" }}
       >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                minDate={dayjs(entityState?.data?.start_date)}
+                label="End Date"
+                name="end_date"
+                value={formData.end_date ? dayjs(formData.end_date) : null}
+                onChange={handleDateChange}
+                slotProps={{
+                  textField: {
+                    variant: "outlined",
+                    fullWidth: true,
+                    required: true,
+                    disabled: entityState.loading,
+                    helperText: error,
+                  },
+                }}
+              />
+            </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimePicker
             label="Start Time"
@@ -109,24 +127,6 @@ const Submit = ({ entityState, setModalOpen }) => {
             }
             onChange={(value) => handleTimeChange("start_time", value)}
             // views={['hours', 'minutes', 'seconds']}
-            slotProps={{
-              textField: {
-                variant: "outlined",
-                fullWidth: true,
-                required: true,
-                disabled: entityState.loading,
-                helperText: error,
-              },
-            }}
-          />
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            minDate={dayjs(entityState?.data?.start_date)}
-            label="End Date"
-            name="end_date"
-            value={formData.end_date ? dayjs(formData.end_date) : null}
-            onChange={handleDateChange}
             slotProps={{
               textField: {
                 variant: "outlined",
