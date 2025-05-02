@@ -85,3 +85,67 @@
       }
    }
 }
+
+@media (max-width:408px) {
+   
+   .title-header{
+      font-size: clamp(1rem,2.7vw,4rem) !important;
+      font-weight: 800;
+      width: 100%;
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between !important;
+      padding:  0 8% 0 0;
+      gap: 1rem;
+      
+      .navigate-back{
+         justify-self: flex-start !important;
+      }
+   }
+
+   .table-container{
+      padding: 1rem;
+      width: 100%;
+      overflow-x:scroll ;
+   }
+   table{
+      max-width: 100% !important;
+   }
+
+   .css-uf7mun{
+      max-width: 100%;
+      overflow-x: scroll;
+
+   }
+   .year-margin{
+      margin: 0 !important;
+   }
+   .year-filter{
+      flex: 1;
+      width: 100%;
+      margin: 0 !important;
+      padding: 0 !important;
+   }
+}
+
+.table-filters{
+   display: flex;
+   flex-wrap: wrap;
+   gap: 1rem;
+   padding-inline-start: 0;
+   >div{
+      min-width:fit-content;
+      display: flex;
+      flex-wrap: wrap;
+   gap: 1rem;
+padding: 0;
+
+>*{
+   flex: 1;
+}
+   }
+}
+
+.btn-refresh{
+   min-width: fit-content !important;
+}

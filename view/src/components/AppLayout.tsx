@@ -236,7 +236,7 @@ const AppLayout = ({ children }) => {
     </div>
   );
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex"}}>
       <CssBaseline />
 
       <AppBar
@@ -246,16 +246,16 @@ const AppLayout = ({ children }) => {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ bgcolor: "white" }} className="justify-between">
+        <Toolbar sx={{ bgcolor: "white",margin:0}} className="justify-between">
           <IconButton
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{padding:"0 0 0 .5rem", mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography sx={{ color: "primary.dark",display:"flex",alignItems:"center",justifyContent:"center",gap:".5rem" }} variant="h6" noWrap>
+          <Typography sx={{ color: "primary.dark",display:"flex",alignItems:"center",justifyContent:"center",gap:".5rem" }} variant="h6" noWrap className="title-header">
           <div className="navigate-back">
           <div className="back" onClick={() => navigate(-1)}>
           <ArrowBackIcon sx={{fontSize:32,fill:"#5d4037"}}/>

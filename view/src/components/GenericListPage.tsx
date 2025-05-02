@@ -69,9 +69,9 @@ export const GenericListPage = ({
   
   return (
     <>
-      <div className="flex gap-8 justify-between">
-        <Typography variant="h5" className="font-bold">
-          {title} {yearFilter && (<sub style={{fontSize:"large",color:"red",marginInlineStart:"1rem"}}> <span style={{color:"black"}}> Year:</span>  {searchParams.get("year__no")}</sub>)}
+      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%"}}>
+        <Typography variant="h5" className="font-bold ">
+          {title} {yearFilter && (<sub style={{fontSize:"large",color:"red",marginInlineStart:"1rem"}} className="year-margin"> <span style={{color:"black"}}> Year:</span>{searchParams.get("year__no")}</sub>)}
         </Typography>
         <div>
           {yearFilter && (
@@ -84,6 +84,7 @@ export const GenericListPage = ({
               focused
               sx={{ marginRight: "8px", minWidth: "130px",outlineColor:"blue"}}
               value={searchParams.get("year__no")}
+              className="year-filter"
             >
               {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
                 <MenuItem key={year} value={year} sx={{fontWeight:"bold" }}>
@@ -115,6 +116,7 @@ export const GenericListPage = ({
             startIcon={<RefreshIcon />}
             onClick={onRefresh}
             disabled={entityState.loading}
+            className="btn-refresh"
           >
             Refresh
           </Button>
@@ -127,7 +129,9 @@ export const GenericListPage = ({
         </Typography>
       )}
 
-      <Table sx={{ minWidth: 650 }} aria-label={`${title} table`}>
+<div className="table-container">
+
+      <Table sx={{ minWidth: 650}} aria-label={`${title} table`} className="table">
         <TableHead>
           <TableRow>
             {headers.map((header) => (
@@ -136,7 +140,7 @@ export const GenericListPage = ({
               </TableCell>
             ))}
             {(hasDetail || hasApproval) && (
-              <TableCell align="center">
+              <TableCell align="left">
                 <Typography noWrap>Action</Typography>
               </TableCell>
             )}
@@ -151,7 +155,7 @@ export const GenericListPage = ({
                 >
                   {columns.map((col) => {
                     return (
-                      <TableCell key={col.header} component="th" scope="row">
+                      <TableCell key={col.header} component="th" scope="row" align="left" >
                         {col.renderCell
                           ? col.renderCell(row)
                           : col.accessor
@@ -162,7 +166,7 @@ export const GenericListPage = ({
                   })}
 
                   {hasDetail && (
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <Button
                         component={Link}
                         to={`${detailRouteBase}/${getKey(row)}`}
@@ -173,7 +177,7 @@ export const GenericListPage = ({
                     </TableCell>
                   )}
                   {hasApproval && row.status === "PENDING" && (
-                    <TableCell align="center">
+                    <TableCell align="left">
                       <ButtonGroup
                         variant="contained"
                         size="small"
@@ -205,6 +209,8 @@ export const GenericListPage = ({
               )}
         </TableBody>
       </Table>
+</div>
+
     </>
   );
 };
