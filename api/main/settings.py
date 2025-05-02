@@ -165,7 +165,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://localhost:5173",
+    "http://172.16.19.10:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
