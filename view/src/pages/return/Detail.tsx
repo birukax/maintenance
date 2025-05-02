@@ -14,14 +14,7 @@ const Detail = () => {
   });
   const renderButtons = () => (
     <>
-      <Button
-        variant="contained"
-        component={Link}
-        to={`/return/edit/${entityState.id}`}
-        className="bg-slate-700"
-      >
-        Edit
-      </Button>
+      
     </>
   );
 

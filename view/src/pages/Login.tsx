@@ -1,11 +1,13 @@
-import React, { useState} from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState} from 'react';
+import { AppState, AppDispatch } from "../store/store";
+import { useDispatch,useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setTokens } from '../store/slices/authSlice';
 import api from '../utils/api';
 import { Button, TextField, Typography, Container, CircularProgress} from '@mui/material';
 
 const Login = () => {
+  const tokens = useSelector((state: AppState) => state.auth.tokens);
     const [username, setUsername] =  useState<string>('');
     const [password, setPassword] =  useState<string>('');
     const [error, setError] =  useState<string>('');
@@ -31,6 +33,17 @@ const Login = () => {
             setLoading(false);
         }
     }
+
+    useEffect(()=>{
+     if(tokens){
+      if (sessionStorage.getItem("previousRoute")) {
+        navigate(sessionStorage.getItem("previousRoute"));
+      } else {
+        navigate("/dashboard/");
+      }
+     }
+    },[])
+
     return (
         <Container className="flex flex-col items-center justify-center min-h-screen">
           <Typography variant="h4" className="mb-6 text-gray-800">

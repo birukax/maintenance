@@ -154,3 +154,9 @@ padding: 0;
    display: flex;
    gap: .5rem;
 }
+
+.activities-clmn{
+   overflow: scroll;
+
+   scrollbar-width: thin;
+}

@@ -12,7 +12,7 @@ const CheckListRows = ({ row, handleUpdateActivity }) => {
   }, [row.value]);
   return (
     <TableRow key={row.id}>
-      <TableCell align="left">
+      <TableCell align="left" title={row.activity.description}>
         {row.activity.name} - {row.activity.code}
       </TableCell>
       <TableCell align="left">
