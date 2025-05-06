@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createLocation } from "../../store/slices/locationSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  fetchPlant,
+  updatePlant,
+  fetchPlants,
+} from "../../store/slices/plantSlice";
+import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import {
   TextField,
@@ -9,37 +14,45 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-const Create = () => {
+const Edit = () => {
   const [formData, setFormData] = useState({
-    code: "",
     name: "",
   });
+  const { id } = useParams();
+  const { tokens } = useSelector((state: AppState) => state.auth);
+  const { plant } = useSelector((state: AppState) => state.plant);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  useEffect(() => {
+    if (tokens && id) {
+      dispatch(fetchPlant(id));
+    }
+    setFormData({
+      name: plant.data?.name,
+    });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      await dispatch(createLocation(formData)).unwrap();
-      toast.success("Location created successfully");
-      navigate("/locations");
+      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
+      await dispatch(updatePlant({ id, formData })).unwrap();
+      toast.success("Plant edited successfully");
+      navigate(`/plant/detail/${plant.data.id}`);
     } catch (err) {
-      toast.error("Error creating Location");
+      toast.error("Error editing Plant");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -48,25 +61,13 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Location
+        Edit Plant
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <TextField
-          label="Code"
-          name="code"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.code}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
-
         <TextField
           label="Name"
           name="name"
@@ -87,7 +88,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Location"}
+          {loading ? <CircularProgress size={24} /> : "Edit Plant"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">
@@ -99,4 +100,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;

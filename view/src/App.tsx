@@ -6,7 +6,8 @@ import ItemRoutes from "./routes/ItemRoutes";
 import ReturnRoutes from "./routes/ReturnRoutes";
 import ContactRoutes from "./routes/ContactRoutes";
 import MachineRoutes from "./routes/MachineRoutes";
-import LocationRoutes from "./routes/LocationRoutes";
+import plantRoutes from "./routes/PlantRoutes";
+import areaRoutes from "./routes/AreaRoutes";
 import ActivityRoutes from "./routes/ActivityRoutes";
 import WorkOrderRoutes from "./routes/WorkOrderRoutes";
 import EquipmentRoutes from "./routes/EquipmentRoutes";
@@ -30,7 +31,8 @@ const App: React.FC = () => {
       {ContactRoutes}
       {MachineRoutes}
       {ActivityRoutes}
-      {LocationRoutes}
+      {plantRoutes}
+      {areaRoutes}
       {WorkOrderRoutes}
       {ScheduleRoutes}
       {EquipmentRoutes}

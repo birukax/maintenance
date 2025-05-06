@@ -9,6 +9,8 @@ import yearReducer from './slices/yearSlice';
 import profileReducer from './slices/profileSlice';
 import machineReducer from './slices/machineSlice';
 import locationReducer from './slices/locationSlice';
+import plantReducer from './slices/plantSlice';
+import areaReducer from './slices/areaSlice';
 import activityReducer from './slices/activitySlice';
 import scheduleReducer from './slices/scheduleSlice';
 import breakdownReducer from './slices/breakdownSlice';
@@ -33,6 +35,8 @@ interface RootState {
   profile: ReturnType<typeof profileReducer>;
   machine: ReturnType<typeof machineReducer>;
   location: ReturnType<typeof locationReducer>;
+  plant: ReturnType<typeof plantReducer>;
+  area: ReturnType<typeof areaReducer>;
   activity: ReturnType<typeof activityReducer>;
   schedule: ReturnType<typeof scheduleReducer>;
   breakdown: ReturnType<typeof breakdownReducer>;
@@ -58,6 +62,8 @@ const rootReducer = {
     profile: profileReducer,
     machine: machineReducer,
     location: locationReducer,
+    plant: plantReducer,
+    area: areaReducer,
     activity: activityReducer,
     schedule: scheduleReducer,
     breakdown: breakdownReducer,

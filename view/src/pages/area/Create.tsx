@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createMachine } from "../../store/slices/machineSlice";
+import { createArea } from "../../store/slices/areaSlice";
 import { fetchPlants } from "../../store/slices/plantSlice";
-import { fetchAreas } from "../../store/slices/areaSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import {
@@ -20,26 +19,25 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
+
   const [formData, setFormData] = useState({
-    name: "",
-    area_id: "",
     code: "",
+    name: "",
+    plant_id:""
   });
-  const [selectedPlant,setSelectedPlant]=useState("")
+  const { plants } = useSelector((state: AppState) => state.plant);
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { plants } = useSelector((state: AppState) => state.plant);
-  const { areas } = useSelector((state: AppState) => state.area);
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    if (tokens) {
-      dispatch(fetchPlants());
-      dispatch(fetchAreas());
-    }
-  }, []);
+
+    useEffect(() => {
+      if (tokens) {
+        dispatch(fetchPlants());
+      }
+    }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,23 +48,20 @@ const Create = () => {
     setLoading(true);
     setError(null);
     try {
-      await dispatch(createMachine(formData)).unwrap();
-      toast.success("Machine created successfully");
-      navigate("/machines");
+      await dispatch(createArea(formData)).unwrap();
+      toast.success("Area created successfully");
+      navigate("/areas");
     } catch (err) {
-      toast.error("Error creating Machine");
+      toast.error("Error creating Area");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
     }
   };
-
-  console.log(selectedPlant);
-  
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Machine
+        Create Area
       </Typography>
       <Box
         component="form"
@@ -79,12 +74,8 @@ const Create = () => {
             labelId="plant-select-label"
             id="plant-select"
             name="plant_id"
-            value={selectedPlant}
-            onChange={(e)=>{
-              setSelectedPlant(
-                e.target.value
-              )
-            }}
+            value={formData.plant_id}
+            onChange={handleChange}
             label="Plant"
           >
             {plants.data &&
@@ -95,35 +86,7 @@ const Create = () => {
               ))}
           </Select>
         </FormControl>
-        <FormControl
-          fullWidth
-          variant="outlined"
-          required={false}
-          disabled={loading}
-        >
-          <InputLabel id="area-select-label">Area</InputLabel>
-          <Select
-            labelId="area-select-label"
-            id="area-select"
-            name="area_id"
-            value={formData.area_id}
-            onChange={handleChange}
-            label="Area"
-          >
-            {areas.data &&
-              areas.data
-                .filter(
-                  (area) => area.plant.id === selectedPlant
-                )
-                .map((area) => (
-                  <MenuItem key={area.id} value={area.id}>
-                    {area.name}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl>
         <TextField
-          multiline
           label="Code"
           name="code"
           className="mb-8"
@@ -134,8 +97,8 @@ const Create = () => {
           required
           disabled={loading}
         />
+
         <TextField
-          multiline
           label="Name"
           name="name"
           className="mb-8"
@@ -146,6 +109,7 @@ const Create = () => {
           required
           disabled={loading}
         />
+
         <Button
           type="submit"
           variant="contained"
@@ -154,7 +118,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Machine"}
+          {loading ? <CircularProgress size={24} /> : "Create Area"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

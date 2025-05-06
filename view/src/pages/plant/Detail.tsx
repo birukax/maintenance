@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { fetchLocation } from "../../store/slices/locationSlice";
+import { fetchPlant } from "../../store/slices/plantSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
@@ -9,15 +9,15 @@ import { Link } from "react-router-dom";
 
 const Detail = () => {
   const entityState = useEntityDetail({
-    detailSelector: (state: AppState) => state.location.location,
-    fetchDetailAction: fetchLocation,
+    detailSelector: (state: AppState) => state.plant.plant,
+    fetchDetailAction: fetchPlant,
   });
   const renderButtons = () => (
     <>
       <Button
         variant="contained"
         component={Link}
-        to={`/location/edit/${entityState.id}`}
+        to={`/plant/edit/${entityState.id}`}
         className="bg-slate-700"
       >
         Edit
@@ -47,7 +47,7 @@ const Detail = () => {
   );
   return (
     <GenericDetailPage
-      titleBase="Location"
+      titleBase="Plant"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}

@@ -1,6 +1,6 @@
 // src/pages/List.tsx
 import React, { useEffect } from "react";
-import { fetchMachines } from "../../store/slices/machineSlice";
+import { fetchAreas } from "../../store/slices/areaSlice";
 import { AppState } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
 import {
@@ -8,27 +8,26 @@ import {
   ColumnDefination,
 } from "../../components/GenericListPage";
 
-const machineColumns = [
+const areaColumns = [
   { header: "Code", accessor: "code" },
   { header: "Name", accessor: "name" },
-  { header: "area", accessor: "area.name" },
 ];
 
 const List: React.FC = () => {
   const entityState = useEntityList({
-    listSelector: (state: AppState) => state.machine.machines,
-    fetchListAction: fetchMachines,
+    listSelector: (state: AppState) => state.area.areas,
+    fetchListAction: fetchAreas,
   });
 
   return (
     <GenericListPage
-      title="Machines"
+      title="Areas"
       entityState={entityState}
-      columns={machineColumns}
-      createRoute="/machine/create"
-      detailRouteBase="/machine/detail"
+      columns={areaColumns}
+      createRoute="/area/create"
+      detailRouteBase="/area/detail"
       onRefresh={entityState.refresh}
-      getKey={(machine) => machine.id}
+      getKey={(area) => area.id}
     />
   );
 };

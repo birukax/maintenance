@@ -41,6 +41,8 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import UndoIcon from '@mui/icons-material/Undo';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import FactoryIcon from '@mui/icons-material/Factory';
+import AreaChartIcon from '@mui/icons-material/AreaChart';
 
 const drawerWidth = 260;
 
@@ -50,6 +52,7 @@ const AppLayout = ({ children }) => {
     purchase: false,
     maintenance: false,
     consumption: false,
+    location:false
   });
 
   const toggleSection = (section) => {
@@ -173,12 +176,7 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
           {openSections.maintenance && (
         <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
-          <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
-            <ListItemIcon>
-          <LocationOnIcon />
-            </ListItemIcon>
-            <ListItemText primary="Location" />
-          </ListItemButton>
+          
 
           <ListItemButton component={Link} to="/machines" sx={{ pl: 4 }}>
             <ListItemIcon>
@@ -235,6 +233,34 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
         </List>
           )}
+
+
+
+<ListItemButton onClick={() => toggleSection("location")}>
+        <ListItemText primary="Location" />
+        {openSections.location ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </ListItemButton>
+          {openSections.location && (
+        <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
+          
+
+          <ListItemButton component={Link} to="/plants" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <FactoryIcon />
+            </ListItemIcon>
+            <ListItemText primary="Plant" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/areas" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <AreaChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Area" />
+          </ListItemButton>
+        </List>
+          )}
+
+
+
             
         </List>
       </List>

@@ -1,6 +1,6 @@
 // src/pages/List.tsx
 import React, { useEffect } from "react";
-import { fetchLocations } from "../../store/slices/locationSlice";
+import { fetchPlants } from "../../store/slices/plantSlice";
 import { AppState } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
 import {
@@ -8,26 +8,26 @@ import {
   ColumnDefination,
 } from "../../components/GenericListPage";
 
-const locationColumns = [
+const plantColumns = [
   { header: "Code", accessor: "code" },
   { header: "Name", accessor: "name" },
 ];
 
 const List: React.FC = () => {
   const entityState = useEntityList({
-    listSelector: (state: AppState) => state.location.locations,
-    fetchListAction: fetchLocations,
+    listSelector: (state: AppState) => state.plant.plants,
+    fetchListAction: fetchPlants,
   });
 
   return (
     <GenericListPage
-      title="Locations"
+      title="Plants"
       entityState={entityState}
-      columns={locationColumns}
-      createRoute="/location/create"
-      detailRouteBase="/location/detail"
+      columns={plantColumns}
+      createRoute="/plant/create"
+      detailRouteBase="/plant/detail"
       onRefresh={entityState.refresh}
-      getKey={(location) => location.id}
+      getKey={(plant) => plant.id}
     />
   );
 };
