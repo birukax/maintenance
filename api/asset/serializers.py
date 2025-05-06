@@ -1,30 +1,20 @@
 from rest_framework import serializers
-from .models import Location, Machine, Equipment
-
-
-class LocationSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    class Meta:
-        model = Location
-        fields = [
-            "id",
-            "code",
-            "name",
-        ]
+from .models import Machine, Equipment
+from location.serializers import AreaSerializer
 
 
 class MachineSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    location = LocationSerializer(read_only=True)
-    location_id = serializers.IntegerField(write_only=True)
+    area = AreaSerializer(read_only=True)
+    area_id = serializers.IntegerField(write_only=True)
     class Meta:
         model = Machine
         fields = [
             "id",
             "code",
             "name",
-            "location",
-            "location_id",
+            "area",
+            "area_id",
         ]
 
 

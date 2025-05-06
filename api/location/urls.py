@@ -5,14 +5,14 @@ from . import views
 router = routers.DefaultRouter()
 
 router.register(
-    r"machines",
-    views.MachineViewSet,
-    basename="machine",
+    r"plants",
+    views.PlantViewSet,
+    basename="plant",
 )
 router.register(
-    r"equipments",
-    views.EquipmentViewSet,
-    basename="equipment",
+    r"areas",
+    views.AreaViewSet,
+    basename="area",
 )
 
 urlpatterns = [

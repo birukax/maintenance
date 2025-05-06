@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     # "dj_rest_auth",
     "account",
+    "location",
     "asset",
     "approval",
     "inventory",
@@ -161,7 +162,6 @@ REST_FRAMEWORK = {
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
-
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",

@@ -2,13 +2,9 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import serializers
-from .models import Location, Machine, Equipment
-from .serializers import LocationSerializer, MachineSerializer, EquipmentSerializer
-
-
-class LocationViewSet(viewsets.ModelViewSet):
-    serializer_class = LocationSerializer
-    queryset = Location.objects.all()
+from .models import Machine, Equipment
+from location.models import Area
+from .serializers import MachineSerializer, EquipmentSerializer
 
 
 class MachineViewSet(viewsets.ModelViewSet):
@@ -16,16 +12,16 @@ class MachineViewSet(viewsets.ModelViewSet):
     queryset = Machine.objects.all()
 
     def perform_create(self, serializer):
-        location_id = serializer.validated_data.get("location_id")
+        area_id = serializer.validated_data.get("area_id")
         try:
-            location = Location.objects.get(id=location_id)
-        except Location.DoesNotExist:
+            area = Area.objects.get(id=area_id)
+        except Area.DoesNotExist:
             raise serializers.ValidationError(
-                {"location_id": f"Location with id {location_id} does not exist."}
+                {"area_id": f"Area with id {area_id} does not exist."}
             )
         serializer.is_valid(raise_exception=True)
-        serializer.save(location=location)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.save(area=area)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class EquipmentViewSet(viewsets.ModelViewSet):
@@ -42,4 +38,4 @@ class EquipmentViewSet(viewsets.ModelViewSet):
             )
         serializer.is_valid(raise_exception=True)
         serializer.save(machine=machine)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
