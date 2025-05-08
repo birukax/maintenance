@@ -17,11 +17,11 @@ const initialState: BreakdownState = {
     breakdown: {data: null, loading: false, error: null},
 };
 
-export const fetchBreakdowns = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchBreakdowns = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'breakdown/fetchBreakdowns',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/breakdown/breakdowns/');
+            const response = await api.get('/breakdown/breakdowns/',{params});
             return response.data;
         }
         catch (error) {

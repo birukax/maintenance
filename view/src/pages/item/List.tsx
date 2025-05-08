@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState,AppDispatch } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
 import {useSelector, useDispatch } from "react-redux";
 import {useSearchParams} from "react-router-dom"
 import {
@@ -67,8 +66,8 @@ const List: React.FC = () => {
       createRoute="/item/create"
       detailRouteBase="/item/detail"
       onRefresh={handleRefresh}
-      searchFilter={handleFilter}
       getKey={(item) => item.id}
+      searchFilter={handleFilter}
       keyWord={keyWord}
       setKeyWord={setKeyWord}
     />

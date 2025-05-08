@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchPurchaseRequests } from "../../store/slices/purchaseRequestSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
@@ -17,11 +18,46 @@ const purchaseRequestColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.purchaseRequest.purchaseRequests,
-    fetchListAction: fetchPurchaseRequests,
-  });
-
+  const { tokens } = useSelector((state: AppState) => state.auth);
+      const [searchParams, setSearchParams] = useSearchParams();
+      const [keyWord,setKeyWord]=useState("")
+      const entityState = useSelector(
+          (state: AppState) => state.purchaseRequest.purchaseRequests
+        );
+      const [params,setParams]=useState({
+        search:searchParams.get("search") ||"",
+        category:searchParams.get("category") ||"",
+        type:searchParams.get("type") ||""
+      })
+      const dispatch = useDispatch<AppDispatch>();
+      
+      useEffect(() => {
+          if (tokens) {
+            dispatch(fetchPurchaseRequests(params));
+            // setSearchParams(params)
+          }
+        },[]);
+    
+        const handleRefresh = () => {
+         if (tokens) {
+           dispatch(fetchPurchaseRequests(params));
+       }}
+    
+      const handleFilter=async (field,value)=>{
+         setParams(prev=>{
+          return{
+            ...prev,
+            [field]:value
+          }
+        })
+        const parameters={
+          ...params,
+          [field]:value
+        }
+         setSearchParams({ ...params, [field]: value });
+        await dispatch(fetchPurchaseRequests(parameters));
+      
+      }
   return (
     <GenericListPage
       title="Purchase Requests"
@@ -31,6 +67,9 @@ const List: React.FC = () => {
       detailRouteBase="/purchase-request/detail"
       onRefresh={entityState.refresh}
       getKey={(purchaseRequest) => purchaseRequest.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

@@ -17,11 +17,11 @@ const initialState: AreaState = {
     area: {data: null, loading: false, error: null},
 };
 
-export const fetchAreas = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchAreas = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'area/fetchAreas',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/location/areas/');
+            const response = await api.get('/location/areas/',{params});
             return response.data;
         }
         catch (error) {

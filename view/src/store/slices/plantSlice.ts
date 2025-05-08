@@ -17,11 +17,11 @@ const initialState: PlantState = {
     plant: {data: null, loading: false, error: null},
 };
 
-export const fetchPlants = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchPlants = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'plant/fetchPlants',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/location/plants/');
+            const response = await api.get('/location/plants/',{params});
             return response.data;
         }
         catch (error) {

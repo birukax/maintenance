@@ -17,11 +17,11 @@ const initialState: PurchaseRequestState = {
     purchaseRequest: {data: null, loading: false, error: null},
 };
 
-export const fetchPurchaseRequests = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchPurchaseRequests = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'purchaseRequest/fetchPurchaseRequests',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/purchase/requests/');
+            const response = await api.get('/purchase/requests/',{params});
             return response.data;
         }
         catch (error) {

@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchAreas } from "../../store/slices/areaSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
@@ -14,10 +15,46 @@ const areaColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.area.areas,
-    fetchListAction: fetchAreas,
-  });
+  const { tokens } = useSelector((state: AppState) => state.auth);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [keyWord,setKeyWord]=useState("")
+    const entityState = useSelector(
+        (state: AppState) => state.area.areas
+      );
+    const [params,setParams]=useState({
+      search:searchParams.get("search") ||"",
+      category:searchParams.get("category") ||"",
+      type:searchParams.get("type") ||""
+    })
+    const dispatch = useDispatch<AppDispatch>();
+    
+    useEffect(() => {
+        if (tokens) {
+          dispatch(fetchAreas(params));
+          // setSearchParams(params)
+        }
+      },[]);
+  
+      const handleRefresh = () => {
+       if (tokens) {
+         dispatch(fetchAreas(params));
+     }}
+  
+    const handleFilter=async (field,value)=>{
+       setParams(prev=>{
+        return{
+          ...prev,
+          [field]:value
+        }
+      })
+      const parameters={
+        ...params,
+        [field]:value
+      }
+       setSearchParams({ ...params, [field]: value });
+      await dispatch(fetchAreas(parameters));
+    
+    }
 
   return (
     <GenericListPage
@@ -26,8 +63,11 @@ const List: React.FC = () => {
       columns={areaColumns}
       createRoute="/area/create"
       detailRouteBase="/area/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(area) => area.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

@@ -17,11 +17,11 @@ const initialState: MachineState = {
     machine: {data: null, loading: false, error: null},
 };
 
-export const fetchMachines = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchMachines = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'machine/fetchMachines',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/asset/machines/');
+            const response = await api.get('/asset/machines/',{params});
             return response.data;
         }
         catch (error) {

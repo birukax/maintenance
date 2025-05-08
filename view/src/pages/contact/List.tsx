@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchContacts } from "../../store/slices/contactSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom";
 import {
   GenericListPage,
   ColumnDefination,
@@ -16,11 +17,47 @@ const contactColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.contact.contacts,
-    fetchListAction: fetchContacts,
-  });
-
+  const { tokens } = useSelector((state: AppState) => state.auth);
+      const [searchParams, setSearchParams] = useSearchParams();
+      const [keyWord,setKeyWord]=useState("")
+      const entityState = useSelector(
+          (state: AppState) => state.contact.contacts
+        );
+      const [params,setParams]=useState({
+        search:searchParams.get("search") ||"",
+        category:searchParams.get("category") ||"",
+        type:searchParams.get("type") ||""
+      })
+      const dispatch = useDispatch<AppDispatch>();
+      
+      useEffect(() => {
+          if (tokens) {
+            dispatch(fetchContacts(params));
+            // setSearchParams(params)
+          }
+        },[]);
+    
+        const handleRefresh = () => {
+         if (tokens) {
+           dispatch(fetchContacts(params));
+       }}
+    
+      const handleFilter=async (field,value)=>{
+         setParams(prev=>{
+          return{
+            ...prev,
+            [field]:value
+          }
+        })
+        const parameters={
+          ...params,
+          [field]:value
+        }
+         setSearchParams({ ...params, [field]: value });
+        await dispatch(fetchContacts(parameters));
+      
+      }
+  
   return (
     <GenericListPage
       title="Contacts"
@@ -28,8 +65,11 @@ const List: React.FC = () => {
       columns={contactColumns}
       createRoute="/contact/create"
       detailRouteBase="/contact/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(contact) => contact.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

@@ -17,11 +17,11 @@ const initialState: ConsumptionState = {
     consumption: {data: null, loading: false, error: null},
 };
 
-export const fetchConsumptions = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchConsumptions = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'consumption/fetchConsumptions',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/consumptions/');
+            const response = await api.get('/inventory/consumptions/',{params});
             return response.data;
         }
         catch (error) {

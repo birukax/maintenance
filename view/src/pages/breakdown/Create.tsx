@@ -60,6 +60,9 @@ const Create = () => {
     // dispatch(fetchItems());
   }, []);
 
+  console.log("machi",machines);
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

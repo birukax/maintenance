@@ -17,11 +17,11 @@ const initialState: ContactState = {
     contact: {data: null, loading: false, error: null},
 };
 
-export const fetchContacts = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchContacts = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'contact/fetchContacts',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/contacts/');
+            const response = await api.get('/inventory/contacts/',{params});
             return response.data;
         }
         catch (error) {

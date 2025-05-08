@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchMachines } from "../../store/slices/machineSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
@@ -15,11 +16,46 @@ const machineColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.machine.machines,
-    fetchListAction: fetchMachines,
-  });
-
+ const { tokens } = useSelector((state: AppState) => state.auth);
+     const [searchParams, setSearchParams] = useSearchParams();
+     const [keyWord,setKeyWord]=useState("")
+     const entityState = useSelector(
+         (state: AppState) => state.machine.machines
+       );
+     const [params,setParams]=useState({
+       search:searchParams.get("search") ||"",
+       category:searchParams.get("category") ||"",
+       type:searchParams.get("type") ||""
+     })
+     const dispatch = useDispatch<AppDispatch>();
+     
+     useEffect(() => {
+         if (tokens) {
+           dispatch(fetchMachines(params));
+           // setSearchParams(params)
+         }
+       },[]);
+   
+       const handleRefresh = () => {
+        if (tokens) {
+          dispatch(fetchMachines(params));
+      }}
+   
+     const handleFilter=async (field,value)=>{
+        setParams(prev=>{
+         return{
+           ...prev,
+           [field]:value
+         }
+       })
+       const parameters={
+         ...params,
+         [field]:value
+       }
+        setSearchParams({ ...params, [field]: value });
+       await dispatch(fetchMachines(parameters));
+     
+     }
   return (
     <GenericListPage
       title="Machines"
@@ -27,8 +63,11 @@ const List: React.FC = () => {
       columns={machineColumns}
       createRoute="/machine/create"
       detailRouteBase="/machine/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(machine) => machine.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

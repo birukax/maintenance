@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState} from "react";
 import { fetchBreakdowns } from "../../store/slices/breakdownSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import { GenericListPage } from "../../components/GenericListPage";
 
 const breakdownColumns = [
@@ -14,10 +15,47 @@ const breakdownColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.breakdown.breakdowns,
-    fetchListAction: fetchBreakdowns,
-  });
+  const { tokens } = useSelector((state: AppState) => state.auth);
+      const [searchParams, setSearchParams] = useSearchParams();
+      const [keyWord,setKeyWord]=useState("")
+      const entityState = useSelector(
+          (state: AppState) => state.breakdown.breakdowns
+        );
+      const [params,setParams]=useState({
+        search:searchParams.get("search") ||"",
+        category:searchParams.get("category") ||"",
+        type:searchParams.get("type") ||""
+      })
+
+      const dispatch = useDispatch<AppDispatch>();
+          
+          useEffect(() => {
+              if (tokens) {
+                dispatch(fetchBreakdowns(params));
+                // setSearchParams(params)
+              }
+            },[]);
+        
+            const handleRefresh = () => {
+             if (tokens) {
+               dispatch(fetchBreakdowns(params));
+           }}
+        
+          const handleFilter=async (field,value)=>{
+             setParams(prev=>{
+              return{
+                ...prev,
+                [field]:value
+              }
+            })
+            const parameters={
+              ...params,
+              [field]:value
+            }
+             setSearchParams({ ...params, [field]: value });
+            await dispatch(fetchBreakdowns(parameters));
+          
+          }
 
   return (
     <GenericListPage
@@ -26,8 +64,11 @@ const List: React.FC = () => {
       columns={breakdownColumns}
       createRoute="/breakdown/create"
       detailRouteBase="/breakdown/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(breakdown) => breakdown.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };
