@@ -17,7 +17,7 @@ class MachineViewSet(viewsets.ModelViewSet):
         "area__name",
         "area__code",
     ]
-    filterset_fields = [""]
+    filterset_fields = []
 
     def perform_create(self, serializer):
         area_id = serializer.validated_data.get("area_id")
@@ -42,7 +42,7 @@ class EquipmentViewSet(viewsets.ModelViewSet):
         "machine__name",
         "machine__code",
     ]
-    filterset_fields = [""]
+    filterset_fields = []
 
     def perform_create(self, serializer):
         machine_id = serializer.validated_data.get("machine_id")
