@@ -54,7 +54,6 @@ class ActivityVeiwSet(viewsets.ModelViewSet):
     search_fields = [
         "name",
         "code",
-        "description",
         "activity_type__name",
         "activity_type__code",
     ]

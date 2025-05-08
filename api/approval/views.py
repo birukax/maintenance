@@ -10,7 +10,7 @@ class PurchaseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Purchase.objects.all()
     search_fields = [
         "purchase_request__item__name",
-        "by",
+        "by__username",
         "purchase_request__requested_by__username",
         "purchase_request__requested_date",
     ]
