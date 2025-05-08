@@ -9,11 +9,15 @@ from .serializers import PlantSerializer, AreaSerializer
 class PlantViewSet(viewsets.ModelViewSet):
     serializer_class = PlantSerializer
     queryset = Plant.objects.all()
+    serach_fields = ["code", "name"]
+    filterset_fields = []
 
 
 class AreaViewSet(viewsets.ModelViewSet):
     serializer_class = AreaSerializer
     queryset = Area.objects.all()
+    search_fields = ["name", "code", "plant__name", "plant__code"]
+    filterset_fields = []
 
     def perform_create(self, serializer):
         plant_id = serializer.validated_data.get("plant_id")

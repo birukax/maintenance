@@ -25,16 +25,28 @@ from .serializers import (
 class UnitOfMeasureViewSet(viewsets.ModelViewSet):
     serializer_class = UnitOfMeasureSerializer
     queryset = UnitOfMeasure.objects.all()
+    search_fields = ["code", "name"]
+    filterset_fields = []
 
 
 class ContactViewSet(viewsets.ModelViewSet):
     serializer_class = ContactSerializer
     queryset = Contact.objects.all()
+    search_fields = ["name", "email", "phone_no", "address"]
+    filterset_fields = []
 
 
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
+    search_fields = [
+        "no",
+        "name",
+        "uom__name",
+        "uom__code",
+        "minimum_stock_level",
+    ]
+    filterset_fields = ["type", "category"]
 
     def perform_create(self, serializer):
         uom_id = serializer.validated_data.pop("uom_id")
@@ -84,6 +96,8 @@ class ItemViewSet(viewsets.ModelViewSet):
 class InventoryViewSet(viewsets.ModelViewSet):
     serializer_class = InventorySerializer
     queryset = Inventory.objects.all()
+    search_fields = ["item__name", "item__no", "balance"]
+    filterset_fields = []
 
     @action(detail=False, methods=["GET"])
     def revaluate_stock(self, request):
@@ -126,6 +140,8 @@ class InventoryViewSet(viewsets.ModelViewSet):
 class ConsumptionViewSet(viewsets.ModelViewSet):
     serializer_class = ConsumptionSerializer
     queryset = Consumption.objects.all()
+    search_fields = ["item__name", "item__no", "date", "quantity"]
+    filterset_fields = []
 
     def perform_create(self, serializer):
         quantity = serializer.validated_data.get("quantity")
@@ -138,3 +154,5 @@ class ConsumptionViewSet(viewsets.ModelViewSet):
 class ReturnViewSet(viewsets.ModelViewSet):
     serializer_class = ReturnSerializer
     queryset = Return.objects.all()
+    search_fields = ["item__name", "item__no", "date", "quantity"]
+    filterset_fields = ["used"]

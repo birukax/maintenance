@@ -18,6 +18,18 @@ from .serializers import ScheduleSerializer
 class ScheduleVeiwSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
+    search_fields = [
+        "machine__name",
+        "machine__code",
+        "equipment__name",
+        "equipment_code",
+        "work_order_type__name",
+        "work_order_type__code",
+        "activity_type__name",
+        "activity_type__code",
+        "planned_time",
+    ]
+    filterset_fields = []
 
     def perform_create(self, serializer):
         type = self.request.data.get("type")

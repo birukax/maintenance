@@ -18,11 +18,20 @@ from .serializers import (
 class WorkOrderTypeVeiwSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderTypeSerializer
     queryset = WorkOrderType.objects.all()
+    search_fields = ["name", "code"]
+    filterset_fields = ["scheduled", "breakdown"]
 
 
 class ActivityTypeVeiwSet(viewsets.ModelViewSet):
     serializer_class = ActivityTypeSerializer
     queryset = ActivityType.objects.all()
+    search_fields = [
+        "name",
+        "code",
+        "work_order_type__name",
+        "work_order_type__code",
+    ]
+    filterset_fields = []
 
     def perform_create(self, serializer):
         work_order_type_id = self.request.data.get("work_order_type_id")
@@ -42,7 +51,14 @@ class ActivityTypeVeiwSet(viewsets.ModelViewSet):
 class ActivityVeiwSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
     queryset = Activity.objects.all()
-
+    search_fields = [
+        "name",
+        "code",
+        "description",
+        "activity_type__name",
+        "activity_type__code",
+    ]
+    filterset_fields = []
     def perform_create(self, serializer):
         activity_type_id = self.request.data.get("activity_type_id")
         try:
@@ -61,6 +77,23 @@ class ActivityVeiwSet(viewsets.ModelViewSet):
 class WorkOrderVeiwSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderSerializer
     queryset = WorkOrder.objects.all()
+    search_fields = [
+        "machine__name",
+        "machine__code",
+        "equipment__name",
+        "equipment__code",
+        "work_order_type__name",
+        "work_order_type__code",
+        "activity_type__name",
+        "activity_type__code",
+        "completed_by__username",
+        "start_date",
+        "start_time",
+        "end_date",
+        "end_time" "total_time_required",
+    ]
+    filterset_fields = ["status"]
+
     def perform_create(self, serializer):
         machine_id = self.request.data.get("machine_id")
         equipment_id = self.request.data.get("equipment_id")
@@ -204,6 +237,9 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
 class WorkOrderActivityVeiwSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderActivitySerializer
     queryset = WorkOrderActivity.objects.all()
+    search_fields = ["activity__name", "activity__code"]
+    filterset_fields = ["value"]
+
     def perform_create(self, serializer):
         activity_id = self.request.data.get("activity_id")
         work_order_id = self.request.data.get("work_order_id")

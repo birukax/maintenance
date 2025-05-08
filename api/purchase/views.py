@@ -16,38 +16,24 @@ from .serializers import (
 class YearViewSet(viewsets.ModelViewSet):
     serializer_class = YearSerializer
     queryset = Year.objects.all()
-
-
-class ScheduleViewSet(viewsets.ModelViewSet):
-    serializer_class = ScheduleSerializer
-    queryset = Schedule.objects.all()
-    filterset_fields = ["year__no"]
-    search_fields = ["year__no"]
-
-    @action(detail=False, methods=["POST"])
-    def create_annual_schedule(self, request):
-        year = request.data.get("year")
-        try:
-            if year is None:
-                raise serializers.ValidationError({"year": "Year is required."})
-            if Year.objects.filter(no=year).exists():
-                raise serializers.ValidationError(
-                    {"year": "Schedule already exists for this year."}
-                )
-            else:
-                year_obj = Year(no=year)
-                year_obj.save()
-            items = Item.objects.all()
-            for item in items:
-                Schedule.objects.create(item=item, year=year_obj)
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-        return Response(status=status.HTTP_200_OK)
+    search_fields = ["no"]
+    filterset_fields = ["no"]
 
 
 class RequestViewSet(viewsets.ModelViewSet):
     serializer_class = RequestSerializer
     queryset = Request.objects.all()
+    search_fields = [
+        "item__name",
+        "item__no",
+        "quantity",
+        "received_quantity",
+        "requested_date",
+        "received_date",
+        "requested_by__username",
+        "approved_by__username",
+    ]
+    filterset_fields = ["status", "priority"]
 
     def perform_create(self, serializer):
         item_id = serializer.validated_data.pop("item_id")
@@ -92,3 +78,45 @@ class RequestViewSet(viewsets.ModelViewSet):
         purchase_request.save()
         serializer = RequestSerializer(purchase_request)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ScheduleViewSet(viewsets.ModelViewSet):
+    serializer_class = ScheduleSerializer
+    queryset = Schedule.objects.all()
+    search_fields = [
+        "item__name",
+        "item__no",
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+    ]
+    filterset_fields = ["year__no"]
+
+    @action(detail=False, methods=["POST"])
+    def create_annual_schedule(self, request):
+        year = request.data.get("year")
+        try:
+            if year is None:
+                raise serializers.ValidationError({"year": "Year is required."})
+            if Year.objects.filter(no=year).exists():
+                raise serializers.ValidationError(
+                    {"year": "Schedule already exists for this year."}
+                )
+            else:
+                year_obj = Year(no=year)
+                year_obj.save()
+            items = Item.objects.all()
+            for item in items:
+                Schedule.objects.create(item=item, year=year_obj)
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+        return Response(status=status.HTTP_200_OK)

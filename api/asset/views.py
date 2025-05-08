@@ -11,6 +11,14 @@ class MachineViewSet(viewsets.ModelViewSet):
     serializer_class = MachineSerializer
     queryset = Machine.objects.all()
 
+    search_fields = [
+        "code",
+        "name",
+        "area__name",
+        "area__code",
+    ]
+    filterset_fields = [""]
+
     def perform_create(self, serializer):
         area_id = serializer.validated_data.get("area_id")
         try:
@@ -27,6 +35,14 @@ class MachineViewSet(viewsets.ModelViewSet):
 class EquipmentViewSet(viewsets.ModelViewSet):
     serializer_class = EquipmentSerializer
     queryset = Equipment.objects.all()
+
+    search_fields = [
+        "code",
+        "name",
+        "machine__name",
+        "machine__code",
+    ]
+    filterset_fields = [""]
 
     def perform_create(self, serializer):
         machine_id = serializer.validated_data.get("machine_id")

@@ -8,6 +8,21 @@ from django.contrib.auth.models import User
 from inventory.models import Item
 
 
+class Year(BaseCreatedUpdated):
+    no = models.IntegerField(
+        validators=[
+            MinValueValidator(2025),
+            MaxValueValidator(datetime.date.today().year + 1),
+        ],
+    )
+
+    class Meta:
+        ordering = ["-no"]
+
+    def __str__(self):
+        return str(self.no)
+
+
 class Request(BaseCreatedUpdated):
     item = models.ForeignKey(
         Item, on_delete=models.RESTRICT, related_name="purchase_requests"
@@ -42,28 +57,13 @@ class Request(BaseCreatedUpdated):
     )
 
     class Meta:
-        ordering = ["-updated_at"]
+        ordering = ["-created_at", "-updated_at"]
 
     def __str__(self):
         if self.item and self.requested_by:
             return f"{self.item.name} - {self.requested_by}"
         elif self.item:
             return f"{self.item.name}"
-
-
-class Year(BaseCreatedUpdated):
-    no = models.IntegerField(
-        validators=[
-            MinValueValidator(2025),
-            MaxValueValidator(datetime.date.today().year + 1),
-        ],
-    )
-
-    class Meta:
-        ordering = ["-no"]
-
-    def __str__(self):
-        return str(self.no)
 
 
 class Schedule(BaseCreatedUpdated):

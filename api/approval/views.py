@@ -8,6 +8,13 @@ from .serializers import PurchaseSerializer
 class PurchaseViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PurchaseSerializer
     queryset = Purchase.objects.all()
+    search_fields = [
+        "purchase_request__item__name",
+        "by",
+        "purchase_request__requested_by__username",
+        "purchase_request__requested_date",
+    ]
+    filterset_fields = ["status", "purchase_request__priority"]
 
     @action(detail=True, methods=["POST"])
     def approve(self, request, pk=None):

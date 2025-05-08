@@ -14,6 +14,17 @@ class BreakdownViewSet(viewsets.ModelViewSet):
     queryset = Breakdown.objects.all()
     serializer_class = BreakdownSerializer
 
+    search_fields = [
+        "start_date",
+        "end_date",
+        "machine__name",
+        "machine__code",
+        "equipment__name",
+        "equipment__code",
+        "total_time",
+    ]
+    filterset_fields = ["status"]
+
     @action(detail=True, methods=["POST"])
     def create_work_order(self, request, pk=None):
         breakdown = self.get_object()
