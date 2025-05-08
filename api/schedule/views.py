@@ -22,7 +22,7 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
         "machine__name",
         "machine__code",
         "equipment__name",
-        "equipment_code",
+        "equipment__code",
         "work_order_type__name",
         "work_order_type__code",
         "activity_type__name",

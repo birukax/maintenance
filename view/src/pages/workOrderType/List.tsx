@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
@@ -16,11 +17,46 @@ const workOrderTypeColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.workOrderType.workOrderTypes,
-    fetchListAction: fetchWorkOrderTypes,
-  });
-
+  const { tokens } = useSelector((state: AppState) => state.auth);
+      const [searchParams, setSearchParams] = useSearchParams();
+      const [keyWord,setKeyWord]=useState("")
+      const entityState = useSelector(
+          (state: AppState) => state.workOrderType.workOrderTypes
+        );
+      const [params,setParams]=useState({
+        search:searchParams.get("search") ||"",
+        category:searchParams.get("category") ||"",
+        type:searchParams.get("type") ||""
+      })
+      const dispatch = useDispatch<AppDispatch>();
+      
+      useEffect(() => {
+          if (tokens) {
+            dispatch(fetchWorkOrderTypes(params));
+            // setSearchParams(params)
+          }
+        },[]);
+    
+        const handleRefresh = () => {
+         if (tokens) {
+           dispatch(fetchWorkOrderTypes(params));
+       }}
+    
+      const handleFilter=async (field,value)=>{
+         setParams(prev=>{
+          return{
+            ...prev,
+            [field]:value
+          }
+        })
+        const parameters={
+          ...params,
+          [field]:value
+        }
+         setSearchParams({ ...params, [field]: value });
+        await dispatch(fetchWorkOrderTypes(parameters));
+      
+      }
   
   return (
     <GenericListPage
@@ -31,6 +67,9 @@ const List: React.FC = () => {
       detailRouteBase="/work-order-type/detail"
       onRefresh={entityState.refresh}
       getKey={(workOrderType) => workOrderType.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

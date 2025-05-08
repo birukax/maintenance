@@ -1,8 +1,9 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchSchedules } from "../../store/slices/scheduleSlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import { GenericListPage } from "../../components/GenericListPage";
 
 const scheduleColumns = [
@@ -14,10 +15,46 @@ const scheduleColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.schedule.schedules,
-    fetchListAction: fetchSchedules,
-  });
+  const { tokens } = useSelector((state: AppState) => state.auth);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [keyWord,setKeyWord]=useState("")
+    const entityState = useSelector(
+        (state: AppState) => state.schedule.schedules
+      );
+    const [params,setParams]=useState({
+      search:searchParams.get("search") ||"",
+      category:searchParams.get("category") ||"",
+      type:searchParams.get("type") ||""
+    })
+    const dispatch = useDispatch<AppDispatch>();
+    
+    useEffect(() => {
+        if (tokens) {
+          dispatch(fetchSchedules(params));
+          // setSearchParams(params)
+        }
+      },[]);
+  
+      const handleRefresh = () => {
+       if (tokens) {
+         dispatch(fetchSchedules(params));
+     }}
+  
+    const handleFilter=async (field,value)=>{
+       setParams(prev=>{
+        return{
+          ...prev,
+          [field]:value
+        }
+      })
+      const parameters={
+        ...params,
+        [field]:value
+      }
+       setSearchParams({ ...params, [field]: value });
+      await dispatch(fetchSchedules(parameters));
+    
+    }
 
   return (
     <GenericListPage
@@ -26,8 +63,11 @@ const List: React.FC = () => {
       columns={scheduleColumns}
       createRoute="/schedule/create"
       detailRouteBase="/schedule/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(schedule) => schedule.id}
+      searchFilter={handleFilter}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

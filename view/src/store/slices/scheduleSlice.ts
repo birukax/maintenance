@@ -17,11 +17,11 @@ const initialState: ScheduleState = {
     schedule: {data: null, loading: false, error: null},
 };
 
-export const fetchSchedules = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchSchedules = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'schedule/fetchSchedules',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/schedule/schedules/');
+            const response = await api.get('/schedule/schedules/',{params});
             return response.data;
         }
         catch (error) {

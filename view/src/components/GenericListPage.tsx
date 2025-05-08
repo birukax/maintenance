@@ -81,7 +81,7 @@ export const GenericListPage = ({
 
           {
             searchFilter && 
-            <form style={{display:"flex",gap:"0",alignItems:"center"}}>
+            <div style={{display:"flex",gap:"0",alignItems:"center"}}>
               <TextField
             label="Search"
             name="search"
@@ -103,7 +103,7 @@ export const GenericListPage = ({
               <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0}}>
                 <SearchIcon/>
               </Button>
-            </form>
+            </div>
             
           }
           {yearFilter && (

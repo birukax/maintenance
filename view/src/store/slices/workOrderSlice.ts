@@ -17,11 +17,11 @@ const initialState: WorkOrderState = {
     workOrder: {data: null, loading: false, error: null},
 };
 
-export const fetchWorkOrders = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchWorkOrders = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'workOrder/fetchWorkOrders',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/work-orders/');
+            const response = await api.get('/work-order/work-orders/',{params});
             return response.data;
         }
         catch (error) {

@@ -17,11 +17,11 @@ const initialState: WorkOrderTypeState = {
     workOrderType: {data: null, loading: false, error: null},
 };
 
-export const fetchWorkOrderTypes = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchWorkOrderTypes = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'workOrderType/fetchWorkOrderTypes',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/work-order-types/');
+            const response = await api.get('/work-order/work-order-types/',{params});
             return response.data;
         }
         catch (error) {
