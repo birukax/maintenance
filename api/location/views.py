@@ -9,7 +9,7 @@ from .serializers import PlantSerializer, AreaSerializer
 class PlantViewSet(viewsets.ModelViewSet):
     serializer_class = PlantSerializer
     queryset = Plant.objects.all()
-    serach_fields = ["code", "name"]
+    search_fields = ["code", "name"]
     filterset_fields = []
 
 
