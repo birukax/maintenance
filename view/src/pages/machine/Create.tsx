@@ -41,6 +41,8 @@ const Create = () => {
     }
   }, []);
 
+
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -61,7 +63,6 @@ const Create = () => {
     }
   };
 
-  console.log(selectedPlant);
   
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">

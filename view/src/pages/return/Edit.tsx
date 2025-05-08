@@ -42,6 +42,7 @@ const Edit = () => {
     });
   }, []);
 
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -80,7 +81,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.email}
+          value={formData?.email}
           onChange={handleChange}
           required
           disabled={loading}
@@ -91,7 +92,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.location}
+          value={formData?.location}
           onChange={handleChange}
           required
           disabled={loading}
@@ -103,7 +104,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.phone_no}
+          value={formData?.phone_no}
           onChange={handleChange}
           required
           disabled={loading}

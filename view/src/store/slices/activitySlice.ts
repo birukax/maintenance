@@ -17,11 +17,11 @@ const initialState: ActivityState = {
     activity: {data: null, loading: false, error: null},
 };
 
-export const fetchActivities = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchActivities = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'activity/fetchActivities',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/activities/');
+            const response = await api.get('/work-order/activities/',{params:params});
             return response.data;
         }
         catch (error) {

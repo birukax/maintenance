@@ -35,12 +35,19 @@ const Edit = () => {
       dispatch(fetchContact(id));
     }
     setFormData({
-      email: contact.data.email,
-      phone_no: contact.data.phone_no,
-      address: contact.data.address,
+      email: contact.data?.email,
+      phone_no: contact.data?.phone_no,
+      address: contact.data?.address,
     });
   }, []);
 
+  useEffect(()=>{
+setFormData({
+      email: contact.data?.email,
+      phone_no: contact.data?.phone_no,
+      address: contact.data?.address,
+    });
+  },[contact])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -79,7 +86,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.email}
+          value={formData?.email}
           onChange={handleChange}
           required
           disabled={loading}
@@ -91,7 +98,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.address}
+          value={formData?.address}
           onChange={handleChange}
           required
           disabled={loading}
@@ -103,7 +110,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.phone_no}
+          value={formData?.phone_no}
           onChange={handleChange}
           required
           disabled={loading}

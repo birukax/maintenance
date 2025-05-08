@@ -17,11 +17,11 @@ const initialState: PurchaseApprovalState = {
     purchaseApproval: {data: null, loading: false, error: null},
 };
 
-export const fetchPurchaseApprovals = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchPurchaseApprovals = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'purchaseApproval/fetchPurchaseApprovals',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/approval/purchase-approvals/');
+            const response = await api.get('/approval/purchase-approvals/',{params:params});
             return response.data;
         }
         catch (error) {

@@ -40,11 +40,17 @@ const Edit = () => {
       dispatch(fetchEquipment(id));
     }
     setFormData({
-      name: equipment.data.name,
-      machine_id: equipment.data.machine.id,
+      name: equipment.data?.name,
+      machine_id: equipment.data?.machine.id,
     });
   }, []);
 
+  useEffect(()=>{
+setFormData({
+      name: equipment.data?.name,
+      machine_id: equipment.data?.machine.id,
+    });
+  },[equipment])
   useEffect(() => {
     if (tokens) {
       dispatch(fetchMachines());
@@ -88,14 +94,14 @@ const Edit = () => {
             labelId="machine-select-label"
             id="machine-select"
             name="machine_id"
-            value={formData.machine_id}
+            value={formData?.machine_id}
             onChange={handleChange}
             label="Machine"
           >
             {machines.data &&
               machines.data.map((machine) => (
-                <MenuItem key={machine.id} value={machine.id}>
-                  {machine.name}
+                <MenuItem key={machine.id} value={machine?.id}>
+                  {machine?.name}
                 </MenuItem>
               ))}
           </Select>
@@ -108,7 +114,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.name}
+          value={formData?.name}
           onChange={handleChange}
           required
           disabled={loading}

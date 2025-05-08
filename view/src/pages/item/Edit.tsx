@@ -60,7 +60,14 @@ const Create = () => {
       suppliers_id: item.data?.suppliers.map((supplier) => supplier.id) || [],
     });
   }, []);
-
+  useEffect(()=>{
+setFormData({
+      type: item.data?.type,
+      category: item.data?.category,
+      minimum_stock_level: item.data?.minimum_stock_level || 0,
+      suppliers_id: item.data?.suppliers.map((supplier) => supplier.id) || [],
+    });
+  },[item])
 
     const supplierOptions = useMemo(() => {
         return contacts.data

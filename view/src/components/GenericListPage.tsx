@@ -4,6 +4,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import SearchIcon from '@mui/icons-material/Search';
+
 import {
   Typography,
   CircularProgress,
@@ -43,12 +45,15 @@ export const GenericListPage = ({
   onApprove = null,
   onReject = null,
   getKey,
+  searchFilter,
+  keyWord,
+  setKeyWord
 }) => {
   const headers = columns.map((col) => col.header);
   const { tokens } = useSelector((state: AppState) => state.auth);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();  
-
+  
   if (!tokens) {
     return <Typography>Unauthorized</Typography>;
   }
@@ -65,15 +70,42 @@ export const GenericListPage = ({
     }
   }
 
-  console.log("params",searchParams.get("edit"));
   
   return (
     <>
-      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%"}}>
+      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%",minWidth:"fit-content"}}>
         <Typography variant="h5" className="font-bold ">
           {title} {yearFilter && (<sub style={{fontSize:"large",color:"red",marginInlineStart:"1rem"}} className="year-margin"> <span style={{color:"black"}}> Year:</span>{searchParams.get("year__no")}</sub>)}
         </Typography>
         <div>
+
+          {
+            searchFilter && 
+            <form style={{display:"flex",gap:"0",alignItems:"center"}}>
+              <TextField
+            label="Search"
+            name="search"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={keyWord}
+            onChange={(e)=>setKeyWord(e.target.value)}
+            sx={{minWidth:"250px",
+              minHeight:"100%",
+              "& .MuiOutlinedInput-root": {
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+              minHeight:"100%",
+
+              },}}
+            
+          />
+              <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0}}>
+                <SearchIcon/>
+              </Button>
+            </form>
+            
+          }
           {yearFilter && (
             
                <TextField

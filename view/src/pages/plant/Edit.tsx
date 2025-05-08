@@ -37,6 +37,11 @@ const Edit = () => {
     });
   }, []);
 
+  useEffect(()=>{
+setFormData({
+      name: plant.data?.name,
+    });
+  },[plant])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

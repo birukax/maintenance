@@ -44,6 +44,14 @@ const Edit = () => {
     });
   }, []);
 
+  useEffect(()=>{
+setFormData({
+      name: workOrderType?.data?.name,
+      scheduled: workOrderType?.data?.scheduled,
+      breakdown: workOrderType?.data?.breakdown,
+    });
+  },[workOrderType])
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

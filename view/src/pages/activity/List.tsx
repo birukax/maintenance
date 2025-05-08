@@ -1,9 +1,10 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchActivities } from "../../store/slices/activitySlice";
-import { AppState } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
+import { AppState,AppDispatch } from "../../store/store";
 import { GenericListPage } from "../../components/GenericListPage";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 
 const activityColumns = [
   { header: "Code", accessor: "code" },
@@ -12,11 +13,45 @@ const activityColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.activity.activities,
-    fetchListAction: fetchActivities,
-  });
 
+  const { tokens } = useSelector((state: AppState) => state.auth);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyWord,setKeyWord]=useState("")
+  const entityState = useSelector(
+    (state: AppState) => state.activity.activities
+  );
+
+  const [params,setParams]=useState({
+      search:searchParams.get("search") ||"",
+    })
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+        if (tokens) {
+          dispatch(fetchActivities(params));
+        }
+      },[]);
+  
+      const handleRefresh = () => {
+       if (tokens) {
+         dispatch(fetchActivities(params));
+     }}
+
+  const handleFilter=async (field,value)=>{
+       setParams(prev=>{
+        return{
+          ...prev,
+          [field]:value
+        }
+      })
+      const parameters={
+        ...params,
+        [field]:value
+      }
+       setSearchParams({ ...params, [field]: value });
+      await dispatch(fetchActivities(parameters));
+    
+    }
   return (
     <GenericListPage
       title="Activity"
@@ -24,8 +59,11 @@ const List: React.FC = () => {
       columns={activityColumns}
       createRoute="/activity/create"
       detailRouteBase="/activity/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
+      searchFilter={handleFilter}
       getKey={(activity) => activity.id}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

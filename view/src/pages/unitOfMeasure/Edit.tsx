@@ -36,10 +36,17 @@ const Edit = () => {
       dispatch(fetchUnitOfMeasure(id));
     }
     setFormData({
-      code: unitOfMeasure.data.code,
-      name: unitOfMeasure.data.name,
+      code: unitOfMeasure.data?.code,
+      name: unitOfMeasure.data?.name,
     });
-  }, []);
+  }, [unitOfMeasure]);
+
+  useEffect(()=>{
+setFormData({
+      code: unitOfMeasure.data?.code,
+      name: unitOfMeasure.data?.name,
+    });
+  },[])
 
   const handleChange = (e) => {
     const { name, value } = e.target;

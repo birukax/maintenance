@@ -33,9 +33,15 @@ const Edit = () => {
       dispatch(fetchWorkOrderType(id));
     }
     setFormData({
-      name: workOrderType.data.name,
+      name: workOrderType.data?.name,
     });
   }, []);
+
+  useEffect(()=>{
+setFormData({
+      name: workOrderType.data?.name,
+    });
+  },[workOrderType])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,7 +80,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.name}
+          value={formData?.name}
           onChange={handleChange}
           required
           disabled={loading}

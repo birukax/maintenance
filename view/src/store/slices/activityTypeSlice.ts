@@ -17,11 +17,11 @@ const initialState: ActivityTypeState = {
     activityType: {data: null, loading: false, error: null},
 };
 
-export const fetchActivityTypes = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchActivityTypes = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'activityType/fetchActivityTypes',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/activity-types/');
+            const response = await api.get('/work-order/activity-types/',{params:params});
             return response.data;
         }
         catch (error) {

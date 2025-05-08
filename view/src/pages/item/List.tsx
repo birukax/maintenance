@@ -1,8 +1,10 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchItems } from "../../store/slices/itemSlice";
-import { AppState } from "../../store/store";
+import { AppState,AppDispatch } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
@@ -15,12 +17,47 @@ const itemColumns = [
   { header: "Type", accessor: "type" },
   { header: "Category", accessor: "category" },
 ];
-
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.item.items,
-    fetchListAction: fetchItems,
-  });
+  const { tokens } = useSelector((state: AppState) => state.auth);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyWord,setKeyWord]=useState("")
+  const entityState = useSelector(
+      (state: AppState) => state.item.items
+    );
+  const [params,setParams]=useState({
+    search:searchParams.get("search") ||"",
+    category:searchParams.get("category") ||"",
+    type:searchParams.get("type") ||""
+  })
+  const dispatch = useDispatch<AppDispatch>();
+  
+  useEffect(() => {
+      if (tokens) {
+        dispatch(fetchItems(params));
+        // setSearchParams(params)
+      }
+    },[]);
+
+    const handleRefresh = () => {
+     if (tokens) {
+       dispatch(fetchItems(params));
+   }}
+
+  const handleFilter=async (field,value)=>{
+     setParams(prev=>{
+      return{
+        ...prev,
+        [field]:value
+      }
+    })
+    const parameters={
+      ...params,
+      [field]:value
+    }
+     setSearchParams({ ...params, [field]: value });
+    await dispatch(fetchItems(parameters));
+  
+  }
 
   return (
     <GenericListPage
@@ -29,8 +66,11 @@ const List: React.FC = () => {
       columns={itemColumns}
       createRoute="/item/create"
       detailRouteBase="/item/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
+      searchFilter={handleFilter}
       getKey={(item) => item.id}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

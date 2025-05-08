@@ -1,13 +1,13 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect ,useState} from "react";
 import {
   fetchPurchaseApprovals,
   approvePurchaseApproval,
   rejectPurchaseApproval,
 } from "../../../store/slices/purchaseApprovalSlice";
 import { AppState, AppDispatch } from "../../../store/store";
-
+import {useSelector, useDispatch } from "react-redux";
+import {useSearchParams} from "react-router-dom"
 import { useEntityList } from "../../../hooks/useEntityList";
 import { GenericListPage } from "../../../components/GenericListPage";
 
@@ -25,12 +25,43 @@ const purchaseApprovalColumns = [
   { header: "Status", accessor: "status" },
 ];
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.purchaseApproval.purchaseApprovals,
-    fetchListAction: fetchPurchaseApprovals,
-  });
+  const entityState = useSelector(
+        (state: AppState) => state.purchaseApproval.purchaseApprovals
+      );
+      const [handlers, setHandlers] = React.useState(false);
+      const { tokens } = useSelector((state: AppState) => state.auth);
+        const [searchParams, setSearchParams] = useSearchParams();
+        const [keyWord,setKeyWord]=useState("")
+        const [params,setParams]=useState({
+            search:searchParams.get("search") ||"",
+            category:searchParams.get("category") ||"",
+            type:searchParams.get("type") ||""
+          })
   const dispatch = useDispatch<AppDispatch>();
-  const [handlers, setHandlers] = React.useState(false);
+
+  useEffect(() => {
+        if (tokens) {
+          dispatch(fetchPurchaseApprovals(params));
+          // setSearchParams(params)
+        }
+      },[]);
+
+
+      const handleFilter=async (field,value)=>{
+           setParams(prev=>{
+            return{
+              ...prev,
+              [field]:value
+            }
+          })
+          const parameters={
+            ...params,
+            [field]:value
+          }
+           setSearchParams({ ...params, [field]: value });
+          await dispatch(fetchPurchaseApprovals(parameters));
+        
+        }
 
   const handleApprove = async (id) => {
     await dispatch(approvePurchaseApproval(id)).unwrap();
@@ -59,12 +90,15 @@ const List: React.FC = () => {
       title="Purchase Approval"
       entityState={entityState}
       columns={purchaseApprovalColumns}
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
+      searchFilter={handleFilter}
       hasDetail={false}
       hasApproval={true}
       onApprove={(id) => handleApprove(id)}
       onReject={(id) => handleReject(id)}
       getKey={(purchaseApproval) => purchaseApproval.id}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

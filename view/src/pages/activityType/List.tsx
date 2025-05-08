@@ -1,8 +1,11 @@
 // src/pages/List.tsx
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
-import { AppState } from "../../store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { AppState, AppDispatch } from "../../store/store";
 import { useEntityList } from "../../hooks/useEntityList";
+import { useSearchParams } from "react-router-dom";
+
 import {
   GenericListPage,
   ColumnDefination,
@@ -15,10 +18,47 @@ const activityTypeColumns = [
 ];
 
 const List: React.FC = () => {
-  const entityState = useEntityList({
-    listSelector: (state: AppState) => state.activityType.activityTypes,
-    fetchListAction: fetchActivityTypes,
-  });
+  const { tokens } = useSelector((state: AppState) => state.auth);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyWord,setKeyWord]=useState("")  
+    const entityState = useSelector(
+      (state: AppState) => state.activityType.activityTypes
+    );
+    
+    const [params,setParams]=useState({
+        search:searchParams.get("search") ||"",
+        category:searchParams.get("category") ||"",
+        type:searchParams.get("type") ||""
+      })
+    const dispatch = useDispatch<AppDispatch>();
+
+     useEffect(() => {
+          if (tokens) {
+            dispatch(fetchActivityTypes(params));
+            // setSearchParams(params)
+          }
+        },[]);
+
+         const handleRefresh = () => {
+             if (tokens) {
+               dispatch(fetchActivityTypes(params));
+           }}
+        
+          const handleFilter=async (field,value)=>{
+             setParams(prev=>{
+              return{
+                ...prev,
+                [field]:value
+              }
+            })
+            const parameters={
+              ...params,
+              [field]:value
+            }
+             setSearchParams({ ...params, [field]: value });
+            await dispatch(fetchActivityTypes(parameters));
+          
+          }
 
   return (
     <GenericListPage
@@ -27,8 +67,11 @@ const List: React.FC = () => {
       columns={activityTypeColumns}
       createRoute="/activity-type/create"
       detailRouteBase="/activity-type/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
+      searchFilter={handleFilter}
       getKey={(activityType) => activityType.id}
+      keyWord={keyWord}
+      setKeyWord={setKeyWord}
     />
   );
 };

@@ -37,6 +37,8 @@ const Edit = ({ setEdit }) => {
   useEffect(() => {
     dispatch(fetchPurchaseSchedules(params));
   }, []);
+
+  
   const handleRefresh = async () => {
     try {
       await dispatch(fetchPurchaseSchedules(params)).unwrap();

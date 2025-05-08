@@ -32,10 +32,17 @@ const Edit = () => {
       dispatch(fetchActivity(id));
     }
     setFormData({
-      name: activity.data.name,
-      description: activity.data.description,
+      name: activity.data?.name,
+      description: activity.data?.description,
     });
   }, []);
+
+  useEffect(()=>{
+    setFormData({
+      name: activity.data?.name,
+      description: activity.data?.description,
+    });
+  },[activity])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +82,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.name}
+          value={formData?.name}
           onChange={handleChange}
           required
           disabled={loading}
@@ -87,7 +94,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.description}
+          value={formData?.description}
           onChange={handleChange}
           required
           disabled={loading}

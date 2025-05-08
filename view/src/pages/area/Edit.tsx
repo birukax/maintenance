@@ -37,6 +37,12 @@ const Edit = () => {
     });
   }, []);
 
+  useEffect(()=>{
+setFormData({
+      name: area.data?.name,
+    });
+  },[area])
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -75,7 +81,7 @@ const Edit = () => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.name}
+          value={formData?.name}
           onChange={handleChange}
           required
           disabled={loading}
