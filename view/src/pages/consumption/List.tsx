@@ -24,8 +24,7 @@ const List: React.FC = () => {
         );
       const [params,setParams]=useState({
         search:searchParams.get("search") ||"",
-        category:searchParams.get("category") ||"",
-        type:searchParams.get("type") ||""
+        
       })
       const dispatch = useDispatch<AppDispatch>();
       

@@ -81,7 +81,7 @@ export const GenericListPage = ({
 
           {
             searchFilter && 
-            <div style={{display:"flex",gap:"0",alignItems:"center"}}>
+            <div style={{display:"flex",gap:"0",alignItems:"center",justifyContent:"center"}}>
               <TextField
             label="Search"
             name="search"
@@ -91,16 +91,17 @@ export const GenericListPage = ({
             value={keyWord}
             onChange={(e)=>setKeyWord(e.target.value)}
             sx={{minWidth:"250px",
-              minHeight:"100%",
+              maxHeight:"97%",
+              border:"none",
               "& .MuiOutlinedInput-root": {
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
-              minHeight:"100%",
+                height:"100%",
 
               },}}
             
           />
-              <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0}}>
+              <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0,height:"57px",border:"1px solid #5d4037"}}>
                 <SearchIcon/>
               </Button>
             </div>
@@ -131,7 +132,7 @@ export const GenericListPage = ({
               component={Link}
               to={createRoute}
               variant="outlined"
-              sx={{ mr: 1 }}
+              sx={{ mr: 1,padding:".5rem 2rem" }}
             >
               New
             </Button>
