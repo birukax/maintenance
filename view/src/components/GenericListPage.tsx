@@ -20,6 +20,7 @@ import {
   ButtonGroup,
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { green } from "@mui/material/colors";
 
 export interface ColumnDefination {
   header: string;
@@ -87,18 +88,19 @@ export const GenericListPage = ({
             name="search"
             className="mb-8"
             variant="outlined"
+            size="small"
             fullWidth
             value={keyWord}
             onChange={(e)=>setKeyWord(e.target.value)}
             sx={{minWidth:"250px",
-              maxHeight:"40px",
               border:"none",
               "& .MuiOutlinedInput-root": {
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
-                height:"100%",
-              maxHeight:"40px",
-              },}}
+              display:"flex",
+              },
+            
+            }}
             
           />
               <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0,height:"40px",border:"1px solid #5d4037"}}>
