@@ -73,11 +73,11 @@ export const GenericListPage = ({
   
   return (
     <>
-      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%",minWidth:"fit-content",maxHeight:"fit-content",backgroundColor:"red"}}>
+      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%",minWidth:"fit-content",maxHeight:"fit-content"}}>
         <Typography variant="h5" className="font-bold ">
           {title} {yearFilter && (<sub style={{fontSize:"large",color:"red",marginInlineStart:"1rem"}} className="year-margin"> <span style={{color:"black"}}> Year:</span>{searchParams.get("year__no")}</sub>)}
         </Typography>
-        <div style={{maxHeight:"fit-content",backgroundColor:"red"}}>
+        <div style={{maxHeight:"fit-content"}}>
 
           {
             searchFilter && 
