@@ -73,11 +73,11 @@ export const GenericListPage = ({
   
   return (
     <>
-      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%",minWidth:"fit-content"}}>
+      <div className="flex gap-8 justify-between table-filters" style={{maxWidth:"100%",minWidth:"fit-content",height:"40px"}}>
         <Typography variant="h5" className="font-bold ">
           {title} {yearFilter && (<sub style={{fontSize:"large",color:"red",marginInlineStart:"1rem"}} className="year-margin"> <span style={{color:"black"}}> Year:</span>{searchParams.get("year__no")}</sub>)}
         </Typography>
-        <div>
+        <div style={{maxHeight:"40px"}}>
 
           {
             searchFilter && 
@@ -91,17 +91,18 @@ export const GenericListPage = ({
             value={keyWord}
             onChange={(e)=>setKeyWord(e.target.value)}
             sx={{minWidth:"250px",
-              maxHeight:"97%",
+              maxHeight:"40px",
               border:"none",
               "& .MuiOutlinedInput-root": {
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
                 height:"100%",
+              maxHeight:"40px",
 
               },}}
             
           />
-              <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0,height:"57px",border:"1px solid #5d4037"}}>
+              <Button variant="contained" onClick={()=>searchFilter("search",keyWord)} sx={{ mr: 1,borderTopLeftRadius:0,borderBottomLeftRadius:0,height:"40px",border:"1px solid #5d4037"}}>
                 <SearchIcon/>
               </Button>
             </div>
@@ -115,7 +116,7 @@ export const GenericListPage = ({
               variant="outlined"
               size="small"
               focused
-              sx={{ marginRight: "8px", minWidth: "130px",outlineColor:"blue"}}
+              sx={{ marginRight: "8px", minWidth: "130px",outlineColor:"blue",maxHeight:"40px"}}
               value={searchParams.get("year__no")}
               className="year-filter"
             >
@@ -132,7 +133,7 @@ export const GenericListPage = ({
               component={Link}
               to={createRoute}
               variant="outlined"
-              sx={{ mr: 1,padding:".5rem 2rem" }}
+              sx={{ mr: 1,padding:".5rem 2rem",maxHeight:"40px" }}
             >
               New
             </Button>
@@ -150,6 +151,7 @@ export const GenericListPage = ({
             onClick={onRefresh}
             disabled={entityState.loading}
             className="btn-refresh"
+            sx={{maxHeight:"40px"}}
           >
             Refresh
           </Button>
@@ -164,7 +166,7 @@ export const GenericListPage = ({
 
 <div className="table-container">
 
-      <Table sx={{ minWidth: 650}} aria-label={`${title} table`} className="table">
+      <Table sx={{ minWidth: 650,maxHeight:"40px"}} aria-label={`${title} table`} className="table">
         <TableHead>
           <TableRow>
             {headers.map((header) => (
