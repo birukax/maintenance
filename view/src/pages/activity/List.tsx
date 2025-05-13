@@ -23,6 +23,7 @@ const List: React.FC = () => {
 
   const [params,setParams]=useState({
       search:searchParams.get("search") ||"",
+      page:searchParams.get("page") || 1
     })
   const dispatch = useDispatch<AppDispatch>();
 
@@ -38,6 +39,7 @@ const List: React.FC = () => {
      }}
 
   const handleFilter=async (field,value)=>{
+       setSearchParams({ ...params, page: 1 });
        setParams(prev=>{
         return{
           ...prev,
@@ -46,9 +48,10 @@ const List: React.FC = () => {
       })
       const parameters={
         ...params,
+        page:1,
         [field]:value
       }
-       setSearchParams({ ...params, [field]: value });
+       setSearchParams({ ...parameters, [field]: value });
       await dispatch(fetchActivities(parameters));
     
     }

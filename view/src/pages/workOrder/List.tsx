@@ -27,7 +27,7 @@ const List: React.FC = () => {
         );
       const [params,setParams]=useState({
         search:searchParams.get("search") ||"",
-        
+ page:searchParams.get("page")||1       
       })
       const dispatch = useDispatch<AppDispatch>();
       
@@ -51,10 +51,10 @@ const List: React.FC = () => {
           }
         })
         const parameters={
-          ...params,
+          ...params,page:1,
           [field]:value
         }
-         setSearchParams({ ...params, [field]: value });
+         setSearchParams({ ...parameters, [field]: value });
         await dispatch(fetchWorkOrders(parameters));
       
       }
@@ -69,7 +69,7 @@ const List: React.FC = () => {
       columns={workOrderColumns}
       createRoute="/work-order/create"
       detailRouteBase="/work-order/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(workOrder) => workOrder.id}
       searchFilter={handleFilter}
       keyWord={keyWord}

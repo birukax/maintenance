@@ -40,6 +40,8 @@ const List: React.FC = () => {
   const [params, setParams] = useState({
     year__no: searchParams.get("year__no") || new Date().getFullYear(),
     search:searchParams.get("search") ||"",
+    page:searchParams.get("page") ||1,
+
   });
   const [edit, setEdit] = useState(searchParams.get("edit") || false);
 
@@ -82,6 +84,7 @@ const List: React.FC = () => {
     // Handle filter action here
       const parameters = {
         year__no:searchParams.get("year__no"),
+        page:1,
         [field]: value,
       };
 

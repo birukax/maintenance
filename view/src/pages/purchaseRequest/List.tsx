@@ -26,7 +26,7 @@ const List: React.FC = () => {
         );
       const [params,setParams]=useState({
         search:searchParams.get("search") ||"",
-        
+ page:searchParams.get("page")||1       
       })
       const dispatch = useDispatch<AppDispatch>();
       
@@ -50,10 +50,10 @@ const List: React.FC = () => {
           }
         })
         const parameters={
-          ...params,
+          ...params,page:1,
           [field]:value
         }
-         setSearchParams({ ...params, [field]: value });
+         setSearchParams({ ...parameters, [field]: value });
         await dispatch(fetchPurchaseRequests(parameters));
       
       }
@@ -64,7 +64,7 @@ const List: React.FC = () => {
       columns={purchaseRequestColumns}
       createRoute="/purchase-request/create"
       detailRouteBase="/purchase-request/detail"
-      onRefresh={entityState.refresh}
+      onRefresh={handleRefresh}
       getKey={(purchaseRequest) => purchaseRequest.id}
       searchFilter={handleFilter}
       keyWord={keyWord}

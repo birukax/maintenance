@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppState } from "../store/store";
 import { Link, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -20,6 +20,7 @@ import {
   ButtonGroup,
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import Pagination from "./Pagination";
 
 export interface ColumnDefination {
   header: string;
@@ -52,7 +53,7 @@ export const GenericListPage = ({
   const { tokens } = useSelector((state: AppState) => state.auth);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [currentPage,setCurrentPage]=useState(searchParams.get("page")||1)
   if (!tokens) {
     return <Typography>Unauthorized</Typography>;
   }
@@ -293,6 +294,14 @@ export const GenericListPage = ({
           </TableBody>
         </Table>
       </div>
+      <Pagination 
+      cur={currentPage}
+      setCur={setCurrentPage}
+      next={entityState?.data?.next} 
+      prev={entityState?.data?.previous} 
+      count={entityState?.data?.count}
+      searchByPage={searchFilter}
+      />
     </>
   );
 };

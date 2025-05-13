@@ -160,3 +160,19 @@ padding: 0;
 
    scrollbar-width: thin;
 }
+
+.page-item{
+   padding:.5rem;
+   border:1px solid #5d4037;
+   list-style: none;
+   height: 35px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   &.active{
+      background-color: #5d4037;
+      color: white;
+
+   }
+}
