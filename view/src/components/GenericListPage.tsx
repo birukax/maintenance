@@ -114,6 +114,7 @@ export const GenericListPage = ({
                 label="Search"
                 name="search"
                 className="mb-8"
+                size="small"
                 variant="outlined"
                 fullWidth
                 value={keyWord}
@@ -294,13 +295,13 @@ export const GenericListPage = ({
           </TableBody>
         </Table>
       </div>
-      <Pagination 
-      cur={currentPage}
-      setCur={setCurrentPage}
-      next={entityState?.data?.next} 
-      prev={entityState?.data?.previous} 
-      count={entityState?.data?.count}
-      searchByPage={searchFilter}
+      <Pagination
+        cur={currentPage}
+        setCur={setCurrentPage}
+        next={entityState?.data?.next}
+        prev={entityState?.data?.previous}
+        count={entityState?.data?.count}
+        searchByPage={searchFilter}
       />
     </>
   );
