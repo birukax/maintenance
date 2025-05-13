@@ -100,6 +100,9 @@ class Consumption(BaseCreatedUpdated):
         max_digits=10, decimal_places=2, null=True, blank=True
     )
 
+    class meta:
+        ordering = ["-created_at"]
+
     def __str__(self):
         if self.item:
             return f"{self.item.name}"
@@ -113,6 +116,9 @@ class Return(BaseCreatedUpdated):
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+
+    class meta:
+        ordering = ["-created_at"]
 
     def __str__(self):
         if self.item:

@@ -36,6 +36,9 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
+  const params = {
+    no_pagination: "true",
+  };
   const { contacts } = useSelector((state: AppState) => state.contact);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -48,11 +51,9 @@ const Create = () => {
     label: ITEM_CATEGORIES[key][1],
   }));
 
-
-
   useEffect(() => {
-      dispatch(fetchUnitOfMeasures());
-      dispatch(fetchContacts());
+    dispatch(fetchUnitOfMeasures(params));
+    dispatch(fetchContacts(params));
   }, []);
 
   const handleChange = (e) => {
