@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProfile } from "../../store/slices/profileSlice";
+import { Roles } from "../../utils/choices";
+
 import api from "../../utils/api";
 import {
   TextField,
@@ -17,25 +19,32 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
+  const [countryCode,setCountryCode]=useState("+251")
   const [formData, setFormData] = useState({
-    code: "",
-    name: "",
+    username: "",
+    phone_no: "",
+    email:"",
+    role:"",
+    password:""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [comfirmpas,setComfirmPas]=useState("")
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value,type } = e.target;
+    
     setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
-      await dispatch(createProfile(formData)).unwrap();
+    if(comfirmpas===formData.password){
+      try {
+      await dispatch(createProfile({...formData,phone_no:countryCode+formData.phone_no})).unwrap();
       toast.success("Profile created successfully");
       navigate("/profiles");
     } catch (err) {
@@ -44,6 +53,11 @@ const Create = () => {
     } finally {
       setLoading(false);
     }
+    }else{
+      toast.error("Password and Comfirm Password must be similar");
+      setLoading(false);
+    }
+    
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
@@ -56,29 +70,106 @@ const Create = () => {
         className="form-gap"
       >
         <TextField
-          label="Code"
-          name="code"
+          label="Username"
+          name="username"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.code}
+          value={formData.username}
           onChange={handleChange}
           required
           disabled={loading}
         />
+
+        <FormControl fullWidth className="mb-8" disabled={loading}>
+  <Box display="flex" alignItems="center" gap={2}>
+    {/* Country Code Selection */}
+    <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+      <InputLabel id="country-code-label">Code</InputLabel>
+      <Select
+        labelId="country-code-label"
+        id="country-code-select"
+        name="countryCode"
+        value={countryCode} // Default to +1 (US)
+        onChange={(e)=>setCountryCode(e.target.value)}
+        label="Code"
+      >
+        <MenuItem value="+251">+251 (Eth)</MenuItem>
+        <MenuItem value="+1">+1 (US)</MenuItem>
+        <MenuItem value="+44">+44 (UK)</MenuItem>
+        <MenuItem value="+91">+91 (India)</MenuItem>
+        <MenuItem value="+61">+61 (Australia)</MenuItem>
+        {/* Add more country codes as needed */}
+      </Select>
+    </FormControl>
+
+    {/* Phone Number Input */}
+    <TextField
+      label="Phone Number"
+      name="phone_no"
+      variant="outlined"
+      fullWidth
+      value={`${formData.phone_no}`}
+      onChange={handleChange}
+      disabled={loading}
+      type="tel"
+    />
+  </Box>
+</FormControl>
 
         <TextField
-          label="Name"
-          name="name"
+          label="Email"
+          name="email"
           className="mb-8"
           variant="outlined"
           fullWidth
-          value={formData.name}
+          value={formData.email}
           onChange={handleChange}
-          required
           disabled={loading}
+          type="email"
         />
 
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+                  <InputLabel id="role">Role</InputLabel>
+                  <Select
+                    labelId="role"
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    label="Role"
+                  >
+                    {Roles.map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+        </FormControl>
+<TextField
+          label="Password"
+          name="password"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.password}
+          onChange={handleChange}
+          disabled={loading}
+          type="password"
+          required
+        />
+        <TextField
+          label="Comfirm Password"
+          name="comfirm_password"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={comfirmpas}
+          onChange={(e)=>setComfirmPas(e.target.value)}
+          disabled={loading}
+          type="password"
+          required
+        />
         <Button
           type="submit"
           variant="contained"

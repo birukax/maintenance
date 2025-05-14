@@ -12,6 +12,8 @@ import {
 const profileColumns = [
   { header: "Username", accessor: "user.username" },
   { header: "Phone_no", accessor: "phone_no" },
+  { header: "Role", accessor: "role" },
+  { header: "Is Active", accessor: "user.is_active" },
 ];
 
 const List: React.FC = () => {

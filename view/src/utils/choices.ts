@@ -53,3 +53,12 @@ export const SCHEDULE_TYPES = [
     ["MONTHLY", "Monthly"],
     ["YEARLY", "Yearly"],
 ] as const;
+
+export const Roles = [
+"USER",
+"ADMIN",
+"MANAGER", 
+"PLANNER",
+"SUPERVISOR",
+"ENGINEER",
+] as const;
