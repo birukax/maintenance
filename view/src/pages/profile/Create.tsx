@@ -95,10 +95,10 @@ const Create = () => {
         label="Code"
       >
         <MenuItem value="+251">+251 (Eth)</MenuItem>
-        <MenuItem value="+1">+1 (US)</MenuItem>
+        {/* <MenuItem value="+1">+1 (US)</MenuItem>
         <MenuItem value="+44">+44 (UK)</MenuItem>
         <MenuItem value="+91">+91 (India)</MenuItem>
-        <MenuItem value="+61">+61 (Australia)</MenuItem>
+        <MenuItem value="+61">+61 (Australia)</MenuItem> */}
         {/* Add more country codes as needed */}
       </Select>
     </FormControl>

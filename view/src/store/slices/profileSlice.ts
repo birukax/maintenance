@@ -17,11 +17,11 @@ const initialState: ProfileState = {
     profile: {data: null, loading: false, error: null},
 };
 
-export const fetchProfiles = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchProfiles = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'profile/fetchProfiles',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/account/profiles/');
+            const response = await api.get('/account/profiles/',{params});
             return response.data;
         }
         catch (error) {
