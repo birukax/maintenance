@@ -21,6 +21,7 @@ import PurchaseScheduleRoutes from "./routes/PurchaseScheduleRoutes";
 import BreakdownRoutes from "./routes/BreakdownRoutes";
 
 import "./App.css";
+import ProfileRoutes from "./routes/ProfileRoutes";
 const App: React.FC = () => {
   return (
     <Routes>
@@ -29,6 +30,7 @@ const App: React.FC = () => {
       {ItemRoutes}
       {ReturnRoutes}
       {ContactRoutes}
+      {ProfileRoutes}
       {MachineRoutes}
       {ActivityRoutes}
       {plantRoutes}
