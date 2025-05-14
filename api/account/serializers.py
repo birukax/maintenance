@@ -11,11 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = UserSerializer(read_only=True)
-    
+
     class Meta:
         model = Profile
         fields = [
-            'id',
-            'user',
-            'role',
+            "id",
+            "user",
+            "phone_no",
+            "role",
         ]
