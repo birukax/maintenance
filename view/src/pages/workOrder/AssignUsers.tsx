@@ -44,8 +44,11 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+  const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
-    dispatch(fetchProfiles());
+    dispatch(fetchProfiles(params));
   }, []);
 
   const userOptions = useMemo(() => {

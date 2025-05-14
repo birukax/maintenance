@@ -30,9 +30,12 @@ const Create = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+const params = {
+    no_pagination: "true",
+  };
+  
   useEffect(() => {
-    dispatch(fetchWorkOrderTypes());
+    dispatch(fetchWorkOrderTypes(params));
   }, []);
 
   const handleChange = (e) => {

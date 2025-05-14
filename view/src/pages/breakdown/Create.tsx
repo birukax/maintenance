@@ -48,13 +48,15 @@ const Create = () => {
   // const { workOrderTypes } = useSelector(
   //   (state: AppState) => state.workOrderType
   // );
-
+const params = {
+    no_pagination: "true",
+  };
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchMachines());
-    dispatch(fetchEquipments());
+    dispatch(fetchMachines(params));
+    dispatch(fetchEquipments(params));
     // dispatch(fetchWorkOrderTypes());
     // dispatch(fetchActivityTypes());
     // dispatch(fetchItems());

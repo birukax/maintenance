@@ -53,13 +53,15 @@ const Create = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
-    dispatch(fetchMachines());
-    dispatch(fetchEquipments());
-    dispatch(fetchWorkOrderTypes());
-    dispatch(fetchActivityTypes());
-    dispatch(fetchItems());
+    dispatch(fetchMachines(params));
+    dispatch(fetchEquipments(params));
+    dispatch(fetchWorkOrderTypes(params));
+    dispatch(fetchActivityTypes(params));
+    dispatch(fetchItems(params));
   }, []);
 
   const toolOptions = useMemo(() => {

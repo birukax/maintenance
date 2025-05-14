@@ -33,11 +33,13 @@ const Create = () => {
   const { areas } = useSelector((state: AppState) => state.area);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchPlants());
-      dispatch(fetchAreas());
+      dispatch(fetchPlants(params));
+      dispatch(fetchAreas(params));
     }
   }, []);
 

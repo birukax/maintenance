@@ -31,11 +31,13 @@ const Create = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
+const params = {
+    no_pagination: "true",
+  };
 
     useEffect(() => {
       if (tokens) {
-        dispatch(fetchPlants());
+        dispatch(fetchPlants(params));
       }
     }, []);
 

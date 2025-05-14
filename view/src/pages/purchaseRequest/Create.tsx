@@ -31,10 +31,12 @@ const Create = () => {
   const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchItems());
+      dispatch(fetchItems(params));
     }
   }, []);
 

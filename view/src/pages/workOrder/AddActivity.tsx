@@ -42,9 +42,11 @@ const AddActivity = ({ entityState, setModalOpen }) => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
-    dispatch(fetchActivities());
+    dispatch(fetchActivities(params));
   }, []);
 
   const activityOptions = useMemo(() => {

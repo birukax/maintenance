@@ -10,7 +10,7 @@ function Pagination(props) {
         width:"100%",
         display:"flex",
         alignItems:"center",
-        justifyContent:"flex-end",
+        justifyContent:"flex-start",
         gap:".5rem",
     }
     const nop=5

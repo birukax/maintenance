@@ -28,12 +28,15 @@ const Create = () => {
   const { activityTypes } = useSelector(
     (state: AppState) => state.activityType
   );
+  const params = {
+    no_pagination: "true",
+  };
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchActivityTypes());
+    dispatch(fetchActivityTypes(params));
   }, []);
 
   const handleChange = (e) => {

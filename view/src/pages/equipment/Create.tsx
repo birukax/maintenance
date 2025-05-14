@@ -30,10 +30,12 @@ const Create = () => {
   const { machines } = useSelector((state: AppState) => state.machine);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchMachines());
+      dispatch(fetchMachines(params));
     }
   }, []);
 
