@@ -27,3 +27,4 @@ class ProfileViewset(viewsets.ModelViewSet):
         except Exception as e:
             raise serializers.ValidationError("error", str(e))
         profile = serializer.save(user=user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
