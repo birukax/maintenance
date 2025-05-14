@@ -74,7 +74,7 @@ class ItemViewSet(viewsets.ModelViewSet):
                 Schedule.objects.create(item=item, year=year)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_update(self, serializer):
         suppliers_id = self.request.data.get("suppliers_id")
