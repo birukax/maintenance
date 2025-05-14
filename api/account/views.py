@@ -15,11 +15,15 @@ class ProfileViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         username = self.request.data.get("username")
         email = self.request.data.get("email")
+        password = self.request.data.get("password")
         try:
             user = User(
                 username=username,
                 email=email,
             )
+            user.save()
+            user.set_password(password)
+            user.save()
         except Exception as e:
             raise serializers.ValidationError("error", str(e))
         profile = serializer.save(user=user)
