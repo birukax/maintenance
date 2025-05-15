@@ -43,7 +43,7 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import FactoryIcon from '@mui/icons-material/Factory';
 import AreaChartIcon from '@mui/icons-material/AreaChart';
-
+import PersonIcon from '@mui/icons-material/Person';
 const drawerWidth = 260;
 
 const AppLayout = ({ children }) => {
@@ -102,6 +102,7 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText primary="Contacts" />
             </ListItemButton>
+        
         <List>
           <ListItemButton onClick={() => toggleSection("inventory")}>
         <ListItemText primary="Inventory" />
@@ -256,11 +257,18 @@ const AppLayout = ({ children }) => {
             </ListItemIcon>
             <ListItemText primary="Area" />
           </ListItemButton>
+        
         </List>
+        
           )}
 
 
-
+            <ListItemButton component={Link} to="/profiles" >
+              <ListItemIcon>
+              <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="Profiles" />
+            </ListItemButton>
             
         </List>
       </List>

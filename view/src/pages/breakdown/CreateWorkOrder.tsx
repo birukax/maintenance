@@ -59,16 +59,18 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const { workOrderTypes } = useSelector(
     (state: AppState) => state.workOrderType
   );
-
+const params = {
+    no_pagination: "true",
+  };
 
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   useEffect(() => {
-      dispatch(fetchWorkOrderTypes());
-      dispatch(fetchActivityTypes());
-      dispatch(fetchItems());
+      dispatch(fetchWorkOrderTypes(params));
+      dispatch(fetchActivityTypes(params));
+      dispatch(fetchItems(params));
     }, []);
 
     const toolOptions = useMemo(() => {
