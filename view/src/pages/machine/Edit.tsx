@@ -38,14 +38,16 @@ const Edit = () => {
     area_id: "",
   });
 
-  
+  const params = {
+    no_pagination: "true",
+  };
   
   useEffect(() => {
     if (id) {
       // handleFetchMachine()
       dispatch(fetchMachine(id)).unwrap();
-      dispatch(fetchPlants());
-      dispatch(fetchAreas());
+      dispatch(fetchPlants(params));
+      dispatch(fetchAreas(params));
 
     }
   }, [dispatch, id]);

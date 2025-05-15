@@ -6,8 +6,10 @@ import { AppState, AppDispatch } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import EditRows from "./EditRows";
+import Pagination from "../../components/Pagination";
 // import Submit from "./Submit";
 import {
+  CircularProgress,
   Typography,
   Button,
   Modal,
@@ -19,25 +21,52 @@ import {
   TextField,
   Checkbox,
 } from "@mui/material";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
+const Edit = () => {
+  const [searchParams,setSearchParams]=useSearchParams()
+  const [currentPage,setCurrentPage]=useState(searchParams.get("page")||1)
+  const {year}=useParams()
+const [loading,setLoading]=useState(true)
+  const [params, setParams] = useState({
+    year__no: year || new Date().getFullYear(),
+    search: searchParams.get("search") || "",
+    page: searchParams.get("page") || 1,
+  });
 
-const Edit = ({ setEdit }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const params = {
-    year__no: searchParams.get("year__no"),
-  };
+  const navigate=useNavigate()
   const { purchaseSchedules } = useSelector(
     (state: AppState) => state.purchaseSchedule
   );
   const dispatch = useDispatch<AppDispatch>();
+console.log(params);
 
   const renderButtons = () => <></>;
-  useEffect(() => {
-    dispatch(fetchPurchaseSchedules(params));
-  }, []);
 
+  const fetch= async ()=>{
+    await dispatch(fetchPurchaseSchedules(params)).unwrap();
+    setLoading(false)
+  }
+  useEffect(() => {
+    fetch()    
+  }, []);
+console.log(purchaseSchedules);
+
+const searchFilter = async (field, value) => {
+    // Handle filter action here
+    const parameters = {
+      year__no: year,
+      page: 1,
+      [field]: value,
+    };
+
+    console.log("changed year", parameters);
+
+    setSearchParams({ ...parameters });
+
+    await dispatch(fetchPurchaseSchedules(parameters));
+  };
   
   const handleRefresh = async () => {
     try {
@@ -79,50 +108,61 @@ const Edit = ({ setEdit }) => {
     "November",
     "December",
   ];
-  return (
-    <>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button
-          variant="contained"
-          onClick={() => {
-            setEdit(false);
-            setSearchParams(params);
+  
+    return (
+      <>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
           }}
-          sx={{ mr: 1 }}
         >
-          Save
-        </Button>
-      </div>
-      <Table sx={{ minWidth: 650 }} aria-label={` table`}>
-        <TableHead>
-          <TableRow>
-            {purchaseScheduleColumns.map((column) => (
-              <TableCell key={column}>
-                <Typography noWrap>{column}</Typography>
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {purchaseSchedules.data &&
-            purchaseSchedules.data.map((row) => (
-              <EditRows
-                key={row.id}
-                row={row}
-                handleUpdateSchedule={handlePurchaseSchedule}
-              />
-            ))}
-        </TableBody>
-      </Table>
-    </>
-  );
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate("/purchase-schedules")
+            }}
+            sx={{ mr: 1 }}
+          >
+            Save
+          </Button>
+        </div>
+        {purchaseSchedules.loading && <CircularProgress />}
+        {!loading && <Table sx={{ minWidth: 650 }} aria-label={` table`}>
+          <TableHead>
+            <TableRow>
+              {purchaseScheduleColumns.map((column) => (
+                <TableCell key={column}>
+                  <Typography noWrap>{column}</Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {purchaseSchedules?.data?.results?.map((row) => (
+                <EditRows
+                  key={row.id}
+                  row={row}
+                  handleUpdateSchedule={handlePurchaseSchedule}
+                />
+              ))
+            }
+          </TableBody>
+        </Table>}
+        
+        <Pagination
+        cur={currentPage}
+        setCur={setCurrentPage}
+        next={purchaseSchedules?.data?.next}
+        prev={purchaseSchedules?.data?.previous}
+        count={purchaseSchedules?.data?.count}
+        searchByPage={searchFilter}
+      />
+      </>
+    );
+  
 };
 
 export default Edit;

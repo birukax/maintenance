@@ -35,6 +35,10 @@ const Edit = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
     if (tokens && id) {
       dispatch(fetchEquipment(id));
@@ -51,9 +55,11 @@ setFormData({
       machine_id: equipment.data?.machine.id,
     });
   },[equipment])
+
+
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchMachines());
+      dispatch(fetchMachines(params));
     }
   }, []);
 

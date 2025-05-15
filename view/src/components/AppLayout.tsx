@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../store/store";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link, useSearchParams } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
 import { ToastContainer } from 'react-toastify';
 import {
@@ -54,7 +54,7 @@ const AppLayout = ({ children }) => {
     consumption: false,
     location:false
   });
-
+  const [searchParams,setSearchParams]=useSearchParams()
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -150,12 +150,21 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
           {openSections.purchase && (
         <List component="div" disablePadding sx={{minWidth:"fit-content"}}>
-          <ListItemButton component={Link} to="/purchase-schedules" sx={{ pl: 4 }}>
+          {searchParams.get("page") || searchParams.get("year__no") ?
+          <ListItemButton component={Link} to={`/purchase-schedules?page=${searchParams.get("page")}&year__no=${searchParams.get("year__no")}&search=${searchParams.get("search")}`} sx={{ pl: 4 }}>
+            <ListItemIcon>
+          < CalendarMonthIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Purchase Schedule"  sx={{minWidth:"fit-content"}}/>
+          </ListItemButton>:
+          <ListItemButton component={Link} to={"/purchase-schedules"} sx={{ pl: 4 }}>
             <ListItemIcon>
           < CalendarMonthIcon/>
             </ListItemIcon>
             <ListItemText primary="Purchase Schedule"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
+        }
+          
           <ListItemButton component={Link} to="/purchase-requests" sx={{ pl: 4 }}>
             <ListItemIcon>
           <RequestPageIcon />

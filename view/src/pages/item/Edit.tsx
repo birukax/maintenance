@@ -49,6 +49,10 @@ const Create = () => {
     value: ITEM_CATEGORIES[key][0],
     label: ITEM_CATEGORIES[key][1],
   }));
+
+  const params = {
+    no_pagination: "true",
+  };
   useEffect(() => {
     if (tokens && id) {
       dispatch(fetchItem(id));
@@ -83,8 +87,8 @@ setFormData({
 
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchUnitOfMeasures());
-      dispatch(fetchContacts());
+      dispatch(fetchUnitOfMeasures(params));
+      dispatch(fetchContacts(params));
     }
   }, []);
 

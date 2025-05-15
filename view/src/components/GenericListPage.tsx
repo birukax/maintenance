@@ -72,7 +72,6 @@ export const GenericListPage = ({
       toast.error(JSON.stringify(entityState.error));
     }
   }
-  console.log(entityState?.data, "entity");
   return (
     <>
       <div
@@ -179,11 +178,8 @@ export const GenericListPage = ({
               New
             </Button>
           )}
-          {onEdit &&
-            (searchParams.get("edit") === false ||
-              searchParams.get("edit") === null) &&
-            entityState.data?.count > 0 && (
-              <Button variant="outlined" onClick={onEdit} sx={{ mr: 1 }}>
+          {onEdit && entityState.data?.count > 0 && (
+              <Button variant="outlined" onClick={()=>onEdit(searchParams.get("year__no"))} sx={{ mr: 1 }}>
                 Edit
               </Button>
             )}

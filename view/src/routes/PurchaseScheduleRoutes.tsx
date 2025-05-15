@@ -36,7 +36,7 @@ const PurchaseScheduleRoutes = [
   />,
   <Route
     key="purchase-schedule-edit"
-    path="/purchase-schedule/edit/:id"
+    path="/purchase-schedule/edit/:year"
     element={
       <ProtectedRoute>
         <PurchaseScheduleEdit />

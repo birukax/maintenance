@@ -22,7 +22,7 @@ export const fetchPurchaseSchedules = createAsyncThunk<[], {params:null}, {rejec
     'purchaseSchedule/fetchPurchaseSchedules',
     async(params, {rejectWithValue }) => {
         try {
-                const response = await api.get('/purchase/schedules/', {params: params});
+                const response = await api.get('/purchase/schedules/', {params});
                 return response.data;
             
             
@@ -32,7 +32,6 @@ export const fetchPurchaseSchedules = createAsyncThunk<[], {params:null}, {rejec
         }
     }
 )
-
 
 export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: string }>(
     'purchaseSchedule/fetchPurchaseSchedule',
@@ -91,7 +90,15 @@ export const createAnnualSchedule = createAsyncThunk<[], { formData: { [key: str
 const purchaseScheduleSlice = createSlice({
     name: 'purchaseSchedule',
     initialState,
-    reducers: {},
+    reducers: {
+        clearPurchaseSchedules: (state) => {
+            state.purchaseSchedules = {
+                data: null,
+                loading: false,
+                error: null,
+            };
+        },
+    },
     
     extraReducers: (builder) => {
         builder
@@ -158,5 +165,21 @@ const purchaseScheduleSlice = createSlice({
     }
 })
 
+export const clear = createAsyncThunk<void,void, {rejectValue: string}>(
+    'purchaseSchedule/clear',
+    async(_, {dispatch }) => {
+        try {
+            dispatch(clearPurchaseSchedules())  
+            console.log("cleared");     
+        }
+        catch (err) {
+            throw new Error(err.message || "Logout failed");
+
+        }
+    }
+)
+
+
 // export const { createPurchaseSchedule, updatePurchaseSchedule, deletePurchaseSchedule } = purchaseScheduleSlice.actions;
+export const { clearPurchaseSchedules } = purchaseScheduleSlice.actions
 export default purchaseScheduleSlice.reducer;
