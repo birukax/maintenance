@@ -42,7 +42,7 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
     work_order = serializers.SerializerMethodField(read_only=True)
-    activity = serializers.SerializerMethodField(read_only=True)
+    # activity = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = WorkOrderActivity
@@ -51,6 +51,7 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
             "value",
             "remark",
             "activity",
+            "description",
             "work_order",
         ]
 
