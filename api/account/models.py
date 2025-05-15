@@ -19,7 +19,7 @@ class Profile(BaseCreatedUpdated):
     # )
 
     class Meta:
-        ordering = ["user__username"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.user.username}"

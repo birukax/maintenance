@@ -160,11 +160,8 @@ class WorkOrderActivity(BaseCreatedUpdated):
         on_delete=models.CASCADE,
         related_name="work_order_activities",
     )
-    activity = models.ForeignKey(
-        Activity,
-        on_delete=models.RESTRICT,
-        related_name="work_order_activities",
-    )
+    activity = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField(max_length=300)
     value = models.BooleanField(choices=choices.YES_NO_NONE, default=False)
     # extra = models.BooleanField(choices=choices.YESNO, default=False)
     remark = models.TextField(max_length=250)

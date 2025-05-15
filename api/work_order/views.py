@@ -164,22 +164,35 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     def create_activities(self, request, pk=None):
         work_order = self.get_object()
-        activity_ids = request.data.get("activity_ids")
-        WorkOrderActivity.objects.filter(work_order=work_order).delete()
-        try:
-            for a in activity_ids:
-                activity = Activity.objects.get(id=a)
-
-                WorkOrderActivity.objects.create(
-                    work_order=work_order,
-                    activity=activity,
+        if work_order.work_order_type.scheduled:
+            activity_ids = request.data.get("activity_ids")
+            WorkOrderActivity.objects.filter(work_order=work_order).delete()
+            try:
+                for a in activity_ids:
+                    activity = Activity.objects.get(id=a)
+                    WorkOrderActivity.objects.create(
+                        work_order=work_order,
+                        activity=activity.name,
+                        description=activity.description,
+                    )
+            except Activity.DoesNotExist:
+                raise serializers.ValidationError(
+                    {"activity_ids": f"Activity does not exist."}
                 )
-        except Activity.DoesNotExist:
-            raise serializers.ValidationError(
-                {"activity_ids": f"Activity does not exist."}
-            )
+            except Exception as e:
+                raise serializers.ValidationError({"error", str(e)})
+        else:
+            try:
+                description_list = request.data.get("description_list")
+                for d in description_list:
+                    WorkOrderActivity.objects.create(
+                        work_order=work_order,
+                        description=d,
+                    )
+            except Exception as e:
+                raise serializers.ValidationError({"error", str(e)})
         serializer = WorkOrderSerializer(work_order)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["POST"])
     def assign_users(self, request, pk=None):
