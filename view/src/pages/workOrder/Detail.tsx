@@ -284,10 +284,7 @@ const Detail = () => {
             <TableHead>
               <TableRow>
                 <TableCell >
-                  <Typography noWrap>Activity Name</Typography>
-                </TableCell>
-                <TableCell >
-                  <Typography noWrap>Activity Code</Typography>
+                  <Typography noWrap>Activity Description</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography noWrap>Value</Typography>
@@ -301,15 +298,8 @@ const Detail = () => {
               return (
                 <TableBody>
                   <TableRow>
-                    <TableCell>{work_order_activity.activity.name}</TableCell>
-                    <TableCell>{work_order_activity.activity.code}</TableCell>
-                    <TableCell>{work_order_activity.value ? <Checkbox
-                        checked={true}
-                        sx={{ transform: "scale(1.5)" }}
-                      />:<Checkbox
-                      checked={false}
-                      sx={{ transform: "scale(1.5)" }}
-                    />}</TableCell>
+                    <TableCell>{work_order_activity.description}</TableCell>
+                    <TableCell>{work_order_activity.value ? <Typography color='success'>Checked</Typography>:<Typography color='error'>Not Checked</Typography> }</TableCell>
                     <TableCell>{work_order_activity.remark}</TableCell>
                   </TableRow>
                 </TableBody>

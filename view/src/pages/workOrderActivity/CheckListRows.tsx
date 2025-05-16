@@ -12,8 +12,8 @@ const CheckListRows = ({ row, handleUpdateActivity }) => {
   }, [row.value]);
   return (
     <TableRow key={row.id}>
-      <TableCell align="left" title={row.activity.description}>
-        {row.activity.name} - {row.activity.code}
+      <TableCell align="left" title={row.activity.name}>
+        {row.description}
       </TableCell>
       <TableCell align="left">
         <Checkbox
@@ -30,6 +30,7 @@ const CheckListRows = ({ row, handleUpdateActivity }) => {
         <TextField
           name="remark"
           value={remark}
+          size="small"
           onChange={(event) => setRemark(event.target.value)}
           onBlur={() => {
             if (remark !== row.remark) {

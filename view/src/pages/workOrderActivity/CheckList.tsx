@@ -98,11 +98,11 @@ const CheckList = () => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography noWrap>Activity</Typography>
+              <Typography noWrap>Activity Description</Typography>
             </TableCell>
 
             <TableCell>
-              <Typography noWrap>Completed</Typography>
+              <Typography noWrap>Checked</Typography>
             </TableCell>
 
             <TableCell>

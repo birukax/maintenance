@@ -9,6 +9,7 @@ import { GenericListPage } from "../../components/GenericListPage";
 const breakdownColumns = [
   { header: "Machine", accessor: "machine.name" },
   { header: "Equipment", accessor: "equipment.name" },
+  { header: "Status", accessor: "status" },
   { header: "Start Date", accessor: "start_date" },
   { header: "Start Time (h:m:S)", accessor: "start_time" },
   // { header: "Planned Time (s)", accessor: "planned_time" },

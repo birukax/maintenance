@@ -276,7 +276,7 @@ const AppLayout = ({ children }) => {
               <ListItemIcon>
               <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary="Profiles" />
+              <ListItemText primary="Users" />
             </ListItemButton>
             
         </List>
