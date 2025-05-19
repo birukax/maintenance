@@ -19,7 +19,7 @@ import {
   TextField,
   Checkbox,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const CheckList = () => {
@@ -32,7 +32,7 @@ const CheckList = () => {
   const handleSubmitModalOpen = () => setSubmitModalOpen(true);
   const handleSubmitModalClose = () => setSubmitModalOpen(false);
   const dispatch = useDispatch<AppDispatch>();
-
+  const navigate=useNavigate()
   const renderButtons = () => (
     <>
       <>
@@ -44,6 +44,14 @@ const CheckList = () => {
         >
           <Submit entityState={entityState} setModalOpen={setSubmitModalOpen} />
         </Modal>
+        <Button
+          onClick={()=>navigate(`/work-order/detail/${entityState.id}`)}
+          variant="contained"
+          className="bg-slate-700"
+          sx={{ marginRight: ".5rem" }}
+        >
+          Save
+        </Button>
         <Button
           onClick={handleSubmitModalOpen}
           variant="contained"
