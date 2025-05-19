@@ -62,7 +62,7 @@ const Create = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Profile
+        Create User
       </Typography>
       <Box
         component="form"
@@ -178,7 +178,7 @@ const Create = () => {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Profile"}
+          {loading ? <CircularProgress size={24} /> : "Create User"}
         </Button>
         {error && (
           <Typography variant="body2" className="mt-4 text-red-500">

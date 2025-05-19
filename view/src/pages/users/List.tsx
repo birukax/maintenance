@@ -60,11 +60,11 @@ const List: React.FC = () => {
 
   return (
     <GenericListPage
-      title="Profiles"
+      title="Users"
       entityState={entityState}
       columns={profileColumns}
-      createRoute="/profile/create"
-      detailRouteBase="/profile/detail"
+      createRoute="/user/create"
+      detailRouteBase="/user/detail"
       onRefresh={handleRefresh}
       getKey={(profile) => profile.id}
       searchFilter={handleFilter}

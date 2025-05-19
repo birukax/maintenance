@@ -28,86 +28,104 @@ import { Roles } from "../../utils/choices";
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    password:"",
+    role:"",
+    is_active: false,
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const { profile } = useSelector((state: AppState) => state.profile);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [comfirmpas,setComfirmPas]=useState("")
-
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
     if (tokens && id) {
       dispatch(fetchProfile(id));
     }
+    setFormData({
+      role: profile.data?.role,
+      is_active: profile.data?.user?.is_active,
+    });
   }, []);
 
-  
-
+  useEffect(()=>{
+setFormData({
+      role: profile.data?.role,
+      is_active: profile.data?.user?.is_active,
+    });
+  },[profile])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  console.log(formData);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    if(comfirmpas===formData.password){
-
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateProfile({ id, formData })).unwrap();
       toast.success("Profile edited successfully");
-      navigate(`/profile/${id}`);
+      navigate(`/profile/detail/${profile.data.id}`);
     } catch (err) {
       toast.error("Error editing Profile");
       setError(err.response?.data.detail || err.message);
     } finally {
-      setLoading(false);
-    }}else{
-      toast.error("Password and Comfirm Password must be similar");
       setLoading(false);
     }
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Reset Password
+        Edit Profile
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="form-gap"
       >
-         <TextField
-          label="Password"
-          name="password"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.password}
-          onChange={handleChange}
-          disabled={loading}
-          type="password"
-          required
-        />
-        <TextField
-          label="Comfirm Password"
-          name="comfirm_password"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={comfirmpas}
-          onChange={(e)=>setComfirmPas(e.target.value)}
-          disabled={loading}
-          type="password"
-          required
-        />
+         <FormControlLabel
+                    labelPlacement="start"
+                    label="Is Active"
+                    control={
+                      <Switch
+                        name="is_active"
+                        checked={formData.is_active}
+                        onChange={(e) =>{
+                          console.log(e.target.checked);
+                          
+                          if(formData.is_active===true){
+                            setFormData({ ...formData, is_active: e.target.checked})
+                          }else{
+                            setFormData({ ...formData, is_active: e.target.checked })
+                                          }                }
+                          
+                        }
+                        disabled={loading}
+                      />
+                    }
+                  />
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+                  <InputLabel id="role">Role</InputLabel>
+                  <Select
+                    labelId="role"
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    label="Role"
+                  >
+                    {Roles.map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+        </FormControl>
+
         <Button
           type="submit"
           variant="contained"

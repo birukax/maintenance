@@ -5,10 +5,9 @@ import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
-  const {id}=useParams()
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.profile.profile,
     fetchDetailAction: fetchProfile,
@@ -19,7 +18,7 @@ const Detail = () => {
       <Button
         variant="contained"
         component={Link}
-        to={`/profile/passwordreset/${id}`}
+        to={`/profile/edit/${entityState.id}`}
         className="bg-slate-700"
       >
         Edit
@@ -72,7 +71,7 @@ const Detail = () => {
   
   return (
     <GenericDetailPage
-      titleBase="Profile"
+      titleBase="User"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}

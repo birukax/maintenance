@@ -1,33 +1,44 @@
-// src/routes/ProfileRoutes.tsx
+// src/routes/UserRoutes.tsx
 import { Route } from "react-router-dom";
-import CreateProfile from "../pages/profile/Create";
-import ProfileList from "../pages/profile/List";
+import CreateUser from "../pages/users/Create";
+import UserList from "../pages/users/List";
+import UserDetail from "../pages/users/Detail";
+import UserEdit from "../pages/users/Edit";
 import ProfileDetail from "../pages/profile/Detail";
 import ProfileEdit from "../pages/profile/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 
-const ProfileRoutes = [
+const UserRoutes = [
   <Route
-    key="profile-list"
-    path="/profiles"
+    key="user-list"
+    path="/users"
     element={
       <ProtectedRoute>
-        <ProfileList />
+        <UserList />
       </ProtectedRoute>
     }
   />,
   <Route
-    key="profile-create"
-    path="/profile/create"
+    key="user-create"
+    path="/user/create"
     element={
       <ProtectedRoute>
-        <CreateProfile />
+        <CreateUser />
+      </ProtectedRoute>
+    }
+  />,
+  <Route
+    key="user-detail"
+    path="/user/detail/:id"
+    element={
+      <ProtectedRoute>
+        <UserDetail />
       </ProtectedRoute>
     }
   />,
   <Route
     key="profile-detail"
-    path="/profile/detail/:id"
+    path="/profile/:id"
     element={
       <ProtectedRoute>
         <ProfileDetail />
@@ -36,7 +47,7 @@ const ProfileRoutes = [
   />,
   <Route
     key="profile-edit"
-    path="/profile/edit/:id"
+    path="/profile/passwordreset/:id"
     element={
       <ProtectedRoute>
         <ProfileEdit />
@@ -45,4 +56,4 @@ const ProfileRoutes = [
   />,
 ];
 
-export default ProfileRoutes;
+export default UserRoutes;
