@@ -167,7 +167,7 @@ class WorkOrderActivity(BaseCreatedUpdated):
     remark = models.TextField(max_length=250)
 
     class Meta:
-        ordering = ["description"]
+        ordering = ["description", "-created_at", "-updated_at"]
         verbose_name_plural = "Work Order Activities"
 
     def __str__(self):
