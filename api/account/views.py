@@ -28,3 +28,15 @@ class ProfileViewset(viewsets.ModelViewSet):
             raise serializers.ValidationError("error", str(e))
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_update(self, serializer):
+        is_active = self.request.data.get("is_active")
+        try:
+            user = User.objects.get(profile=serializer.instance)
+            user.is_active = is_active
+            user.save()
+        except User.DoesNotExist():
+            raise serializers.ValidationError("error", "User does not exist!")
+        except Exception as e:
+            raise serializers.ValidationError("error", str(e))
+        return super().perform_update(serializer)
