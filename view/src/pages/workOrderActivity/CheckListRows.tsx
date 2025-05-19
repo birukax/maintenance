@@ -29,6 +29,7 @@ const CheckListRows = ({ row, handleUpdateActivity }) => {
       <TableCell align="left">
         <TextField
           name="remark"
+          required
           value={remark}
           size="small"
           onChange={(event) => setRemark(event.target.value)}

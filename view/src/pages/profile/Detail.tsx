@@ -12,6 +12,7 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.profile.profile,
     fetchDetailAction: fetchProfile,
   });
+  
   const renderButtons = () => (
     <>
       <Button
@@ -29,15 +30,36 @@ const Detail = () => {
     <>
     <div className="rw">
       <div className="clmn">
-        <Typography variant="h6">Code:</Typography>
+        <Typography variant="h6">Username:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.code}
+        {data.user.username}
       </Typography>
       </div>
       <div className="clmn">
-<Typography variant="h6">Name:</Typography>
+<Typography variant="h6">Email:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.name}
+        {data.user.email}
+      </Typography>
+      </div>
+
+      <div className="clmn">
+<Typography variant="h6">Is Active:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.user.is_active ? "Active" : "Inactive"}
+      </Typography>
+      </div>
+      <div className="clmn">
+<Typography variant="h6">Role:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.role}
+      </Typography>
+      </div>
+    </div>
+    <div className="rw">
+      <div className="clmn">
+        <Typography variant="h6">Phone No:</Typography>
+      <Typography variant="body1" className="text-slate-500 mb-2">
+        {data.phone_no}
       </Typography>
       </div>
     </div>
@@ -45,6 +67,8 @@ const Detail = () => {
       
     </>
   );
+
+  
   return (
     <GenericDetailPage
       titleBase="Profile"

@@ -5,13 +5,15 @@ import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Checkbox, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import dayjs from "dayjs";
-import AddActivity from "./AddActivity";
+import AddActivityModal from "./AddActivityModal";
 import AssignUsers from "./AssignUsers";
 
 const Detail = () => {
+  const navigate=useNavigate()
+  const {id}=useParams()
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.workOrder.workOrder,
     fetchDetailAction: fetchWorkOrder,
@@ -34,23 +36,30 @@ const Detail = () => {
   const handleActivityModalOpen = () => setActivityModalOpen(true);
   const handleActivityModalClose = () => setActivityModalOpen(false);
 
+
+  
   const renderButtons = () => (
     <>
       {entityState.data?.status === "Created" &&
         entityState.data?.work_order_activities.length === 0 && (
           <>
-            <Modal
+            
+            {
+            
+            entityState.data.work_order_type?.scheduled ?
+                <>
+                <Modal
               open={activityModalOpen}
               onClose={handleActivityModalClose}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <AddActivity
+              <AddActivityModal
                 entityState={entityState}
                 setModalOpen={setActivityModalOpen}
               />
             </Modal>
-            <Button
+                <Button
               onClick={handleActivityModalOpen}
               variant="contained"
               className="bg-slate-700"
@@ -58,7 +67,20 @@ const Detail = () => {
             >
               Add Activity
             </Button>
+                </>
+                :
+            <Button
+              onClick={()=>navigate(`/work-order/${id}/add-activities`)}
+              variant="contained"
+              className="bg-slate-700"
+              sx={{ mr: 1 }}
+            >
+              Add Activity
+            </Button>
+            }
+            
           </>
+
         )}
       {(entityState.data?.status === "Created" ||
         entityState.data?.status === "Assigned") && (

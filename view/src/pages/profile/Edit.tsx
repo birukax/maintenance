@@ -15,11 +15,21 @@ import {
   Container,
   CircularProgress,
   Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Switch,
+  FormHelperText,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { Roles } from "../../utils/choices";
+
 const Edit = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    role:"",
+    is_active: false,
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -33,13 +43,15 @@ const Edit = () => {
       dispatch(fetchProfile(id));
     }
     setFormData({
-      name: profile.data?.name,
+      role: profile.data?.role,
+      is_active: profile.data?.user?.is_active,
     });
   }, []);
 
   useEffect(()=>{
 setFormData({
-      name: profile.data?.name,
+      role: profile.data?.role,
+      is_active: profile.data?.user?.is_active,
     });
   },[profile])
   const handleChange = (e) => {
@@ -47,6 +59,8 @@ setFormData({
     setFormData({ ...formData, [name]: value });
   };
 
+  console.log(formData);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -73,17 +87,44 @@ setFormData({
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <TextField
-          label="Name"
-          name="name"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.name}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        />
+         <FormControlLabel
+                    labelPlacement="start"
+                    label="Is Active"
+                    control={
+                      <Switch
+                        name="is_active"
+                        checked={formData.is_active}
+                        onChange={(e) =>{
+                          console.log(e.target.checked);
+                          
+                          if(formData.is_active===true){
+                            setFormData({ ...formData, is_active: e.target.checked})
+                          }else{
+                            setFormData({ ...formData, is_active: e.target.checked })
+                                          }                }
+                          
+                        }
+                        disabled={loading}
+                      />
+                    }
+                  />
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+                  <InputLabel id="role">Role</InputLabel>
+                  <Select
+                    labelId="role"
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    label="Role"
+                  >
+                    {Roles.map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+        </FormControl>
 
         <Button
           type="submit"
