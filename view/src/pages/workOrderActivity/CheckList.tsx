@@ -46,7 +46,7 @@ const CheckList = () => {
         </Modal>
         <Button
           onClick={()=>navigate(`/work-order/detail/${entityState.id}`)}
-          variant="contained"
+          variant="outlined"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
         >

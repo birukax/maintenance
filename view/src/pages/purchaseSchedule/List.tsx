@@ -36,22 +36,24 @@ const List: React.FC = () => {
   const navigate = useNavigate();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [params, setParams] = useState({
+    year__no: searchParams.get("year__no") && searchParams.get("year__no") !=="null" ? searchParams.get("year__no") : new Date().getFullYear(),
+    page:searchParams.get("page") ||1
+
+  });
   const [keyWord, setKeyWord] = useState("");
   const entityState = useSelector(
     (state: AppState) => state.purchaseSchedule.purchaseSchedules
   );
   const dispatch = useDispatch<AppDispatch>();
-  const [params, setParams] = useState({
-    year__no: searchParams.get("year__no") || new Date().getFullYear(),
-    search: searchParams.get("search") || "",
-    page: searchParams.get("page") || 1,
-  });
   // const [edit, setEdit] = useState(searchParams.get("edit") || false);
 
   useEffect(() => {
     dispatch(fetchPurchaseSchedules(params));
-    setSearchParams(params);
+    // setSearchParams(params);
   }, []);
+
+  
 
   const handleRefresh = () => {
     if (tokens) {
@@ -70,12 +72,7 @@ const List: React.FC = () => {
         search: searchParams.get("search"),
         [field]: value,
       };
-      console.log("changed year", parameters);
-
       setSearchParams({ ...parameters });
-
-      console.log("serac", searchParams.get("year__no"));
-
       await dispatch(fetchPurchaseSchedules(parameters));
     }
   };
@@ -87,7 +84,7 @@ const List: React.FC = () => {
       [field]: value,
     };
 
-    console.log("changed year", parameters);
+    // console.log("changed year", parameters);
 
     setSearchParams({ ...parameters });
 

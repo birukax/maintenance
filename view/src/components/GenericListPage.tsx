@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppState } from "../store/store";
 import { Link, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -72,6 +72,7 @@ export const GenericListPage = ({
       toast.error(JSON.stringify(entityState.error));
     }
   }
+  
   return (
     <>
       <div
@@ -95,7 +96,7 @@ export const GenericListPage = ({
             >
               {" "}
               <span style={{ color: "black" }}> Year:</span>
-              {searchParams.get("year__no")}
+              {searchParams.get("year__no") }
             </sub>
           )}
         </Typography>
@@ -158,7 +159,7 @@ export const GenericListPage = ({
                 outlineColor: "blue",
                 maxHeight: "40px",
               }}
-              value={searchParams.get("year__no")}
+              value={searchParams.get("year__no") !=="null" && searchParams.get("year__no") || new Date().getFullYear()}
               className="year-filter"
             >
               {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
@@ -283,7 +284,7 @@ export const GenericListPage = ({
                 ))
               : !entityState.loading && (
                   <TableRow>
-                    <TableCell colSpan={headers} align="center">
+                    <TableCell colSpan={columns.length + 1} align="left" rowSpan={1}>
                       No data available.
                     </TableCell>
                   </TableRow>
