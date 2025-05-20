@@ -51,7 +51,7 @@ const List: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchPurchaseSchedules(params));
-    // setSearchParams(params);
+    setSearchParams(params);
   }, []);
 
   
