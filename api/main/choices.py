@@ -38,6 +38,14 @@ PURCHASE_STATUS = (
     ("RECEIVED", "RECEIVED"),
 )
 
+TRANSFER_STATUS = (
+    ("PENDING-APPROVAL", "PENDING-APPROVAL"),
+    ("APPROVED", "APPROVED"),
+    ("REJECTED", "REJECTED"),
+    ("SHIPPED", "SHIPPED"),
+    ("RECEIVED", "RECEIVED"),
+)
+
 WORK_ORDER_TYPES = (
     ("PM01", "Failure Work-Order"),
     ("PM02", "Inspection Based Work-Order"),

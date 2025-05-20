@@ -5,34 +5,89 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from purchase.models import Request, Schedule, Year
 from .models import (
-    UnitOfMeasure,
     Contact,
+    Location,
+    Shelf,
+    ShelfRow,
+    ShelfBox,
+    UnitOfMeasure,
     Item,
     Inventory,
+    Transfer,
+    TransferItem,
     Consumption,
     Return,
 )
 from .serializers import (
-    UnitOfMeasureSerializer,
     ContactSerializer,
+    LocationSerializer,
+    ShelfSerializer,
+    ShelfRowSerializer,
+    ShelfBoxSerializer,
+    UnitOfMeasureSerializer,
     ItemSerializer,
     InventorySerializer,
+    TransferSerializer,
+    TransferItemSerializer,
     ConsumptionSerializer,
     ReturnSerializer,
 )
-
-
-class UnitOfMeasureViewSet(viewsets.ModelViewSet):
-    serializer_class = UnitOfMeasureSerializer
-    queryset = UnitOfMeasure.objects.all()
-    search_fields = ["code", "name"]
-    filterset_fields = []
 
 
 class ContactViewSet(viewsets.ModelViewSet):
     serializer_class = ContactSerializer
     queryset = Contact.objects.all()
     search_fields = ["name", "email", "phone_no", "address"]
+    filterset_fields = []
+
+
+class LocationViewSet(viewsets.ModelViewSet):
+    serializer_class = LocationSerializer
+    queryset = Location.objects.all()
+    search_fields = ["code", "name"]
+    filterset_fields = []
+
+
+class ShelfViewSet(viewsets.ModelViewSet):
+    serializer_class = ShelfSerializer
+    queryset = Shelf.objects.all()
+    search_fields = [
+        "code",
+        "name",
+        "location__code",
+        "location__name",
+    ]
+    filterset_fields = []
+
+
+class ShelfRowViewSet(viewsets.ModelViewSet):
+    serializer_class = ShelfRowSerializer
+    queryset = ShelfRow.objects.all()
+    search_fields = [
+        "code",
+        "name",
+        "shelf__code",
+        "shelf__name",
+    ]
+    filterset_fields = []
+
+
+class ShelfBoxViewSet(viewsets.ModelViewSet):
+    serializer_class = ShelfBoxSerializer
+    queryset = ShelfBox.objects.all()
+    search_fields = [
+        "code",
+        "name",
+        "shelf_row__code",
+        "shelf_row__name",
+    ]
+    filterset_fields = []
+
+
+class UnitOfMeasureViewSet(viewsets.ModelViewSet):
+    serializer_class = UnitOfMeasureSerializer
+    queryset = UnitOfMeasure.objects.all()
+    search_fields = ["code", "name"]
     filterset_fields = []
 
 
@@ -44,6 +99,12 @@ class ItemViewSet(viewsets.ModelViewSet):
         "name",
         "uom__name",
         "uom__code",
+        "shelf__code",
+        "shelf__name",
+        "row__code",
+        "row__name",
+        "box__code",
+        "box__name",
         "minimum_stock_level",
     ]
     filterset_fields = ["type", "category"]
@@ -68,10 +129,15 @@ class ItemViewSet(viewsets.ModelViewSet):
             item = serializer.save(uom=uom)
             if suppliers.exists():
                 item.suppliers.set(suppliers)
-            Inventory.objects.create(item=item)
+            if Location.objects.exists():
+                item_location_list = [
+                    Inventory(location=l, item=item) for l in Location.objects.all()
+                ]
+                Inventory.objects.bulk_create(item_location_list)
             years = Year.objects.filter(no__gte=datetime.date.today().year)
-            for year in years:
-                Schedule.objects.create(item=item, year=year)
+            if years.exists():
+                item_year_list = [Schedule(year=y.no, item=item) for y in years]
+                Schedule.objects.bulk_create(item_year_list)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -102,7 +168,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["GET"])
     def revaluate_stock(self, request):
         all_purchases = Request.objects.values("item_id").annotate(
-            total_received=Sum("received_quantity")
+            total_received=Sum("received _quantity")
         )
         all_consumptions = Consumption.objects.values("item_id").annotate(
             total_consumed=Sum("quantity")
@@ -151,40 +217,81 @@ class InventoryViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        # inventories = Inventory.objects.all()
-        # purchases = Request.objects.all()
-        # consumptions = Consumption.objects.all()
-        # returns = Return.objects.filter(used=False)
-        # for i in inventories:
-        #     if purchases.filter(item=i.item).exists():
-        #         i.purchased_quantity = (
-        #             purchases.filter(item=i.item)
-        #             .aggregate(total=Sum("received_quantity"))
-        #             .get("total")
-        #         )
-        #     else:
-        #         i.purchased_quantity = 0
-        #     if consumptions.filter(item=i.item).exists():
-        #         i.consumed_quantity = (
-        #             consumptions.filter(item=i.item)
-        #             .aggregate(total=Sum("quantity"))
-        #             .get("total")
-        #         )
-        #     else:
-        #         i.consumed_quantity = 0
-        #     if returns.filter(item=i.item).exists():
-        #         i.returned_quantity = (
-        #             returns.filter(item=i.item)
-        #             .aggregate(total=Sum("quantity"))
-        #             .get("total")
-        #         )
-        #     else:
-        #         i.returned_quantity = 0
-        #     i.save()
-        #     i.balance = i.purchased_quantity - i.consumed_quantity + i.returned_quantity
-        #     i.save()
-        # serializer = InventorySerializer(inventories, many=True)
-        # return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TransferViewSet(viewsets.ModelViewSet):
+    serializer_class = TransferSerializer
+    queryset = Transfer.objects.all()
+    search_fields = [
+        "requested_by__username",
+        "approved_by__username",
+        "from_location__code",
+        "from_location__name",
+        "to_location__code",
+        "to_location__name",
+    ]
+    filterset_fields = [
+        "status",
+        "requested_date",
+        "approved_date",
+        "shipment_date",
+    ]
+
+    def perform_create(self, serializer):
+        requested_by = self.request.user
+        from_location_id = self.validated_data.pop("from_location_id")
+        to_location_id = self.validated_data.pop("to_location_id")
+        requested_items = self.request.get("requested_items")
+
+        try:
+            from_location = Location.objects.get(id=from_location_id)
+            to_location = Location.objects.get(id=to_location_id)
+
+        except Location.DoesNotExist:
+            raise serializers.ValidationError(
+                {
+                    "from_location",
+                    f"location Does not exist!",
+                },
+                {
+                    "to_location",
+                    f"location Does not exist!",
+                },
+            )
+        transfer = serializer.save(
+            requested_by=requested_by,
+            from_location=from_location,
+            to_location=to_location,
+        )
+
+        try:
+            transfer_item_list = [
+                TransferItem(
+                    transfer=transfer,
+                    item=Item.objects.get(i.item_id),
+                    requested_quantity=i.requested_quantity,
+                )
+                for i in requested_items
+            ]
+            TransferItem.objects.bulk_create(transfer_item_list)
+
+        except Item.DoesNotExist:
+            raise serializers.ValidationError({"error", "Item does not exist!"})
+
+        except Exception as e:
+            raise serializers.ValidationError({"error", str(e)})
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class TransferItemViewSet(viewsets.ModelViewSet):
+    serializer_class = TransferItemSerializer
+    queryset = TransferItem.objects.all()
+    search__fields = [
+        "item__no",
+        "item__name",
+    ]
+    filterset_fields = []
 
 
 class ConsumptionViewSet(viewsets.ModelViewSet):

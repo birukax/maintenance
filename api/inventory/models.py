@@ -5,17 +5,6 @@ from main import choices
 from main.models import BaseCreatedUpdated
 
 
-class UnitOfMeasure(BaseCreatedUpdated):
-    code = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=100)
-
-    class Meta:
-        ordering = ["code"]
-
-    def __str__(self):
-        return f"{self.name}"
-
-
 class Contact(BaseCreatedUpdated):
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -29,9 +18,96 @@ class Contact(BaseCreatedUpdated):
         return f"{self.name}"
 
 
+class Location(BaseCreatedUpdated):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Shelf(BaseCreatedUpdated):
+    location = models.ForeignKey(
+        Location, on_delete=models.RESTRICT, related_name="shelves"
+    )
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        if self.location:
+            return f"{self.location.name} - {self.name}"
+        return f"{self.name}"
+
+
+class ShelfRow(BaseCreatedUpdated):
+    shelf = models.ForeignKey(Shelf, on_delete=models.RESTRICT, related_name="rows")
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        if self.shelf:
+            return f"{self.shelf.name} - {self.name}"
+        return f"{self.name}"
+
+
+class ShelfBox(BaseCreatedUpdated):
+    row = models.ForeignKey(ShelfRow, on_delete=models.RESTRICT, related_name="boxes")
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        if self.row:
+            return f"{self.row.name} - {self.name}"
+        return f"{self.name}"
+
+
+class UnitOfMeasure(BaseCreatedUpdated):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class Item(BaseCreatedUpdated):
     no = models.CharField(blank=True, max_length=20, unique=True)
     name = models.CharField(max_length=100)
+    shelf = models.ForeignKey(
+        Shelf,
+        on_delete=models.RESTRICT,
+        related_name="items",
+        null=True,
+        blank=True,
+    )
+    row = models.ForeignKey(
+        ShelfRow,
+        on_delete=models.RESTRICT,
+        related_name="items",
+        null=True,
+        blank=True,
+    )
+    box = models.ForeignKey(
+        ShelfBox,
+        on_delete=models.RESTRICT,
+        related_name="items",
+        null=True,
+        blank=True,
+    )
     uom = models.ForeignKey(
         UnitOfMeasure, on_delete=models.RESTRICT, related_name="items"
     )
@@ -69,17 +145,30 @@ class Item(BaseCreatedUpdated):
 
 class Inventory(BaseCreatedUpdated):
     item = models.OneToOneField(
-        Item, on_delete=models.RESTRICT, related_name="inventory"
+        Item,
+        on_delete=models.RESTRICT,
+        related_name="inventory",
     )
-    purchased_quantity = models.DecimalField(
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.RESTRICT,
+        related_name="inventories",
+    )
+    purchased = models.DecimalField(
         default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
-    consumed_quantity = models.DecimalField(
+    inbound_transfers = models.DecimalField(
         default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
-    returned_quantity = models.DecimalField(
+    outbound_transfers = models.DecimalField(
         default=0, max_digits=10, decimal_places=2, null=True, blank=True
     )
+    # consumed_quantity = models.DecimalField(
+    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
+    # )
+    # returned_quantity = models.DecimalField(
+    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
+    # )
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
@@ -87,7 +176,55 @@ class Inventory(BaseCreatedUpdated):
         verbose_name_plural = "inventories"
 
     def __str__(self):
+        if self.item and self.location:
+            return f"{self.item.name} - {self.location.name}"
         return f"{self.item.name}"
+
+
+class Transfer(BaseCreatedUpdated):
+    requested_by = models.ForeignKey(
+        User, on_delete=models.RESTRICT, related_name="transfers_requested"
+    )
+    approved_by = models.ForeignKey(
+        User, on_delete=models.RESTRICT, related_name="transfers_approved"
+    )
+    status = models.CharField(
+        choices=choices.TRANSFER_STATUS, max_length=25, default="PENDING-APPROVAL"
+    )
+    from_location = models.ForeignKey(
+        Location, on_delete=models.RESTRICT, related_name="transfers_from"
+    )
+    to_location = models.ForeignKey(
+        Location, on_delete=models.RESTRICT, related_name="transfers_to"
+    )
+    requested_date = models.DateField(default=datetime.datetime.now)
+    approved_date = models.DateField(null=True, blank=True)
+    shipment_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-requested_date", "-created_at"]
+
+    def __str__(self):
+        return f"{self.requested_by.username} - {self.requested_date}"
+
+
+class TransferItem(BaseCreatedUpdated):
+    transfer = models.ForeignKey(
+        Transfer, on_delete=models.CASCADE, related_name="transfer_items"
+    )
+    item = models.ForeignKey(
+        Item, on_delete=models.RESTRICT, related_name="transfer_items"
+    )
+    requested_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    transfered_quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
+
+    class Meta:
+        ordering = ["-item__name", "created_at"]
+
+    def __str__(self):
+        return f"{self.item.name} - {self.transfer.status}"
 
 
 class Consumption(BaseCreatedUpdated):
