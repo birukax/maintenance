@@ -41,6 +41,7 @@ const List: React.FC = () => {
     page:searchParams.get("page") ||1
 
   });
+  
   const [keyWord, setKeyWord] = useState("");
   const entityState = useSelector(
     (state: AppState) => state.purchaseSchedule.purchaseSchedules

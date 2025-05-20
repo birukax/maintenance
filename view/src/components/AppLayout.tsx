@@ -153,13 +153,7 @@ const AppLayout = ({ children }) => {
           </ListItemButton>
           {openSections.purchase && (
         <List component="div" disablePadding sx={{minWidth:"fit-content"}}>
-          {searchParams.get("page") || searchParams.get("year__no") ?
-          <ListItemButton component={Link} to={`/purchase-schedules?page=${searchParams.get("page")}&year__no=${searchParams.get("year__no")}&search=${searchParams.get("search")}`} sx={{ pl: 4 }}>
-            <ListItemIcon>
-          < CalendarMonthIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Purchase Schedule"  sx={{minWidth:"fit-content"}}/>
-          </ListItemButton>:
+          {
           <ListItemButton component={Link} to={"/purchase-schedules"} sx={{ pl: 4 }}>
             <ListItemIcon>
           < CalendarMonthIcon/>

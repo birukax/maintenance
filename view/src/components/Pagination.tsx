@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
@@ -34,10 +34,14 @@ function Pagination(props) {
   const currentPagin = (pgNum) => {
     props.setCur(pgNum);
   };
-
+  useEffect(()=>{
+    if(searchParams.get("page") !== null){
+      props.setCur(Number(searchParams.get("page")))
+    }
+  },[])
   return (
     <div className='pagination' style={ContainerStyle}>
-      {props?.prev !== null &&
+      {props?.prev !== "null" &&
         <IconButton onClick={() => {
           setSearchParams({ ...Object.fromEntries(searchParams), page: props?.cur - 1 });
           props.searchByPage("page", props.cur - 1);
@@ -70,7 +74,7 @@ function Pagination(props) {
           </li>
         )
       )}
-      {props.next !== null &&
+      {props.next !== "null" &&
         <IconButton size='small' onClick={() => {
           setSearchParams({ ...Object.fromEntries(searchParams), page: props?.cur + 1 });
           props.searchByPage("page", props.cur + 1);
