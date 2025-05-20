@@ -316,17 +316,17 @@ const Detail = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
+            <TableBody>
             {data.work_order_activities.map((work_order_activity) => {
               return (
-                <TableBody>
-                  <TableRow>
+                  <TableRow key={work_order_activity.id}>
                     <TableCell>{work_order_activity.description}</TableCell>
                     <TableCell>{work_order_activity.value ? <Typography color='success'>Checked</Typography>:<Typography color='error'>Not Checked</Typography> }</TableCell>
                     <TableCell>{work_order_activity.remark}</TableCell>
                   </TableRow>
-                </TableBody>
               );
             })}
+                </TableBody>
           </Table>
         </div>
         </div>
