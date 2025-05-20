@@ -24,7 +24,7 @@ const Create = () => {
     username: "",
     phone_no: "",
     email:"",
-    role:"",
+    role: "ENGINEER",
     password:""
   });
   const [loading, setLoading] = useState(false);
