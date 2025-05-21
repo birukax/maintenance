@@ -128,6 +128,7 @@ class ItemViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         try:
+            serializer.is_valid(raise_exception=True)
             item = serializer.save(uom=uom)
             if suppliers.exists():
                 item.suppliers.set(suppliers)
@@ -155,6 +156,7 @@ class ItemViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
 
+        serializer.is_valid(raise_exception=True)
         item = serializer.save()
         if suppliers.exists():
             item.suppliers.set(suppliers)
@@ -282,6 +284,8 @@ class TransferViewSet(viewsets.ModelViewSet):
                     f"location Does not exist!",
                 },
             )
+
+        serializer.is_valid(raise_exception=True)
         transfer = serializer.save(
             requested_by=requested_by,
             from_location=from_location,

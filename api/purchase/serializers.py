@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from account.serializers import UserSerializer
-from inventory.serializers import ItemSerializer
+from inventory.serializers import ItemSerializer, LocationSerializer
 from .models import (
     Schedule,
     Request,
@@ -47,6 +47,8 @@ class RequestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     item_id = serializers.IntegerField(write_only=True)
     item = ItemSerializer(read_only=True)
+    location_id = serializers.IntegerField(write_only=True)
+    location = LocationSerializer(read_only=True)
     requested_by = UserSerializer(read_only=True)
     approved_by = UserSerializer(read_only=True)
 
@@ -56,6 +58,8 @@ class RequestSerializer(serializers.ModelSerializer):
             "id",
             "item",
             "item_id",
+            "location",
+            "location_id",
             "quantity",
             "received_quantity",
             "requested_date",

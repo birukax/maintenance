@@ -4,7 +4,7 @@ from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from approval.models import Purchase
-from inventory.models import Item
+from inventory.models import Item, Location
 from .models import Schedule, Request, Year
 from .serializers import (
     ScheduleSerializer,
@@ -37,12 +37,20 @@ class RequestViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         item_id = serializer.validated_data.pop("item_id")
+        location_id = serializer.validated_data.pop("location_id")
         try:
             item = Item.objects.get(id=item_id)
+            location = Location.objects.get(id=location_id)
         except Item.DoesNotExist:
             raise serializers.ValidationError(
                 {"item_id": f"Item with id {item_id} does not exist."}
             )
+        except Location.DoesNotExist:
+            raise serializers.ValidationError(
+                {"location_id": f"Location with id {location_id} does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
         serializer.is_valid(raise_exception=True)
         purchase_request = serializer.save(
             requested_by=self.request.user,
