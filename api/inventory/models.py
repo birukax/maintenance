@@ -227,6 +227,31 @@ class TransferItem(BaseCreatedUpdated):
         return f"{self.item.name} - {self.transfer.status}"
 
 
+class TransferHistory(BaseCreatedUpdated):
+    transfer = models.ForeignKey(
+        Transfer, on_delete=models.CASCADE, related_name="transfer_histories"
+    )
+    item = models.ForeignKey(
+        Item, on_delete=models.RESTRICT, related_name="transfer_histories"
+    )
+    location = models.ForeignKey(
+        Location, on_delete=models.RESTRICT, related_name="transfer_histories"
+    )
+    type = models.CharField(
+        choices=choices.TRANSFER_TYPES, max_length=25, null=True, blank=True
+    )
+    date = models.DateField(default=datetime.datetime.now)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    class Meta:
+        ordering = ["-created_at", "transfer__id", "item__name", "type"]
+
+    def __str__(self):
+        if self.item and self.location:
+            return f"{self.item.name} - {self.location.name}"
+        return f"{self.date} - {self.quantity}"
+
+
 class Consumption(BaseCreatedUpdated):
     item = models.ForeignKey(
         Item, on_delete=models.RESTRICT, related_name="consumptions"

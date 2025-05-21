@@ -46,6 +46,11 @@ TRANSFER_STATUS = (
     ("RECEIVED", "RECEIVED"),
 )
 
+TRANSFER_TYPES = (
+    ("INBOUND", "INBOUND"),
+    ("OUTBOUND", "OUTBOUND"),
+)
+
 WORK_ORDER_TYPES = (
     ("PM01", "Failure Work-Order"),
     ("PM02", "Inspection Based Work-Order"),

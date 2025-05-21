@@ -17,6 +17,7 @@ from .models import (
     TransferItem,
     Consumption,
     Return,
+    TransferHistory,
 )
 from .serializers import (
     ContactSerializer,
@@ -162,7 +163,13 @@ class ItemViewSet(viewsets.ModelViewSet):
 class InventoryViewSet(viewsets.ModelViewSet):
     serializer_class = InventorySerializer
     queryset = Inventory.objects.all()
-    search_fields = ["item__name", "item__no", "balance"]
+    search_fields = [
+        "item__name",
+        "item__no",
+        "location__name",
+        "location__code",
+        "balance",
+    ]
     filterset_fields = []
 
     @action(detail=False, methods=["GET"])
@@ -170,30 +177,44 @@ class InventoryViewSet(viewsets.ModelViewSet):
         all_purchases = Request.objects.values("item_id").annotate(
             total_received=Sum("received _quantity")
         )
-        all_consumptions = Consumption.objects.values("item_id").annotate(
-            total_consumed=Sum("quantity")
-        )
-        all_returns = (
-            Return.objects.filter(used=False)
-            .values("item_id")
-            .annotate(total_returned=Sum("quantity"))
-        )
+        # all_consumptions = Consumption.objects.values("item_id").annotate(
+        #     total_consumed=Sum("quantity")
+        # )
+        # all_returns = (
+        #     Return.objects.filter(used=False)
+        #     .values("item_id")
+        #     .annotate(total_returned=Sum("quantity"))
+        # )
         purchase_map = {p["item_id"]: p["total_received"] for p in all_purchases}
-        consumptions_map = {c["item_id"]: c["total_consumed"] for c in all_consumptions}
-        returns_map = {r["item_id"]: r["total_returned"] for r in all_returns}
+        # consumptions_map = {c["item_id"]: c["total_consumed"] for c in all_consumptions}
+        # returns_map = {r["item_id"]: r["total_returned"] for r in all_returns}
 
         inventories_to_update = Inventory.objects.all()
         updated_inventory_instances = []
 
         for inv_item in inventories_to_update:
             inv_item.purchased_quantity = purchase_map.get(inv_item.item_id, 0) or 0
-            inv_item.consumed_quantity = consumptions_map.get(inv_item.item_id, 0) or 0
-            inv_item.returned_quantity = returns_map.get(inv_item.item_id, 0) or 0
+            inv_item.inbound_transfers = (
+                TransferHistory.objects.filter(
+                    location=inv_item.location, item=inv_item.item, type="INBOUND"
+                )
+                .annotate(total_quantity=Sum("quantity"))
+                .values("total_quantity")[0]["total_quantity"]
+                or 0
+            )
+            inv_item.outbound_transfers = (
+                TransferHistory.objects.filter(
+                    location=inv_item.location, item=inv_item.item, type="OUTBOUND"
+                )
+                .annotate(total_quantity=Sum("quantity"))
+                .values("total_quantity")[0]["total_quantity"]
+                or 0
+            )
 
             inv_item.balance = (
                 inv_item.purchased_quantity
-                - inv_item.consumed_quantity
-                + inv_item.returned_quantity
+                + inv_item.inbound_transfers
+                - inv_item.outbound_transfers
             )
 
             updated_inventory_instances.append(inv_item)
@@ -203,8 +224,10 @@ class InventoryViewSet(viewsets.ModelViewSet):
                 updated_inventory_instances,
                 [
                     "purchased_quantity",
-                    "consumed_quantity",
-                    "returned_quantity",
+                    "inbound_transfers",
+                    "outbound_transfers",
+                    # "consumed_quantity",
+                    # "returned_quantity",
                     "balance",
                 ],
             )
