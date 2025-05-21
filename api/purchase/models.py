@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from main import choices
 from main.models import BaseCreatedUpdated
 from django.contrib.auth.models import User
-from inventory.models import Item
+from inventory.models import Item, Location
 
 
 class Year(BaseCreatedUpdated):
@@ -49,6 +49,9 @@ class Request(BaseCreatedUpdated):
         blank=True,
     )
     received_date = models.DateField(null=True, blank=True)
+    location = models.ForeignKey(
+        Location, on_delete=models.RESTRICT, null=True, blank=True
+    )
     priority = models.CharField(
         choices=choices.PRIORITIES, max_length=25, default="MEDIUM"
     )
