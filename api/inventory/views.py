@@ -30,6 +30,7 @@ from .serializers import (
     InventorySerializer,
     TransferSerializer,
     TransferItemSerializer,
+    TransferHistorySerializer,
     ConsumptionSerializer,
     ReturnSerializer,
 )
@@ -315,6 +316,21 @@ class TransferItemViewSet(viewsets.ModelViewSet):
         "item__name",
     ]
     filterset_fields = []
+
+
+class TransferHistoryViewSet(viewsets.ModelViewSet):
+    serializer_class = TransferHistorySerializer
+    queryset = TransferHistory.objects.all()
+    serach_fields = [
+        "item__no",
+        "item__name",
+        "location__code",
+        "location_name",
+    ]
+    filterset_fields = [
+        "type",
+        "date",
+    ]
 
 
 class ConsumptionViewSet(viewsets.ModelViewSet):

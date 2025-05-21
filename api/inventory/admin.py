@@ -1,18 +1,31 @@
 from django.contrib import admin
 from .models import (
-    UnitOfMeasure,
     Contact,
+    Location,
+    Shelf,
+    ShelfRow,
+    ShelfBox,
+    UnitOfMeasure,
     Item,
     Inventory,
-    # Consumption,
+    Transfer,
+    TransferItem,
+    TransferHistory,
+    Consumption,
     Return,
     Location,
 )
 
-admin.site.register(Item)
-admin.site.register(Return)
 admin.site.register(Contact)
-admin.site.register(Inventory)
-# admin.site.register(Consumption)
-admin.site.register(UnitOfMeasure)
 admin.site.register(Location)
+admin.site.register(Shelf)
+admin.site.register(ShelfRow)
+admin.site.register(ShelfBox)
+admin.site.register(UnitOfMeasure)
+admin.site.register(Item)
+admin.site.register(Inventory)
+admin.site.register(Transfer)
+admin.site.register(TransferItem)
+admin.site.register(TransferHistory)
+admin.site.register(Consumption)
+admin.site.register(Return)

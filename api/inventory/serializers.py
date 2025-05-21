@@ -11,6 +11,7 @@ from .models import (
     Inventory,
     Transfer,
     TransferItem,
+    TransferHistory,
     Consumption,
     Return,
 )
@@ -212,6 +213,23 @@ class TransferSerializer(serializers.ModelSerializer):
             "approved_date",
             "shipment_date",
             "transfer_items",
+        ]
+
+
+class TransferHistorySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    transfer = TransferSerializer(read_only=True)
+    item = ItemSerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
+
+    class Meta:
+        model = TransferHistory
+        fields = [
+            "id",
+            "transfer",
+            "type",
+            "date",
+            "quantity",
         ]
 
 
