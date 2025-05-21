@@ -13,7 +13,7 @@ function Pagination(props) {
     justifyContent: "flex-start",
     gap: ".5rem",
   };
-  const nop = 2;
+  const nop = 35; // number of items per page
   const totalPages = Math.ceil((props?.count || 0) / nop);
   const pageNumbers = [...Array(totalPages).keys()].map(i => i + 1);
 
@@ -41,7 +41,7 @@ function Pagination(props) {
   },[])
   return (
     <div className='pagination' style={ContainerStyle}>
-      {props?.prev !== "null" &&
+      {props?.prev !== null &&
         <IconButton onClick={() => {
           setSearchParams({ ...Object.fromEntries(searchParams), page: props?.cur - 1 });
           props.searchByPage("page", props.cur - 1);
@@ -74,7 +74,7 @@ function Pagination(props) {
           </li>
         )
       )}
-      {props.next !== "null" &&
+      {props.next !== null &&
         <IconButton size='small' onClick={() => {
           setSearchParams({ ...Object.fromEntries(searchParams), page: props?.cur + 1 });
           props.searchByPage("page", props.cur + 1);

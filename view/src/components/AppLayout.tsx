@@ -156,7 +156,7 @@ const AppLayout = ({ children }) => {
           {
           <ListItemButton component={Link} to={"/purchase-schedules"} sx={{ pl: 4 }}>
             <ListItemIcon>
-          < CalendarMonthIcon/>
+          < CalendarMonthIcon sx={{fill:"#5d4037"}}/>
             </ListItemIcon>
             <ListItemText primary="Purchase Schedule"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
