@@ -61,6 +61,21 @@ class ShelfViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = []
 
+    def perform_create(self, serializer):
+        location_id = serializer.validated_data.pop("location_id")
+        try:
+            location = Location.objects.get(id=location_id)
+        except Location.DoesNotExist:
+            raise serializers.ValidationError(
+                {"location_id": f"Location with id {location_id} does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save(location=location)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class ShelfRowViewSet(viewsets.ModelViewSet):
     serializer_class = ShelfRowSerializer
@@ -73,6 +88,21 @@ class ShelfRowViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = []
 
+    def perform_create(self, serializer):
+        shelf_id = serializer.validated_data.pop("shelf_id")
+        try:
+            shelf = Shelf.objects.get(id=shelf_id)
+        except Shelf.DoesNotExist:
+            raise serializers.ValidationError(
+                {"shelf_id": f"Shelf with id {shelf_id} does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save(shelf=shelf)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class ShelfBoxViewSet(viewsets.ModelViewSet):
     serializer_class = ShelfBoxSerializer
@@ -84,6 +114,21 @@ class ShelfBoxViewSet(viewsets.ModelViewSet):
         "shelf_row__name",
     ]
     filterset_fields = []
+
+    def perform_create(self, serializer):
+        shelf_row_id = serializer.validated_data.pop("shelf_row_id")
+        try:
+            shelf_row = ShelfRow.objects.get(id=shelf_row_id)
+        except ShelfRow.DoesNotExist:
+            raise serializers.ValidationError(
+                {"shelf_row_id": f"Shelf Row with id {shelf_row_id} does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save(shelf_row=shelf_row)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UnitOfMeasureViewSet(viewsets.ModelViewSet):
