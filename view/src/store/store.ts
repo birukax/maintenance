@@ -10,6 +10,9 @@ import profileReducer from './slices/profileSlice';
 import machineReducer from './slices/machineSlice';
 import locationReducer from './slices/locationSlice';
 import plantReducer from './slices/plantSlice';
+import shelfReducer from './slices/shelfSlice';
+import shelfRowReducer from './slices/shelfRowSlice';
+import shelfBoxReducer from './slices/shelfBoxSlice';
 import areaReducer from './slices/areaSlice';
 import activityReducer from './slices/activitySlice';
 import scheduleReducer from './slices/scheduleSlice';
@@ -36,6 +39,9 @@ interface RootState {
   machine: ReturnType<typeof machineReducer>;
   location: ReturnType<typeof locationReducer>;
   plant: ReturnType<typeof plantReducer>;
+  shelf: ReturnType<typeof shelfReducer>;
+  shelfRow: ReturnType<typeof shelfRowReducer>;
+  shelfBox: ReturnType<typeof shelfBoxReducer>;
   area: ReturnType<typeof areaReducer>;
   activity: ReturnType<typeof activityReducer>;
   schedule: ReturnType<typeof scheduleReducer>;
@@ -63,6 +69,9 @@ const rootReducer = {
     machine: machineReducer,
     location: locationReducer,
     plant: plantReducer,
+    shelf: shelfReducer,
+    shelfRow: shelfRowReducer,
+    shelfBox: shelfBoxReducer,
     area: areaReducer,
     activity: activityReducer,
     schedule: scheduleReducer,

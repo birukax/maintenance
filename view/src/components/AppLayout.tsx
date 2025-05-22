@@ -45,6 +45,10 @@ import FactoryIcon from '@mui/icons-material/Factory';
 import AreaChartIcon from '@mui/icons-material/AreaChart';
 import PersonIcon from '@mui/icons-material/Person';
 import { jwtDecode } from "jwt-decode";
+import TableChartIcon from '@mui/icons-material/TableChart';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import TableRowsIcon from '@mui/icons-material/TableRows';
+import PlaceIcon from '@mui/icons-material/Place';
 const drawerWidth = 260;
 
 const AppLayout = ({ children }) => {
@@ -53,7 +57,8 @@ const AppLayout = ({ children }) => {
     purchase: false,
     maintenance: false,
     consumption: false,
-    location:false
+    location:false,
+    shelf:false
   });
   const [searchParams,setSearchParams]=useSearchParams()
   const toggleSection = (section) => {
@@ -125,6 +130,12 @@ const AppLayout = ({ children }) => {
             </ListItemIcon>
             <ListItemText primary="Inventory" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
+              <ListItemIcon>
+              <PlaceIcon sx={{fill:"#5d4037"}}/>
+              </ListItemIcon>
+              <ListItemText primary="Location"  sx={{minWidth:"fit-content"}}/>
+            </ListItemButton>
           <ListItemButton component={Link} to="/unit-of-measures" sx={{ pl: 4 }}>
               <ListItemIcon>
               <ScaleIcon sx={{fill:"#5d4037"}}/>
@@ -262,6 +273,36 @@ const AppLayout = ({ children }) => {
           <AreaChartIcon sx={{fill:"#5d4037"}}/>
             </ListItemIcon>
             <ListItemText primary="Area" />
+          </ListItemButton>
+        
+        </List>
+        
+          )}
+          <ListItemButton onClick={() => toggleSection("shelf")}>
+        <ListItemText primary="Shelf" />
+        {openSections.shelf ? <ExpandLessIcon sx={{fill:"#5d4037"}}/> : <ExpandMoreIcon sx={{fill:"#5d4037"}}/>}
+          </ListItemButton>
+          {openSections.shelf && (
+        <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
+          
+
+          <ListItemButton component={Link} to="/shelves" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <TableChartIcon sx={{fill:"#5d4037"}}/>
+            </ListItemIcon>
+            <ListItemText primary="Shelf" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/shelf-rows" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <TableRowsIcon sx={{fill:"#5d4037"}}/>
+            </ListItemIcon>
+            <ListItemText primary="Shelf Row" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/shelf-boxes" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <ArchiveIcon sx={{fill:"#5d4037"}}/>
+            </ListItemIcon>
+            <ListItemText primary="Shelf Box" />
           </ListItemButton>
         
         </List>

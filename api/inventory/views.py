@@ -110,24 +110,24 @@ class ShelfBoxViewSet(viewsets.ModelViewSet):
     search_fields = [
         "code",
         "name",
-        "shelf_row__code",
-        "shelf_row__name",
+        "row__code",
+        "row__name",
     ]
     filterset_fields = []
 
     def perform_create(self, serializer):
-        shelf_row_id = serializer.validated_data.pop("shelf_row_id")
+        row_id = serializer.validated_data.pop("row_id")
         try:
-            shelf_row = ShelfRow.objects.get(id=shelf_row_id)
+            row = ShelfRow.objects.get(id=row_id)
         except ShelfRow.DoesNotExist:
             raise serializers.ValidationError(
-                {"shelf_row_id": f"Shelf Row with id {shelf_row_id} does not exist."}
+                {"row_id": f"Shelf Row with id {row_id} does not exist."}
             )
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
 
         serializer.is_valid(raise_exception=True)
-        serializer.save(shelf_row=shelf_row)
+        serializer.save(row=row)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

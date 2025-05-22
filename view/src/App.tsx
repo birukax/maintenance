@@ -22,6 +22,10 @@ import BreakdownRoutes from "./routes/BreakdownRoutes";
 
 import "./App.css";
 import ProfileRoutes from "./routes/ProfileRoutes";
+import ShelfRoutes from "./routes/ShelfRoutes";
+import ShelfRowRoutes from "./routes/ShelfRowRoutes";
+import ShelfBoxRoutes from "./routes/ShelfBoxRoutes";
+import LocationRoutes from "./routes/LocationRoutes";
 const App: React.FC = () => {
 
   
@@ -36,6 +40,10 @@ const App: React.FC = () => {
       {MachineRoutes}
       {ActivityRoutes}
       {plantRoutes}
+      {ShelfRoutes}
+      {ShelfRowRoutes}
+      {ShelfBoxRoutes}
+      {LocationRoutes}
       {areaRoutes}
       {WorkOrderRoutes}
       {ScheduleRoutes}

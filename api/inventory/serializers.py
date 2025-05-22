@@ -46,7 +46,7 @@ class LocationSerializer(serializers.ModelSerializer):
 class ShelfSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     location = LocationSerializer(read_only=True)
-    location_id = serializers.IntegerField(read_only=True)
+    location_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Shelf
@@ -62,7 +62,7 @@ class ShelfSerializer(serializers.ModelSerializer):
 class ShelfRowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     shelf = ShelfSerializer(read_only=True)
-    shelf_id = serializers.IntegerField(read_only=True)
+    shelf_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = ShelfRow
@@ -77,11 +77,15 @@ class ShelfRowSerializer(serializers.ModelSerializer):
 
 class ShelfBoxSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    shelf_row = ShelfRowSerializer(read_only=True)
-
+    row = ShelfRowSerializer(read_only=True)
+    row_id = serializers.IntegerField(write_only=True)
     class Meta:
         model = ShelfBox
-        fields = ["id", ""]
+        fields = ["id", 
+                  "row",
+            "row_id",
+            "code",
+            "name",]
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):

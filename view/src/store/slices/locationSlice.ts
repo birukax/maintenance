@@ -17,11 +17,11 @@ const initialState: LocationState = {
     location: {data: null, loading: false, error: null},
 };
 
-export const fetchLocations = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchLocations = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
     'location/fetchLocations',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/asset/locations/');
+            const response = await api.get('/inventory/locations/',{params});
             return response.data;
         }
         catch (error) {
@@ -35,7 +35,7 @@ export const fetchLocation = createAsyncThunk<[], number, { rejectValue: string 
     'location/fetchLocation',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await api.get(`/asset/locations/${id}/`)
+            const response = await api.get(`/inventory/locations/${id}/`)
             return response.data;
         }
         catch (error) {
@@ -48,7 +48,7 @@ export const createLocation = createAsyncThunk<[],  formData  , { rejectValue: s
     'location/createLocation',
     async (formData, { rejectWithValue }) => {
         try {
-            const response = await api.post('/asset/locations/', formData);
+            const response = await api.post('/inventory/locations/', formData);
             return response.data;
         }
         catch (error) {
@@ -61,7 +61,7 @@ export const updateLocation = createAsyncThunk<[], { id: string, formData: { [ke
     'location/updateLocation',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
-            const response = await api.patch(`/asset/locations/${id}/`, formData);
+            const response = await api.patch(`/inventory/locations/${id}/`, formData);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
