@@ -11,6 +11,8 @@ const Detail = () => {
   });
   const renderButtons = () => <></>;
 
+
+  
   const renderDetails = (data) => (
     <>
 
@@ -19,13 +21,13 @@ const Detail = () => {
       <div className="clmn">
         <Typography variant="h6">Name:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.item.name}
+        {data.item?.name}
       </Typography>
       </div>
       <div className="clmn">
         <Typography variant="h6">UoM:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.item.uom.name}
+        {data.item?.uom?.name}
       </Typography>
       </div>
     </div>
@@ -35,7 +37,7 @@ const Detail = () => {
         <div className="clmn">
 <Typography variant="h6">Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.quantity}
+        {data?.quantity}
       </Typography>
 
         </div>
@@ -50,7 +52,7 @@ const Detail = () => {
 
 <Typography variant="h6">Consumption Date:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.date}
+        {data?.date}
       </Typography>
         </div>
       </div>

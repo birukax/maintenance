@@ -130,7 +130,7 @@ const Detail = () => {
 
           <Typography variant="h6">Machine:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.machine.code} - {data.machine.name}
+            {data?.machine?.code} - {data?.machine?.name}
           </Typography>
         </div>
 
@@ -139,14 +139,14 @@ const Detail = () => {
 
           <Typography variant="h6">Equipment:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.equipment.code} - {data.equipment.name}
+            {data?.equipment?.code} - {data?.equipment?.name}
           </Typography>
         </div>
 
         <div className="clmn">
           <Typography variant="h6">Work Order Type:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.work_order_type.code} - {data.work_order_type.name}
+            {data?.work_order_type?.code} - {data?.work_order_type?.name}
           </Typography>
         </div>
 
@@ -154,14 +154,14 @@ const Detail = () => {
 
           <Typography variant="h6">Activity Type:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.activity_type.code} - {data.activity_type.name}
+            {data?.activity_type?.code} - {data?.activity_type?.name}
           </Typography>
         </div>
 
         <div className="clmn">
           <Typography variant="h6">Status:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.status}
+            {data?.status}
           </Typography>
         </div>
 
@@ -169,7 +169,7 @@ const Detail = () => {
           <div className="clmn">
             <Typography variant="h6">Breakdown Reason:</Typography>
             <Typography variant="body1" className="text-slate-500 mb-2">
-              {data.breakdown.reason}
+              {data?.breakdown?.reason}
             </Typography>
           </div>
         )}
@@ -179,7 +179,7 @@ const Detail = () => {
           <div className="clmn">
             <Typography variant="h6">Schedule:</Typography>
             <Typography variant="body1" className="text-slate-500 mb-2">
-              {data.schedule.type}
+              {data?.schedule?.type}
             </Typography>
           </div>
         )}
@@ -192,10 +192,10 @@ const Detail = () => {
 
           <Typography variant="h6">Start:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState.data.start_date}
+            {entityState?.data?.start_date}
           </Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState.data.start_time}
+            {entityState?.data?.start_time}
 
           </Typography>
         </div>
@@ -204,10 +204,10 @@ const Detail = () => {
 
           <Typography variant="h6">End:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState.data.end_date}
+            {entityState?.data?.end_date}
           </Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState.data.end_time}
+            {entityState?.data?.end_time}
 
           </Typography>
         </div>
@@ -217,7 +217,7 @@ const Detail = () => {
 
           <Typography variant="h6">Total Time Required:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.total_time_required}
+            {data?.total_time_required}
           </Typography>
         </div>
 
@@ -226,7 +226,7 @@ const Detail = () => {
 
           <Typography variant="h6">Total Time Taken:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.total_time_taken}
+            {data?.total_time_taken}
           </Typography>
         </div>
 
@@ -240,10 +240,10 @@ const Detail = () => {
 
 
 
-        {data.assigned_users.length > 0 && (
+        {data?.assigned_users?.length > 0 && (
           <div className="clmn">
             <Typography variant="h6">Assigned Users:</Typography>
-            {data.assigned_users.map((assigned_user) => {
+            {data?.assigned_users?.map((assigned_user) => {
               return (
                 <Typography
                   variant="body1"
@@ -260,14 +260,14 @@ const Detail = () => {
         <div className="clmn">
 
           <Typography variant="h6">Spareparts Required:</Typography>
-          {data.spareparts_required.map((sparepart) => {
+          {data?.spareparts_required?.map((sparepart) => {
             return (
               <Typography
                 variant="body1"
                 className="text-slate-500 mb-2"
                 key={sparepart.id}
               >
-                <li className="boolean"></li> {sparepart.name}
+                <li className="boolean"></li> {sparepart?.name}
               </Typography>
             );
           })}
@@ -275,14 +275,14 @@ const Detail = () => {
         <div className="clmn">
 
           <Typography variant="h6">Tools Required:</Typography>
-          {data.tools_required.map((tool) => {
+          {data?.tools_required?.map((tool) => {
             return (
               <Typography
                 variant="body1"
                 className="text-slate-500 mb-2"
                 key={tool.id}
               >
-                <li className="boolean"></li> {tool.name}
+                <li className="boolean"></li> {tool?.name}
               </Typography>
             );
           })}
@@ -291,7 +291,7 @@ const Detail = () => {
           <div className="clmn">
             <Typography variant="h6">Completed By:</Typography>
             <Typography variant="body1" className="text-slate-500 mb-2">
-              {data.completed_by.username}
+              {data?.completed_by?.username}
             </Typography>
           </div>
         )}
@@ -317,12 +317,12 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {data.work_order_activities.map((work_order_activity) => {
+            {data?.work_order_activities?.map((work_order_activity) => {
               return (
                   <TableRow key={work_order_activity.id}>
-                    <TableCell>{work_order_activity.description}</TableCell>
-                    <TableCell>{work_order_activity.value ? <Typography color='success'>Checked</Typography>:<Typography color='error'>Not Checked</Typography> }</TableCell>
-                    <TableCell>{work_order_activity.remark}</TableCell>
+                    <TableCell>{work_order_activity?.description}</TableCell>
+                    <TableCell>{work_order_activity?.value ? <Typography color='success'>Checked</Typography>:<Typography color='error'>Not Checked</Typography> }</TableCell>
+                    <TableCell>{work_order_activity?.remark}</TableCell>
                   </TableRow>
               );
             })}

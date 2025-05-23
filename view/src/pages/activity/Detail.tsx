@@ -31,7 +31,7 @@ const Detail = () => {
       <div className="clmn">
       <Typography variant="h6">Code:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.code}
+        {data?.code}
       </Typography>
       </div>
 
@@ -39,7 +39,7 @@ const Detail = () => {
 
       <Typography variant="h6">Name:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.name}
+        {data?.name}
       </Typography>
       </div>
     </div>
@@ -48,7 +48,7 @@ const Detail = () => {
       <div className="clmn">
       <Typography variant="h6">Activity Type:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.activity_type.code} - {data.activity_type.name}
+        {data?.activity_type?.code} - {data?.activity_type?.name}
       </Typography>
 
       </div>
@@ -56,7 +56,7 @@ const Detail = () => {
 
       <Typography variant="h6">Description:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.description}
+        {data?.description}
       </Typography>
       </div>
     </div>

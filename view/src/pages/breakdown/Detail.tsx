@@ -55,7 +55,7 @@ const Detail = () => {
           >
             Create Work Order
           </Button>
-          {entityState.data?.status === "WORK-ORDER CREATED" && (
+          {entityState?.data?.status === "WORK-ORDER CREATED" && (
             <>
               <Modal
                 open={updateModalOpen}
@@ -93,20 +93,20 @@ const Detail = () => {
       <div className="clmn">
         <Typography variant="h6">Machine:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.machine.code} - {data.machine.name}
+        {data?.machine?.code} - {data?.machine?.name}
       </Typography>
       </div>
       <div className="clmn">
       <Typography variant="h6">Equipment:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.equipment.code} - {data.equipment.name}
+        {data?.equipment?.code} - {data?.equipment?.name}
       </Typography>
 
       </div>
       <div className="clmn">
       <Typography variant="h6">Status:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.status}
+        {data?.status}
       </Typography>
       </div>
     </div>
@@ -123,7 +123,7 @@ const Detail = () => {
       </Typography>
       </div>
       <div className="clmn">
-{data.end_date && (
+{data?.end_date && (
         <>
           <Typography variant="h6">End:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
@@ -140,15 +140,15 @@ const Detail = () => {
 
       <Typography variant="h6">Reason:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.reason}
+        {data?.reason}
       </Typography>
         </div>
         <div className="clmn">
-{data.remark && (
+{data?.remark && (
         <>
           <Typography variant="h6">Remark:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.remark}
+            {data?.remark}
           </Typography>
         </>
       )}

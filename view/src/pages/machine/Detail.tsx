@@ -32,20 +32,20 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Code:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.code}
+            {data?.code}
           </Typography>
         </div>
         <div className="clmn">
           <Typography variant="h6">Name:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.name}
+            {data?.name}
           </Typography></div>
       </div>
       <div className="rw">
         <div className="clmn">
           <Typography variant="h6">Area:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.area.name}
+            {data?.area?.name}
           </Typography>
           </div>
       </div>

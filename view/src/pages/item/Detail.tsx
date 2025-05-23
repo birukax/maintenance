@@ -59,7 +59,7 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Unit of Measure:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.uom.name}
+            {data.uom && data.uom.name}
           </Typography>
         </div>
         <div className="clmn">
@@ -69,7 +69,7 @@ const Detail = () => {
           </Typography>
         </div>
         <div className="clmn"><Typography variant="h6">Suppliers:</Typography>
-          {data.suppliers.map((supplier, index) => {
+          {data.supliers && data.suppliers.map((supplier, index) => {
             return (
               <Typography variant="body1" className="text-slate-500 mb-2" key={index}>
                 <li className="boolean"></li> {supplier.name}
@@ -81,6 +81,8 @@ const Detail = () => {
 
     </>
   );
+  console.log("ssssssssssss",entityState);
+
   return (
     <GenericDetailPage
       titleBase="Item"

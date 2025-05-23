@@ -93,7 +93,6 @@ const persistConfig: PersistConfig<RootState> = {
     key: 'root',
     storage,
     whitelist: ['auth'],
-    blacklist: ['contact','unitOfMeasure'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

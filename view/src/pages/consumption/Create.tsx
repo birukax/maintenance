@@ -75,7 +75,7 @@ const params = {
       <Box component="form" onSubmit={handleSubmit} className="form-gap">
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
-            options={items.data || []}
+            options={Array.isArray(items.data) && items.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
@@ -87,7 +87,7 @@ const params = {
               />
             )}
             id="item-select"
-            value={items.data?.find((item) => item.id === formData.item_id) || null}
+            value={Array.isArray(items.data)&&items.data?.find((item) => item.id === formData.item_id) || null}
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,

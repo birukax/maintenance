@@ -25,14 +25,14 @@ const Detail = () => {
       <div className="clmn">
       <Typography variant="h6">Item:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.item.name}
+        {data.item?.name}
       </Typography>
       
       </div>
       <div className="clmn">
       <Typography variant="h6">UoM:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.item.uom.name}
+        {data?.item?.uom?.name}
       </Typography>
       
       </div>
