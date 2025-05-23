@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -68,23 +69,26 @@ const params = {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="machine-select-label">Machine</InputLabel>
-          <Select
-            labelId="machine-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={machines.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Machine"
+                placeholder="Search machines..."
+                required
+              />
+            )}
             id="machine-select"
-            name="machine_id"
-            value={formData.machine_id}
-            onChange={handleChange}
-            label="Machine"
-          >
-            {machines.data &&
-              machines.data.map((machine) => (
-                <MenuItem key={machine.id} value={machine.id}>
-                  {machine.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <TextField
           multiline

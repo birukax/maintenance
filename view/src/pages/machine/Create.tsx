@@ -17,6 +17,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -76,54 +77,56 @@ const params = {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="plant-select-label">Plant</InputLabel>
-          <Select
-            labelId="plant-select-label"
-            id="plant-select"
-            name="plant_id"
-            value={selectedPlant}
-            onChange={(e)=>{
-              setSelectedPlant(
-                e.target.value
-              )
-            }}
-            label="Plant"
-          >
-            {plants.data &&
-              plants.data.map((plant) => (
-                <MenuItem key={plant.id} value={plant.id}>
-                  {plant.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-        <FormControl
-          fullWidth
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={plants.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
           variant="outlined"
-          required={false}
-          disabled={loading}
-        >
-          <InputLabel id="area-select-label">Area</InputLabel>
-          <Select
-            labelId="area-select-label"
-            id="area-select"
-            name="area_id"
-            value={formData.area_id}
-            onChange={handleChange}
-            label="Area"
-          >
-            {areas.data &&
+          label="Plant"
+          placeholder="Search plants..."
+          required
+              />
+            )}
+            id="plant-select"
+            value={plants.data?.find((plant) => plant.id === selectedPlant) || null}
+            onChange={(event, newValue) => {
+              setSelectedPlant(newValue ? newValue.id : "");
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={
               areas.data
-                .filter(
-                  (area) => area.plant.id === selectedPlant
-                )
-                .map((area) => (
-                  <MenuItem key={area.id} value={area.id}>
-                    {area.name}
-                  </MenuItem>
-                ))}
-          </Select>
+          ? areas.data.filter((area) => area.plant.id === selectedPlant)
+          : []
+            }
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Area"
+          placeholder="Search areas..."
+          required
+              />
+            )}
+            id="area-select"
+            value={
+              areas.data?.find((area) => area.id === formData.area_id) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({
+          ...formData,
+          area_id: newValue ? newValue.id : "",
+              });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <TextField
           multiline

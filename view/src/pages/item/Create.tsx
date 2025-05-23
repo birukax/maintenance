@@ -36,10 +36,7 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
-  const params = {
-    no_pagination: "true",
-  };
-  const { contacts } = useSelector((state: AppState) => state.contact);
+  
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
@@ -50,11 +47,18 @@ const Create = () => {
     value: ITEM_CATEGORIES[key][0],
     label: ITEM_CATEGORIES[key][1],
   }));
-
+  
   useEffect(() => {
+    let isMounted=true
+    let controller=new AbortController()
+    const params = {
+      no_pagination: "true",
+    };
+    
     dispatch(fetchUnitOfMeasures(params));
     dispatch(fetchContacts(params));
   }, []);
+  const { contacts } = useSelector((state: AppState) => state.contact);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -91,15 +95,15 @@ const Create = () => {
 
   
   const supplierOptions = useMemo(() => {
-      return contacts.data
-        ? contacts.data
-        : [];
+      return contacts?.data ? contacts?.data:[];
     }, [contacts.data]);
 
+    console.log("supplier option",supplierOptions);
+    
   const selectedSuppliers = useMemo(() => {
-      return supplierOptions.filter((option) =>
+      return supplierOptions? supplierOptions?.filter((option) =>
         formData.suppliers_id.includes(option.id)
-      );
+      ):[] ;
     }, [formData.suppliers_id, supplierOptions]);
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
@@ -195,7 +199,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={loading}>
                         <Autocomplete
                           multiple
-                          options={supplierOptions}
+                          options={supplierOptions && supplierOptions}
                           getOptionLabel={(option) => option.name}
                           renderInput={(params) => (
                             <TextField

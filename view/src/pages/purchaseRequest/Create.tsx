@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { PRIORITIES } from "../../utils/choices";
@@ -69,23 +70,29 @@ const params = {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="uom-select-label">Item</InputLabel>
-          <Select
-            labelId="uom-select-label"
-            id="uom-select"
-            name="item_id"
-            value={formData.item_id}
-            onChange={handleChange}
-            label="Unit of Measure"
-          >
-            {items.data &&
-              items.data.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-          </Select>
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={items.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Item"
+                placeholder="Search items..."
+                required
+              />
+            )}
+            id="item-select"
+            value={items.data?.find((item) => item.id === formData.item_id) || null}
+            onChange={(event, newValue) => {
+              setFormData({
+                ...formData,
+                item_id: newValue ? newValue.id : "",
+              });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="priority-select-label">Priority</InputLabel>

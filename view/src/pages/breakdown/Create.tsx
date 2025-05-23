@@ -199,9 +199,8 @@ const params = {
             onChange={handleChange}
             label="Equipment"
           >
-            {equipments.data &&
-              equipments.data
-              .filter(
+            {equipments&&
+              equipments?.data?.filter(
                 (equipment) => equipment.machine.id === formData.machine_id
               )
               .map((equipment) => (
