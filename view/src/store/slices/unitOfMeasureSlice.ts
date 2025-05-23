@@ -13,8 +13,8 @@ interface UnitOfMeasureState {
 }
 
 const initialState: UnitOfMeasureState = {
-  unitOfMeasures: { data: null, loading: false, error: null },
-  unitOfMeasure: { data: null, loading: false, error: null },
+  unitOfMeasures: { data: [], loading: false, error: null },
+  unitOfMeasure: { data: [], loading: false, error: null },
 };
 
 export const fetchUnitOfMeasures = createAsyncThunk<

@@ -13,8 +13,8 @@ interface ActivityState {
 }
 
 const initialState: ActivityState = {
-    activities: {data: null, loading: false, error: null},
-    activity: {data: null, loading: false, error: null},
+    activities: {data: [], loading: false, error: null},
+    activity: {data: [], loading: false, error: null},
 };
 
 export const fetchActivities = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

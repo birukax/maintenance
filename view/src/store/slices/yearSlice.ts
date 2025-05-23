@@ -13,8 +13,8 @@ interface YearState {
 }
 
 const initialState: YearState = {
-    years: {data: null, loading: false, error: null},
-    year: {data: null, loading: false, error: null},
+    years: {data: [], loading: false, error: null},
+    year: {data: [], loading: false, error: null},
 };
 
 export const fetchYears = createAsyncThunk<[], void, {rejectValue: string}>(

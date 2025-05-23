@@ -13,8 +13,8 @@ interface AreaState {
 }
 
 const initialState: AreaState = {
-    areas: {data: null, loading: false, error: null},
-    area: {data: null, loading: false, error: null},
+    areas: {data: [], loading: false, error: null},
+    area: {data: [], loading: false, error: null},
 };
 
 export const fetchAreas = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

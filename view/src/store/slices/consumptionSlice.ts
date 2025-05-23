@@ -13,8 +13,8 @@ interface ConsumptionState {
 }
 
 const initialState: ConsumptionState = {
-    consumptions: {data: null, loading: false, error: null},
-    consumption: {data: null, loading: false, error: null},
+    consumptions: {data: [], loading: false, error: null},
+    consumption: {data: [], loading: false, error: null},
 };
 
 export const fetchConsumptions = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

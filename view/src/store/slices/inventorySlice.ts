@@ -13,8 +13,8 @@ interface InventoryState {
 }
 
 const initialState: InventoryState = {
-  inventories: { data: null, loading: false, error: null },
-  inventory: { data: null, loading: false, error: null },
+  inventories: { data: [], loading: false, error: null },
+  inventory: { data: [], loading: false, error: null },
 };
 
 export const fetchInventories = createAsyncThunk<

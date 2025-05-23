@@ -7,7 +7,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { AsyncThunk } from '@reduxjs/toolkit';
 
 interface EntityDetailState {
-  data: null;
+  data: [];
   loading: boolean;
   error: string | SerializedError | null;
 }

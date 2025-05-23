@@ -13,8 +13,8 @@ interface WorkOrderState {
 }
 
 const initialState: WorkOrderState = {
-    workOrders: {data: null, loading: false, error: null},
-    workOrder: {data: null, loading: false, error: null},
+    workOrders: {data: [], loading: false, error: null},
+    workOrder: {data: [], loading: false, error: null},
 };
 
 export const fetchWorkOrders = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

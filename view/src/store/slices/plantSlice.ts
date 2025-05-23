@@ -13,8 +13,8 @@ interface PlantState {
 }
 
 const initialState: PlantState = {
-    plants: {data: null, loading: false, error: null},
-    plant: {data: null, loading: false, error: null},
+    plants: {data: [], loading: false, error: null},
+    plant: {data: [], loading: false, error: null},
 };
 
 export const fetchPlants = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

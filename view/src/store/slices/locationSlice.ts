@@ -13,8 +13,8 @@ interface LocationState {
 }
 
 const initialState: LocationState = {
-    locations: {data: null, loading: false, error: null},
-    location: {data: null, loading: false, error: null},
+    locations: {data: [], loading: false, error: null},
+    location: {data: [], loading: false, error: null},
 };
 
 export const fetchLocations = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

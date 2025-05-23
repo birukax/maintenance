@@ -13,8 +13,8 @@ interface ItemState {
 }
 
 const initialState: ItemState = {
-    items: { data: null, loading: false, error: null },
-    item: { data: null, loading: false, error: null },
+    items: { data: [], loading: false, error: null },
+    item: { data: [], loading: false, error: null },
 };
 
 export const fetchItems = createAsyncThunk<[], {params:null}, { rejectValue: string }>(

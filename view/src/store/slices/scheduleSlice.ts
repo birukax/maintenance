@@ -13,8 +13,8 @@ interface ScheduleState {
 }
 
 const initialState: ScheduleState = {
-    schedules: {data: null, loading: false, error: null},
-    schedule: {data: null, loading: false, error: null},
+    schedules: {data: [], loading: false, error: null},
+    schedule: {data: [], loading: false, error: null},
 };
 
 export const fetchSchedules = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

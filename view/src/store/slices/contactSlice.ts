@@ -13,8 +13,8 @@ interface ContactState {
 }
 
 const initialState: ContactState = {
-    contacts: {data: null, loading: false, error: null},
-    contact: {data: null, loading: false, error: null},
+    contacts: {data: [], loading: false, error: null},
+    contact: {data: [], loading: false, error: null},
 };
 
 export const fetchContacts = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

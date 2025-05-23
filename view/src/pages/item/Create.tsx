@@ -33,10 +33,12 @@ const Create = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { contacts } = useSelector((state: AppState) => state.contact);
+
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
-  
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const item_types = Object.keys(ITEM_TYPES).map((key) => ({
@@ -47,18 +49,17 @@ const Create = () => {
     value: ITEM_CATEGORIES[key][0],
     label: ITEM_CATEGORIES[key][1],
   }));
-  
+
   useEffect(() => {
-    let isMounted=true
-    let controller=new AbortController()
+    let isMounted = true;
+    let controller = new AbortController();
     const params = {
       no_pagination: "true",
     };
-    
+
     dispatch(fetchUnitOfMeasures(params));
     dispatch(fetchContacts(params));
   }, []);
-  const { contacts } = useSelector((state: AppState) => state.contact);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,7 +74,6 @@ const Create = () => {
       [fieldName]: selectedIds,
     }));
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,21 +90,19 @@ const Create = () => {
       setLoading(false);
     }
   };
-
-
-
-  
   const supplierOptions = useMemo(() => {
-      return contacts?.data ? contacts?.data:[];
-    }, [contacts.data]);
+    return Array.isArray(contacts?.data) ? contacts?.data : [];
+  }, [contacts.data]);
 
-    console.log("supplier option",supplierOptions);
-    
+  console.log("supplier option", supplierOptions);
+
   const selectedSuppliers = useMemo(() => {
-      return supplierOptions? supplierOptions?.filter((option) =>
-        formData.suppliers_id.includes(option.id)
-      ):[] ;
-    }, [formData.suppliers_id, supplierOptions]);
+    return Array.isArray(supplierOptions)
+      ? supplierOptions?.filter((option) =>
+          formData.suppliers_id.includes(option.id)
+        )
+      : [];
+  }, [formData.suppliers_id, supplierOptions]);
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">

@@ -13,8 +13,8 @@ interface ShelfRowState {
 }
 
 const initialState: ShelfRowState = {
-    shelfRows: {data: null, loading: false, error: null},
-    shelfRow: {data: null, loading: false, error: null},
+    shelfRows: {data: [], loading: false, error: null},
+    shelfRow: {data: [], loading: false, error: null},
 };
 
 export const fetchShelfRows = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

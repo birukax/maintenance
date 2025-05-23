@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
+import { persistStore, persistReducer, PersistConfig, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/authSlice';
 import itemReducer from './slices/itemSlice';
@@ -59,7 +59,7 @@ interface RootState {
   monthlyPurchaseSchedule: ReturnType<typeof monthlyPurchaseScheduleReducer>;
 }
 
-const rootReducer = {
+const rootReducer = combineReducers({
     auth: authReducer,
     item: itemReducer,
     return: returnReducer,
@@ -87,23 +87,23 @@ const rootReducer = {
     purchaseApproval: purchaseApprovalReducer,
     purchaseSchedule: purchaseScheduleReducer,
     monthlyPurchaseSchedule: monthlyPurchaseScheduleReducer,
-}
+})
 
 const persistConfig: PersistConfig<RootState> = {
     key: 'root',
     storage,
     whitelist: ['auth'],
-    blacklist: ['contact'],
+    blacklist: ['contact','unitOfMeasure'],
 };
 
-const persistedReducer = persistReducer(persistConfig, combineReducers(rootReducer));
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer:  persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
           serializableCheck: {
-            ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
           },
         }),
 });

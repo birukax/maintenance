@@ -13,8 +13,8 @@ interface ReturnState {
 }
 
 const initialState: ReturnState = {
-    returns: {data: null, loading: false, error: null},
-    return: {data: null, loading: false, error: null},
+    returns: {data: [], loading: false, error: null},
+    return: {data: [], loading: false, error: null},
 };
 
 export const fetchReturns = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

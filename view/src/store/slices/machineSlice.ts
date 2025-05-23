@@ -13,8 +13,8 @@ interface MachineState {
 }
 
 const initialState: MachineState = {
-    machines: {data: null, loading: false, error: null},
-    machine: {data: null, loading: false, error: null},
+    machines: {data: [], loading: false, error: null},
+    machine: {data: [], loading: false, error: null},
 };
 
 export const fetchMachines = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

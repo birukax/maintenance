@@ -13,8 +13,8 @@ interface ProfileState {
 }
 
 const initialState: ProfileState = {
-    profiles: {data: null, loading: false, error: null},
-    profile: {data: null, loading: false, error: null},
+    profiles: {data: [], loading: false, error: null},
+    profile: {data: [], loading: false, error: null},
 };
 
 export const fetchProfiles = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

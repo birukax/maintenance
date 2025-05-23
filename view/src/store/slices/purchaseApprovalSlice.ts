@@ -13,8 +13,8 @@ interface PurchaseApprovalState {
 }
 
 const initialState: PurchaseApprovalState = {
-    purchaseApprovals: {data: null, loading: false, error: null},
-    purchaseApproval: {data: null, loading: false, error: null},
+    purchaseApprovals: {data: [], loading: false, error: null},
+    purchaseApproval: {data: [], loading: false, error: null},
 };
 
 export const fetchPurchaseApprovals = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

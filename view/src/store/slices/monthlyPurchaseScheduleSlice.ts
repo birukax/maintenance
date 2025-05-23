@@ -13,8 +13,8 @@ interface MonthlyPurchaseScheduleState {
 }
 
 const initialState: MonthlyPurchaseScheduleState = {
-    monthlyPurchaseSchedules: {data: null, loading: false, error: null},
-    monthlyPurchaseSchedule: {data: null, loading: false, error: null},
+    monthlyPurchaseSchedules: {data: [], loading: false, error: null},
+    monthlyPurchaseSchedule: {data: [], loading: false, error: null},
 };
 
 export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, {rejectValue: string}>(

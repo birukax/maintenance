@@ -13,8 +13,8 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    users: {data: null, loading: false, error: null},
-    user: {data: null, loading: false, error: null},
+    users: {data: [], loading: false, error: null},
+    user: {data: [], loading: false, error: null},
 };
 
 export const fetchUsers = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

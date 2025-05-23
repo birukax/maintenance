@@ -13,8 +13,8 @@ interface BreakdownState {
 }
 
 const initialState: BreakdownState = {
-    breakdowns: {data: null, loading: false, error: null},
-    breakdown: {data: null, loading: false, error: null},
+    breakdowns: {data: [], loading: false, error: null},
+    breakdown: {data: [], loading: false, error: null},
 };
 
 export const fetchBreakdowns = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

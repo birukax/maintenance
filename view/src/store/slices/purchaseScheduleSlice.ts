@@ -13,8 +13,8 @@ interface PurchaseScheduleState {
 }
 
 const initialState: PurchaseScheduleState = {
-    purchaseSchedules: {data: null, loading: false, error: null},
-    purchaseSchedule: {data: null, loading: false, error: null},
+    purchaseSchedules: {data: [], loading: false, error: null},
+    purchaseSchedule: {data: [], loading: false, error: null},
 };
 
 
@@ -93,7 +93,7 @@ const purchaseScheduleSlice = createSlice({
     reducers: {
         clearPurchaseSchedules: (state) => {
             state.purchaseSchedules = {
-                data: null,
+                data: [],
                 loading: false,
                 error: null,
             };

@@ -13,8 +13,8 @@ interface ShelfBoxestate {
 }
 
 const initialState: ShelfBoxestate = {
-    shelfBoxes: {data: null, loading: false, error: null},
-    shelfBox: {data: null, loading: false, error: null},
+    shelfBoxes: {data: [], loading: false, error: null},
+    shelfBox: {data: [], loading: false, error: null},
 };
 
 export const fetchShelfBoxes = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

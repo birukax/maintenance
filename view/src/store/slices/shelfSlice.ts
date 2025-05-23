@@ -13,8 +13,8 @@ interface ShelveState {
 }
 
 const initialState: ShelveState = {
-    shelves: {data: null, loading: false, error: null},
-    shelf: {data: null, loading: false, error: null},
+    shelves: {data: [], loading: false, error: null},
+    shelf: {data: [], loading: false, error: null},
 };
 
 export const fetchShelves = createAsyncThunk<[], {params:null}, {rejectValue: string}>(

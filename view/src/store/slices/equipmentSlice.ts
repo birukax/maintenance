@@ -13,8 +13,8 @@ interface EquipmentState {
 }
 
 const initialState: EquipmentState = {
-    equipments: {data: null, loading: false, error: null},
-    equipment: {data: null, loading: false, error: null},
+    equipments: {data: [], loading: false, error: null},
+    equipment: {data: [], loading: false, error: null},
 };
 
 export const fetchEquipments = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
