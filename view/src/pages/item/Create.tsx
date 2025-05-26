@@ -117,6 +117,8 @@ const Create = () => {
       : [];
   }, [formData.suppliers_id, supplierOptions]);
   
+
+  
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -234,7 +236,10 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
-            options={Array.isArray(shelfRows.data) ? shelfRows.data : []}
+            
+            options={Array.isArray(shelfRows.data)&&shelfRows.data ?.filter(
+              (shelfRow) => shelfRow?.shelf?.id === formData.shelf_id
+            ) || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
@@ -260,7 +265,9 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
-            options={Array.isArray(shelfBoxes.data) ? shelfBoxes.data : []}
+            options={Array.isArray(shelfBoxes.data)&&shelfBoxes.data ?.filter(
+              (shelfBox) => shelfBox?.row?.id === formData.row_id
+            ) || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField

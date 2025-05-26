@@ -66,13 +66,13 @@ const params = {
 
   
   const toolOptions = useMemo(() => {
-    return items.data
+    return Array.isArray(items.data)
       ? items.data.filter((item) => item.category === "TOOL")
       : [];
   }, [items.data]);
 
   const sparepartOptions = useMemo(() => {
-    return items.data
+    return Array.isArray(items.data)&&items.data
       ? items.data.filter((item) => item.category === "SPAREPART")
       : [];
   }, [items.data]);
@@ -174,7 +174,7 @@ const params = {
               />
             )}
             id="machine-select"
-            value={Array.isArray(machines.data)&&machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            value={ Array.isArray(machines.data)&& machines.data?.find((machine) => machine.id === formData.machine_id) || null}
             onChange={(event, newValue) => {
               setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
             }}
@@ -183,7 +183,9 @@ const params = {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
-            options={equipments.data || []}
+            options={Array.isArray(equipments.data)&&equipments.data ?.filter(
+              (equipment) => equipment.machine.id === formData.machine_id
+            ) || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
@@ -191,11 +193,14 @@ const params = {
                 variant="outlined"
                 label="Equipment"
                 placeholder="Search equipments..."
-                required
               />
             )}
             id="equipment-select"
-            value={Array.isArray(equipments.data) && equipments.data?.find((equipment) => equipment.id === formData.equipment_id) || null}
+            value={
+              Array.isArray(equipments.data)&&equipments.data?.find(
+                (equipment) => equipment.id === formData.equipment_id
+              ) || null
+            }
             onChange={(event, newValue) => {
               setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
             }}
