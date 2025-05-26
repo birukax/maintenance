@@ -158,25 +158,43 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         uom_id = serializer.validated_data.pop("uom_id")
+        shelf_id = serializer.validated_data.pop("shelf_id")
+        row_id = serializer.validated_data.pop("row_id")
+        box_id = serializer.validated_data.pop("box_id")
         suppliers_id = self.request.data.get("suppliers_id")
         try:
             uom = UnitOfMeasure.objects.get(id=uom_id)
+            shelf = Shelf.objects.get(id=shelf_id)
+            box = ShelfBox.objects.get(id=box_id)
+            row = ShelfRow.objects.get(id=row_id)
             suppliers = Contact.objects.filter(id__in=suppliers_id)
         except UnitOfMeasure.DoesNotExist:
             raise serializers.ValidationError(
-                {"uom_id": f"Unit of measure with id {uom_id} does not exist."}
+                {"uom_id": f"Unit of measure  does not exist."}
             )
         except Contact.DoesNotExist:
             raise serializers.ValidationError(
-                {"suppliers_id": f"Contact with id {suppliers_id} does not exist."}
+                {"suppliers_id": f"Supplier does not exist."}
             )
+        except Shelf.DoesNotExist:
+            raise serializers.ValidationError({"shelf_id": "Shelf does not exist."})
+        except ShelfRow.DoesNotExist:
+            raise serializers.ValidationError({"row_id": "Shelf Row does not exist."})
+        except ShelfBox.DoesNotExist:
+            raise serializers.ValidationError({"box_id": "Shelf Box does not exist."})
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         try:
             serializer.is_valid(raise_exception=True)
-            item = serializer.save(uom=uom)
+            item = serializer.save(
+                uom=uom,
+                shelf=shelf,
+                row=row,
+                box=box,
+            )
             if suppliers.exists():
                 item.suppliers.set(suppliers)
+                item.save()
             if Location.objects.exists():
                 item_location_list = [
                     Inventory(location=l, item=item) for l in Location.objects.all()
