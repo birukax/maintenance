@@ -202,7 +202,7 @@ class ItemViewSet(viewsets.ModelViewSet):
                 Inventory.objects.bulk_create(item_location_list)
             years = Year.objects.filter(no__gte=datetime.date.today().year)
             if years.exists():
-                item_year_list = [Schedule(year=y.no, item=item) for y in years]
+                item_year_list = [Schedule(year=y, item=item) for y in years]
                 Schedule.objects.bulk_create(item_year_list)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
