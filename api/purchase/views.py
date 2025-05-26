@@ -56,7 +56,7 @@ class RequestViewSet(viewsets.ModelViewSet):
         purchase_request = self.get_object()
         received_quantity = int(request.data.get("received_quantity"))
         received_date = request.data.get("received_date")
-        location_id = serializer.validated_data.pop("location_id")
+        location_id = request.data.get("location_id")
         try:
             location = Location.objects.get(id=location_id)
         except Location.DoesNotExist:

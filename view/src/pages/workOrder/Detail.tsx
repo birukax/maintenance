@@ -200,7 +200,9 @@ const Detail = () => {
           </Typography>
         </div>
 
-        <div className="clmn">
+        {
+          entityState?.data?.end_date?
+          <div className="clmn">
 
           <Typography variant="h6">End:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
@@ -210,7 +212,8 @@ const Detail = () => {
             {entityState?.data?.end_time}
 
           </Typography>
-        </div>
+        </div>:
+          ""}
 
 
         <div className="clmn">
@@ -221,17 +224,17 @@ const Detail = () => {
           </Typography>
         </div>
 
-
+{data?.total_time_taken?
         <div className="clmn">
 
           <Typography variant="h6">Total Time Taken:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
             {data?.total_time_taken}
           </Typography>
-        </div>
+        </div>:""}
+
 
       </div>
-
 
       <h2>Work Details</h2>
       <div className="rw">

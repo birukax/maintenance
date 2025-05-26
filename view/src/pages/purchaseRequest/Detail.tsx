@@ -41,7 +41,6 @@ const Detail = () => {
     </>
   );
 
-  console.log(entityState);
   
 
   const renderDetails = (data) => (
@@ -101,28 +100,29 @@ const Detail = () => {
       <div className="clmn">
         <Typography variant="h6">Requested Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.quantity}
+        {data?.quantity}
       </Typography>
       
       </div>
       <div className="clmn">
         <Typography variant="h6">Received Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.received_quantity}
+        {data?.received_quantity}
       </Typography>
       </div>
+      {data.location?
       <div className="clmn">
         <Typography variant="h6">Received Location:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.location}
+        {data.location?.name}
       </Typography>
-      </div>
+      </div>:""}
       <div className="clmn">
-        {data.requested_by && (
+        {data?.requested_by && (
         <>
           <Typography variant="h6">Requested By:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.requested_by.username}
+            {data.requested_by?.username}
           </Typography>
         </>
       )}
