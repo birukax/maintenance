@@ -55,6 +55,7 @@ class RequestViewSet(viewsets.ModelViewSet):
         purchase_request = serializer.save(
             requested_by=self.request.user,
             item=item,
+            location=location,
         )
         Purchase.objects.create(purchase_request=purchase_request)
         return Response(status=status.HTTP_200_OK)
