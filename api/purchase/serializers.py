@@ -47,7 +47,7 @@ class RequestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     item_id = serializers.IntegerField(write_only=True)
     item = ItemSerializer(read_only=True)
-    location_id = serializers.IntegerField(write_only=True)
+    location_id = serializers.IntegerField(write_only=True, required=False)
     location = LocationSerializer(read_only=True)
     requested_by = UserSerializer(read_only=True)
     approved_by = UserSerializer(read_only=True)

@@ -37,25 +37,16 @@ class RequestViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         item_id = serializer.validated_data.pop("item_id")
-        location_id = serializer.validated_data.pop("location_id")
         try:
             item = Item.objects.get(id=item_id)
-            location = Location.objects.get(id=location_id)
         except Item.DoesNotExist:
-            raise serializers.ValidationError(
-                {"item_id": f"Item with id {item_id} does not exist."}
-            )
-        except Location.DoesNotExist:
-            raise serializers.ValidationError(
-                {"location_id": f"Location with id {location_id} does not exist."}
-            )
+            raise serializers.ValidationError({"item_id": f"Item does not exist."})
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         serializer.is_valid(raise_exception=True)
         purchase_request = serializer.save(
             requested_by=self.request.user,
             item=item,
-            location=location,
         )
         Purchase.objects.create(purchase_request=purchase_request)
         return Response(status=status.HTTP_200_OK)
@@ -65,6 +56,15 @@ class RequestViewSet(viewsets.ModelViewSet):
         purchase_request = self.get_object()
         received_quantity = int(request.data.get("received_quantity"))
         received_date = request.data.get("received_date")
+        location_id = serializer.validated_data.pop("location_id")
+        try:
+            location = Location.objects.get(id=location_id)
+        except Location.DoesNotExist:
+            raise serializers.ValidationError(
+                {"location_id": f"Location does not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
         if received_quantity is not None:
             if received_quantity > purchase_request.quantity:
                 raise serializers.ValidationError(
@@ -84,6 +84,7 @@ class RequestViewSet(viewsets.ModelViewSet):
         purchase_request.received_quantity = received_quantity
         purchase_request.received_date = received_date
         purchase_request.status = "RECEIVED"
+        purchase_request.location = location
         purchase_request.save()
         serializer = RequestSerializer(purchase_request)
         return Response(serializer.data, status=status.HTTP_200_OK)
