@@ -81,7 +81,6 @@ const Detail = () => {
 
     </>
   );
-  console.log("ssssssssssss",entityState);
 
   return (
     <GenericDetailPage

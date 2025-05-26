@@ -15,6 +15,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -91,23 +92,33 @@ const Create = () => {
           disabled={loading}
         />
 
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
-          <Select
-            labelId="activity-type-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={activityTypes.data || []}
+            getOptionLabel={(option) => (option.code ? `${option.code} - ${option.name}` : option.name || "")}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Activity Type"
+          placeholder="Search activity types..."
+          required
+              />
+            )}
             id="activity-type-select"
-            name="activity_type_id"
-            value={formData.activity_type_id}
-            onChange={handleChange}
-            label="Activity Type"
-          >
-            {activityTypes.data &&
-              activityTypes.data.map((activityType) => (
-                <MenuItem key={activityType.id} value={activityType.id}>
-                  {activityType.code} - {activityType.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={
+              Array.isArray(activityTypes.data)&&activityTypes.data?.find(
+          (activityType) => activityType.id === formData.activity_type_id
+              ) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({
+          ...formData,
+          activity_type_id: newValue ? newValue.id : "",
+              });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <TextField
           multiline

@@ -6,6 +6,7 @@ import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import api from "../../utils/api";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
+import { fetchShelves } from "../../store/slices/shelfSlice";
 import {
   TextField,
   Button,
@@ -21,12 +22,17 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { fetchContacts } from "../../store/slices/contactSlice";
+import { fetchShelfRows } from "../../store/slices/shelfRowSlice";
+import { fetchShelfBoxes } from "../../store/slices/shelfBoxSlice";
 const Create = () => {
   const [formData, setFormData] = useState({
     name: "",
     uom_id: "",
     type: "",
     category: "",
+    shelf_id:"",
+    row_id:"",
+    box_id:"",
     minimum_stock_level: 0,
     suppliers_id:[]
   });
@@ -38,6 +44,9 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
+    const { shelves } = useSelector((state: AppState) => state.shelf);
+    const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
+    const { shelfBoxes } = useSelector((state: AppState) => state.shelfBox);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -59,6 +68,11 @@ const Create = () => {
 
     dispatch(fetchUnitOfMeasures(params));
     dispatch(fetchContacts(params));
+            dispatch(fetchShelves(params));
+                    dispatch(fetchShelfRows(params));
+                    dispatch(fetchShelfBoxes(params));
+            
+    
   }, []);
 
   const handleChange = (e) => {
@@ -94,7 +108,6 @@ const Create = () => {
     return Array.isArray(contacts?.data) ? contacts?.data : [];
   }, [contacts.data]);
 
-  console.log("supplier option", supplierOptions);
 
   const selectedSuppliers = useMemo(() => {
     return Array.isArray(supplierOptions)
@@ -126,58 +139,150 @@ const Create = () => {
           disabled={loading}
         />
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="uom-select-label">Unit of Measure</InputLabel>
-          <Select
-            labelId="uom-select-label"
+          <Autocomplete
+            options={Array.isArray(unitOfMeasures.data) ? unitOfMeasures.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Unit of Measure"
+          placeholder="Search unit of measure..."
+              />
+            )}
             id="uom-select"
-            name="uom_id"
-            value={formData.uom_id}
-            onChange={handleChange}
-            label="Unit of Measure"
-          >
-            {unitOfMeasures.data &&
-              unitOfMeasures.data.map((uom) => (
-                <MenuItem key={uom.id} value={uom.id}>
-                  {uom.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={
+              Array.isArray(unitOfMeasures.data)
+          ? unitOfMeasures.data.find((uom) => uom.id === formData.uom_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, uom_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={item_types}
+            getOptionLabel={(option) => option.label || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Item Type"
+          placeholder="Search item types..."
+              />
+            )}
+            id="item-type-select"
+            value={
+              item_types.find((item_type) => item_type.value === formData.type) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, type: newValue ? newValue.value : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.value === value.value}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={item_categories}
+            getOptionLabel={(option) => option.label || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Item Category"
+          placeholder="Search item categories..."
+              />
+            )}
+            id="item-category-select"
+            value={
+              item_categories.find((item_category) => item_category.value === formData.category) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, category: newValue ? newValue.value : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.value === value.value}
+          />
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="item-types-select-label">Item Type</InputLabel>
-          <Select
-            labelId="item-types-select-label"
-            id="item-types-select"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            label="Item Type"
-          >
-            {item_types.map((item_type) => (
-              <MenuItem key={item_type.value} value={item_type.value}>
-                {item_type.label}
-              </MenuItem>
-            ))}
-          </Select>
+          <Autocomplete
+            options={Array.isArray(shelves.data) ? shelves.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf"
+          placeholder="Search shelves..."
+          required
+              />
+            )}
+            id="shelf-select"
+            value={
+              Array.isArray(shelves.data)
+          ? shelves.data.find((shelf) => shelf.id === formData.shelf_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="item-categories-select-label">
-            Item Category
-          </InputLabel>
-          <Select
-            labelId="item-categories-select-label"
-            id="item-categories-select"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            label="Item Category"
-          >
-            {item_categories.map((item_category) => (
-              <MenuItem key={item_category.value} value={item_category.value}>
-                {item_category.label}
-              </MenuItem>
-            ))}
-          </Select>
+          <Autocomplete
+            options={Array.isArray(shelfRows.data) ? shelfRows.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf Row"
+          placeholder="Search shelf rows..."
+          required
+              />
+            )}
+            id="shelf-row-select"
+            value={
+              Array.isArray(shelfRows.data)
+          ? shelfRows.data.find((row) => row.id === formData.row_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <Autocomplete
+            options={Array.isArray(shelfBoxes.data) ? shelfBoxes.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf Box"
+          placeholder="Search shelf boxes..."
+          required
+              />
+            )}
+            id="shelf-box-select"
+            value={
+              Array.isArray(shelfBoxes.data)
+          ? shelfBoxes.data.find((box) => box.id === formData.box_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, box_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
         </FormControl>
         <TextField
           label="Minimum Stock Level"

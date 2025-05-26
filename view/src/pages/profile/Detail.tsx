@@ -22,37 +22,39 @@ const Detail = () => {
         to={`/profile/passwordreset/${id}`}
         className="bg-slate-700"
       >
-        Edit
+        Reset Password
       </Button>
     </>
   );
 
   const renderDetails = (data) => (
+
+    
     <>
     <div className="rw">
       <div className="clmn">
         <Typography variant="h6">Username:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.user.username}
+        {data?.user?.username}
       </Typography>
       </div>
       <div className="clmn">
 <Typography variant="h6">Email:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.user.email}
+        {data?.user?.email}
       </Typography>
       </div>
 
       <div className="clmn">
 <Typography variant="h6">Is Active:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.user.is_active ? "Active" : "Inactive"}
+        {data?.user?.is_active ? "Active" : "Inactive"}
       </Typography>
       </div>
       <div className="clmn">
 <Typography variant="h6">Role:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.role}
+        {data?.role}
       </Typography>
       </div>
     </div>
@@ -60,7 +62,7 @@ const Detail = () => {
       <div className="clmn">
         <Typography variant="h6">Phone No:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.phone_no}
+        {data?.phone_no}
       </Typography>
       </div>
     </div>

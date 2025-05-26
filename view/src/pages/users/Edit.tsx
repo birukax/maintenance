@@ -59,7 +59,6 @@ setFormData({
     setFormData({ ...formData, [name]: value });
   };
 
-  console.log(formData);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,7 +94,6 @@ setFormData({
                         name="is_active"
                         checked={formData.is_active}
                         onChange={(e) =>{
-                          console.log(e.target.checked);
                           
                           if(formData.is_active===true){
                             setFormData({ ...formData, is_active: e.target.checked})

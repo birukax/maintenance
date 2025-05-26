@@ -170,7 +170,6 @@ export const clear = createAsyncThunk<void,void, {rejectValue: string}>(
     async(_, {dispatch }) => {
         try {
             dispatch(clearPurchaseSchedules())  
-            console.log("cleared");     
         }
         catch (err) {
             throw new Error(err.message || "Logout failed");

@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -71,22 +72,25 @@ const params = {
         className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="plant-select-label">Plant</InputLabel>
-          <Select
-            labelId="plant-select-label"
+          <Autocomplete
+            options={plants.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Plant"
+                placeholder="Search plants..."
+                required
+              />
+            )}
             id="plant-select"
-            name="plant_id"
-            value={formData.plant_id}
-            onChange={handleChange}
-            label="Plant"
-          >
-            {plants.data &&
-              plants.data.map((plant) => (
-                <MenuItem key={plant.id} value={plant.id}>
-                  {plant.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={Array.isArray(plants.data)&&plants.data?.find((plant) => plant.id === formData.plant_id) || null}
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, plant_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <TextField
           label="Code"

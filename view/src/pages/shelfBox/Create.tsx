@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -68,22 +69,30 @@ const Create = () => {
         className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="shelf-select-label">Shelf Row</InputLabel>
-          <Select
-            labelId="shelf-select-label"
-            id="shelf-select"
-            name="row_id"
-            value={formData.row_id}
-            onChange={handleChange}
-            label="Shelf Row"
-          >
-            {shelfRows.data &&
-              shelfRows.data.map((shelf) => (
-                <MenuItem key={shelf.id} value={shelf.id}>
-                  {shelf.name}
-                </MenuItem>
-              ))}
-          </Select>
+          <Autocomplete
+            options={Array.isArray(shelfRows.data) ? shelfRows.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf Row"
+          placeholder="Search shelf rows..."
+          required
+              />
+            )}
+            id="shelf-row-select"
+            value={
+              Array.isArray(shelfRows.data)
+          ? shelfRows.data.find((row) => row.id === formData.row_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
         </FormControl>
         <TextField
           label="Code"

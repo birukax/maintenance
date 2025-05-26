@@ -15,6 +15,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -89,25 +90,35 @@ const params = {
           required
           disabled={loading}
         />
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="work-order-type-select-label">
-            Work Order Type
-          </InputLabel>
-          <Select
-            labelId="work-order-type-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={workOrderTypes.data || []}
+            getOptionLabel={(option) =>
+              option.code ? `${option.code} - ${option.name}` : option.name || ""
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Work Order Type"
+                placeholder="Search work order types..."
+                required
+              />
+            )}
             id="work-order-type-select"
-            name="work_order_type_id"
-            value={formData.work_order_type_id}
-            onChange={handleChange}
-            label="Work Order Type"
-          >
-            {workOrderTypes.data &&
-              workOrderTypes.data.map((workOrderType) => (
-                <MenuItem key={workOrderType.id} value={workOrderType.id}>
-                  {workOrderType.code} - {workOrderType.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={
+              Array.isArray(workOrderTypes)&&workOrderTypes.data?.find(
+                (workOrderType) => workOrderType.id === formData.work_order_type_id
+              ) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({
+                ...formData,
+                work_order_type_id: newValue ? newValue.id : "",
+              });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <Button
           type="submit"

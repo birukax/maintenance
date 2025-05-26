@@ -40,7 +40,6 @@ const [loading,setLoading]=useState(true)
     (state: AppState) => state.purchaseSchedule
   );
   const dispatch = useDispatch<AppDispatch>();
-console.log(params);
 
   const renderButtons = () => <></>;
 
@@ -51,7 +50,6 @@ console.log(params);
   useEffect(() => {
     fetch()    
   }, []);
-console.log(purchaseSchedules);
 
 const searchFilter = async (field, value) => {
     // Handle filter action here
@@ -61,7 +59,6 @@ const searchFilter = async (field, value) => {
       [field]: value,
     };
 
-    console.log("changed year", parameters);
 
     setSearchParams({ ...parameters });
 

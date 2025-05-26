@@ -19,6 +19,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { SCHEDULE_TYPES } from "../../utils/choices";
 import { toast } from "react-toastify";
@@ -104,22 +105,26 @@ const params = {
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="types-select-label">Type</InputLabel>
-          <Select
-            labelId="types-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={SCHEDULE_TYPES}
+            getOptionLabel={(option) => option[1] || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Type"
+          placeholder="Search types..."
+          required
+              />
+            )}
             id="types-select"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            label="Type"
-          >
-            {SCHEDULE_TYPES.map((type) => (
-              <MenuItem key={type[0]} value={type[0]}>
-                {type[1]}
-              </MenuItem>
-            ))}
-          </Select>
+            value={SCHEDULE_TYPES.find((type) => type[0] === formData.type) || null}
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, type: newValue ? newValue[0] : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option[0] === value[0]}
+          />
         </FormControl>
         <TextField
           multiline
@@ -133,141 +138,176 @@ const params = {
           required
           disabled={loading}
         />
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="machine-select-label">Machine</InputLabel>
-          <Select
-            labelId="machine-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={machines.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Machine"
+                placeholder="Search machines..."
+                required
+              />
+            )}
             id="machine-select"
-            name="machine_id"
-            value={formData.machine_id}
-            onChange={handleChange}
-            label="Machine"
-          >
-            {machines.data &&
-              machines.data.map((machine) => (
-                <MenuItem key={machine.id} value={machine.id}>
-                  {machine.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={ Array.isArray(machines.data)&& machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
-        <FormControl
-          fullWidth
-          variant="outlined"
-          required={false}
-          disabled={loading}
-        >
-          <InputLabel id="equipment-select-label">Equipment</InputLabel>
-          <Select
-            labelId="equipment-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={Array.isArray(equipments.data)&&equipments.data ?.filter(
+              (equipment) => equipment.machine.id === formData.machine_id
+            ) || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Equipment"
+                placeholder="Search equipments..."
+              />
+            )}
             id="equipment-select"
-            name="equipment_id"
-            value={formData.equipment_id}
-            onChange={handleChange}
-            label="Equipment"
-          >
-            {equipments.data &&
-              equipments.data
-                .filter(
-                  (equipment) => equipment.machine.id === formData.machine_id
-                )
-                .map((equipment) => (
-                  <MenuItem key={equipment.id} value={equipment.id}>
-                    {equipment.name}
-                  </MenuItem>
-                ))}
-          </Select>
+            value={
+              Array.isArray(equipments.data)&&equipments.data?.find(
+                (equipment) => equipment.id === formData.equipment_id
+              ) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
 
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="work-order-type-select-label">
-            Work Order Type
-          </InputLabel>
-          <Select
-            labelId="work-order-type-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={
+              Array.isArray(workOrderTypes.data)
+                ? workOrderTypes.data.filter((workOrderType) => workOrderType.scheduled === true)
+                : []
+            }
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Work Order Type"
+                placeholder="Search work order types..."
+                required
+              />
+            )}
             id="work-order-type-select"
-            name="work_order_type_id"
-            value={formData.work_order_type_id}
-            onChange={handleChange}
-            label="Work Order Type"
-          >
-            {workOrderTypes.data &&
-              workOrderTypes.data
-                .filter((workOrderType) => workOrderType.scheduled === true)
-                .map((workOrderType) => (
-                  <MenuItem key={workOrderType.id} value={workOrderType.id}>
-                    {workOrderType.name}
-                  </MenuItem>
-                ))}
-          </Select>
+            value={
+              Array.isArray(workOrderTypes.data)
+                ? workOrderTypes.data.find((workOrderType) => workOrderType.id === formData.work_order_type_id) || null
+                : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, work_order_type_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
-          <Select
-            labelId="activity-type-select-label"
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={
+              Array.isArray(activityTypes.data)
+          ? activityTypes.data.filter(
+              (activityType) =>
+                activityType.work_order_type.id === formData.work_order_type_id
+            )
+          : []
+            }
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Activity Type"
+          placeholder="Search activity types..."
+          required
+              />
+            )}
             id="activity-type-select"
-            name="activity_type_id"
-            value={formData.activity_type_id}
-            onChange={handleChange}
-            label="Activity Type"
-          >
-            {activityTypes.data &&
-              activityTypes.data
-                .filter(
-                  (activityType) =>
-                    activityType.work_order_type.id ===
-                    formData.work_order_type_id
-                )
-                .map((activityType) => (
-                  <MenuItem key={activityType.id} value={activityType.id}>
-                    {activityType.name}
-                  </MenuItem>
-                ))}
-          </Select>
+            value={
+              Array.isArray(activityTypes.data)
+          ? activityTypes.data.find(
+              (activityType) => activityType.id === formData.activity_type_id
+            ) || null
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, activity_type_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
-          <InputLabel id="sparepart-select-label">
-            Spareparts Required
-          </InputLabel>
-          <Select
+          <Autocomplete
             multiple
-            labelId="sparepart-select-label"
-            id="sparepart-select"
-            name="spareparts_required_id"
-            value={formData.spareparts_required_id}
-            onChange={handleChange}
-            label="Spareparts Required"
-          >
-            {items.data &&
+            options={items.data ? items.data.filter((item) => item.category === "SPAREPART") : []}
+            getOptionLabel={(option) => option.name || ""}
+            value={
               items.data
-                .filter((item) => item.category === "SPAREPART")
-                .map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-          </Select>
+          ? items.data.filter((item) =>
+              formData.spareparts_required_id.includes(item.id)
+            )
+          : []
+            }
+            onChange={(_, newValue) => {
+              setFormData({
+          ...formData,
+          spareparts_required_id: newValue.map((item) => item.id),
+              });
+            }}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Spareparts Required"
+          placeholder="Search spareparts..."
+              />
+            )}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
-          <InputLabel id="tool-select-label">Tools Required</InputLabel>
-          <Select
+          <Autocomplete
             multiple
-            labelId="tool-select-label"
-            id="tool-select"
-            name="tools_required_id"
-            value={formData.tools_required_id}
-            onChange={handleChange}
-            label="Tools Required"
-          >
-            {items.data &&
+            options={items.data ? items.data.filter((item) => item.category === "TOOL") : []}
+            getOptionLabel={(option) => option.name || ""}
+            value={
               items.data
-                .filter((item) => item.category === "TOOL")
-                .map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-          </Select>
+          ? items.data.filter((item) =>
+              formData.tools_required_id.includes(item.id)
+            )
+          : []
+            }
+            onChange={(_, newValue) => {
+              setFormData({
+          ...formData,
+          tools_required_id: newValue.map((item) => item.id),
+              });
+            }}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Tools Required"
+          placeholder="Search tools..."
+              />
+            )}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
         </FormControl>
         <div className="planned-time-group">
         <TextField

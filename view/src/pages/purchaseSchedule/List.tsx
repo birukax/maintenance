@@ -85,7 +85,6 @@ const List: React.FC = () => {
       [field]: value,
     };
 
-    // console.log("changed year", parameters);
 
     setSearchParams({ ...parameters });
 

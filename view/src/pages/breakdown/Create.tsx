@@ -24,6 +24,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 // import { BREAKDOWN_TYPES } from "../../utils/choices";
 
@@ -62,7 +63,6 @@ const params = {
     // dispatch(fetchItems());
   }, []);
 
-  console.log("machi",machines);
   
 
   const handleChange = (e) => {
@@ -165,51 +165,53 @@ const params = {
             }}
           />
         </LocalizationProvider>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="machine-select-label">Machine</InputLabel>
-          <Select
-            labelId="machine-select-label"
-            id="machine-select"
-            name="machine_id"
-            value={formData.machine_id}
-            onChange={handleChange}
-            label="Machine"
-          >
-            {machines.data &&
-              machines.data.map((machine) => (
-                <MenuItem key={machine.id} value={machine.id}>
-                  {machine.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-
-        <FormControl
-          fullWidth
-          variant="outlined"
-          required={false}
-          disabled={loading}
-        >
-          <InputLabel id="equipment-select-label">Equipment</InputLabel>
-          <Select
-            labelId="equipment-select-label"
-            id="equipment-select"
-            name="equipment_id"
-            value={formData.equipment_id}
-            onChange={handleChange}
-            label="Equipment"
-          >
-            {equipments&&
-              equipments?.data?.filter(
-                (equipment) => equipment.machine.id === formData.machine_id
-              )
-              .map((equipment) => (
-                <MenuItem key={equipment.id} value={equipment.id}>
-                    {equipment.name}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+                  <Autocomplete
+                    options={machines.data || []}
+                    getOptionLabel={(option) => option.name || ""}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Machine"
+                        placeholder="Search machines..."
+                        required
+                      />
+                    )}
+                    id="machine-select"
+                    value={ Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+                    onChange={(event, newValue) => {
+                      setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
+                    }}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                  />
+                </FormControl>
+                <FormControl fullWidth variant="outlined" disabled={loading}>
+                  <Autocomplete
+                    options={Array.isArray(equipments.data)&&equipments.data ?.filter(
+                      (equipment) => equipment.machine.id === formData.machine_id
+                    ) || []}
+                    getOptionLabel={(option) => option.name || ""}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Equipment"
+                        placeholder="Search equipments..."
+                      />
+                    )}
+                    id="equipment-select"
+                    value={
+                      Array.isArray(equipments.data)&&equipments.data?.find(
+                        (equipment) => equipment.id === formData.equipment_id
+                      ) || null
+                    }
+                    onChange={(event, newValue) => {
+                      setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
+                    }}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                  />
+                </FormControl>
 
         <TextField
           multiline

@@ -91,7 +91,7 @@ const params = {
               />
             )}
             id="plant-select"
-            value={plants.data?.find((plant) => plant.id === selectedPlant) || null}
+            value={Array.isArray(plants.data)&&plants.data?.find((plant) => plant.id === selectedPlant) || null}
             onChange={(event, newValue) => {
               setSelectedPlant(newValue ? newValue.id : "");
             }}

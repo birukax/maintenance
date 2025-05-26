@@ -104,8 +104,8 @@ setFormData({
             onChange={handleChange}
             label="Machine"
           >
-            {machines.data &&
-              machines.data.map((machine) => (
+            {Array.isArray(machines.data)&&machines.data &&
+              Array.isArray(machines.data)&&machines.data.map((machine) => (
                 <MenuItem key={machine.id} value={machine?.id}>
                   {machine?.name}
                 </MenuItem>

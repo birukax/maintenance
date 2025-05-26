@@ -105,7 +105,7 @@ const params = {
                       />
                     )}
                     id="item-select"
-                    value={items.data?.find((item) => item.id === formData.item_id) || null}
+                    value={Array.isArray(items.data)&&items.data?.find((item) => item.id === formData.item_id) || null}
                     onChange={(event, newValue) => {
                       setFormData({
                         ...formData,

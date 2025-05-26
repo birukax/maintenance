@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
@@ -70,22 +71,30 @@ const Create = () => {
         className="form-gap"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="location-select-label">Location</InputLabel>
-          <Select
-            labelId="location-select-label"
+          <Autocomplete
+            options={Array.isArray(locations.data) ? locations.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Location"
+                placeholder="Search locations..."
+                required
+              />
+            )}
             id="location-select"
-            name="location_id"
-            value={formData.location_id}
-            onChange={handleChange}
-            label="Location"
-          >
-            {locations.data &&
-              locations.data.map((location) => (
-                <MenuItem key={location.id} value={location.id}>
-                  {location.name}
-                </MenuItem>
-              ))}
-          </Select>
+            value={
+              Array.isArray(locations.data)
+                ? locations.data.find((location) => location.id === formData.location_id)
+                : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, location_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
         </FormControl>
         <TextField
           label="Code"
