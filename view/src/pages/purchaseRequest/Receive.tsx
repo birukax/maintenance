@@ -14,8 +14,11 @@ import {
   CircularProgress,
   TextField,
   Box,
+  FormControl,
+  Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { fetchLocations } from "../../store/slices/locationSlice";
 const style = {
   position: "absolute",
   top: "50%",
@@ -30,12 +33,17 @@ const style = {
 
 const Receive = ({ id, setModalOpen }) => {
   const [formData, setFormData] = useState({
+    location_id:"",
     received_quantity: 0,
     received_date: "",
   });
+  const [loading, setLoading] = useState(false);
+
   const { purchaseRequest } = useSelector(
     (state: AppState) => state.purchaseRequest
   );
+    const { locations } = useSelector((state: AppState) => state.location);
+
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -68,10 +76,17 @@ const Receive = ({ id, setModalOpen }) => {
     }
   };
   useEffect(() => {
+    const params = {
+    no_pagination: "true",
+  };
     if (purchaseRequest.error) {
       setError(purchaseRequest.error);
     }
+    dispatch(fetchLocations(params))
   }, [purchaseRequest.error]);
+
+  console.log(formData);
+  
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -82,6 +97,30 @@ const Receive = ({ id, setModalOpen }) => {
         onSubmit={handleSubmit}
         className="form-gap"
       >
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={locations.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Location"
+          placeholder="Search locations..."
+          required
+              />
+            )}
+            id="location-select"
+            value={Array.isArray(locations.data)&&locations.data?.find((location) => location.id === formData?.location_id) || null}
+          onChange={(_, newValue) => {
+              setFormData({
+          ...formData,
+          location_id: newValue.id,
+              });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
+        </FormControl>
         <TextField
           label="Quantity"
           name="received_quantity"

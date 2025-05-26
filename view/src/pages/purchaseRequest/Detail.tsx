@@ -41,6 +41,9 @@ const Detail = () => {
     </>
   );
 
+  console.log(entityState);
+  
+
   const renderDetails = (data) => (
     <>
 
@@ -82,7 +85,9 @@ const Detail = () => {
       {data.received_date ? (
         <>
           <Typography variant="h6">Received Date:</Typography>
-          
+          <Typography variant="body1" className="text-slate-500">
+        {data.received_date}
+      </Typography>
         </>
       ):<Typography variant="body1" className="text-slate-500">
             Not Received Yet
@@ -104,6 +109,12 @@ const Detail = () => {
         <Typography variant="h6">Received Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500">
         {data.received_quantity}
+      </Typography>
+      </div>
+      <div className="clmn">
+        <Typography variant="h6">Received Location:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data.location}
       </Typography>
       </div>
       <div className="clmn">

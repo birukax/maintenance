@@ -252,10 +252,10 @@ const params = {
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             multiple
-            options={items.data ? items.data.filter((item) => item.category === "SPAREPART") : []}
+            options={Array.isArray(items.data)&& items.data ? items.data.filter((item) => item.category === "SPAREPART") : []}
             getOptionLabel={(option) => option.name || ""}
             value={
-              items.data
+              Array.isArray(items.data)
           ? items.data.filter((item) =>
               formData.spareparts_required_id.includes(item.id)
             )
@@ -282,10 +282,10 @@ const params = {
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             multiple
-            options={items.data ? items.data.filter((item) => item.category === "TOOL") : []}
+            options={Array.isArray(items.data)&&items.data ? items.data.filter((item) => item.category === "TOOL") : []}
             getOptionLabel={(option) => option.name || ""}
             value={
-              items.data
+              Array.isArray(items.data)
           ? items.data.filter((item) =>
               formData.tools_required_id.includes(item.id)
             )
