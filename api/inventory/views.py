@@ -358,11 +358,11 @@ class TransferViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {
                     "from_location",
-                    f"location Does not exist!",
+                    f"Location Does not exist!",
                 },
                 {
                     "to_location",
-                    f"location Does not exist!",
+                    f"Location Does not exist!",
                 },
             )
 
