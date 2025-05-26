@@ -174,7 +174,7 @@ class ItemViewSet(viewsets.ModelViewSet):
             )
         except Contact.DoesNotExist:
             raise serializers.ValidationError(
-                {"suppliers_id": f"Supplier does not exist."}
+                {"suppliers_id": f"Suppliers does not exist."}
             )
         except Shelf.DoesNotExist:
             raise serializers.ValidationError({"shelf_id": "Shelf does not exist."})
@@ -214,7 +214,7 @@ class ItemViewSet(viewsets.ModelViewSet):
             suppliers = Contact.objects.filter(id__in=suppliers_id)
         except Contact.DoesNotExist:
             raise serializers.ValidationError(
-                {"suppliers_id": f"Contact with id {suppliers_id} does not exist."}
+                {"suppliers_id": f"Suppliers does not exist."}
             )
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
@@ -240,8 +240,14 @@ class InventoryViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def revaluate_stock(self, request):
+        items = Item.objects.all()
+        locations = Location.objects.all()
+        for item in items:
+            for location in locations:
+                Inventory.objects.get_or_create(item=item, location=location)
+
         all_purchases = Request.objects.values("item_id").annotate(
-            total_received=Sum("received _quantity")
+            total_received=Sum("received_quantity")
         )
         # all_consumptions = Consumption.objects.values("item_id").annotate(
         #     total_consumed=Sum("quantity")
@@ -251,7 +257,12 @@ class InventoryViewSet(viewsets.ModelViewSet):
         #     .values("item_id")
         #     .annotate(total_returned=Sum("quantity"))
         # )
-        purchase_map = {p["item_id"]: p["total_received"] for p in all_purchases}
+
+        purchase_map = {
+            p["item_id"]: p["total_received"]
+            for p in all_purchases
+            if p["total_received"] > 0
+        }
         # consumptions_map = {c["item_id"]: c["total_consumed"] for c in all_consumptions}
         # returns_map = {r["item_id"]: r["total_returned"] for r in all_returns}
 
@@ -259,26 +270,33 @@ class InventoryViewSet(viewsets.ModelViewSet):
         updated_inventory_instances = []
 
         for inv_item in inventories_to_update:
-            inv_item.purchased_quantity = purchase_map.get(inv_item.item_id, 0) or 0
-            inv_item.inbound_transfers = (
-                TransferHistory.objects.filter(
-                    location=inv_item.location, item=inv_item.item, type="INBOUND"
+            inv_item.purchased = purchase_map.get(inv_item.item_id, 0) or 0
+            try:
+                inv_item.inbound_transfers = (
+                    TransferHistory.objects.filter(
+                        location=inv_item.location, item=inv_item.item, type="INBOUND"
+                    )
+                    .annotate(total_quantity=Sum("quantity"))
+                    .values("total_quantity")[0]["total_quantity"]
+                    or 0
                 )
-                .annotate(total_quantity=Sum("quantity"))
-                .values("total_quantity")[0]["total_quantity"]
-                or 0
-            )
-            inv_item.outbound_transfers = (
-                TransferHistory.objects.filter(
-                    location=inv_item.location, item=inv_item.item, type="OUTBOUND"
+            except Exception as e:
+                print(e)
+                inv_item.inbound_transfers = 0
+            try:
+                inv_item.outbound_transfers = (
+                    TransferHistory.objects.filter(
+                        location=inv_item.location, item=inv_item.item, type="OUTBOUND"
+                    )
+                    .annotate(total_quantity=Sum("quantity"))
+                    .values("total_quantity")[0]["total_quantity"]
+                    or 0
                 )
-                .annotate(total_quantity=Sum("quantity"))
-                .values("total_quantity")[0]["total_quantity"]
-                or 0
-            )
-
+            except Exception as e:
+                print(e)
+                inv_item.outbound_transfers = 0
             inv_item.balance = (
-                inv_item.purchased_quantity
+                inv_item.purchased
                 + inv_item.inbound_transfers
                 - inv_item.outbound_transfers
             )
@@ -289,7 +307,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
             Inventory.objects.bulk_update(
                 updated_inventory_instances,
                 [
-                    "purchased_quantity",
+                    "purchased",
                     "inbound_transfers",
                     "outbound_transfers",
                     # "consumed_quantity",

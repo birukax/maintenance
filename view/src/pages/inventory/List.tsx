@@ -13,13 +13,17 @@ import {
 } from "../../components/GenericListPage";
 
 const inventoryColumns = [
+  { header: "Item ID", accessor: "item.no" },
   { header: "Item", accessor: "item.name" },
+  { header: "Location", accessor: "location.name" },
   { header: "UoM", accessor: "item.uom.name" },
   { header: "MSL", accessor: "item.minimum_stock_level" },
   { header: "Balance", accessor: "balance" },
-  { header: "Purchased Quantity", accessor: "purchased_quantity" },
-  { header: "Consumed Quantity", accessor: "consumed_quantity" },
-  { header: "Returned Quantity", accessor: "returned_quantity" },
+  { header: "Purchased Quantity", accessor: "purchased" },
+  { header: "Inbound Transfers", accessor: "inbound_transfers" },
+  { header: "Outbound Transfers", accessor: "outbound_transfers" },
+  // { header: "Consumed Quantity", accessor: "consumed_quantity" },
+  // { header: "Returned Quantity", accessor: "returned_quantity" },
 ];
 
 const List: React.FC = () => {

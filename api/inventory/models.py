@@ -144,7 +144,7 @@ class Item(BaseCreatedUpdated):
 
 
 class Inventory(BaseCreatedUpdated):
-    item = models.OneToOneField(
+    item = models.ForeignKey(
         Item,
         on_delete=models.RESTRICT,
         related_name="inventory",

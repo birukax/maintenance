@@ -113,7 +113,7 @@ class ItemSerializer(serializers.ModelSerializer):
     row_id = serializers.IntegerField(write_only=True)
     box = ShelfBoxSerializer(read_only=True)
     box_id = serializers.IntegerField(write_only=True)
-    inventory = serializers.SerializerMethodField(read_only=True)
+    # inventory = serializers.SerializerMethodField(read_only=True)
     suppliers = ContactSerializer(read_only=True, many=True, required=False)
 
     class Meta:
@@ -130,20 +130,20 @@ class ItemSerializer(serializers.ModelSerializer):
             "box_id",
             "uom",
             "uom_id",
-            "inventory",
+            # "inventory",
             "minimum_stock_level",
             "type",
             "category",
             "suppliers",
         ]
 
-    def get_inventory(self, obj):
-        try:
-            inventory_obj = obj.inventory
-            return {"id": inventory_obj.id, "balance": inventory_obj.balance}
-            # return InventorySerializer(inventory_obj, context=self.context).data
-        except Inventory.DoesNotExist:
-            return None
+    # def get_inventory(self, obj):
+    #     try:
+    #         inventory_obj = obj.inventory
+    #         return {"id": inventory_obj.id, "balance": inventory_obj.balance}
+    #         # return InventorySerializer(inventory_obj, context=self.context).data
+    #     except Inventory.DoesNotExist:
+    #         return None
 
 
 class InventorySerializer(serializers.ModelSerializer):
