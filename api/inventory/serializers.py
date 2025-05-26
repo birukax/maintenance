@@ -79,13 +79,16 @@ class ShelfBoxSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     row = ShelfRowSerializer(read_only=True)
     row_id = serializers.IntegerField(write_only=True)
+
     class Meta:
         model = ShelfBox
-        fields = ["id", 
-                  "row",
+        fields = [
+            "id",
+            "row",
             "row_id",
             "code",
-            "name",]
+            "name",
+        ]
 
 
 class UnitOfMeasureSerializer(serializers.ModelSerializer):
@@ -104,6 +107,12 @@ class ItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     uom = UnitOfMeasureSerializer(read_only=True)
     uom_id = serializers.IntegerField(write_only=True)
+    shelf = ShelfSerializer(read_only=True)
+    shelf_id = serializers.IntegerField(write_only=True)
+    row = ShelfRowSerializer(read_only=True)
+    row_id = serializers.IntegerField(write_only=True)
+    box = ShelfBoxSerializer(read_only=True)
+    box_id = serializers.IntegerField(write_only=True)
     inventory = serializers.SerializerMethodField(read_only=True)
     suppliers = ContactSerializer(read_only=True, many=True, required=False)
 
@@ -114,8 +123,11 @@ class ItemSerializer(serializers.ModelSerializer):
             "no",
             "name",
             "shelf",
+            "shelf_id",
             "row",
+            "row_id",
             "box",
+            "box_id",
             "uom",
             "uom_id",
             "inventory",
@@ -132,6 +144,7 @@ class ItemSerializer(serializers.ModelSerializer):
             # return InventorySerializer(inventory_obj, context=self.context).data
         except Inventory.DoesNotExist:
             return None
+
 
 class InventorySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
