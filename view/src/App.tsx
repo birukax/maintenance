@@ -26,6 +26,7 @@ import ShelfRoutes from "./routes/ShelfRoutes";
 import ShelfRowRoutes from "./routes/ShelfRowRoutes";
 import ShelfBoxRoutes from "./routes/ShelfBoxRoutes";
 import LocationRoutes from "./routes/LocationRoutes";
+import TransferRoutes from "./routes/transferRoutes";
 const App: React.FC = () => {
 
   
@@ -34,6 +35,7 @@ const App: React.FC = () => {
       <Route path="/login" element={<Login />} />
       {OtherRoutes}
       {ItemRoutes}
+      {TransferRoutes}
       {ReturnRoutes}
       {ContactRoutes}
       {ProfileRoutes}

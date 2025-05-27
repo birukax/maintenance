@@ -186,7 +186,7 @@ class Transfer(BaseCreatedUpdated):
         User, on_delete=models.RESTRICT, related_name="transfers_requested"
     )
     approved_by = models.ForeignKey(
-        User, on_delete=models.RESTRICT, related_name="transfers_approved"
+        User, on_delete=models.RESTRICT, related_name="transfers_approved", null=True, blank=True,
     )
     status = models.CharField(
         choices=choices.TRANSFER_STATUS, max_length=25, default="PENDING-APPROVAL"

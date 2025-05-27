@@ -10,6 +10,7 @@ import profileReducer from './slices/profileSlice';
 import machineReducer from './slices/machineSlice';
 import locationReducer from './slices/locationSlice';
 import plantReducer from './slices/plantSlice';
+import transferReducer from './slices/transferSlice';
 import shelfReducer from './slices/shelfSlice';
 import shelfRowReducer from './slices/shelfRowSlice';
 import shelfBoxReducer from './slices/shelfBoxSlice';
@@ -39,6 +40,7 @@ interface RootState {
   machine: ReturnType<typeof machineReducer>;
   location: ReturnType<typeof locationReducer>;
   plant: ReturnType<typeof plantReducer>;
+  transfer: ReturnType<typeof transferReducer>;
   shelf: ReturnType<typeof shelfReducer>;
   shelfRow: ReturnType<typeof shelfRowReducer>;
   shelfBox: ReturnType<typeof shelfBoxReducer>;
@@ -69,6 +71,7 @@ const rootReducer = combineReducers({
     machine: machineReducer,
     location: locationReducer,
     plant: plantReducer,
+    transfer: transferReducer,
     shelf: shelfReducer,
     shelfRow: shelfRowReducer,
     shelfBox: shelfBoxReducer,
