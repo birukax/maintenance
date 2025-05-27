@@ -127,7 +127,7 @@ class WorkOrder(BaseCreatedUpdated):
         default="Created",
     )
     remark = models.TextField(max_length=250, null=True, blank=True)
-    start_date = models.DateField(default=datetime.datetime.now)
+    start_date = models.DateField(default=datetime.date.today)
     start_time = models.TimeField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)

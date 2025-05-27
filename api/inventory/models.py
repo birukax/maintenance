@@ -38,6 +38,7 @@ class Shelf(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["code"]
+        verbose_name_plural = "shelves"
 
     def __str__(self):
         if self.location:
@@ -66,6 +67,7 @@ class ShelfBox(BaseCreatedUpdated):
 
     class Meta:
         ordering = ["code"]
+        verbose_name_plural = "shelf boxes"
 
     def __str__(self):
         if self.row:
@@ -197,7 +199,7 @@ class Transfer(BaseCreatedUpdated):
     to_location = models.ForeignKey(
         Location, on_delete=models.RESTRICT, related_name="transfers_to"
     )
-    requested_date = models.DateField(default=datetime.datetime.now)
+    requested_date = models.DateField(default=datetime.date.today)
     approved_date = models.DateField(null=True, blank=True)
     shipment_date = models.DateField(null=True, blank=True)
 
@@ -240,11 +242,12 @@ class TransferHistory(BaseCreatedUpdated):
     type = models.CharField(
         choices=choices.TRANSFER_TYPES, max_length=25, null=True, blank=True
     )
-    date = models.DateField(default=datetime.datetime.now)
+    date = models.DateField(default=datetime.date.today)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         ordering = ["-created_at", "transfer__id", "item__name", "type"]
+        verbose_name_plural = "transfer histories"
 
     def __str__(self):
         if self.item and self.location:
@@ -256,7 +259,7 @@ class Consumption(BaseCreatedUpdated):
     item = models.ForeignKey(
         Item, on_delete=models.RESTRICT, related_name="consumptions"
     )
-    date = models.DateField(default=datetime.datetime.now)
+    date = models.DateField(default=datetime.date.today)
     reason = models.TextField(max_length=250)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
@@ -272,7 +275,7 @@ class Consumption(BaseCreatedUpdated):
 
 class Return(BaseCreatedUpdated):
     item = models.ForeignKey(Item, on_delete=models.RESTRICT, related_name="returns")
-    date = models.DateField(default=datetime.datetime.now)
+    date = models.DateField(default=datetime.date.today)
     reason = models.TextField(max_length=250)
     used = models.BooleanField(default=True)
     quantity = models.DecimalField(
