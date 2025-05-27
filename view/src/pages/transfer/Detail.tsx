@@ -161,7 +161,7 @@ const Detail = () => {
             {data?.status}
           </Typography>
         </div>
-        {data?.approved_by.name?
+        {data?.approved_by?.name?
         <div className="clmn">
 
           <Typography variant="h6">Approved By:</Typography>
@@ -169,7 +169,7 @@ const Detail = () => {
                 variant="body1"
                 className="text-slate-500 mb-2"
               >
-                {data?.approved_by.name}
+                {data?.approved_by?.name}
               </Typography>
             
         </div>:""}

@@ -82,13 +82,15 @@ console.log(formData);
       try {
       await dispatch(createTransfer(formData)).unwrap();
       toast.success("Transfer created successfully");
-      navigate("/work-orders");
+      navigate("/transfers");
     } catch (err) {
       toast.error("Error creating Transfer");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
     }
+    
+
     
   };
 
@@ -200,6 +202,7 @@ const selectedItems=formData.requested_items.length>0?
                 required
                 sx={{width:"90px",padding:"0"}}
                 size="small"
+                inputProps={{ min: 1 }}
                 onChange={(e)=>setFormData(prev=>{
                   return{
                     ...prev,
