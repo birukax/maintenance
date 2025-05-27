@@ -349,9 +349,24 @@ class TransferViewSet(viewsets.ModelViewSet):
         from_location_id = serializer.validated_data.pop("from_location_id")
         to_location_id = serializer.validated_data.pop("to_location_id")
         requested_items = self.request.data.get("requested_items")
+
         try:
             from_location = Location.objects.get(id=from_location_id)
             to_location = Location.objects.get(id=to_location_id)
+            for i in requested_items:
+
+                if i["quantity"] is None or i["quantity"] <= 0 or i["quantity"] == "":
+                    raise serializers.ValidationError(
+                        {"quantity": "Quantity is invalid."}
+                    )
+
+                if not Item.objects.filter(id=i["item_id"]).exists():
+                    raise serializers.ValidationError(
+                        {
+                            "item_id",
+                            f"Item Does not exist!",
+                        },
+                    )
 
         except Location.DoesNotExist:
             raise serializers.ValidationError(
@@ -376,19 +391,17 @@ class TransferViewSet(viewsets.ModelViewSet):
             transfer_item_list = [
                 TransferItem(
                     transfer=transfer,
-                    item=Item.objects.get(i['item_id']),
-                    requested_quantity=i['quantity'],
+                    item=Item.objects.get(id=i["item_id"]),
+                    requested_quantity=i["quantity"],
                 )
                 for i in requested_items
             ]
             TransferItem.objects.bulk_create(transfer_item_list)
 
         except Item.DoesNotExist:
-            print('item does not exist')
             raise serializers.ValidationError({"item_id", "Item does not exist!"})
 
         except Exception as e:
-            print(str(e))
             raise serializers.ValidationError({"error", str(e)})
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
