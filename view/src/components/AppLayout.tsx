@@ -142,6 +142,12 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText primary="Unit of Measures"  sx={{minWidth:"fit-content"}}/>
             </ListItemButton>
+          <ListItemButton component={Link} to="/transfers" sx={{ pl: 4 }}>
+            <ListItemIcon>
+          <UndoIcon sx={{fill:"#5d4037"}}/>
+            </ListItemIcon>
+            <ListItemText primary="Transfer" />
+          </ListItemButton>
             <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }} >
             <ListItemIcon>
           <LocalShippingIcon sx={{fill:"#5d4037"}}/>
