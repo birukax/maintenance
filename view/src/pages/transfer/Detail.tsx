@@ -138,19 +138,11 @@ const Detail = () => {
         </div>
 
 
-        <div className="clmn">
-
-          <Typography variant="h6" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>Transfer Items:<div>Qty</div></Typography>
-          {data?.transfer_items?.map(item=><Typography variant="body1" className="text-slate-500 mb-2"  style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <span>{item?.item?.name}</span> <span>{item?.requested_quantity}</span>
-          </Typography>)}
-          
-        </div>
 
         <div className="clmn">
           <Typography variant="h6">Transfer Location:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data?.from_location.name} - {data?.to_location?.name}
+            {data?.from_location?.name} - {data?.to_location?.name}
           </Typography>
         </div>
 
@@ -224,6 +216,35 @@ const Detail = () => {
 
 
       </div>
+      <div className="rw">
+
+        <div className="clmn activities-clmn">
+
+          <Typography variant="h6">Transfer Requested Items:</Typography>
+          <Table sx={{ width:"100%" }} className="table">
+            <TableHead>
+              <TableRow>
+                <TableCell >
+                  <Typography noWrap>Item</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Requested Quantity</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+            {data?.transfer_items?.map((item) => {
+              return (
+                  <TableRow key={item.id}>
+                    <TableCell>{item?.item?.name}</TableCell>
+                    <TableCell>{item?.requested_quantity}</TableCell>
+                  </TableRow>
+              );
+            })}
+                </TableBody>
+          </Table>
+        </div>
+        </div>
 
 
 

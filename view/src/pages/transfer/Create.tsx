@@ -47,30 +47,6 @@ const params = {
   }, []);
 console.log(formData);
 
-  
-  // const toolOptions = useMemo(() => {
-  //   return Array.isArray(items.data)
-  //     ? items.data.filter((item) => item.category === "TOOL")
-  //     : [];
-  // }, [items.data]);
-
-  // const itemOptions = useMemo(() => {
-  //   return Array.isArray(items.data)&&items.data
-  //     ? items.data.filter((item) => item.category === "ITEM")
-  //     : [];
-  // }, [items.data]);
-
-  // const selectedItems = useMemo(() => {
-  //   return itemOptions.filter((option) =>
-  //     formData.items_required_id.includes(option.id)
-  //   );
-  // }, [formData.items_required_id, itemOptions]);
-
-  // const selectedTools = useMemo(() => {
-  //   return toolOptions.filter((option) =>
-  //     formData.requested_items.includes(option.id)
-  //   );
-  // }, [formData.requested_items, toolOptions]);
 
  
 
