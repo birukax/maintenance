@@ -407,7 +407,7 @@ class TransferViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["PATCH"])
-    def ship(self, request):
+    def ship(self, request,pk=None):
         transfer = self.get_object()
         shipped_items = request.data.get("shipped_items")
         if not shipped_items:
@@ -432,7 +432,7 @@ class TransferViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["PATCH"])
-    def receive(self, request):
+    def receive(self, request,pk=None):
         transfer = self.get_object()
         shipped_items = TransferHistory.objects.filter(
             transfer=transfer, type="OUTBOUND", completed=False

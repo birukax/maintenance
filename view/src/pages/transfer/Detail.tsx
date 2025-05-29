@@ -6,118 +6,35 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Checkbox, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import dayjs from "dayjs";
-import AddActivityModal from "./AddActivityModal";
-import AssignUsers from "./AssignUsers";
-
+import ReceiveModal from "./RecieveModal"
 const Detail = () => {
-  const navigate=useNavigate()
-  const {id}=useParams()
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.transfer.transfer,
     fetchDetailAction: fetchTransfer,
   });
-  const start = () => {
-    return dayjs(
-      `${entityState.data.start_date}T${entityState.data.start_time}`
-    ).format("YYYY/MM/DD HH:mm a");
-  };
-  const end = () => {
-    return dayjs(
-      `${entityState.data.end_date}T${entityState.data.end_time}`
-    ).format("YYYY/MM/DD HH:mm a");
-  };
-  const [assignmodalOpen, setAssignModalOpen] = useState(false);
-  const handleAssignModalOpen = () => setAssignModalOpen(true);
-  const handleAssignModalClose = () => setAssignModalOpen(false);
-
-  const [activityModalOpen, setActivityModalOpen] = useState(false);
-  const handleActivityModalOpen = () => setActivityModalOpen(true);
-  const handleActivityModalClose = () => setActivityModalOpen(false);
-
-
+  const [receivemodalOpen,setReceiveModalOpen]=useState(false)
   
   const renderButtons = () => (
     <>
-      {entityState.data?.status === "Created" &&
-        entityState.data?.work_order_activities.length === 0 && (
-          <>
-            
-            {
-            
-            entityState.data.work_order_type?.scheduled ?
-                <>
-                <Modal
-              open={activityModalOpen}
-              onClose={handleActivityModalClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <AddActivityModal
-                entityState={entityState}
-                setModalOpen={setActivityModalOpen}
-              />
-            </Modal>
-                <Button
-              onClick={handleActivityModalOpen}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Add Activity
-            </Button>
-                </>
-                :
-            <Button
-              onClick={()=>navigate(`/work-order/${id}/add-activities`)}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Add Activity
-            </Button>
-            }
-            
-          </>
-
-        )}
-      {(entityState.data?.status === "Created" ||
-        entityState.data?.status === "Assigned") && (
-          <>
+      <>
             <Modal
-              open={assignmodalOpen}
-              onClose={handleAssignModalClose}
+              open={receivemodalOpen}
+              onClose={()=>setReceiveModalOpen(false)}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <AssignUsers
+              <ReceiveModal
                 entityState={entityState}
-                setModalOpen={setAssignModalOpen}
               />
             </Modal>
-            <Button
-              onClick={handleAssignModalOpen}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Assign User
-            </Button>
           </>
-        )}
-      {entityState.data?.status === "Assigned" && (
-        <>
-          <Button
-            component={Link}
-            to={`/work-order/check-list/${entityState.id}`}
+      <Button
+            onClick={()=>setReceiveModalOpen(true)}
             variant="contained"
             sx={{ mr: 1 }}
           >
-            Check-List
+            Receive
           </Button>
-        </>
-      )}
     </>
   );
 
@@ -228,7 +145,13 @@ const Detail = () => {
                   <Typography noWrap>Item</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography noWrap>Requested Quantity</Typography>
+                  <Typography noWrap>Requested</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Shipped</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Received</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -238,6 +161,8 @@ const Detail = () => {
                   <TableRow key={item.id}>
                     <TableCell>{item?.item?.name}</TableCell>
                     <TableCell>{item?.requested_quantity}</TableCell>
+                    <TableCell>{item?.shipped_quantity}</TableCell>
+                    <TableCell>{item?.received_quantity}</TableCell>
                   </TableRow>
               );
             })}

@@ -68,6 +68,17 @@ export const updateTransfer = createAsyncThunk<[], { id: string, formData: { [ke
         }
     }
 )
+export const receiveTransfer = createAsyncThunk<[], { id: string}, { rejectValue: string }>(
+    'transfer/receive',
+    async ({ id }, { rejectWithValue }) => {
+        try {
+            const response = await api.patch(`/inventory/transfers/${id}/receive/`);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || 'Failed to update work order');
+        }
+    }
+)
 
 export const createTransferActivities = createAsyncThunk<[],{ id: string, formData: { [key: string] } }, { rejectValue: string }>(
     'transfer/createTransferActivities',
@@ -157,6 +168,18 @@ const TransferSlice = createSlice({
             state.transfer.data = action.payload;
         })
         .addCase(updateTransfer.rejected, (state, action) => {
+            state.transfer.loading = false;
+            state.transfer.error = action.payload || 'Unknown error';
+        })
+        .addCase(receiveTransfer.pending, (state) => {
+            state.transfer.loading = true;
+            state.transfer.error = null;
+        })
+        .addCase(receiveTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.transfer.loading = false;
+            state.transfer.data = action.payload;
+        })
+        .addCase(receiveTransfer.rejected, (state, action) => {
             state.transfer.loading = false;
             state.transfer.error = action.payload || 'Unknown error';
         })

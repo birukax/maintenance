@@ -5,7 +5,7 @@ import TransferList from "../pages/transfer/List";
 import TransferDetail from "../pages/transfer/Detail";
 // import TransferEdit from "../pages/transfer/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
-
+import Receive from "../pages/transfer/Receive"
 const TransferRoutes = [
   <Route
     key="transfer-list"
@@ -34,15 +34,15 @@ const TransferRoutes = [
       </ProtectedRoute>
     }
   />,
-  // <Route
-  //   key="transfer-edit"
-  //   path="/transfer/edit/:id"
-  //   element={
-  //     <ProtectedRoute>
-  //       <TransferEdit />
-  //     </ProtectedRoute>
-  //   }
-  // />,
+  <Route
+    key="transfer-edit"
+    path="/transfer/receive/:id"
+    element={
+      <ProtectedRoute>
+        <Receive />
+      </ProtectedRoute>
+    }
+  />,
 ];
 
 export default TransferRoutes;
