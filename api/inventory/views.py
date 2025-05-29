@@ -406,6 +406,69 @@ class TransferViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @action(detail=True, methods=["PATCH"])
+    def ship(self, request):
+        transfer = self.get_object()
+        shipped_items = request.data.get("shipped_items")
+        if not shipped_items:
+            raise serializers.ValidationError({"error": "Shipped items are required."})
+        try:
+            shipment_list = [
+                TransferHistory(
+                    transfer=transfer,
+                    item=Item.objects.get(id=item["item_id"]),
+                    location=transfer.from_location,
+                    type="OUTBOUND",
+                    quantity=item["quantity"],
+                )
+                for item in shipped_items
+            ]
+        except Item.DoesNotExist:
+            raise serializers.ValidationError(
+                {"error": "One or more items do not exist."}
+            )
+        TransferHistory.objects.bulk_create(shipment_list)
+        serializer = self.get_serializer(transfer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["PATCH"])
+    def receive(self, request):
+        transfer = self.get_object()
+        shipped_items = TransferHistory.objects.filter(
+            transfer=transfer, type="OUTBOUND", completed=False
+        )
+        transfer_items = TransferItem.objects.filter(transfer=transfer)
+        try:
+            received_list = []
+            for i in transfer_items:
+                total = (
+                    shipped_items.filter(item=i.item).aggregate(
+                        total_quantity=Sum("quantity")
+                    )["total_quantity"]
+                    or 0
+                )
+                received_list.append(
+                    TransferHistory(
+                        transfer=transfer,
+                        item=i.item,
+                        location=transfer.to_location,
+                        completed=True,
+                        quantity=total,
+                        type="INBOUND",
+                    )
+                )
+            if received_list:
+                TransferHistory.objects.bulk_create(received_list)
+                transfer_items.update(completed=True)
+        except Item.DoesNotExist:
+            raise serializers.ValidationError(
+                {"error": "One or more items do not exist."}
+            )
+        except Exception as e:
+            raise serializers.ValidationError({"error": str(e)})
+        serializer = self.get_serializer(transfer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class TransferItemViewSet(viewsets.ModelViewSet):
     serializer_class = TransferItemSerializer

@@ -176,7 +176,11 @@ class TransferItemSerializer(serializers.ModelSerializer):
             "item",
             "item_id",
             "requested_quantity",
-            "transfered_quantity",
+            "shipped_quantity",
+            "received_quantity",
+            "remaining_quantity",
+            "shipped",
+            "received",
         ]
 
     def get_transfer(self, obj):
@@ -247,6 +251,7 @@ class TransferHistorySerializer(serializers.ModelSerializer):
             "type",
             "date",
             "quantity",
+            "completed",
         ]
 
 
