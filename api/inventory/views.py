@@ -413,21 +413,33 @@ class TransferViewSet(viewsets.ModelViewSet):
         if not shipped_items:
             raise serializers.ValidationError({"error": "Shipped items are required."})
         try:
-            shipment_list = [
-                TransferHistory(
-                    transfer=transfer,
-                    item=Item.objects.get(id=item["item_id"]),
-                    location=transfer.from_location,
-                    type="OUTBOUND",
-                    quantity=item["quantity"],
-                )
-                for item in shipped_items
-            ]
+            for i in shipped_items:
+                item = Item.objects.get(id=[i["item_id"]])
+                transfer_item = TransferItem.objects.get(transfer=transfer, item=item)
+                if transfer_item.remaining_quantity < i["quantity"]:
+                    raise serializer.ValidationError(
+                        {
+                            "error": "The shipped quantity cannot be greater than the remaining quantity."
+                        }
+                    )
+                elif i["quantity"] > 0:
+                    shipment_list = [
+                        TransferHistory(
+                            transfer=transfer,
+                            item=Item,
+                            location=transfer.from_location,
+                            type="OUTBOUND",
+                            quantity=i["quantity"],
+                        )
+                    ]
         except Item.DoesNotExist:
             raise serializers.ValidationError(
                 {"error": "One or more items do not exist."}
             )
-        
+        except TransferItem.DoesNotExist:
+            raise serializers.ValidationError(
+                {"error": "Transfer for one or more item does not exist."}
+            )
         except Exception as e:
             raise serializers.ValidationError({"error", str(e)})
 
