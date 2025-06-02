@@ -36,7 +36,8 @@ const Detail = () => {
             Receive
           </Button>
       <Button
-            onClick={()=>setReceiveModalOpen(true)}
+            component={Link}
+            to={`/transfer/${entityState.data.id}/ship`}
             variant="contained"
             sx={{ mr: 1 }}
           >

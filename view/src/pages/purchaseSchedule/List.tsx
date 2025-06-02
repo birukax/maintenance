@@ -67,12 +67,20 @@ const List: React.FC = () => {
     navigate(`/purchase-schedule/edit/${year}?page=1`);
   };
   const handleFilter = async (field, value) => {
+    let parameters
     // Handle filter action here
     if (field === "year__no") {
-      const parameters = {
+      if(!searchParams.get("search")){
+        parameters = {
+        [field]: value
+      }
+      }else{
+        parameters = {
         search: searchParams.get("search"),
         [field]: value,
       };
+      }
+       
       setSearchParams({ ...parameters });
       await dispatch(fetchPurchaseSchedules(parameters));
     }
@@ -91,6 +99,7 @@ const List: React.FC = () => {
     await dispatch(fetchPurchaseSchedules(parameters));
   };
 
+  
   return (
     <GenericListPage
       title="Purchase Schedules"

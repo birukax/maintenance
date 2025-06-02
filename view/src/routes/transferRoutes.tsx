@@ -6,6 +6,7 @@ import TransferDetail from "../pages/transfer/Detail";
 // import TransferEdit from "../pages/transfer/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Receive from "../pages/transfer/Receive"
+import ShipList from "../pages/transfer/ShipList";
 const TransferRoutes = [
   <Route
     key="transfer-list"
@@ -40,6 +41,15 @@ const TransferRoutes = [
     element={
       <ProtectedRoute>
         <Receive />
+      </ProtectedRoute>
+    }
+  />,
+  <Route
+    key="transfer-ship"
+    path="/transfer/:id/ship"
+    element={
+      <ProtectedRoute>
+        <ShipList />
       </ProtectedRoute>
     }
   />,
