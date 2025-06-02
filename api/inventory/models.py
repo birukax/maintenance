@@ -267,9 +267,7 @@ class TransferItem(BaseCreatedUpdated):
 
     @property
     def remaining_quantity(self):
-        return self.requested_quantity - (
-            self.shipped_quantity + self.received_quantity
-        )
+        return self.requested_quantity - self.shipped_quantity
 
     class Meta:
         ordering = ["-item__name", "created_at"]
