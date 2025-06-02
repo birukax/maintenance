@@ -35,6 +35,13 @@ const Detail = () => {
           >
             Receive
           </Button>
+      <Button
+            onClick={()=>setReceiveModalOpen(true)}
+            variant="contained"
+            sx={{ mr: 1 }}
+          >
+            Ship
+          </Button>
     </>
   );
 
