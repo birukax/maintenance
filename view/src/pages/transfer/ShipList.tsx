@@ -6,7 +6,7 @@ import { AppState, AppDispatch } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import ShipListRows from "./ShipListRows";
-import Submit from "./Submit";
+import { shipTransfer } from "../../store/slices/transferSlice";
 import {
   Typography,
   Button,
@@ -19,7 +19,7 @@ import {
   TextField,
   Checkbox,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const ShipList = () => {
@@ -28,14 +28,33 @@ const ShipList = () => {
     fetchDetailAction: fetchTransfer,
   });
 
-  const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    // from_location_id:entityState?.data?.from_location?.id,
-    // to_location_id:entityState?.data?.to_location?.id,
     shipped_items:[]
   });
+  const {id}=useParams()
   const dispatch = useDispatch<AppDispatch>();
   const navigate=useNavigate()
+
+
+  const handleRefesh=()=>{
+    try {
+      dispatch(fetchTransfer(id))
+    } catch (error) {
+      console.log("error",error);
+      
+    }
+  }
+  const handleSubmit=async (e)=>{
+    // e.preventDefault()
+    try {
+      await dispatch(shipTransfer({id,formData})).unwrap()
+      navigate(`/tranfer/detail/${id}`)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log(entityState.data);
+  
   const renderButtons = () => (
     <>
       <>
@@ -43,6 +62,7 @@ const ShipList = () => {
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
+          onClick={handleSubmit}
         >
           Submit
         </Button>
@@ -50,26 +70,39 @@ const ShipList = () => {
     </>
   );
 
-  const handleRefresh = async () => {
-    try {
-      await dispatch(fetchTransfer(entityState?.id)).unwrap();
-    } catch (error) {
-      console.error("Failed to refresh work order:", error);
-    }
-  };
+  
 
-  const handleFormChange = async (e) => {
+  const handleFormChange = async (data) => {
     
-    setFormData(prev=>{
+    let item=formData?.shipped_items?.find(el=>el.item_id===data.item_id)
+    if(!item){
+      
+      setFormData(prev=>{
       return {
         ...prev,
-        shipped_items:[...prev?.shipped_items,{[e.target.name]:e.target.value}]
+        shipped_items:[...prev?.shipped_items,data]
       }
     })
+    }else{
+      
+      setFormData(prev=>{
+      return {
+        ...prev,
+        shipped_items:[...prev?.shipped_items?.filter(el=>{
+          console.log("filttered",el);
+          
+          if(el.item_id===data.item_id){
+             el.quantity=data.quantity
+          }
+            return el
+        })]
+      }
+    })
+    }
+console.log(formData);
+    
   };
 
-  console.log(entityState,"list");
-  console.log(formData,"form");
   
   const renderDetails = (data) => (
     <>

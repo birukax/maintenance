@@ -79,6 +79,19 @@ export const receiveTransfer = createAsyncThunk<[], { id: string}, { rejectValue
         }
     }
 )
+export const shipTransfer = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+
+    'transfer/ship',
+    async ({ id ,formData}, { rejectWithValue }) => {
+        try {
+            const response = await api.patch(`/inventory/transfers/${id}/ship/`,formData);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error.response?.data || 'Failed to update Transfer');
+        }
+    }
+)
 
 export const createTransferActivities = createAsyncThunk<[],{ id: string, formData: { [key: string] } }, { rejectValue: string }>(
     'transfer/createTransferActivities',
@@ -180,6 +193,18 @@ const TransferSlice = createSlice({
             state.transfer.data = action.payload;
         })
         .addCase(receiveTransfer.rejected, (state, action) => {
+            state.transfer.loading = false;
+            state.transfer.error = action.payload || 'Unknown error';
+        })
+        .addCase(shipTransfer.pending, (state) => {
+            state.transfer.loading = true;
+            state.transfer.error = null;
+        })
+        .addCase(shipTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.transfer.loading = false;
+            state.transfer.data = action.payload;
+        })
+        .addCase(shipTransfer.rejected, (state, action) => {
             state.transfer.loading = false;
             state.transfer.error = action.payload || 'Unknown error';
         })

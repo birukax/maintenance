@@ -427,6 +427,10 @@ class TransferViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {"error": "One or more items do not exist."}
             )
+        
+        except Exception as e:
+            raise serializers.ValidationError({"error", str(e)})
+
         TransferHistory.objects.bulk_create(shipment_list)
         serializer = self.get_serializer(transfer)
         return Response(serializer.data, status=status.HTTP_200_OK)

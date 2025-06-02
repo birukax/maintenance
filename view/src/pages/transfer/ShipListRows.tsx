@@ -29,11 +29,14 @@ const CheckListRows = ({ row, handleFormChange }) => {
           name="quantity"
           type="number"
           required
-          value={remark}
           size="small"
+          inputProps={{ min: 0, max: row.remaining_quantity }}
           onChange={(e)=>{
-            console.log(e.target.value);
-            
+            console.log(e.target.value,"change");
+            handleFormChange({
+              item_id:row?.item?.id,
+              quantity:e.target.value
+            })
           }}
         />
       </TableCell>
