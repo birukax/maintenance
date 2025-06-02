@@ -7,6 +7,7 @@ import {useSearchParams} from "react-router-dom"
 import { GenericListPage } from "../../components/GenericListPage";
 
 const scheduleColumns = [
+  { header: "Type", accessor: "type" },
   { header: "Machine", accessor: "machine.name" },
   { header: "Equipment", accessor: "equipment.name" },
   { header: "Work Order Type", accessor: "work_order_type.name" },
