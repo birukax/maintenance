@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createContact } from "../../store/slices/contactSlice";
 import api from "../../utils/api";
@@ -16,7 +16,9 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { AppState } from "../../store/store";
 const Create = () => {
+  const contact = useSelector((state:AppState)=>state.contact.contact)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,7 +26,6 @@ const Create = () => {
     address: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,14 +37,12 @@ const Create = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
       await dispatch(createContact(formData)).unwrap();
       toast.success("Contact created successfully");
       navigate("/contacts");
     } catch (err) {
-      toast.error("Error creating Contact");
-      setError(err.response?.data.detail || err.message);
+      toast.error(contact?.error?.error ||"Error creating Contact");
     } finally {
       setLoading(false);
     }
@@ -68,6 +67,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact?.error?.name || ""}
+
         />
 
         <TextField
@@ -81,6 +82,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact?.error?.email || ""}
+
         />
         <TextField
           label="address"
@@ -92,6 +95,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact?.error?.address || ""}
+
         />
 
         <TextField
@@ -104,6 +109,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact?.error?.phone_no || ""}
         />
 
         <Button
@@ -116,11 +122,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Contact"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+        
       </Box>
     </Container>
   );

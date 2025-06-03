@@ -36,7 +36,6 @@ const List: React.FC = () => {
            dispatch(fetchTransfers(params));
        }}
     
-     console.log(entityState);
      
   return (
     <Table sx={{ minWidth: 650 }} aria-label={` table`}>

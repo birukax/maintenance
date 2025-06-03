@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, Checkbox, TextField } from "@mui/material";
 
-const CheckListRows = ({ row, handleFormChange }) => {
-  const [remark, setRemark] = useState(row.remark || "");
-  const [value, setValue] = useState(row.value || false);
-  useEffect(() => {
-    setRemark(row.remark || "");
-  }, [row.remark]);
-  useEffect(() => {
-    setValue(row.value || "");
-  }, [row.value]);
+const CheckListRows = ({ row, handleFormChange,index,errorCount,setErrorCount }) => {
+
+  const [error, setError] = useState(false);
+  const errorList=errorCount
+  
+
+  
   return (
     <TableRow key={row.id}>
       <TableCell align="left" title={row.id}>
@@ -25,18 +23,32 @@ const CheckListRows = ({ row, handleFormChange }) => {
         {row?.shipped_quantity}
       </TableCell>
       <TableCell align="left">
+        {row?.remaining_quantity}
+      </TableCell>
+      <TableCell align="left">
         <TextField
           name="quantity"
           type="number"
           required
           size="small"
           inputProps={{ min: 0, max: row.remaining_quantity }}
+          style={error?{border:"1px solid red"}:{}}
           onChange={(e)=>{
             console.log(e.target.value,"change");
-            handleFormChange({
+            if(e.target.value>row.remaining_quantity){
+              setError(true)
+              errorList[index]=true
+              setErrorCount([...errorList])
+            }else{
+              setError(false)
+              errorList[index]=false
+              setErrorCount([...errorList])
+              handleFormChange({
               item_id:row?.item?.id,
               quantity:e.target.value
             })
+            }
+            
           }}
         />
       </TableCell>

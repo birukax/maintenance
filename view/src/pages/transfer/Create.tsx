@@ -45,7 +45,6 @@ const params = {
     dispatch(fetchLocations(params));
     dispatch(fetchItems(params));
   }, []);
-console.log(formData);
 
 
  

@@ -25,9 +25,11 @@ const Detail = () => {
             >
               <ReceiveModal
                 entityState={entityState}
+                setReceiveModalOpen={setReceiveModalOpen}
               />
             </Modal>
           </>
+          {entityState?.data && entityState?.data?.transfer_items?.every(el=>Number(el.requested_quantity)===Number(el.received_quantity))?"":
       <Button
             onClick={()=>setReceiveModalOpen(true)}
             variant="contained"
@@ -35,14 +37,15 @@ const Detail = () => {
           >
             Receive
           </Button>
-      <Button
+}
+      {entityState?.data && entityState?.data?.transfer_items?.every(el=>el.remaining_quantity<1)?"":<Button
             component={Link}
             to={`/transfer/${entityState.data.id}/ship`}
             variant="contained"
             sx={{ mr: 1 }}
           >
             Ship
-          </Button>
+          </Button>}
     </>
   );
 

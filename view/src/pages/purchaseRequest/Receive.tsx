@@ -85,7 +85,6 @@ const Receive = ({ id, setModalOpen }) => {
     dispatch(fetchLocations(params))
   }, [purchaseRequest.error]);
 
-  console.log(formData);
   
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">

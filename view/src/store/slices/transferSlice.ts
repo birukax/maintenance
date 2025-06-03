@@ -25,7 +25,7 @@ export const fetchTransfers = createAsyncThunk<[], {params:null}, {rejectValue: 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work orders');
+            return rejectWithValue(error.response?.data || 'Failed to fetch Transfers');
         }
     }
 )
@@ -39,7 +39,7 @@ export const fetchTransfer = createAsyncThunk<[], number, { rejectValue: string 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order');
+            return rejectWithValue(error.response?.data || 'Failed to fetch Transfer');
         }
     }
 )
@@ -52,7 +52,7 @@ export const createTransfer = createAsyncThunk<[],  formData  , { rejectValue: s
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create work order');
+            return rejectWithValue(error.response?.data || 'Failed to create Transfer');
         }
     }
 )
@@ -64,7 +64,7 @@ export const updateTransfer = createAsyncThunk<[], { id: string, formData: { [ke
             const response = await api.patch(`/inventory/transfers/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update work order');
+            return rejectWithValue(error.response?.data || 'Failed to update Transfer');
         }
     }
 )
@@ -75,7 +75,9 @@ export const receiveTransfer = createAsyncThunk<[], { id: string}, { rejectValue
             const response = await api.patch(`/inventory/transfers/${id}/receive/`);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update work order');
+            console.log(error);
+            
+            return rejectWithValue(error.response?.data || 'Failed to Receive Transfer');
         }
     }
 )
@@ -88,45 +90,12 @@ export const shipTransfer = createAsyncThunk<[], { id: string, formData: { [key:
             return response.data;
         } catch (error) {
             console.log(error);
-            return rejectWithValue(error.response?.data || 'Failed to update Transfer');
+            return rejectWithValue(error.response?.data || 'Failed to ship Transfer');
         }
     }
 )
 
-export const createTransferActivities = createAsyncThunk<[],{ id: string, formData: { [key: string] } }, { rejectValue: string }>(
-    'transfer/createTransferActivities',
-    async ({ id, formData }, { rejectWithValue}) => {
-        try {
-            const response = await api.post(`/inventory/transfers/${id}/create_activities/`, formData)
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create work order activities');
-        }
-    }
-)
 
-export const assignTransferUsers = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
-    'transfer/assignTransferUsers',
-    async ({ id, formData }, { rejectWithValue }) => {
-        try {
-            const response = await api.post(`/inventory/transfers/${id}/assign_users/`, formData);
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
-        }
-    }
-)
-export const submitTransfer = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
-    'transfer/submitTransfer',
-    async ({ id, formData }, { rejectWithValue }) => {
-        try {
-            const response = await api.post(`/inventory/transfers/${id}/submit_work_order/`, formData);
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
-        }
-    }
-)
 
 
 const TransferSlice = createSlice({
@@ -205,42 +174,6 @@ const TransferSlice = createSlice({
             state.transfer.data = action.payload;
         })
         .addCase(shipTransfer.rejected, (state, action) => {
-            state.transfer.loading = false;
-            state.transfer.error = action.payload || 'Unknown error';
-        })
-        .addCase(createTransferActivities.pending, (state) => {
-            state.transfer.loading = true;
-            state.transfer.error = null;
-        })
-        .addCase(createTransferActivities.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.transfer.loading = false;
-            state.transfer.data = action.payload;
-        })
-        .addCase(createTransferActivities.rejected, (state, action) => {
-            state.transfer.loading = false;
-            state.transfer.error = action.payload || 'Unknown error';
-        })
-        .addCase(assignTransferUsers.pending, (state) => {
-            state.transfer.loading = true;
-            state.transfer.error = null;
-        })
-        .addCase(assignTransferUsers.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.transfer.loading = false;
-            state.transfer.data = action.payload;
-        })
-        .addCase(assignTransferUsers.rejected, (state, action) => {
-            state.transfer.loading = false;
-            state.transfer.error = action.payload || 'Unknown error';
-        })
-        .addCase(submitTransfer.pending, (state) => {
-            state.transfer.loading = true;
-            state.transfer.error = null;
-        })
-        .addCase(submitTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.transfer.loading = false;
-            state.transfer.data = action.payload;
-        })
-        .addCase(submitTransfer.rejected, (state, action) => {
             state.transfer.loading = false;
             state.transfer.error = action.payload || 'Unknown error';
         })

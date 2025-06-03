@@ -41,7 +41,7 @@ const style = {
 
 };
 
-const AddActivity = ({ entityState,setModalOpen }) => {
+const AddActivity = ({ entityState,setReceiveModalOpen }) => {
   const [formData, setFormData] = useState({
     activity_ids: [],
   });
@@ -52,9 +52,9 @@ const AddActivity = ({ entityState,setModalOpen }) => {
 
 
   const handlereceiveTransfer=async (id)=>{
-    console.log(id);
     
     await dispatch(receiveTransfer({id})).unwrap()
+    setReceiveModalOpen(false)
   }
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
@@ -103,44 +103,7 @@ const AddActivity = ({ entityState,setModalOpen }) => {
             </TableCell>
           </TableRow>
             ))}
-          {entityState &&
-            entityState.data.transfer_items.map((row,index) => (
-              <TableRow key={index}>
-            <TableCell>
-              <Typography noWrap>{row.item.name}</Typography>
-            </TableCell>
-
-            <TableCell>
-              <Typography noWrap>{entityState?.data?.requested_date}</Typography>
-            </TableCell>
-
-            <TableCell>
-              <Typography noWrap>{row?.requested_quantity}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography noWrap>{row?.shipped_quantity}</Typography>
-            </TableCell>
-          </TableRow>
-            ))}
-          {entityState &&
-            entityState.data.transfer_items.map((row,index) => (
-              <TableRow key={index}>
-            <TableCell>
-              <Typography noWrap>{row.item.name}</Typography>
-            </TableCell>
-
-            <TableCell>
-              <Typography noWrap>{entityState?.data?.requested_date}</Typography>
-            </TableCell>
-
-            <TableCell>
-              <Typography noWrap>{row?.requested_quantity}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography noWrap>{row?.shipped_quantity}</Typography>
-            </TableCell>
-          </TableRow>
-            ))}
+          
         </TableBody>
       </Table>
         <Button

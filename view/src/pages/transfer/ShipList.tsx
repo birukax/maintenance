@@ -27,7 +27,7 @@ const ShipList = () => {
     detailSelector: (state: AppState) => state.transfer.transfer,
     fetchDetailAction: fetchTransfer,
   });
-
+  const [errorCount,setErrorCount]=useState([])
   const [formData, setFormData] = useState({
     shipped_items:[]
   });
@@ -36,7 +36,7 @@ const ShipList = () => {
   const navigate=useNavigate()
 
 
-  const handleRefesh=()=>{
+  const handleRefresh=()=>{
     try {
       dispatch(fetchTransfer(id))
     } catch (error) {
@@ -45,26 +45,25 @@ const ShipList = () => {
     }
   }
   const handleSubmit=async (e)=>{
-    // e.preventDefault()
+    e.preventDefault()
     try {
       await dispatch(shipTransfer({id,formData})).unwrap()
-      navigate(`/tranfer/detail/${id}`)
-    } catch (error) {
-      console.log(error);
+      navigate(`/transfer/detail/${id}`)
+    } catch (error) {      
+      return error
     }
   }
-  console.log(entityState.data);
-  
   const renderButtons = () => (
     <>
       <>
         <Button
+        disabled={errorCount.find(el=>el===true)?true:false}
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
           onClick={handleSubmit}
         >
-          Submit
+          Ship
         </Button>
       </>
     </>
@@ -99,10 +98,10 @@ const ShipList = () => {
       }
     })
     }
-console.log(formData);
     
   };
 
+  console.log(formData,"now");
   
   const renderDetails = (data) => (
     <>
@@ -124,23 +123,33 @@ console.log(formData);
               <Typography noWrap>Shipped Quantity</Typography>
             </TableCell>
             <TableCell>
+              <Typography noWrap>Remaining Quantity</Typography>
+            </TableCell>
+            <TableCell>
               <Typography noWrap>Ship</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data &&
-            data?.transfer_items?.map((row) => {
+            data?.transfer_items?.map((row,index) => {
               if(row.remaining_quantity>0) return <ShipListRows
+                setErrorCount={setErrorCount}
+                errorCount={errorCount}
                 key={row.id}
                 row={row}
+                index={index}
                 handleFormChange={handleFormChange}
               />
 })}
+{
+  data && data?.transfer_items?.every(el=>el.remaining_quantity<1)&&<TableRow><Typography>No Shippment Left</Typography></TableRow>
+}
         </TableBody>
       </Table>
     </>
   );
+
   if (!entityState?.data) {
     return <Typography>The work order ship is not available</Typography>;
   } else {
