@@ -425,7 +425,7 @@ class TransferViewSet(viewsets.ModelViewSet):
             ]
         except Item.DoesNotExist:
             raise serializers.ValidationError(
-                {"error": "One or more items do not exist."}vvvcc
+                {"error": "One or more items do not exist."}
             )
         
         except Exception as e:
