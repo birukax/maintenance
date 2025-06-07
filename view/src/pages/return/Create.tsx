@@ -33,6 +33,8 @@ const Create = () => {
     used: true,
     quantity: "",
   });
+    const retur = useSelector((state:AppState)=>state.return.return)
+
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -102,6 +104,8 @@ const params = {
                         label="Item"
                         placeholder="Search items..."
                         required
+                        helperText={retur.error?.item_id}
+
                       />
                     )}
                     id="item-select"
@@ -127,6 +131,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={retur.error?.quantity}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -156,6 +161,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={retur.error?.reason}
         />
         <Button
           type="submit"

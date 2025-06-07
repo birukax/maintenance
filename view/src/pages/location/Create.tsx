@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createLocation } from "../../store/slices/locationSlice";
 import api from "../../utils/api";
@@ -16,11 +16,14 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { AppState } from "../../store/store";
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     name: "",
   });
+    const location = useSelector((state:AppState)=>state.location.location)
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -65,6 +68,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={location.error?.code}
+
         />
 
         <TextField
@@ -77,6 +82,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={location.error?.name}
         />
 
         <Button

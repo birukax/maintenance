@@ -26,6 +26,7 @@ const Create = () => {
     name: "",
     plant_id:""
   });
+  const area = useSelector((state: AppState) => state.area.area);
   const { plants } = useSelector((state: AppState) => state.plant);
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -82,6 +83,7 @@ const params = {
                 label="Plant"
                 placeholder="Search plants..."
                 required
+                helperText={area?.error?.plant_id}
               />
             )}
             id="plant-select"
@@ -102,6 +104,8 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+                helperText={area?.error?.code}
+
         />
 
         <TextField
@@ -114,6 +118,8 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+                helperText={area?.error?.name}
+
         />
 
         <Button

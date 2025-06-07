@@ -26,6 +26,7 @@ const Create = () => {
     quantity: "",
     priority: "",
   });
+  const purchaseRequest = useSelector((state:AppState)=>state.purchaseRequest.purchaseRequest)
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -81,6 +82,7 @@ const params = {
                 label="Item"
                 placeholder="Search items..."
                 required
+                helperText={purchaseRequest.error?.item_id}
               />
             )}
             id="item-select"
@@ -103,6 +105,7 @@ const params = {
             value={formData.priority}
             onChange={handleChange}
             label="Priority"
+            
           >
             {PRIORITIES.map((priority,index) => (
                 <MenuItem key={index} value={priority[0]}>
@@ -126,6 +129,7 @@ const params = {
           }}
           required
           disabled={loading}
+          helperText={purchaseRequest.error?.quantity}
         />
 
         <Button

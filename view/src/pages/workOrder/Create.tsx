@@ -39,6 +39,7 @@ const Create = () => {
     total_days: 0,
     total_minutes: 0,
   });
+  const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
@@ -171,6 +172,8 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
+                helperText={workOrder.error?.machine_id}
+
               />
             )}
             id="machine-select"
@@ -193,6 +196,7 @@ const params = {
                 variant="outlined"
                 label="Equipment"
                 placeholder="Search equipments..."
+                helperText={workOrder.error?.equipment_id}
               />
             )}
             id="equipment-select"
@@ -228,6 +232,7 @@ const params = {
           label="Work Order Type"
           placeholder="Search work order types..."
           required
+          helperText={workOrder.error?.work_order_type_id}
               />
             )}
             id="work-order-type-select"
@@ -266,6 +271,7 @@ const params = {
                 label="Activity Type"
                 placeholder="Search activity types..."
                 required
+                helperText={workOrder.error?.activity_type_id}
               />
             )}
             id="activity-type-select"
@@ -300,6 +306,7 @@ const params = {
                       variant="outlined"
                       label="Spareparts Required"
                       placeholder="Search spareparts..."
+                      helperText={workOrder.error?.spareparts_required_id}
                     />
                   )}
                   id="sparepart-autocomplete"
@@ -325,6 +332,7 @@ const params = {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
+                helperText={workOrder.error?.tools_required_id}
               />
             )}
             id="tool-select"

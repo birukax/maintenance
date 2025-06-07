@@ -37,6 +37,7 @@ const Create = () => {
     planned_hours: 0,
     planned_minutes: 0,
   });
+  const schedule = useSelector((state:AppState)=>state.schedule.schedule)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
@@ -116,6 +117,7 @@ const params = {
           label="Type"
           placeholder="Search types..."
           required
+          helperText={schedule.error?.type}
               />
             )}
             id="types-select"
@@ -137,6 +139,8 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={schedule.error?.description}
+
         />
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
@@ -149,6 +153,8 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
+                helperText={schedule.error?.machine_id}
+
               />
             )}
             id="machine-select"
@@ -171,6 +177,8 @@ const params = {
                 variant="outlined"
                 label="Equipment"
                 placeholder="Search equipments..."
+          helperText={schedule.error?.equipment_id}
+
               />
             )}
             id="equipment-select"
@@ -201,6 +209,8 @@ const params = {
                 label="Work Order Type"
                 placeholder="Search work order types..."
                 required
+          helperText={schedule.error?.work_order_type_id}
+
               />
             )}
             id="work-order-type-select"
@@ -233,6 +243,8 @@ const params = {
           label="Activity Type"
           placeholder="Search activity types..."
           required
+          helperText={schedule.error?.activity_type_id}
+
               />
             )}
             id="activity-type-select"
@@ -273,6 +285,8 @@ const params = {
           variant="outlined"
           label="Spareparts Required"
           placeholder="Search spareparts..."
+          helperText={schedule.error?.spareparts_required_id}
+
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -303,6 +317,8 @@ const params = {
           variant="outlined"
           label="Tools Required"
           placeholder="Search tools..."
+          helperText={schedule.error?.tools_required_id}
+
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -320,6 +336,7 @@ const params = {
           value={formData.planned_days}
           onChange={handleChange}
           disabled={loading}
+
         />
         <TextField
           label="Planned Hours"

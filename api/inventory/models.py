@@ -88,7 +88,7 @@ class UnitOfMeasure(BaseCreatedUpdated):
 
 class Item(BaseCreatedUpdated):
     no = models.CharField(blank=True, max_length=20, unique=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     shelf = models.ForeignKey(
         Shelf,
         on_delete=models.RESTRICT,

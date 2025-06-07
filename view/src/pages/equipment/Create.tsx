@@ -25,6 +25,7 @@ const Create = () => {
     machine_id: "",
     code: "",
   });
+  const equipment = useSelector((state:AppState)=>state.equipment.equipment)
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -80,6 +81,7 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
+                helperText={equipment.error?.machine_id}
               />
             )}
             id="machine-select"
@@ -101,6 +103,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={equipment.error?.code}
         />
         <TextField
           multiline
@@ -113,6 +116,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={equipment.error?.name}
         />
         <Button
           type="submit"

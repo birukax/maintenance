@@ -25,6 +25,7 @@ const Create = () => {
     code: "",
     name: "",
   });
+  const shelf = useSelector((state:AppState)=>state.shelf.shelf)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -81,6 +82,7 @@ const Create = () => {
                 label="Location"
                 placeholder="Search locations..."
                 required
+                helperText={shelf?.error?.location_id}
               />
             )}
             id="location-select"
@@ -106,6 +108,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={shelf?.error?.code}
         />
 
         <TextField
@@ -118,6 +121,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={shelf?.error?.name}
         />
 
         <Button

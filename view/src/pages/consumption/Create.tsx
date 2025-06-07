@@ -29,6 +29,9 @@ const Create = () => {
     quantity: "",
     date:""
   });
+      const consumption = useSelector((state:AppState)=>state.consumption.consumption)
+
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
@@ -84,6 +87,8 @@ const params = {
                 label="Item"
                 placeholder="Search items..."
                 required
+                helperText={consumption.error?.item_id}
+
               />
             )}
             id="item-select"
@@ -108,6 +113,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={consumption.error?.quantity}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -137,6 +143,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={consumption.error?.reason}
         />
 
         <Button

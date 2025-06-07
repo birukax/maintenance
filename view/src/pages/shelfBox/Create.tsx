@@ -25,6 +25,7 @@ const Create = () => {
     code: "",
     name: "",
   });
+  const shelfBox = useSelector((state:AppState)=>state.shelfBox.shelfBox)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -79,6 +80,7 @@ const Create = () => {
           label="Shelf Row"
           placeholder="Search shelf rows..."
           required
+          helperText={shelfBox?.error?.row_id}
               />
             )}
             id="shelf-row-select"
@@ -104,6 +106,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={shelfBox?.error?.code}
         />
 
         <TextField
@@ -116,6 +119,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={shelfBox?.error?.name}
+
         />
 
         <Button

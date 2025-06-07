@@ -44,6 +44,8 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
+  const item = useSelector((state:AppState)=>state.item.item)
+
     const { shelves } = useSelector((state: AppState) => state.shelf);
     const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
     const { shelfBoxes } = useSelector((state: AppState) => state.shelfBox);
@@ -139,6 +141,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={item.error?.name}
         />
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
@@ -150,6 +153,8 @@ const Create = () => {
           variant="outlined"
           label="Unit of Measure"
           placeholder="Search unit of measure..."
+          helperText={item.error?.uom}
+
               />
             )}
             id="uom-select"
@@ -174,6 +179,8 @@ const Create = () => {
           variant="outlined"
           label="Item Type"
           placeholder="Search item types..."
+          helperText={item.error?.type}
+
               />
             )}
             id="item-type-select"
@@ -196,6 +203,8 @@ const Create = () => {
           variant="outlined"
           label="Item Category"
           placeholder="Search item categories..."
+          helperText={item.error?.category}
+
               />
             )}
             id="item-category-select"
@@ -219,6 +228,8 @@ const Create = () => {
           label="Shelf"
           placeholder="Search shelves..."
           required
+          helperText={item.error?.shelf}
+
               />
             )}
             id="shelf-select"
@@ -248,6 +259,8 @@ const Create = () => {
           label="Shelf Row"
           placeholder="Search shelf rows..."
           required
+          helperText={item.error?.row}
+
               />
             )}
             id="shelf-row-select"
@@ -276,6 +289,8 @@ const Create = () => {
           label="Shelf Box"
           placeholder="Search shelf boxes..."
           required
+          helperText={item.error?.box}
+
               />
             )}
             id="shelf-box-select"
@@ -306,6 +321,8 @@ const Create = () => {
           }}
           required
           disabled={loading}
+          helperText={item.error?.minimum_stock_level}
+
         />
         <FormControl fullWidth variant="outlined" disabled={loading}>
                         <Autocomplete
@@ -318,6 +335,8 @@ const Create = () => {
                               variant="outlined"
                               label="Suppliers"
                               placeholder="Search suppliers..."
+                              helperText={item.error?.supplier}
+
                             />
                           )}
                           id="supplier-autocomplete"

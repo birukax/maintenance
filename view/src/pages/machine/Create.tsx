@@ -26,6 +26,7 @@ const Create = () => {
     area_id: "",
     code: "",
   });
+  const machine = useSelector((state:AppState)=>state.machine.machine)
   const [selectedPlant,setSelectedPlant]=useState("")
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -88,6 +89,7 @@ const params = {
           label="Plant"
           placeholder="Search plants..."
           required
+          helperText={machine.error?.plant_id}
               />
             )}
             id="plant-select"
@@ -113,6 +115,7 @@ const params = {
           label="Area"
           placeholder="Search areas..."
           required
+          helperText={machine.error?.area_id}
               />
             )}
             id="area-select"
@@ -139,6 +142,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={machine.error?.code}
         />
         <TextField
           multiline
@@ -151,6 +155,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={machine.error?.name}
         />
         <Button
           type="submit"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
 import { toast } from "react-toastify";
@@ -12,12 +12,15 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
+import { AppState } from "../../store/store";
 
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     name: "",
   });
+  const uom = useSelector((state:AppState)=>state.unitOfMeasure.unitOfMeasure)
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -62,6 +65,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={uom.error?.code}
+
         />
 
         <TextField
@@ -74,6 +79,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={uom.error?.name}
+
         />
 
         <Button

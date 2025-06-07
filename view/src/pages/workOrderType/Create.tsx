@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createWorkOrderType } from "../../store/slices/workOrderTypeSlice";
 import {toast} from "react-toastify";
@@ -18,6 +18,7 @@ import {
 Switch,
   Box,
 } from "@mui/material";
+import { AppState } from "../../store/store";
 
 const Create = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,7 @@ const Create = () => {
     scheduled: false,
     breakdown: false,
   });
+  const workOrderType = useSelector((state:AppState)=>state.workOrderType.workOrderType)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -112,6 +114,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={workOrderType.error?.code}
         />
         <TextField
           label="Name"
@@ -123,6 +126,8 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={workOrderType.error?.name}
+
         />
 
         <Button

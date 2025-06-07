@@ -39,16 +39,10 @@ const Create = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { breakdown } = useSelector((state: AppState) => state.breakdown);
-  // const { items } = useSelector((state: AppState) => state.item);
+  const breakdown  = useSelector((state: AppState) => state.breakdown.breakdown);
   const { machines } = useSelector((state: AppState) => state.machine);
   const { equipments } = useSelector((state: AppState) => state.equipment);
-  // const { activityTypes } = useSelector(
-  //   (state: AppState) => state.activityType
-  // );
-  // const { workOrderTypes } = useSelector(
-  //   (state: AppState) => state.workOrderType
-  // );
+ 
 const params = {
     no_pagination: "true",
   };
@@ -58,9 +52,6 @@ const params = {
   useEffect(() => {
     dispatch(fetchMachines(params));
     dispatch(fetchEquipments(params));
-    // dispatch(fetchWorkOrderTypes());
-    // dispatch(fetchActivityTypes());
-    // dispatch(fetchItems());
   }, []);
 
   
@@ -110,24 +101,6 @@ const params = {
         className="form-gap"
       >
 
-        {/* <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="types-select-label">Type</InputLabel>
-          <Select
-            labelId="types-select-label"
-            id="types-select"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            label="Type"
-          >
-            {BREAKDOWN_TYPES.map((type) => (
-              <MenuItem key={type[0]} value={type[0]}>
-                {type[1]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
-
 <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             disableFuture
@@ -176,6 +149,8 @@ const params = {
                         label="Machine"
                         placeholder="Search machines..."
                         required
+                        helperText={breakdown.error?.machine_id}
+
                       />
                     )}
                     id="machine-select"
@@ -198,6 +173,7 @@ const params = {
                         variant="outlined"
                         label="Equipment"
                         placeholder="Search equipments..."
+                        helperText={breakdown.error?.equipment_id}
                       />
                     )}
                     id="equipment-select"
@@ -224,112 +200,8 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={breakdown.error?.reason}
         />
-        {/* <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="work-order-type-select-label">
-          Work Order Type
-          </InputLabel>
-          <Select
-            labelId="work-order-type-select-label"
-            id="work-order-type-select"
-            name="work_order_type_id"
-            value={formData.work_order_type_id}
-            onChange={handleChange}
-            label="Work Order Type"
-          >
-            {workOrderTypes.data &&
-              workOrderTypes.data
-                .filter((workOrderType) => workOrderType.breakdownd === true)
-                .map((workOrderType) => (
-                  <MenuItem key={workOrderType.id} value={workOrderType.id}>
-                    {workOrderType.name}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl> */}
-
-        {/* <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
-          <Select
-            labelId="activity-type-select-label"
-            id="activity-type-select"
-            name="activity_type_id"
-            value={formData.activity_type_id}
-            onChange={handleChange}
-            label="Activity Type"
-          >
-            {activityTypes.data &&
-              activityTypes.data
-                .filter(
-                  (activityType) =>
-                    activityType.work_order_type.id ===
-                    formData.work_order_type_id
-                )
-                .map((activityType) => (
-                  <MenuItem key={activityType.id} value={activityType.id}>
-                    {activityType.name}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl> */}
-
-        {/* <FormControl fullWidth variant="outlined" disabled={loading}>
-          <InputLabel id="sparepart-select-label">
-            Spareparts Required
-          </InputLabel>
-          <Select
-            multiple
-            labelId="sparepart-select-label"
-            id="sparepart-select"
-            name="spareparts_required_id"
-            value={formData.spareparts_required_id}
-            onChange={handleChange}
-            label="Spareparts Required"
-          >
-            {items.data &&
-              items.data
-                .filter((item) => item.category === "SPAREPART")
-                .map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl> */}
-
-        {/* <FormControl fullWidth variant="outlined" disabled={loading}>
-          <InputLabel id="tool-select-label">Tools Required</InputLabel>
-          <Select
-            multiple
-            labelId="tool-select-label"
-            id="tool-select"
-            name="tools_required_id"
-            value={formData.tools_required_id}
-            onChange={handleChange}
-            label="Tools Required"
-          >
-            {items.data &&
-              items.data
-                .filter((item) => item.category === "TOOL")
-                .map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-          </Select>
-        </FormControl> */}
-        {/* <TextField
-          label="Planned Time (In minutes)"
-          name="planned_time"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.planned_time}
-          onChange={handleChange}
-          required
-          disabled={loading}
-        /> */}
 
         <Button
           type="submit"

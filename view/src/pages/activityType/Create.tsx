@@ -24,6 +24,7 @@ const Create = () => {
     name: "",
     work_order_type_id: "",
   });
+  const activityType = useSelector((state:AppState)=>state.activityType.activityType)
   const [loading, setLoading] = useState(false);
   const { workOrderTypes } = useSelector(
     (state: AppState) => state.workOrderType
@@ -78,6 +79,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activityType.error?.code}
         />
         <TextField
           label="Name"
@@ -89,6 +91,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activityType.error?.name}
         />
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
@@ -103,6 +106,7 @@ const params = {
                 label="Work Order Type"
                 placeholder="Search work order types..."
                 required
+                helperText={activityType.error?.work_order_type_id}
               />
             )}
             id="work-order-type-select"

@@ -25,6 +25,7 @@ const Create = () => {
     activity_type_id: "",
     name: "",
   });
+  const activity = useSelector((state:AppState)=>state.activity.activity)
   const [loading, setLoading] = useState(false);
   const { activityTypes } = useSelector(
     (state: AppState) => state.activityType
@@ -79,6 +80,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activity.error?.code}
         />
         <TextField
           label="Name"
@@ -90,6 +92,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activity.error?.name}
         />
 
         <FormControl fullWidth variant="outlined" disabled={loading}>
@@ -103,6 +106,7 @@ const Create = () => {
           label="Activity Type"
           placeholder="Search activity types..."
           required
+          helperText={activity.error?.activity_type_id}
               />
             )}
             id="activity-type-select"
@@ -131,6 +135,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activity.error?.decription}
         />
 
         <Button

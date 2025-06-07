@@ -31,6 +31,8 @@ const Create = () => {
     to_location_id:null,
     requested_items:[]
   });
+    const transfer = useSelector((state:AppState)=>state.transfer.transfer)
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
@@ -97,6 +99,8 @@ const selectedItems=formData.requested_items.length>0?
                 label="From Location"
                 placeholder="Search locations..."
                 required
+                helperText={transfer.error?.from_location_id}
+
               />
             )}
             id="location-select"
@@ -123,6 +127,8 @@ const selectedItems=formData.requested_items.length>0?
                 label="To Location"
                 placeholder="Search locations..."
                 required
+                helperText={transfer.error?.to_location_id}
+
               />
             )}
             id="location-select"
@@ -160,8 +166,9 @@ const selectedItems=formData.requested_items.length>0?
               <TextField
           {...params}
           variant="outlined"
-          label="Tools Required"
-          placeholder="Search tools..."
+          label="Requested Items"
+          placeholder="Search Items..."
+          helperText={transfer.error?.requested_items}
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}

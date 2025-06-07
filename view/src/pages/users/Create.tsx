@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProfile } from "../../store/slices/profileSlice";
 import { Roles } from "../../utils/choices";
@@ -18,6 +18,7 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { AppState } from "../../store/store";
 const Create = () => {
   const [countryCode,setCountryCode]=useState("+251")
   const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ const Create = () => {
     role: "ENGINEER",
     password:""
   });
+  const profile = useSelector((state:AppState)=>state.profile.profile)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [comfirmpas,setComfirmPas]=useState("")
@@ -79,6 +81,7 @@ const Create = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={profile?.error?.username}
         />
 
         <FormControl fullWidth className="mb-8" disabled={loading}>
@@ -113,6 +116,8 @@ const Create = () => {
       onChange={handleChange}
       disabled={loading}
       type="tel"
+      helperText={profile?.error?.phone_no}
+
     />
   </Box>
 </FormControl>
@@ -127,6 +132,8 @@ const Create = () => {
           onChange={handleChange}
           disabled={loading}
           type="email"
+          helperText={profile?.error?.email}
+
         />
 
         <FormControl fullWidth variant="outlined" required disabled={loading}>
@@ -157,6 +164,8 @@ const Create = () => {
           disabled={loading}
           type="password"
           required
+          helperText={profile?.error?.password}
+
         />
         <TextField
           label="Comfirm Password"
@@ -169,6 +178,7 @@ const Create = () => {
           disabled={loading}
           type="password"
           required
+          helperText={profile?.error?.password}
         />
         <Button
           type="submit"

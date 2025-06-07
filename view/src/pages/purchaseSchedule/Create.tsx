@@ -21,7 +21,7 @@ const Create = () => {
   const [formData, setFormData] = useState({
     year:Number(year)
   });
-  
+  const purchase_schedule = useSelector((state:AppState)=>state.purchaseSchedule.purchaseSchedule)
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -65,6 +65,7 @@ const Create = () => {
           variant="outlined"
           fullWidth
           value={formData.year}
+          helperText={purchase_schedule.error?.year}
           onChange={(e) => {
         const currentYear = new Date().getFullYear();
         const selectedYear = parseInt(e.target.value, 10);
