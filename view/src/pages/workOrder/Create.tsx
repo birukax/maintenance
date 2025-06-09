@@ -121,7 +121,7 @@ const params = {
       toast.success("Work Order created successfully");
       navigate("/work-orders");
     } catch (err) {
-      toast.error("Error creating Work Order");
+      toast.error(workOrder.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -156,7 +156,7 @@ const params = {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                helperText: error?.start_date,
+                helperText: workOrder.error?.start_date||"",
               },
             }}
           />
@@ -172,7 +172,7 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
-                helperText={workOrder.error?.machine_id}
+                helperText={workOrder.error?.machine_id||""}
 
               />
             )}
@@ -196,7 +196,7 @@ const params = {
                 variant="outlined"
                 label="Equipment"
                 placeholder="Search equipments..."
-                helperText={workOrder.error?.equipment_id}
+                helperText={workOrder.error?.equipment_id||""}
               />
             )}
             id="equipment-select"
@@ -271,7 +271,7 @@ const params = {
                 label="Activity Type"
                 placeholder="Search activity types..."
                 required
-                helperText={workOrder.error?.activity_type_id}
+                helperText={workOrder.error?.activity_type_id||""}
               />
             )}
             id="activity-type-select"
@@ -306,7 +306,7 @@ const params = {
                       variant="outlined"
                       label="Spareparts Required"
                       placeholder="Search spareparts..."
-                      helperText={workOrder.error?.spareparts_required_id}
+                      helperText={workOrder.error?.spareparts_required_id||""}
                     />
                   )}
                   id="sparepart-autocomplete"
@@ -332,7 +332,7 @@ const params = {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
-                helperText={workOrder.error?.tools_required_id}
+                helperText={workOrder.error?.tools_required_id||""}
               />
             )}
             id="tool-select"
@@ -391,11 +391,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Work Order"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

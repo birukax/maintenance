@@ -39,7 +39,7 @@ const Create = () => {
       toast.success("Unit of Measure created successfully");
       navigate("/unit-of-measures");
     } catch (err) {
-      toast.error("Error creating Unit of Measure");
+      toast.error(uom.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -93,11 +93,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Unit of Measure"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

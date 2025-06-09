@@ -27,10 +27,10 @@ const Edit = () => {
     name: "",
     machine_id: "",
   });
+  const equipment = useSelector((state:AppState)=>state.equipment.equipment)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const { machines } = useSelector((state: AppState) => state.machine);
-  const { equipment } = useSelector((state: AppState) => state.equipment);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -78,7 +78,7 @@ setFormData({
       toast.success("Equipment edited successfully");
       navigate(`/equipment/detail/${equipment.data.id}`);
     } catch (err) {
-      toast.error("Error editing Equipment");
+      toast.error(equipment.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -124,6 +124,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={equipment.error?.name||""}
         />
         <Button
           type="submit"
@@ -135,11 +136,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Equipment"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

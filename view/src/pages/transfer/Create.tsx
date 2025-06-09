@@ -61,7 +61,7 @@ const params = {
       toast.success("Transfer created successfully");
       navigate("/transfers");
     } catch (err) {
-      toast.error("Error creating Transfer");
+      toast.error(transfer.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -208,11 +208,7 @@ const selectedItems=formData.requested_items.length>0?
         >
           {loading ? <CircularProgress size={24} /> : "Create Transfer"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

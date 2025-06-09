@@ -29,9 +29,10 @@ const Create = () => {
     minimum_stock_level: 0,
     suppliers_id:[]
   });
+  const item = useSelector((state:AppState)=>state.item.item)
+
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { item } = useSelector((state: AppState) => state.item);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { unitOfMeasures } = useSelector(
@@ -116,7 +117,7 @@ setFormData({
       toast.success("Item updated successfully");
       navigate(`/item/detail/${item.data.id}`);
     } catch (err) {
-      toast.error("Error updating Item");
+      toast.error(item.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -132,27 +133,6 @@ setFormData({
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        {/* <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="uom-select-label">Unit of Measure</InputLabel>
-          <Select
-            labelId="uom-select-label"
-            id="uom-select"
-            name="uom_id"
-            value={formData.uom_id}
-            onChange={handleChange}
-            label="Unit of Measure"
-          >
-            {unitOfMeasures.data &&
-              unitOfMeasures.data.map((uom) => (
-                <MenuItem key={uom.id} value={uom.id}>
-                  {uom.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl> */}
-
-
-        
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="item-types-select-label">Item Type</InputLabel>
           <Select
@@ -204,6 +184,7 @@ setFormData({
           }}
           required
           disabled={loading}
+          helperText={item.error?.minimum_stock_level||""}
         />
         <FormControl fullWidth variant="outlined" disabled={loading}>
                                 <Autocomplete
@@ -216,6 +197,7 @@ setFormData({
                                       variant="outlined"
                                       label="Suppliers"
                                       placeholder="Search suppliers..."
+                                      helperText={item.error?.suppliers_id||""}
                                     />
                                   )}
                                   id="supplier-autocomplete"
@@ -235,11 +217,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Item"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

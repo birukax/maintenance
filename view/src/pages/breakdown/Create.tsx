@@ -83,7 +83,7 @@ const params = {
       toast.success("Breakdown created successfully");
       navigate("/breakdowns");
     } catch (err) {
-      toast.error("Error creating Breakdown");
+      toast.error(breakdown.error?.error||"Something Went Wrong");
       // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -114,7 +114,7 @@ const params = {
                 fullWidth: true,
                 required: true,
                 disabled: breakdown.loading,
-                helperText: error,
+                helperText:breakdown.error.start_date,
               },
             }}
           />
@@ -133,7 +133,7 @@ const params = {
                 fullWidth: true,
                 required: true,
                 disabled: breakdown.loading,
-                helperText: error,
+                helperText:breakdown.error.start_time,
               },
             }}
           />
@@ -213,11 +213,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Breakdown"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

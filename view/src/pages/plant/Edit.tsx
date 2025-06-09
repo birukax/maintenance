@@ -21,9 +21,9 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
+  const plant = useSelector((state:AppState)=>state.plant.plant)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { plant } = useSelector((state: AppState) => state.plant);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -57,7 +57,7 @@ setFormData({
       toast.success("Plant edited successfully");
       navigate(`/plant/detail/${plant.data.id}`);
     } catch (err) {
-      toast.error("Error editing Plant");
+      toast.error(plant.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -83,6 +83,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={plant.error?.name||""}
         />
 
         <Button
@@ -95,11 +96,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Plant"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

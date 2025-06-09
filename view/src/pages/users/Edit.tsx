@@ -33,7 +33,8 @@ const Edit = () => {
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { profile } = useSelector((state: AppState) => state.profile);
+  const profile = useSelector((state:AppState)=>state.profile.profile)
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -70,7 +71,7 @@ setFormData({
       toast.success("Profile edited successfully");
       navigate(`/profile/detail/${profile.data.id}`);
     } catch (err) {
-      toast.error("Error editing Profile");
+      toast.error(profile.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -103,6 +104,7 @@ setFormData({
                           
                         }
                         disabled={loading}
+                        
                       />
                     }
                   />
@@ -115,6 +117,7 @@ setFormData({
                     value={formData.role}
                     onChange={handleChange}
                     label="Role"
+          
                   >
                     {Roles.map((role) => (
                       <MenuItem key={role} value={role}>
@@ -134,11 +137,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Profile"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

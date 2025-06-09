@@ -46,7 +46,7 @@ const Create = () => {
       toast.success("Work Order Type created successfully");
       navigate("/work-order-types");
     } catch (err) {
-      toast.error("Error creating Work Order Type");
+      toast.error(workOrderType.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -140,11 +140,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Work Order Type"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

@@ -27,6 +27,8 @@ const Edit = () => {
   const { unitOfMeasure } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
+  const uom = useSelector((state:AppState)=>state.unitOfMeasure.unitOfMeasure)
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -63,7 +65,7 @@ setFormData({
       toast.success("Unit of Measure edited successfully");
       navigate(`/unit-of-measure/detail/${unitOfMeasure.data.id}`);
     } catch (err) {
-      toast.error("Error edit Unit of Measure");
+      toast.error(uom.error?.error||"Something Went Wrong");
 
       // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
@@ -92,6 +94,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={uom.error?.code||""}
         />
         <TextField
           label="Name"
@@ -103,6 +106,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={uom.error?.name||""}
         />
         <Button
           type="submit"
@@ -114,11 +118,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Unit of Measure"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

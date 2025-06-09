@@ -24,6 +24,7 @@ const Edit = () => {
     phone_no: "",
     location: "",
   });
+
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const { ret } = useSelector((state: AppState) => state.ret.return);
@@ -58,7 +59,7 @@ const Edit = () => {
       toast.success("Return edited successfully");
       navigate(`/return/detail/${ret.data.id}`);
     } catch (err) {
-      toast.error("Error editing Return");
+      toast.error(ret.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -85,6 +86,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={ret.error?.email||""}
         />
         <TextField
           label="Location"
@@ -96,6 +98,8 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={ret.error?.location_id||""}
+
         />
 
         <TextField
@@ -108,6 +112,8 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={ret.error?.phone_no||""}
+
         />
 
         <Button
@@ -120,11 +126,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Return"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

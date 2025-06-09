@@ -60,7 +60,8 @@ const params = {
       toast.success("Machine created successfully");
       navigate("/machines");
     } catch (err) {
-      toast.error("Error creating Machine");
+      toast.error(machine.error?.error||"Something Went Wrong");
+
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -167,11 +168,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Machine"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

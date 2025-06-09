@@ -26,6 +26,7 @@ const Create = () => {
     name: "",
     plant_id:""
   });
+
   const area = useSelector((state: AppState) => state.area.area);
   const { plants } = useSelector((state: AppState) => state.plant);
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -56,7 +57,8 @@ const params = {
       toast.success("Area created successfully");
       navigate("/areas");
     } catch (err) {
-      toast.error("Error creating Area");
+       toast.error(area.error?.error||"Something Went Wrong");
+
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -132,11 +134,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Area"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

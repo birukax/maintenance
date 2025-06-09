@@ -23,9 +23,9 @@ const Edit = () => {
     phone_no: "",
     address: "",
   });
+  const contact = useSelector((state:AppState)=>state.contact.contact)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { contact } = useSelector((state: AppState) => state.contact);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -63,7 +63,7 @@ setFormData({
       toast.success("Contact edited successfully");
       navigate(`/contact/detail/${contact.data.id}`);
     } catch (err) {
-      toast.error("Error editing Contact");
+      toast.error(contact.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -90,6 +90,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact.error?.email||""}
         />
         
         <TextField
@@ -102,6 +103,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact.error?.address||""}
         />
 
         <TextField
@@ -114,6 +116,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={contact.error?.phone_no||""}
         />
 
         <Button
@@ -126,11 +129,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Contact"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

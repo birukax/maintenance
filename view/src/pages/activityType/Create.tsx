@@ -53,7 +53,8 @@ const params = {
       toast.success("Activity Type created successfully");
       navigate("/activity-types");
     } catch (err) {
-      toast.error("Error creating Activity Type");
+            toast.error(activityType.error?.error||"Something Went Wrong");
+
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -134,11 +135,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Activity Type"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

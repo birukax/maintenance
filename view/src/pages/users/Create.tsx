@@ -50,7 +50,7 @@ const Create = () => {
       toast.success("Profile created successfully");
       navigate("/profiles");
     } catch (err) {
-      toast.error("Error creating Profile");
+      toast.error(profile.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -190,11 +190,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create User"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

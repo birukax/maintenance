@@ -54,7 +54,7 @@ const Create = () => {
       toast.success("Activity created successfully");
       navigate("/activities");
     } catch (err) {
-      toast.error("Error creating Activity");
+      toast.error(activity.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -148,11 +148,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Activity"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

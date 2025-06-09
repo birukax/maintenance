@@ -41,7 +41,7 @@ const Create = () => {
       toast.success("Purchase Schedule created successfully");
       navigate("/purchase-schedules");
     } catch (err) {
-      toast.error("Error creating Purchase Schedule");
+      toast.error(purchase_schedule.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);

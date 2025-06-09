@@ -33,7 +33,7 @@ const Create = () => {
     used: true,
     quantity: "",
   });
-    const retur = useSelector((state:AppState)=>state.return.return)
+  const retur = useSelector((state:AppState)=>state.return.return)
 
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -72,7 +72,7 @@ const params = {
       toast.success("Return created successfully");
       navigate("/returns");
     } catch (err) {
-      toast.error("Error creating return");
+      toast.error(retur.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -173,11 +173,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Return"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

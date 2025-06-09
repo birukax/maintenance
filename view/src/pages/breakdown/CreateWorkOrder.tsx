@@ -129,7 +129,7 @@ const params = {
       toast.success("Breakdown Work Order created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error("Error creating Breakdown Work Order");
+      toast.error(breakdown.error?.error||"Something Went Wrong");
       // setError(err.response?.data.detail || err.message);  
       setError(
         err.response?.data.detail || "Failed to create a breakdown work order."
@@ -159,7 +159,7 @@ const params = {
                 fullWidth: true,
                 required: true,
                 disabled: breakdown.loading,
-                helperText: error,
+                helperText: breakdown.error?.start_date || "",
               },
             }}
           />
@@ -219,6 +219,7 @@ const params = {
                               variant="outlined"
                               label="Spareparts Required"
                               placeholder="Search spareparts..."
+                              helperText={breakdown.error?.spareparts_required_id ||""}
                             />
                           )}
                           id="sparepart-autocomplete"
@@ -239,6 +240,7 @@ const params = {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
+                helperText={breakdown.error?.tools_required_id||""}
               />
             )}
             id="tool-select"
@@ -259,6 +261,7 @@ const params = {
                   onChange={handleChange}
                   required
                   disabled={breakdown.loading}
+                  helperText={breakdown.error?.total_time_required||""}
                 />
         
         <Button
@@ -275,11 +278,7 @@ const params = {
             "Create Breakdown Work Order"
           )}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+        
       </Box>
     </Container>
   );

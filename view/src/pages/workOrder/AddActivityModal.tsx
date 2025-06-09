@@ -38,6 +38,8 @@ const AddActivity = ({ entityState, setModalOpen }) => {
   const [formData, setFormData] = useState({
     activity_ids: [],
   });
+    const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
+
   const { activities } = useSelector((state: AppState) => state.activity);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -88,7 +90,7 @@ const params = {
       toast.success("Work Order Activities created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error("Error creating work order activities");
+      toast.error(workOrder.error?.error||"Something Went Wrong");
       setError(
         err.response?.data.detail || "Failed to create work order activities."
       );
@@ -117,6 +119,7 @@ const params = {
                               variant="outlined"
                               label="Activities"
                               placeholder="Search activities..."
+                              helperText={workOrder.error?.activity_ids||""}
                             />
                           )}
                           id="activity-autocomplete"

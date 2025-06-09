@@ -19,6 +19,7 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
+  const breakdown  = useSelector((state: AppState) => state.breakdown.breakdown);
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const { workOrderType } = useSelector(
@@ -58,7 +59,7 @@ setFormData({
       toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data.id}`);
     } catch (err) {
-      toast.error("Error editing Work Order Type");
+      toast.error(breakdown.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -84,6 +85,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={breakdown.error?.name || ""}
         />
 
         <Button
@@ -96,11 +98,6 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Work Order Type"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
       </Box>
     </Container>
   );

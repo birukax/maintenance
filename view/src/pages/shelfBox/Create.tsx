@@ -46,7 +46,7 @@ const Create = () => {
       toast.success("ShelfBox created successfully");
       navigate("/shelf-boxes");
     } catch (err) {
-      toast.error("Error creating ShelfBox");
+      toast.error(shelfBox.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -133,11 +133,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create ShelfBox"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

@@ -38,6 +38,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   const [formData, setFormData] = useState({
     user_ids: entityState.data.assigned_users.map(user=>user.id) || [],
   });
+  const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
   const { profiles } = useSelector((state: AppState) => state.profile);
   const [inputs, setInputs] = useState(5);
   const [error, setError] = useState(null);
@@ -89,7 +90,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
       toast.success("Users assigned successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error("Error assigning Users");
+      toast.error(workOrder.error?.error||"Something Went Wrong");
       setError(
         err.response?.data.detail || "Failed to assign Users."
       );
@@ -118,6 +119,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
                               variant="outlined"
                               label="Users"
                               placeholder="Search users..."
+                              helperText={workOrder.error?.user_ids||""}
                             />
                           )}
                           id="user-autocomplete"

@@ -19,9 +19,9 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
+  const shelf = useSelector((state:AppState)=>state.shelf.shelf)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { shelf } = useSelector((state: AppState) => state.shelf);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -55,7 +55,7 @@ setFormData({
       toast.success("Shelf edited successfully");
       navigate(`/shelf/detail/${shelf.data.id}`);
     } catch (err) {
-      toast.error("Error editing Shelf");
+      toast.error(shelf.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -81,6 +81,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={shelf.error?.name||""}
         />
 
         <Button
@@ -93,11 +94,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Shelf"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

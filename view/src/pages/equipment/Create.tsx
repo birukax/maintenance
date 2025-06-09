@@ -54,7 +54,7 @@ const params = {
       toast.success("Equipment created successfully");
       navigate("/equipments");
     } catch (err) {
-      toast.error("Error creating Equipment");
+      toast.error(equipment.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -81,7 +81,7 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
-                helperText={equipment.error?.machine_id}
+                helperText={equipment.error?.machine_id||""}
               />
             )}
             id="machine-select"
@@ -103,7 +103,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={equipment.error?.code}
+          helperText={equipment.error?.code||""}
         />
         <TextField
           multiline
@@ -116,7 +116,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={equipment.error?.name}
+          helperText={equipment.error?.name||""}
         />
         <Button
           type="submit"
@@ -128,11 +128,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Equipment"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

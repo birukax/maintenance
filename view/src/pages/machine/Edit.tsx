@@ -26,7 +26,6 @@ import { toast } from "react-toastify";
 const Edit = () => {
   const { areas } = useSelector((state: AppState) => state.area);
   const { plants } = useSelector((state: AppState) => state.plant);
-  const { machine } = useSelector((state: AppState) => state.machine);
   const [selectedPlant,setSelectedPlant]=useState("")
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -38,6 +37,7 @@ const Edit = () => {
     name: "",
     area_id: "",
   });
+  const machine = useSelector((state:AppState)=>state.machine.machine)
 
   const params = {
     no_pagination: "true",
@@ -78,7 +78,7 @@ const Edit = () => {
       toast.success("Machine edited successfully");
       navigate(`/machine/detail/${machine.data.id}`);
     } catch (err) {
-      toast.error("Error editing Machine");
+      toast.error(machine.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -106,6 +106,7 @@ const Edit = () => {
                   label="Plant"
                   placeholder="Search plants..."
                   required
+                  helperText={machine.error?.plant_id||""}
                       />
                     )}
                     id="plant-select"
@@ -131,6 +132,7 @@ const Edit = () => {
                   label="Area"
                   placeholder="Search areas..."
                   required
+                  helperText={machine.error?.area_id||""}
                       />
                     )}
                     id="area-select"
@@ -158,6 +160,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={machine.error?.name||""}
         />
         <Button
           type="submit"
@@ -169,11 +172,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Machine"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

@@ -42,7 +42,7 @@ const Create = () => {
       toast.success("Location created successfully");
       navigate("/locations");
     } catch (err) {
-      toast.error("Error creating Location");
+      toast.error(location.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -95,11 +95,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Location"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

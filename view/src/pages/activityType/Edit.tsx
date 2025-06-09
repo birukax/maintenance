@@ -19,9 +19,10 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
+  const activityType = useSelector((state:AppState)=>state.activityType.activityType)
+
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { activityType } = useSelector((state: AppState) => state.activityType);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -55,7 +56,7 @@ setFormData({
       toast.success("Activity Type edited successfully");
       navigate(`/activity-type/detail/${activityType.data.id}`);
     } catch (err) {
-      toast.error("Error editing Activity Type");
+      toast.error(activityType.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -81,6 +82,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activityType.error?.name||""}
         />
         <Button
           type="submit"
@@ -92,11 +94,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Activity Type"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

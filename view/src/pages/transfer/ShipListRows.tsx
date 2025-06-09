@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, Checkbox, TextField } from "@mui/material";
+import { useSelector } from "react-redux";
+import { AppState } from "../../store/store";
 
 const CheckListRows = ({ row, handleFormChange,index,errorCount,setErrorCount }) => {
 
   const [error, setError] = useState(false);
   const errorList=errorCount
   
+    const transfer = useSelector((state:AppState)=>state.transfer.transfer)
 
   
   return (
@@ -32,6 +35,7 @@ const CheckListRows = ({ row, handleFormChange,index,errorCount,setErrorCount })
           required
           size="small"
           inputProps={{ min: 0, max: row.remaining_quantity }}
+          helperText={transfer.error?.quantity||""}
           style={error?{border:"1px solid red"}:{}}
           onChange={(e)=>{
             console.log(e.target.value,"change");

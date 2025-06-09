@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {  useNavigate, useParams } from "react-router-dom";
-import {  AppDispatch } from "../../store/store";
+import {  AppDispatch, AppState } from "../../store/store";
 import { createWorkOrderActivities } from "../../store/slices/workOrderSlice";
 
 import {
@@ -20,6 +20,7 @@ const AddActivityPage = () => {
   const [formData,setFormData]=useState({
     description_list:[""]
   })
+    const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
   const navigate=useNavigate()
   const {id}=useParams()
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ const AddActivityPage = () => {
         toast.success("Work Order Activities created successfully");
         navigate(`/work-order/detail/${id}`)
       } catch (err) {
-        toast.error("Error creating work order activities");
+        toast.error(workOrder.error?.error||"Something Went Wrong");
         setError(
           err.response?.data.detail || "Failed to create work order activities."
         );
@@ -63,6 +64,7 @@ const AddActivityPage = () => {
                   sx={{width:"100%"}}
                 value={el}
                   size="small"
+                  helperText={workOrder.error?.remark||""}
                   onChange={(e)=>{
                     setFormData(prev=>{
                         return {
@@ -103,11 +105,7 @@ const AddActivityPage = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Add Work Order Activities"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

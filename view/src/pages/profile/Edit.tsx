@@ -32,7 +32,7 @@ const Edit = () => {
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { profile } = useSelector((state: AppState) => state.profile);
+  const profile = useSelector((state: AppState) => state.profile.profile);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [comfirmpas,setComfirmPas]=useState("")
@@ -65,7 +65,7 @@ const Edit = () => {
       toast.success("Profile edited successfully");
       navigate(`/profile/${id}`);
     } catch (err) {
-      toast.error("Error editing Profile");
+      toast.error(profile.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -95,6 +95,7 @@ const Edit = () => {
           disabled={loading}
           type="password"
           required
+          helperText={profile.error?.password||""}
         />
         <TextField
           label="Comfirm Password"
@@ -107,6 +108,7 @@ const Edit = () => {
           disabled={loading}
           type="password"
           required
+          helperText={profile.error?.password||""}
         />
         <Button
           type="submit"
@@ -118,11 +120,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Profile"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

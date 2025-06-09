@@ -42,7 +42,7 @@ const Submit = ({ entityState, setModalOpen }) => {
     end_date: dayjs(entityState?.data?.start_date).format("YYYY-MM-DD") || null,
     end_time: "",
   });
-  const { workOrder } = useSelector((state: AppState) => state.workOrder);
+    const transfer = useSelector((state:AppState)=>state.transfer.transfer)
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const Submit = ({ entityState, setModalOpen }) => {
       toast.success("Work Order submitted successfully");
       navigate(`/work-order/detail/${id}`);
     } catch (err) {
-      toast.error("Error submitting Work Order");
+      toast.error(transfer.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || "Failed to submit Work Order.");
     }
   };
@@ -111,7 +111,7 @@ const Submit = ({ entityState, setModalOpen }) => {
                     fullWidth: true,
                     required: true,
                     disabled: entityState.loading,
-                    helperText: error,
+                    helperText: transfer.error?.end_date||"",
                   },
                 }}
               />
@@ -133,7 +133,8 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: transfer.error?.start_date||"",
+
               },
             }}
           />
@@ -158,7 +159,8 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: transfer.error?.end_time||"",
+
               },
             }}
           />
@@ -175,6 +177,7 @@ const Submit = ({ entityState, setModalOpen }) => {
           onChange={handleChange}
           required
           disabled={entityState.loading}
+          helperText={transfer.error?.remark||""}
         />
         <Button
           type="submit"

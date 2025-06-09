@@ -20,9 +20,9 @@ const Edit = () => {
     name:"",
     description: ""
   });
+  const activity = useSelector((state:AppState)=>state.activity.activity)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { activity } = useSelector((state: AppState) => state.activity);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -59,7 +59,7 @@ const Edit = () => {
       toast.success("Activity edited successfully");
       navigate(`/activity/detail/${activity.data.id}`);
     } catch (err) {
-      toast.error("Error editing Activity");
+            toast.error(activity.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -86,6 +86,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activity.error?.name||""}
         />
         <TextField
           multiline
@@ -98,6 +99,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={activity.error?.description||""}
         />
         <Button
           type="submit"
@@ -109,11 +111,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Activity"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

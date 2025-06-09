@@ -21,9 +21,10 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
+  const area = useSelector((state: AppState) => state.area.area);
+
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { area } = useSelector((state: AppState) => state.area);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -58,7 +59,7 @@ setFormData({
       toast.success("Area edited successfully");
       navigate(`/area/detail/${area.data.id}`);
     } catch (err) {
-      toast.error("Error editing Area");
+      toast.error(area.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -85,6 +86,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={area.error?.name||""}
         />
 
         <Button
@@ -97,11 +99,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Area"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

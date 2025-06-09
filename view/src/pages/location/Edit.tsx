@@ -21,9 +21,10 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
+    const location = useSelector((state:AppState)=>state.location.location)
+
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const { location } = useSelector((state: AppState) => state.location);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -57,7 +58,7 @@ setFormData({
       toast.success("Location edited successfully");
       navigate(`/location/detail/${location.data.id}`);
     } catch (err) {
-      toast.error("Error editing Location");
+      toast.error(location.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -83,6 +84,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
+          helperText={location.error?.name||""}
         />
 
         <Button
@@ -95,11 +97,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Location"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

@@ -37,11 +37,10 @@ const Receive = ({ id, setModalOpen }) => {
     received_quantity: 0,
     received_date: "",
   });
+  const purchaseRequest = useSelector((state:AppState)=>state.purchaseRequest.purchaseRequest)
+
   const [loading, setLoading] = useState(false);
 
-  const { purchaseRequest } = useSelector(
-    (state: AppState) => state.purchaseRequest
-  );
     const { locations } = useSelector((state: AppState) => state.location);
 
   const [error, setError] = useState(null);
@@ -71,7 +70,7 @@ const Receive = ({ id, setModalOpen }) => {
       toast.success("Item received successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error("Error receiving item");
+      toast.error(purchaseRequest.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || "Failed to receive the item.");
     }
   };
@@ -107,6 +106,7 @@ const Receive = ({ id, setModalOpen }) => {
           label="Location"
           placeholder="Search locations..."
           required
+          helperText={purchaseRequest.error?.location_id||""}
               />
             )}
             id="location-select"
@@ -127,12 +127,13 @@ const Receive = ({ id, setModalOpen }) => {
           className="mb-8"
           variant="outlined"
           fullWidth
-          helperText={error?.received_quantity}
           value={formData.received_quantity}
           onChange={handleChange}
           required
           disabled={purchaseRequest.loading}
           inputProps={{ min: 0 }}
+          helperText={purchaseRequest.error?.received_quantity||""}
+
         />
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -150,7 +151,8 @@ const Receive = ({ id, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: purchaseRequest.loading,
-                helperText: error?.received_date,
+                helperText:purchaseRequest.error?.received_date||""
+,
               },
             }}
           />

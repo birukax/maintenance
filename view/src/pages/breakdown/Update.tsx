@@ -42,6 +42,7 @@ const Update = ({ entityState, setModalOpen }) => {
     end_time: "",
     status: "FIXED",
   });
+  const breakdown  = useSelector((state: AppState) => state.breakdown.breakdown);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -76,8 +77,8 @@ const Update = ({ entityState, setModalOpen }) => {
       toast.success("Breakdown updated successfully");
       navigate(`/breakdown/detail/${id}`);
     } catch (err) {
-      toast.error("Error updating Breakdown");
-      setError(err.response?.data.detail || "Failed to update Breakdown.");
+      toast.error(breakdown.error?.error||"Something Went Wrong");
+      setError(err.response?.data?.detail || "Failed to update Breakdown.");
     }
   };
 
@@ -105,7 +106,7 @@ const Update = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: breakdown.error?.end_date||"",
               },
             }}
           />
@@ -130,7 +131,7 @@ const Update = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: breakdown.error?.end_time||"",
               },
             }}
           />
@@ -147,6 +148,7 @@ const Update = ({ entityState, setModalOpen }) => {
           onChange={handleChange}
           required
           disabled={entityState.loading}
+          helperText={breakdown.error?.remark||""}
         />
         <Button
           type="submit"
@@ -162,11 +164,6 @@ const Update = ({ entityState, setModalOpen }) => {
             "Update Breakdown"
           )}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
-          </Typography>
-        )}
       </Box>
     </Container>
   );

@@ -55,7 +55,7 @@ const params = {
       toast.success("Purchase Request created successfully");
       navigate("/purchase-requests");
     } catch (err) {
-      toast.error("Error creating Purchase Request");
+      toast.error(purchaseRequest.error?.error||"Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -142,11 +142,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Item"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );

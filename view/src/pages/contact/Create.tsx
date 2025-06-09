@@ -42,7 +42,7 @@ const Create = () => {
       toast.success("Contact created successfully");
       navigate("/contacts");
     } catch (err) {
-      toast.error(contact?.error?.error ||"Error creating Contact");
+      toast.error(contact.error?.error||"Something Went Wrong");
     } finally {
       setLoading(false);
     }

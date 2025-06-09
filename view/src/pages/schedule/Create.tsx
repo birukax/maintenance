@@ -85,7 +85,7 @@ const params = {
       toast.success("Schedule created successfully");
       navigate("/schedules");
     } catch (err) {
-      toast.error("Error creating Schedule");
+      toast.error(schedule.error?.error||"Something Went Wrong");
       // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -372,11 +372,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Schedule"}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error}
-          </Typography>
-        )}
+         
       </Box>
     </Container>
   );
