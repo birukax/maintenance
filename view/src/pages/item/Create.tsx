@@ -180,7 +180,6 @@ const Create = () => {
           {...params}
           variant="outlined"
           label="Item Type"
-          required
           placeholder="Search item types..."
           helperText={item.error?.type}
 
