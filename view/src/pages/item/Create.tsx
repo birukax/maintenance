@@ -153,7 +153,8 @@ const Create = () => {
           variant="outlined"
           label="Unit of Measure"
           placeholder="Search unit of measure..."
-          helperText={item.error?.uom}
+          required
+          helperText={item.error?.uom_id}
 
               />
             )}
@@ -171,6 +172,7 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+          
             options={item_types}
             getOptionLabel={(option) => option.label || ""}
             renderInput={(params) => (
@@ -178,6 +180,7 @@ const Create = () => {
           {...params}
           variant="outlined"
           label="Item Type"
+          required
           placeholder="Search item types..."
           helperText={item.error?.type}
 
@@ -204,6 +207,7 @@ const Create = () => {
           label="Item Category"
           placeholder="Search item categories..."
           helperText={item.error?.category}
+          required
 
               />
             )}
