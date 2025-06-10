@@ -4,7 +4,12 @@
         margin-block: 0.5rem !important;
      }
 }
-
+.sidebar{
+   .css-cokf1l-MuiListItemIcon-root{
+      min-width: fit-content !important;
+      margin-right: .5rem;
+   }
+}
 :root{
    --white:#ffffff;
    --orange:#e5781e;

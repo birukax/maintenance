@@ -92,7 +92,7 @@ const AppLayout = ({ children }) => {
 
   
   const drawer = (
-    <div  style={{minWidth:"fit-content"}}>
+    <div  style={{minWidth:"fit-content"}} className="sidebar">
       {/* <div className="logo" onClick={() => navigate("/dashboard")}>
         <img src={Logo} alt="qualabels logo" width="80px" title="qualabels manufacturers plc logo"/>
       </div> */}
@@ -100,13 +100,13 @@ const AppLayout = ({ children }) => {
       <List  sx={{ minWidth:"fit-content"}}>
         <ListItemButton component={Link} to="/dashboard">
           <ListItemIcon>
-        <DashboardIcon sx={{fill:"#5d4037"}}/>
+        <DashboardIcon color="primary"/>
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItemButton>
         <ListItemButton component={Link} to="/contacts" >
               <ListItemIcon>
-              <ContactsIcon sx={{fill:"#5d4037"}}/>
+              <ContactsIcon color="primary"/>
               </ListItemIcon>
               <ListItemText primary="Contacts" />
             </ListItemButton>
@@ -114,49 +114,49 @@ const AppLayout = ({ children }) => {
         <List>
           <ListItemButton onClick={() => toggleSection("inventory")}>
         <ListItemText primary="Inventory" />
-        {openSections.inventory ? <ExpandLessIcon sx={{fill:"#5d4037"}}/> : <ExpandMoreIcon sx={{fill:"#5d4037"}}/>}
+        {openSections.inventory ? <ExpandLessIcon color="primary"/> : <ExpandMoreIcon color="primary"/>}
           </ListItemButton>
           {openSections.inventory && (
         <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
           <ListItemButton component={Link} to="/items" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <CategoryIcon sx={{fill:"#5d4037"}}/>
+          <CategoryIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Items" />
           </ListItemButton>
           <ListItemButton component={Link} to="/inventories" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <InventoryIcon sx={{fill:"#5d4037"}}/>
+          <InventoryIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Inventory" />
           </ListItemButton>
           <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
               <ListItemIcon>
-              <PlaceIcon sx={{fill:"#5d4037"}}/>
+              <PlaceIcon color="primary"/>
               </ListItemIcon>
               <ListItemText primary="Location"  sx={{minWidth:"fit-content"}}/>
             </ListItemButton>
           <ListItemButton component={Link} to="/unit-of-measures" sx={{ pl: 4 }}>
               <ListItemIcon>
-              <ScaleIcon sx={{fill:"#5d4037"}}/>
+              <ScaleIcon color="primary"/>
               </ListItemIcon>
               <ListItemText primary="Unit of Measures"  sx={{minWidth:"fit-content"}}/>
             </ListItemButton>
           <ListItemButton component={Link} to="/transfers" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <UndoIcon sx={{fill:"#5d4037"}}/>
+          <UndoIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Transfer" />
           </ListItemButton>
             <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }} >
             <ListItemIcon>
-          <LocalShippingIcon sx={{fill:"#5d4037"}}/>
+          <LocalShippingIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Consumption" />
           </ListItemButton>
           <ListItemButton component={Link} to="/returns" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <UndoIcon sx={{fill:"#5d4037"}}/>
+          <UndoIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Return" />
           </ListItemButton>
@@ -166,14 +166,14 @@ const AppLayout = ({ children }) => {
 
           <ListItemButton onClick={() => toggleSection("purchase")} >
         <ListItemText primary="Purchase" />
-        {openSections.purchase ? <ExpandLessIcon sx={{fill:"#5d4037"}}/> : <ExpandMoreIcon sx={{fill:"#5d4037"}}/>}
+        {openSections.purchase ? <ExpandLessIcon color="primary"/> : <ExpandMoreIcon color="primary"/>}
           </ListItemButton>
           {openSections.purchase && (
         <List component="div" disablePadding sx={{minWidth:"fit-content"}}>
           {
           <ListItemButton component={Link} to={"/purchase-schedules"} sx={{ pl: 4 }}>
             <ListItemIcon>
-          < CalendarMonthIcon sx={{fill:"#5d4037"}}/>
+          < CalendarMonthIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Purchase Schedule"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
@@ -181,13 +181,13 @@ const AppLayout = ({ children }) => {
           
           <ListItemButton component={Link} to="/purchase-requests" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <RequestPageIcon sx={{fill:"#5d4037"}}/>
+          <RequestPageIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Purchase Request" />
           </ListItemButton>
           <ListItemButton component={Link} to="/purchase-approvals" sx={{ pl: 4 ,minWidth:"fit-content"}}>
             <ListItemIcon>
-          <CheckCircleIcon sx={{fill:"#5d4037"}}/>
+          <CheckCircleIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Purchase Approval"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
@@ -196,7 +196,7 @@ const AppLayout = ({ children }) => {
 
           <ListItemButton onClick={() => toggleSection("maintenance")}>
         <ListItemText primary="Maintenance" />
-        {openSections.maintenance ? <ExpandLessIcon sx={{fill:"#5d4037"}}/> : <ExpandMoreIcon sx={{fill:"#5d4037"}}/>}
+        {openSections.maintenance ? <ExpandLessIcon color="primary"/> : <ExpandMoreIcon color="primary"/>}
           </ListItemButton>
           {openSections.maintenance && (
         <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
@@ -204,13 +204,13 @@ const AppLayout = ({ children }) => {
 
           <ListItemButton component={Link} to="/machines" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <PrecisionManufacturingIcon sx={{fill:"#5d4037"}}/>
+          <PrecisionManufacturingIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Machine" />
           </ListItemButton>
           <ListItemButton component={Link} to="/equipments" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <HomeRepairServiceIcon sx={{fill:"#5d4037"}}/>
+          <HomeRepairServiceIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Equipment" />
           </ListItemButton>
@@ -218,40 +218,40 @@ const AppLayout = ({ children }) => {
          
           <ListItemButton component={Link} to="/activities" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <PlaylistAddCheckIcon sx={{fill:"#5d4037"}}/>
+          <PlaylistAddCheckIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Activity" />
           </ListItemButton>
           
           <ListItemButton component={Link} to="/activity-types" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ContactsIcon sx={{fill:"#5d4037"}}/>
+          <ContactsIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Activity Type" />
           </ListItemButton>
           
           <ListItemButton component={Link} to="/work-order-types" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <EngineeringIcon sx={{fill:"#5d4037"}}/>
+          <EngineeringIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Work Order Type"  sx={{minWidth:"fit-content"}}/>
           </ListItemButton>
           
           <ListItemButton component={Link} to="/work-orders" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ConstructionIcon sx={{fill:"#5d4037"}}/>
+          <ConstructionIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Work Order" />
           </ListItemButton>
           <ListItemButton component={Link} to="/schedules" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <EditCalendarIcon sx={{fill:"#5d4037"}}/>
+          <EditCalendarIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Schedule" />
           </ListItemButton>
           <ListItemButton component={Link} to="/breakdowns" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <HardwareIcon sx={{fill:"#5d4037"}}/>
+          <HardwareIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Breakdown" />
           </ListItemButton>
@@ -262,7 +262,7 @@ const AppLayout = ({ children }) => {
 
 <ListItemButton onClick={() => toggleSection("location")}>
         <ListItemText primary="Location" />
-        {openSections.location ? <ExpandLessIcon sx={{fill:"#5d4037"}}/> : <ExpandMoreIcon sx={{fill:"#5d4037"}}/>}
+        {openSections.location ? <ExpandLessIcon color="primary"/> : <ExpandMoreIcon color="primary"/>}
           </ListItemButton>
           {openSections.location && (
         <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
@@ -270,13 +270,13 @@ const AppLayout = ({ children }) => {
 
           <ListItemButton component={Link} to="/plants" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <FactoryIcon sx={{fill:"#5d4037"}}/>
+          <FactoryIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Plant" />
           </ListItemButton>
           <ListItemButton component={Link} to="/areas" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <AreaChartIcon sx={{fill:"#5d4037"}}/>
+          <AreaChartIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Area" />
           </ListItemButton>
@@ -286,7 +286,7 @@ const AppLayout = ({ children }) => {
           )}
           <ListItemButton onClick={() => toggleSection("shelf")}>
         <ListItemText primary="Shelf" />
-        {openSections.shelf ? <ExpandLessIcon sx={{fill:"#5d4037"}}/> : <ExpandMoreIcon sx={{fill:"#5d4037"}}/>}
+        {openSections.shelf ? <ExpandLessIcon color="primary"/> : <ExpandMoreIcon color="primary"/>}
           </ListItemButton>
           {openSections.shelf && (
         <List component="div" disablePadding  sx={{minWidth:"fit-content"}}>
@@ -294,19 +294,19 @@ const AppLayout = ({ children }) => {
 
           <ListItemButton component={Link} to="/shelves" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <TableChartIcon sx={{fill:"#5d4037"}}/>
+          <TableChartIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Shelf" />
           </ListItemButton>
           <ListItemButton component={Link} to="/shelf-rows" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <TableRowsIcon sx={{fill:"#5d4037"}}/>
+          <TableRowsIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Shelf Row" />
           </ListItemButton>
           <ListItemButton component={Link} to="/shelf-boxes" sx={{ pl: 4 }}>
             <ListItemIcon>
-          <ArchiveIcon sx={{fill:"#5d4037"}}/>
+          <ArchiveIcon color="primary"/>
             </ListItemIcon>
             <ListItemText primary="Shelf Box" />
           </ListItemButton>
@@ -318,13 +318,13 @@ const AppLayout = ({ children }) => {
 
             <ListItemButton component={Link} to="/users" >
               <ListItemIcon>
-              <PersonIcon sx={{fill:"#5d4037"}}/>
+              <PersonIcon color="primary"/>
               </ListItemIcon>
               <ListItemText primary="Users" />
             </ListItemButton>
             <ListItemButton component={Link} to={`/profile/${user?.user_id}`} >
               <ListItemIcon>
-              <PersonIcon sx={{fill:"#5d4037"}}/>
+              <PersonIcon color="primary"/>
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItemButton>
@@ -351,12 +351,12 @@ const AppLayout = ({ children }) => {
             onClick={handleDrawerToggle}
             sx={{padding:"0 0 0 .5rem", mr: 2, display: { sm: "none" } }}
           >
-            <MenuIcon sx={{fill:"#5d4037"}}/>
+            <MenuIcon color="primary"/>
           </IconButton>
           <Typography sx={{ color: "primary.dark",display:"flex",alignItems:"center",justifyContent:"center",gap:".5rem" }} variant="h6" noWrap className="title-header">
           <div className="navigate-back">
           <div className="back" onClick={() => navigate(-1)}>
-          <ArrowBackIcon sx={{fontSize:32,fill:"#5d4037"}}/>
+          <ArrowBackIcon sx={{fontSize:32,fill:"secondary"}}/>
           </div>
 
         </div>
