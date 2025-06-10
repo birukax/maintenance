@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from main import choices
 from main.models import BaseCreatedUpdated
 from django.contrib.auth.models import User
-from inventory.models import Item, Location
+from inventory.models import Item, Location, Inventory
 
 
 class Year(BaseCreatedUpdated):
@@ -115,7 +115,12 @@ class Schedule(BaseCreatedUpdated):
         )
         return (
             purchases.aggregate(Sum("received_quantity"))["received_quantity__sum"] or 0
-        )
+        ) or 0
+
+    @property
+    def balance(self):
+        all_balance = Inventory.objects.filter(item=self.item)
+        return all_balance.aggregate(Sum("balance"))["balance__sum"] or 0
 
     class Meta:
         ordering = ["-year__no", "item__name"]

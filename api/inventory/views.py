@@ -270,35 +270,42 @@ class InventoryViewSet(viewsets.ModelViewSet):
         updated_inventory_instances = []
 
         for inv_item in inventories_to_update:
-            inv_item.purchased = purchase_map.get(inv_item.item_id, 0) or 0
             try:
-                inv_item.inbound_transfers = (
-                    TransferHistory.objects.filter(
-                        location=inv_item.location, item=inv_item.item, type="INBOUND"
-                    )
-                    .annotate(total_quantity=Sum("quantity"))
-                    .values("total_quantity")[0]["total_quantity"]
+
+                inv_item.purchased = (
+                    Request.objects.filter(
+                        item=inv_item.item, location=inv_item.location
+                    ).aggregate(total_received=Sum("received_quantity"))[
+                        "total_received"
+                    ]
                     or 0
                 )
             except Exception as e:
-                print(e)
+                print(f"Purchased error {e}")
+                inv_item.purchased = 0
+            try:
+                # inv_item.purchased = purchase_map.get(inv_item.item_id, 0) or 0
+                inv_item.inbound_transfers = (
+                    TransferHistory.objects.filter(
+                        location=inv_item.location, item=inv_item.item, type="INBOUND"
+                    ).aggregate(total_quantity=Sum("quantity"))["total_quantity"]
+                    or 0
+                )
+            except Exception as e:
+                print(f"Inbound error {e}")
                 inv_item.inbound_transfers = 0
             try:
                 inv_item.outbound_transfers = (
                     TransferHistory.objects.filter(
                         location=inv_item.location, item=inv_item.item, type="OUTBOUND"
-                    )
-                    .annotate(total_quantity=Sum("quantity"))
-                    .values("total_quantity")[0]["total_quantity"]
+                    ).aggregate(total_quantity=Sum("quantity"))["total_quantity"]
                     or 0
                 )
             except Exception as e:
-                print(e)
+                print(f"Outbound error {e}")
                 inv_item.outbound_transfers = 0
-            inv_item.balance = (
-                inv_item.purchased
-                + inv_item.inbound_transfers
-                - inv_item.outbound_transfers
+            inv_item.balance = inv_item.purchased + (
+                inv_item.inbound_transfers - inv_item.outbound_transfers
             )
 
             updated_inventory_instances.append(inv_item)
@@ -407,7 +414,7 @@ class TransferViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["PATCH"])
-    def ship(self, request,pk=None):
+    def ship(self, request, pk=None):
         transfer = self.get_object()
         shipped_items = request.data.get("shipped_items")
         if not shipped_items:
@@ -449,7 +456,7 @@ class TransferViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["PATCH"])
-    def receive(self, request,pk=None):
+    def receive(self, request, pk=None):
         transfer = self.get_object()
         shipped_items = TransferHistory.objects.filter(
             transfer=transfer, type="OUTBOUND", completed=False

@@ -178,9 +178,8 @@ class TransferItemSerializer(serializers.ModelSerializer):
             "requested_quantity",
             "shipped_quantity",
             "received_quantity",
+            "total_shipped_quantity",
             "remaining_quantity",
-            "shipped_quantity",
-            "received_quantity",
         ]
 
     def get_transfer(self, obj):

@@ -133,7 +133,7 @@ class Item(BaseCreatedUpdated):
                 prefix = f"ITEM"
             last_item = Item.objects.filter(type=self.type).order_by("-id").first()
             # next_id = last_item.pk + 1 if last_item else 1
-            next_id = last_item.no.split("-")[-1] if last_item else 1
+            next_id = last_item.no.split("-")[-1] if last_item else 0
             next_id = int(next_id) + 1
             self.no = f"{prefix}-{next_id}"
         super().save(*args, **kwargs)
@@ -174,7 +174,7 @@ class Inventory(BaseCreatedUpdated):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        ordering = ["-updated_at"]
+        ordering = ["item__no", "location__code"]
         verbose_name_plural = "inventories"
 
     def __str__(self):
@@ -188,7 +188,11 @@ class Transfer(BaseCreatedUpdated):
         User, on_delete=models.RESTRICT, related_name="transfers_requested"
     )
     approved_by = models.ForeignKey(
-        User, on_delete=models.RESTRICT, related_name="transfers_approved", null=True, blank=True,
+        User,
+        on_delete=models.RESTRICT,
+        related_name="transfers_approved",
+        null=True,
+        blank=True,
     )
     status = models.CharField(
         choices=choices.TRANSFER_STATUS, max_length=25, default="PENDING-APPROVAL"
@@ -208,6 +212,7 @@ class Transfer(BaseCreatedUpdated):
 
     def __str__(self):
         return f"{self.requested_by.username} - {self.requested_date}"
+
 
 class TransferHistory(BaseCreatedUpdated):
     transfer = models.ForeignKey(
@@ -232,8 +237,8 @@ class TransferHistory(BaseCreatedUpdated):
 
     def __str__(self):
         if self.item and self.location:
-            return f"{self.item.name} - {self.location.name}"
-        return f"{self.date} - {self.quantity}"
+            return f"{self.item.name} - {self.location.name} - {self.type} | {self.quantity}"
+        return f"{self.date} - {self.type} - {self.quantity}"
 
 
 class TransferItem(BaseCreatedUpdated):
@@ -251,7 +256,7 @@ class TransferItem(BaseCreatedUpdated):
     def shipped_quantity(self):
         return (
             TransferHistory.objects.filter(
-                transfer=self.transfer, item=self.item, type="OUTBOUND"
+                transfer=self.transfer, item=self.item, type="OUTBOUND", completed=False
             ).aggregate(total_shipped=models.Sum("quantity"))["total_shipped"]
             or 0
         )
@@ -262,6 +267,15 @@ class TransferItem(BaseCreatedUpdated):
             TransferHistory.objects.filter(
                 transfer=self.transfer, item=self.item, type="INBOUND"
             ).aggregate(total_received=models.Sum("quantity"))["total_received"]
+            or 0
+        )
+
+    @property
+    def total_shipped_quantity(self):
+        return (
+            TransferHistory.objects.filter(
+                transfer=self.transfer, item=self.item, type="OUTBOUND", completed=True
+            ).aggregate(total_shipped=models.Sum("quantity"))["total_shipped"]
             or 0
         )
 
