@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 const purchaseScheduleColumns = [
   { header: "Item", accessor: "item.name" },
   { header: "UoM", accessor: "item.uom.name" },
-  { header: "Balance", accessor: "item.inventory.balance" },
+  { header: "Current Balance", accessor: "balance" },
   { header: "Min Stock Level", accessor: "item.minimum_stock_level" },
   { header: "Year", accessor: "year.no" },
   { header: "Quantity", accessor: "quantity" },

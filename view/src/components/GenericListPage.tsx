@@ -213,12 +213,12 @@ export const GenericListPage = ({
             <TableRow>
               {headers.map((header) => (
                 <TableCell key={header}>
-                  <Typography noWrap>{header}</Typography>
+                  <Typography Wrap>{header}</Typography>
                 </TableCell>
               ))}
               {(hasDetail || hasApproval) && (
                 <TableCell align="left">
-                  <Typography noWrap>Action</Typography>
+                  <Typography Wrap>Action</Typography>
                 </TableCell>
               )}
             </TableRow>
@@ -237,12 +237,16 @@ export const GenericListPage = ({
                           component="th"
                           scope="row"
                           align="left"
+                          size="small"
+                          sx={{padding:1.5}}
                         >
-                          {col.renderCell
+                          <Typography noWrap>
+                            {col.renderCell
                             ? col.renderCell(row)
                             : col.accessor
                             ? String(getNestedValue(row, String(col.accessor)))
                             : "N/A"}
+                          </Typography>
                         </TableCell>
                       );
                     })}

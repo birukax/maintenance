@@ -10,6 +10,7 @@
       margin-right: .5rem;
    }
 }
+
 :root{
    --white:#ffffff;
    --orange:#e5781e;
@@ -31,7 +32,9 @@
 .table-container{
    overflow: scroll;
    max-height: 75vh !important;
-   scrollbar-color: transparent transparent;
+   scrollbar-color: var(--smoke)  transparent;
+   flex: 1;
+   height: 100%;
 
 }
 .table-container:hover{
@@ -177,6 +180,9 @@ padding: 0;
 
 
 .pagination{
+   position: fixed;
+   bottom: 1rem;
+   flex: 0;
    *{
       border-radius: 4px;
    }

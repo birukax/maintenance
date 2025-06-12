@@ -2,11 +2,9 @@ import { useState, useEffect,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchItem, updateItem } from "../../store/slices/itemSlice";
-import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { fetchContacts } from "../../store/slices/contactSlice";
-import api from "../../utils/api";
-import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
+import { ITEM_TYPES} from "../../utils/choices";
 import {
   Button,
   Typography,
@@ -22,22 +20,22 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { fetchShelves } from "../../store/slices/shelfSlice";
+import { fetchShelfRows } from "../../store/slices/shelfRowSlice";
+import { fetchShelfBoxes } from "../../store/slices/shelfBoxSlice";
 const Create = () => {
   const [formData, setFormData] = useState({
     type: "",
-    category: "",
     minimum_stock_level: 0,
-    suppliers_id:[]
+    suppliers_id:[],
+    shelf_id:"",
+    row_id:"",
+    box_id:""
   });
   const item = useSelector((state:AppState)=>state.item.item)
 
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { unitOfMeasures } = useSelector(
-    (state: AppState) => state.unitOfMeasure
-  );
     const { contacts } = useSelector((state: AppState) => state.contact);
   
   const dispatch = useDispatch<AppDispatch>();
@@ -46,33 +44,35 @@ const Create = () => {
     value: ITEM_TYPES[key][0],
     label: ITEM_TYPES[key][1],
   }));
-  const item_categories = Object.keys(ITEM_CATEGORIES).map((key) => ({
-    value: ITEM_CATEGORIES[key][0],
-    label: ITEM_CATEGORIES[key][1],
-  }));
-
+  
+const { shelves } = useSelector((state: AppState) => state.shelf);
+    const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
+    const { shelfBoxes } = useSelector((state: AppState) => state.shelfBox);
   const params = {
     no_pagination: "true",
   };
+
+
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
+      dispatch(fetchContacts(params));
       dispatch(fetchItem(id));
+      dispatch(fetchShelves(params))
+      dispatch(fetchShelfRows(params))
+      dispatch(fetchShelfBoxes(params))
     }
-    setFormData({
-      type: item.data?.type,
-      category: item.data?.category,
-      minimum_stock_level: item.data?.minimum_stock_level || 0,
-      suppliers_id: item.data?.suppliers.map((supplier) => supplier.id) || [],
-    });
   }, []);
+
   useEffect(()=>{
 setFormData({
       type: item.data?.type,
-      category: item.data?.category,
       minimum_stock_level: item.data?.minimum_stock_level || 0,
-      suppliers_id: item.data?.suppliers.map((supplier) => supplier.id) || [],
+      suppliers_id: item.data?.suppliers?.map((supplier) => supplier.id) || [],
+      shelf_id: item.data?.shelf?.id,
+      row_id: item.data?.row?.id,
+      box_id: item.data?.box?.id
     });
-  },[item])
+  },[item.data,contacts.data])
 
     const supplierOptions = useMemo(() => {
         return contacts.data
@@ -86,12 +86,6 @@ setFormData({
         );
       }, [formData.suppliers_id, supplierOptions]);
 
-  useEffect(() => {
-    if (tokens) {
-      dispatch(fetchUnitOfMeasures(params));
-      dispatch(fetchContacts(params));
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -110,7 +104,6 @@ setFormData({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateItem({ id, formData })).unwrap();
@@ -118,7 +111,6 @@ setFormData({
       navigate(`/item/detail/${item.data.id}`);
     } catch (err) {
       toast.error(item.error?.error||"Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
     }
@@ -150,25 +142,6 @@ setFormData({
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="item-categories-select-label">
-            Item Category
-          </InputLabel>
-          <Select
-            labelId="item-categories-select-label"
-            id="item-categories-select"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            label="Item Category"
-          >
-            {item_categories.map((item_category) => (
-              <MenuItem key={item_category.value} value={item_category.value}>
-                {item_category.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
         <TextField
           label="Minimum Stock Level"
           name="minimum_stock_level"
@@ -186,6 +159,95 @@ setFormData({
           disabled={loading}
           helperText={item.error?.minimum_stock_level||""}
         />
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <Autocomplete
+            options={Array.isArray(shelves.data) ? shelves.data : []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf"
+          placeholder="Search shelves..."
+          required
+          helperText={item.error?.shelf}
+
+              />
+            )}
+            id="shelf-select"
+            value={
+              Array.isArray(shelves.data)
+          ?shelves.data.find((shelf) => shelf?.id === formData.shelf_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <Autocomplete
+            
+            options={Array.isArray(shelfRows.data)&&shelfRows.data ?.filter(
+              (shelfRow) => shelfRow?.shelf?.id === formData.shelf_id
+            ) || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf Row"
+          placeholder="Search shelf rows..."
+          required
+          helperText={item.error?.row}
+
+              />
+            )}
+            id="shelf-row-select"
+            value={
+              Array.isArray(shelfRows.data)
+          ? shelfRows.data.find((row) => row.id === formData.row_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <Autocomplete
+            options={Array.isArray(shelfBoxes.data)&&shelfBoxes.data ?.filter(
+              (shelfBox) => shelfBox?.row?.id === formData.row_id
+            ) || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+          {...params}
+          variant="outlined"
+          label="Shelf Box"
+          placeholder="Search shelf boxes..."
+          required
+          helperText={item.error?.box}
+
+              />
+            )}
+            id="shelf-box-select"
+            value={
+              Array.isArray(shelfBoxes.data)
+          ? shelfBoxes.data.find((box) => box.id === formData.box_id)
+          : null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, box_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            disabled={loading}
+          />
+        </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
                                 <Autocomplete
                                   multiple

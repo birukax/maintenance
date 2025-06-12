@@ -13,6 +13,8 @@ const itemColumns = [
   { header: "ID", accessor: "no" },
   { header: "Name", accessor: "name" },
   { header: "UoM", accessor: "uom.name" },
+  { header: "Location", accessor: "shelf.location?.name" },
+  { header: "Shelf", accessor: "shelf.name" },
   { header: "Type", accessor: "type" },
   { header: "Category", accessor: "category" },
 ];
@@ -30,6 +32,7 @@ const List: React.FC = () => {
     page:searchParams.get("page") || 1
   })
   const dispatch = useDispatch<AppDispatch>();
+  console.log(entityState);
   
   useEffect(() => {
       if (tokens) {
