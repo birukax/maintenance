@@ -10,11 +10,13 @@ interface DataState {
 interface TransferState {
     transfers: DataState;
     transfer: DataState;
+    transferHistories:DataState;
 }
 
 const initialState: TransferState = {
     transfers: {data: [], loading: false, error: null},
     transfer: {data: [], loading: false, error: null},
+    transferHistories: {data: [], loading: false, error: null},
 };
 
 export const fetchTransfers = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
@@ -75,8 +77,6 @@ export const receiveTransfer = createAsyncThunk<[], { id: string}, { rejectValue
             const response = await api.patch(`/inventory/transfers/${id}/receive/`);
             return response.data;
         } catch (error) {
-            console.log(error);
-            
             return rejectWithValue(error.response?.data || 'Failed to Receive Transfer');
         }
     }
@@ -89,8 +89,20 @@ export const shipTransfer = createAsyncThunk<[], { id: string, formData: { [key:
             const response = await api.patch(`/inventory/transfers/${id}/ship/`,formData);
             return response.data;
         } catch (error) {
-            console.log(error);
             return rejectWithValue(error.response?.data || 'Failed to ship Transfer');
+        }
+    }
+)
+
+export const fetchTransferHistories = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+    'transfer/fetchTransferHistories',
+    async(params, {rejectWithValue }) => {
+        try {
+            const response = await api.get('/inventory/transfer-histories/',{params});
+            return response.data;
+        }
+        catch (error) {
+            return rejectWithValue(error.response?.data || 'Failed to fetch Transfer histories');
         }
     }
 )
@@ -176,6 +188,18 @@ const TransferSlice = createSlice({
         .addCase(shipTransfer.rejected, (state, action) => {
             state.transfer.loading = false;
             state.transfer.error = action.payload || 'Unknown error';
+        })
+        .addCase(fetchTransferHistories.pending, (state) => {
+            state.transferHistories.loading = true;
+            state.transferHistories.error = null;
+        })
+        .addCase(fetchTransferHistories.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.transferHistories.loading = false;
+            state.transferHistories.data = action.payload;
+        })
+        .addCase(fetchTransferHistories.rejected, (state, action) => {
+            state.transferHistories.loading = false;
+            state.transferHistories.error = action.payload || 'Unknown error';
         })
     }
 })

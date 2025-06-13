@@ -116,6 +116,7 @@ const searchFilter = async (field, value) => {
             justifyContent: "flex-end",
           }}
         >
+        {purchaseSchedules.loading && <CircularProgress/>}
           <Button
             variant="contained"
             onClick={() => {
@@ -126,7 +127,6 @@ const searchFilter = async (field, value) => {
             Save
           </Button>
         </div>
-        {purchaseSchedules.loading && <CircularProgress />}
         {!loading && <Table sx={{ minWidth: 650 }} aria-label={` table`}>
           <TableHead>
             <TableRow>

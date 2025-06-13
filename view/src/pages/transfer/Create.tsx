@@ -182,8 +182,8 @@ const selectedItems=formData.requested_items.length>0?
                 type="number"
                 value={formData.requested_items.filter(el=>(el.item_id===item[0].id))[0]?.quantity}
                 required
-                sx={{width:"90px",padding:"0"}}
-                size="small"
+                sx={{width:"140px",padding:"0"}}
+                size="large"
                 inputProps={{ min: 1 }}
                 onChange={(e)=>setFormData(prev=>{
                   return{

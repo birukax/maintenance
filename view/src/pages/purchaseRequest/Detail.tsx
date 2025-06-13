@@ -69,10 +69,27 @@ const Detail = () => {
       </Typography>
       
       </div>
+      
+      <div className="clmn">
+        <>
+          <Typography variant="h6">Requested By:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+        {data.requested_by?.username}
+      </Typography>
+        </>
+      
+
+      </div>
       <div className="clmn">
 <Typography variant="h6">Status:</Typography>
       <Typography variant="body1" className="text-slate-500">
         {data?.status}
+      </Typography>
+      </div>
+      <div className="clmn">
+<Typography variant="h6">Approved By:</Typography>
+      <Typography variant="body1" className="text-slate-500">
+        {data?.approved_by?.username}
       </Typography>
       </div>
     </div>
@@ -81,18 +98,27 @@ const Detail = () => {
 <h2>Timeline</h2>
     <div className="rw">
       <div className="clmn">
-      {data.received_date ? (
+        <>
+          <Typography variant="h6">Requested Date:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+        {data.requested_date}
+      </Typography>
+        </>
+     
+
+      </div>
+      
+      {data.received_date && (<div className="clmn">
+      
         <>
           <Typography variant="h6">Received Date:</Typography>
           <Typography variant="body1" className="text-slate-500">
         {data.received_date}
       </Typography>
         </>
-      ):<Typography variant="body1" className="text-slate-500">
-            Not Received Yet
-          </Typography>
-          }
-      </div>
+      
+      </div>)
+    }
     </div>
 
 <h2>Deatils</h2>

@@ -10,11 +10,13 @@ interface DataState {
 interface PurchaseScheduleState {
     purchaseSchedules: DataState;
     purchaseSchedule: DataState;
+    years : DataState;
 }
 
 const initialState: PurchaseScheduleState = {
     purchaseSchedules: {data: [], loading: false, error: null},
     purchaseSchedule: {data: [], loading: false, error: null},
+    years: {data: [], loading: false, error: null},
 };
 
 
@@ -32,6 +34,7 @@ export const fetchPurchaseSchedules = createAsyncThunk<[], {params:null}, {rejec
         }
     }
 )
+
 
 export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: string }>(
     'purchaseSchedule/fetchPurchaseSchedule',
@@ -86,6 +89,20 @@ export const createAnnualSchedule = createAsyncThunk<[], { formData: { [key: str
 
 
 
+export const fetchYears = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+    'purchaseSchedule/fetchYears',
+    async(params, {rejectWithValue }) => {
+        try {
+                const response = await api.get('/purchase/years/', {params});
+                return response.data;
+            
+            
+        }
+        catch (error) {
+            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Years');
+        }
+    }
+)
 
 const purchaseScheduleSlice = createSlice({
     name: 'purchaseSchedule',
@@ -161,6 +178,18 @@ const purchaseScheduleSlice = createSlice({
         .addCase(createAnnualSchedule.rejected, (state, action) => {
             state.purchaseSchedule.loading = false;
             state.purchaseSchedule.error = action.payload || 'Unknown error';
+        })
+        .addCase(fetchYears.pending, (state) => {
+            state.years.loading = true;
+            state.years.error = null;
+        })
+        .addCase(fetchYears.fulfilled, (state, action: PayloadAction<[]>) => {
+            state.years.loading = false;
+            state.years.data = action.payload;
+        })
+        .addCase(fetchYears.rejected, (state, action) => {
+            state.years.loading = false;
+            state.years.error = action.payload || 'Unknown error';
         })
     }
 })

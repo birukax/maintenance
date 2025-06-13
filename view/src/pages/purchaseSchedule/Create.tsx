@@ -16,22 +16,42 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { fetchYears } from "../../store/slices/purchaseScheduleSlice";
 const Create = () => {
   const year = new Date().getFullYear();
   const [formData, setFormData] = useState({
-    year:Number(year)
+    year:""
   });
   const purchase_schedule = useSelector((state:AppState)=>state.purchaseSchedule.purchaseSchedule)
+  const years = useSelector((state:AppState)=>state.purchaseSchedule.years)
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
+ const params = {
+    no_pagination: "true",
+  };
 
+  useEffect(()=>{
+    dispatch(fetchYears(params))
+  },[])
+  useEffect(()=>{
 
+    let current=years?.data;
+    let plan=current[0]
+    console.log("currrrent",current);
+    setFormData(prev=>{
+      return{
+        ...prev,
+        year:plan?plan.no+1:new Date().getFullYear()
+      }
+    })
+    console.log(years);
+  },[years?.data])
 
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -67,7 +87,7 @@ const Create = () => {
           value={formData.year}
           helperText={purchase_schedule.error?.year}
           onChange={(e) => {
-        const currentYear = new Date().getFullYear();
+        const currentYear =years.data?.length>0&&years.data[0]["no"]?years.data[0]["no"]+1:new Date().getFullYear();
         const selectedYear = parseInt(e.target.value, 10);
         if (selectedYear >= currentYear && selectedYear <= 9999) {
           setFormData({ ...formData, year: Number(e.target.value) });

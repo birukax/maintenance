@@ -19,7 +19,6 @@ import {
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    code: "",
     name: "",
   });
   const { id } = useParams();
@@ -38,17 +37,15 @@ const Edit = () => {
       dispatch(fetchUnitOfMeasure(id));
     }
     setFormData({
-      code: unitOfMeasure.data?.code,
       name: unitOfMeasure.data?.name,
     });
-  }, [unitOfMeasure]);
+  }, []);
 
   useEffect(()=>{
 setFormData({
-      code: unitOfMeasure.data?.code,
       name: unitOfMeasure.data?.name,
     });
-  },[])
+  },[unitOfMeasure])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,19 +80,6 @@ setFormData({
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        {" "}
-        <TextField
-          label="Code"
-          name="code"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.code}
-          onChange={handleChange}
-          required
-          disabled={loading}
-          helperText={uom.error?.code||""}
-        />
         <TextField
           label="Name"
           name="name"

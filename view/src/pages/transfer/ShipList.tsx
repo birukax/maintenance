@@ -40,7 +40,7 @@ const ShipList = () => {
     try {
       dispatch(fetchTransfer(id))
     } catch (error) {
-      console.log("error",error);
+      return error
       
     }
   }
@@ -88,8 +88,6 @@ const ShipList = () => {
       return {
         ...prev,
         shipped_items:[...prev?.shipped_items?.filter(el=>{
-          console.log("filttered",el);
-          
           if(el.item_id===data.item_id){
              el.quantity=data.quantity
           }
@@ -101,8 +99,6 @@ const ShipList = () => {
     
   };
 
-  console.log(formData,"now");
-  
   const renderDetails = (data) => (
     <>
       <Table sx={{ minWidth: 650 }} aria-label={` table`}>
@@ -121,6 +117,9 @@ const ShipList = () => {
             </TableCell>
             <TableCell>
               <Typography noWrap>Shipped Quantity</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>Total Shipped Quantity</Typography>
             </TableCell>
             <TableCell>
               <Typography noWrap>Remaining Quantity</Typography>

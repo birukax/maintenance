@@ -43,6 +43,12 @@ const Detail = () => {
       </div>
       <div className="rw">
         <div className="clmn">
+          <Typography variant="h6">Plant:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.area?.plant?.name}
+          </Typography>
+          </div>
+        <div className="clmn">
           <Typography variant="h6">Area:</Typography>
           <Typography variant="body1" className="text-slate-500">
             {data?.area?.name}

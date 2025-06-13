@@ -25,7 +25,6 @@ const Detail = () => {
     </>
   );
 
-  console.log(entityState);
   
   const renderDetails = (data) => (
     <>

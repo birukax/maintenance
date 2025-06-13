@@ -85,7 +85,7 @@ const AddActivity = ({ entityState,setReceiveModalOpen }) => {
         </TableHead>
         <TableBody>
           {entityState &&
-            entityState.data.transfer_items.map((row,index) => (
+            entityState.data.transfer_items.filter(el=>el.shipped_quantity>0).map((row,index) => (
               <TableRow key={index}>
             <TableCell>
               <Typography noWrap>{row.item.name}</Typography>

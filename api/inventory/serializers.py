@@ -247,6 +247,8 @@ class TransferHistorySerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "transfer",
+            "item",
+            "location",
             "type",
             "date",
             "quantity",

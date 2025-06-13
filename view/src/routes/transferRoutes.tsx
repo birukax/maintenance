@@ -2,6 +2,7 @@
 import { Route } from "react-router-dom";
 import CreateTransfer from "../pages/transfer/Create";
 import TransferList from "../pages/transfer/List";
+import TransferHistoryList from "../pages/transfer/history/List";
 import TransferDetail from "../pages/transfer/Detail";
 // import TransferEdit from "../pages/transfer/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -50,6 +51,15 @@ const TransferRoutes = [
     element={
       <ProtectedRoute>
         <ShipList />
+      </ProtectedRoute>
+    }
+  />,
+  <Route
+    key="transfer-history"
+    path="/transfer/history"
+    element={
+      <ProtectedRoute>
+        <TransferHistoryList />
       </ProtectedRoute>
     }
   />,

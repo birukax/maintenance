@@ -26,6 +26,9 @@ const CheckListRows = ({ row, handleFormChange,index,errorCount,setErrorCount })
         {row?.shipped_quantity}
       </TableCell>
       <TableCell align="left">
+        {row?.total_shipped_quantity}
+      </TableCell>
+      <TableCell align="left">
         {row?.remaining_quantity}
       </TableCell>
       <TableCell align="left">
@@ -38,7 +41,6 @@ const CheckListRows = ({ row, handleFormChange,index,errorCount,setErrorCount })
           helperText={transfer.error?.quantity||""}
           style={error?{border:"1px solid red"}:{}}
           onChange={(e)=>{
-            console.log(e.target.value,"change");
             if(e.target.value>row.remaining_quantity){
               setError(true)
               errorList[index]=true

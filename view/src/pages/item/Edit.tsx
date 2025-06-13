@@ -115,6 +115,9 @@ setFormData({
       setLoading(false);
     }
   };
+
+  
+  
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -160,93 +163,62 @@ setFormData({
           helperText={item.error?.minimum_stock_level||""}
         />
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <Autocomplete
-            options={Array.isArray(shelves.data) ? shelves.data : []}
-            getOptionLabel={(option) => option.name || ""}
-            renderInput={(params) => (
-              <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf"
-          placeholder="Search shelves..."
-          required
-          helperText={item.error?.shelf}
-
-              />
-            )}
+          <InputLabel id="shelf-select-label">Shelf</InputLabel>
+          <Select
+            labelId="shelf-select-label"
             id="shelf-select"
-            value={
-              Array.isArray(shelves.data)
-          ?shelves.data.find((shelf) => shelf?.id === formData.shelf_id)
-          : null
-            }
-            onChange={(event, newValue) => {
-              setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
-            }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
-          />
+            name="shelf_id"
+            value={formData.shelf_id}
+            onChange={handleChange}
+            label="Shelf"
+          >
+            {Array.isArray(shelves.data) &&
+              shelves.data.map((shelf) => (
+                <MenuItem key={shelf.id} value={shelf.id}>
+                  {shelf.name}
+                </MenuItem>
+              ))}
+          </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <Autocomplete
-            
-            options={Array.isArray(shelfRows.data)&&shelfRows.data ?.filter(
-              (shelfRow) => shelfRow?.shelf?.id === formData.shelf_id
-            ) || []}
-            getOptionLabel={(option) => option.name || ""}
-            renderInput={(params) => (
-              <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf Row"
-          placeholder="Search shelf rows..."
-          required
-          helperText={item.error?.row}
-
-              />
-            )}
+          <InputLabel id="shelf-row-select-label">Shelf Row</InputLabel>
+          <Select
+            labelId="shelf-row-select-label"
             id="shelf-row-select"
-            value={
-              Array.isArray(shelfRows.data)
-          ? shelfRows.data.find((row) => row.id === formData.row_id)
-          : null
-            }
-            onChange={(event, newValue) => {
-              setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
-            }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
-          />
+            name="row_id"
+            value={formData.row_id}
+            onChange={handleChange}
+            label="Shelf Row"
+          >
+            {Array.isArray(shelfRows.data) &&
+              shelfRows.data
+                .filter((shelfRow) => shelfRow?.shelf?.id === formData.shelf_id)
+                .map((row) => (
+                  <MenuItem key={row.id} value={row.id}>
+                    {row.name}
+                  </MenuItem>
+                ))}
+          </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <Autocomplete
-            options={Array.isArray(shelfBoxes.data)&&shelfBoxes.data ?.filter(
-              (shelfBox) => shelfBox?.row?.id === formData.row_id
-            ) || []}
-            getOptionLabel={(option) => option.name || ""}
-            renderInput={(params) => (
-              <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf Box"
-          placeholder="Search shelf boxes..."
-          required
-          helperText={item.error?.box}
-
-              />
-            )}
+          <InputLabel id="shelf-box-select-label">Shelf Box</InputLabel>
+          <Select
+            labelId="shelf-box-select-label"
             id="shelf-box-select"
-            value={
-              Array.isArray(shelfBoxes.data)
-          ? shelfBoxes.data.find((box) => box.id === formData.box_id)
-          : null
-            }
-            onChange={(event, newValue) => {
-              setFormData({ ...formData, box_id: newValue ? newValue.id : "" });
-            }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
-          />
+            name="box_id"
+            value={formData.box_id}
+            onChange={handleChange}
+            label="Shelf Box"
+          >
+            {Array.isArray(shelfBoxes.data) &&
+              shelfBoxes.data
+          .filter((shelfBox) => shelfBox?.row?.id === formData.row_id)
+          .map((box) => (
+            <MenuItem key={box.id} value={box.id}>
+              {box.name}
+            </MenuItem>
+          ))}
+          </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
                                 <Autocomplete

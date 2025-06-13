@@ -14,6 +14,9 @@ const Detail = () => {
   });
   const [receivemodalOpen,setReceiveModalOpen]=useState(false)
   
+
+  console.log(entityState);
+  
   const renderButtons = () => (
     <>
       <>
@@ -29,15 +32,16 @@ const Detail = () => {
               />
             </Modal>
           </>
-          {entityState?.data && entityState?.data?.transfer_items?.every(el=>Number(el.requested_quantity)===Number(el.received_quantity))?"":
+          
       <Button
             onClick={()=>setReceiveModalOpen(true)}
             variant="contained"
             sx={{ mr: 1 }}
+          disabled={entityState?.data && entityState?.data?.transfer_items?.every(el=>Number(el.requested_quantity)===Number(el.received_quantity))||entityState?.data && entityState?.data?.transfer_items?.every(el=>el.shipped_quantity===0)?true:false }
           >
             Receive
           </Button>
-}
+
       {entityState?.data && entityState?.data?.transfer_items?.every(el=>el.remaining_quantity<1)?"":<Button
             component={Link}
             to={`/transfer/${entityState.data.id}/ship`}
@@ -49,8 +53,7 @@ const Detail = () => {
     </>
   );
 
-  console.log(entityState);
-  
+
 
   const renderDetails = (data) => (
     <>

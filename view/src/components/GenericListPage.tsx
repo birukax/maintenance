@@ -213,12 +213,12 @@ export const GenericListPage = ({
             <TableRow>
               {headers.map((header) => (
                 <TableCell key={header}>
-                  <Typography Wrap>{header}</Typography>
+                  <Typography >{header}</Typography>
                 </TableCell>
               ))}
               {(hasDetail || hasApproval) && (
                 <TableCell align="left">
-                  <Typography Wrap>Action</Typography>
+                  <Typography >Action</Typography>
                 </TableCell>
               )}
             </TableRow>
