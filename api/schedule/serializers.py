@@ -2,7 +2,11 @@ from rest_framework import serializers
 from account.serializers import UserSerializer
 from inventory.serializers import ItemSerializer
 from asset.serializers import EquipmentSerializer, MachineSerializer
-from work_order.serializers import WorkOrderTypeSerializer, ActivityTypeSerializer
+from work_order.serializers import (
+    WorkOrderTypeSerializer,
+    ActivityTypeSerializer,
+    ActivitySerializer,
+)
 from .models import Schedule
 
 
@@ -20,8 +24,10 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     activity_type = ActivityTypeSerializer(read_only=True)
     activity_type_id = serializers.IntegerField(write_only=True)
+
     tools_required = ItemSerializer(many=True, read_only=True)
     spareparts_required = ItemSerializer(many=True, read_only=True)
+    activities = ActivitySerializer(many=True, read_only=True)
 
     class Meta:
         model = Schedule
@@ -39,5 +45,6 @@ class ScheduleSerializer(serializers.ModelSerializer):
             "activity_type_id",
             "tools_required",
             "spareparts_required",
+            "activities",
             "planned_time",
         ]

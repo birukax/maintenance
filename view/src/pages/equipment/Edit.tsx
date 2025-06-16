@@ -4,11 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchEquipment,
   updateEquipment,
-  fetchEquipments,
 } from "../../store/slices/equipmentSlice";
-import { fetchMachines } from "../../store/slices/machineSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   Button,
   Typography,
@@ -25,14 +22,9 @@ import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
-    machine_id: "",
   });
-  const equipment = useSelector((state:AppState)=>state.equipment.equipment)
+  const equipment = useSelector((state: AppState) => state.equipment.equipment)
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const { machines } = useSelector((state: AppState) => state.machine);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -40,28 +32,20 @@ const Edit = () => {
     no_pagination: "true",
   };
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchEquipment(id));
     }
     setFormData({
-      name: equipment.data?.name,
-      machine_id: equipment.data?.machine.id,
+      name: equipment?.data?.name,
     });
   }, []);
-
-  useEffect(()=>{
-setFormData({
-      name: equipment.data?.name,
-      machine_id: equipment.data?.machine.id,
-    });
-  },[equipment])
-
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchMachines(params));
-    }
-  }, []);
+    setFormData({
+      name: equipment?.data?.name,
+    });
+  }, [equipment])
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,18 +54,13 @@ setFormData({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateEquipment({ id, formData })).unwrap();
       toast.success("Equipment edited successfully");
-      navigate(`/equipment/detail/${equipment.data.id}`);
+      navigate(`/equipment/detail/${id}`);
     } catch (err) {
-      toast.error(equipment.error?.error||"Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
+      toast.error(equipment?.error?.error || "Something Went Wrong");
     }
   };
   return (
@@ -94,25 +73,6 @@ setFormData({
         onSubmit={handleSubmit}
         className="form-gap"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <InputLabel id="machine-select-label">Machine</InputLabel>
-          <Select
-            labelId="machine-select-label"
-            id="machine-select"
-            name="machine_id"
-            value={formData?.machine_id}
-            onChange={handleChange}
-            label="Machine"
-          >
-            {Array.isArray(machines.data)&&machines.data &&
-              Array.isArray(machines.data)&&machines.data.map((machine) => (
-                <MenuItem key={machine.id} value={machine?.id}>
-                  {machine?.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-
         <TextField
           multiline
           label="Name"
@@ -123,20 +83,20 @@ setFormData({
           value={formData?.name}
           onChange={handleChange}
           required
-          disabled={loading}
-          helperText={equipment.error?.name||""}
+          disabled={equipment.loading}
+          helperText={equipment?.error?.name || ""}
         />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          disabled={loading}
+          disabled={equipment.loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Edit Equipment"}
+          {equipment.loading ? <CircularProgress size={24} /> : "Edit Equipment"}
         </Button>
-         
+
       </Box>
     </Container>
   );

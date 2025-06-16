@@ -49,6 +49,7 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
             hours=int(planned_hours) or 0,
             minutes=int(planned_minutes) or 0,
         )
+
         try:
             if machine_id:
                 machine = Machine.objects.get(id=machine_id)
@@ -90,20 +91,27 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
         )
         serializer.instance.spareparts_required.set(spareparts_required_id)
         serializer.instance.tools_required.set(tools_required_id)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["POST"])
     def create_work_order(self, request, pk=None):
         schedule = self.get_object()
         start_date = request.data.get("start_date")
+        activities = Activity.objects.filter(schedule=schedule, active=False)
+
+        if not activities.exists():
+            raise serializers.ValidationError(
+                {"error": "There are no active activites for this schedule!"}
+            )
 
         try:
-            if WorkOrder.objects.filter(
-                schedule=schedule, start_date=start_date
-            ).exists():
+            if (
+                WorkOrder.objects.filter(schedule=schedule)
+                .exclude(status="Completed")
+                .exists()
+            ):
                 raise serializers.ValidationError(
                     {
-                        "start_date": "Work order already exists for this schedule and start_date."
+                        "error": "Work order already exists for this schedule and start_date."
                     }
                 )
             work_order = WorkOrder(
@@ -122,8 +130,13 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
             work_order.spareparts_required.set(
                 [schedule.spareparts_required.all().values_list("id", flat=True)[0]]
             )
-
+            for a in activities:
+                WorkOrderActivity.objects.create(
+                    work_order=work_order,
+                    description=a.description,
+                )
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
-        serializer = ScheduleSerializer(schedule)
+        serializer = self.serializer_class(self.queryset)
+
         return Response(serializer.data, status=status.HTTP_200_OK)

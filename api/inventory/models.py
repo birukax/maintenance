@@ -139,7 +139,7 @@ class Item(BaseCreatedUpdated):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ["-created_at", "name"]
+        ordering = ["name", "-created_at"]
 
     def __str__(self):
         return f"{self.name}"

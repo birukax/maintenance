@@ -6,6 +6,7 @@ from .models import Activity, ActivityType, WorkOrderActivity, WorkOrder, WorkOr
 from django.contrib.auth.models import User
 from asset.models import Machine, Equipment
 from inventory.models import Item
+from schedule.models import Schedule
 from .serializers import (
     ActivitySerializer,
     WorkOrderSerializer,
@@ -39,38 +40,32 @@ class ActivityTypeVeiwSet(viewsets.ModelViewSet):
             work_order_type = WorkOrderType.objects.get(id=work_order_type_id)
         except WorkOrderType.DoesNotExist:
             raise serializers.ValidationError(
-                {
-                    "work_order_type_id": f"Work order type with id {work_order_type_id} does not exist."
-                }
+                {"work_order_type_id": f"Work order type does not exist."}
             )
         serializer.is_valid(raise_exception=True)
         serializer.save(work_order_type=work_order_type)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ActivityVeiwSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
     queryset = Activity.objects.all()
     search_fields = [
-        "name",
-        "code",
-        "activity_type__name",
-        "activity_type__code",
+        "description",
     ]
-    filterset_fields = []
+    filterset_fields = [
+        "schedule_id",
+    ]
+
     def perform_create(self, serializer):
-        activity_type_id = self.request.data.get("activity_type_id")
+        schedule_id = self.request.data.get("schedule_id")
         try:
-            activity_type = ActivityType.objects.get(id=activity_type_id)
-        except ActivityType.DoesNotExist:
+            schedule = Schedule.objects.get(id=schedule_id)
+        except Schedule.DoesNotExist:
             raise serializers.ValidationError(
-                {
-                    "activity_type_id": f"Activity type with id {activity_type_id} does not exist."
-                }
+                {"schedule_id": f"Schedule does not exist."}
             )
         serializer.is_valid(raise_exception=True)
-        serializer.save(activity_type=activity_type)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.save(schedule=schedule)
 
 
 class WorkOrderVeiwSet(viewsets.ModelViewSet):
@@ -159,40 +154,25 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
                     work_order=serializer.instance,
                     activity=a,
                 )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["POST"])
     def create_activities(self, request, pk=None):
         work_order = self.get_object()
-        if work_order.work_order_type.scheduled:
-            activity_ids = request.data.get("activity_ids")
-            WorkOrderActivity.objects.filter(work_order=work_order).delete()
-            try:
-                for a in activity_ids:
-                    activity = Activity.objects.get(id=a)
-                    WorkOrderActivity.objects.create(
-                        work_order=work_order,
-                        activity=activity.name,
-                        description=activity.description,
-                    )
-            except Activity.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"activity_ids": f"Activity does not exist."}
+        if work_order.work_order_type.schedules:
+            raise serializers.ValidationError({"error": "Invalid Work Order Type."})
+
+        try:
+            description_list = request.data.get("description_list")
+            for d in description_list:
+                WorkOrderActivity.objects.create(
+                    work_order=work_order,
+                    description=d,
                 )
-            except Exception as e:
-                raise serializers.ValidationError({"error", str(e)})
-        else:
-            try:
-                description_list = request.data.get("description_list")
-                for d in description_list:
-                    WorkOrderActivity.objects.create(
-                        work_order=work_order,
-                        description=d,
-                    )
-            except Exception as e:
-                raise serializers.ValidationError({"error", str(e)})
-        serializer = WorkOrderSerializer(work_order)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            raise serializers.ValidationError({"error", str(e)})
+        serializer = self.serializer_class(self.queryset)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST"])
     def assign_users(self, request, pk=None):
@@ -276,4 +256,3 @@ class WorkOrderActivityVeiwSet(viewsets.ModelViewSet):
             activity=activity,
             work_order=work_order,
         )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)

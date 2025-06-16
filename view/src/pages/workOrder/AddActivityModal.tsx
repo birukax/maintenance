@@ -1,4 +1,4 @@
-import { useState, useEffect,useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchActivities } from "../../store/slices/activitySlice";
@@ -26,7 +26,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   minWidth: 300,
-  width:"40%",
+  width: "40%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -38,13 +38,13 @@ const AddActivity = ({ entityState, setModalOpen }) => {
   const [formData, setFormData] = useState({
     activity_ids: [],
   });
-    const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
+  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
 
   const { activities } = useSelector((state: AppState) => state.activity);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -52,20 +52,20 @@ const params = {
   }, []);
 
   const activityOptions = useMemo(() => {
-      return activities.data
-        ? activities.data.filter(
-          (activity) =>
-            activity.activity_type.id ===
-            entityState.data.activity_type.id
-        )
-        : [];
-    }, [activities.data]);
+    return activities?.data
+      ? activities?.data?.filter(
+        (activity) =>
+          activity.activity_type.id ===
+          entityState.data.activity_type.id
+      )
+      : [];
+  }, [activities.data]);
 
-    const selectedActivities = useMemo(() => {
-        return activityOptions.filter((option) =>
-          formData.activity_ids.includes(option.id)
-        );
-      }, [formData.activity_ids, activityOptions]);
+  const selectedActivities = useMemo(() => {
+    return activityOptions.filter((option) =>
+      formData.activity_ids.includes(option.id)
+    );
+  }, [formData.activity_ids, activityOptions]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,7 +90,7 @@ const params = {
       toast.success("Work Order Activities created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(workOrder.error?.error||"Something Went Wrong");
+      toast.error(workOrder.error?.error || "Something Went Wrong");
       setError(
         err.response?.data.detail || "Failed to create work order activities."
       );
@@ -106,29 +106,29 @@ const params = {
         component="form"
         onSubmit={handleSubmit}
         className="form-gap"
-        sx={{minWidth:"90%"}}
+        sx={{ minWidth: "90%" }}
       >
         <FormControl fullWidth variant="outlined" disabled={entityState.loading}>
-                        <Autocomplete
-                          multiple
-                          options={activityOptions}
-                          getOptionLabel={(option) => option.name}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              label="Activities"
-                              placeholder="Search activities..."
-                              helperText={workOrder.error?.activity_ids||""}
-                            />
-                          )}
-                          id="activity-autocomplete"
-                          value={selectedActivities}
-                          onChange={(event, newValue) =>
-                            handleAutocompleteChange("activity_ids", newValue)
-                          }
-                        ></Autocomplete>
-                      </FormControl>
+          <Autocomplete
+            multiple
+            options={activityOptions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Activities"
+                placeholder="Search activities..."
+                helperText={workOrder.error?.activity_ids || ""}
+              />
+            )}
+            id="activity-autocomplete"
+            value={selectedActivities}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("activity_ids", newValue)
+            }
+          ></Autocomplete>
+        </FormControl>
         <Button
           type="submit"
           variant="contained"

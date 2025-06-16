@@ -39,19 +39,25 @@ class ActivityType(BaseCreatedUpdated):
 
 
 class Activity(BaseCreatedUpdated):
-    code = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
-    activity_type = models.ForeignKey(
-        ActivityType,
+    active = models.BooleanField(default=True)
+    schedule = models.ForeignKey(
+        Schedule,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name="activities",
     )
+    # activity_type = models.ForeignKey(
+    #     ActivityType,
+    #     on_delete=models.CASCADE,
+    #     null=True,
+    #     blank=True,
+    #     related_name="activities",
+    # )
 
     class Meta:
-        ordering = ["code"]
+        ordering = ["description"]
         verbose_name_plural = "Activities"
 
     def __str__(self):
@@ -160,7 +166,6 @@ class WorkOrderActivity(BaseCreatedUpdated):
         on_delete=models.CASCADE,
         related_name="work_order_activities",
     )
-    activity = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=300)
     value = models.BooleanField(choices=choices.YES_NO_NONE, default=False)
     # extra = models.BooleanField(choices=choices.YESNO, default=False)

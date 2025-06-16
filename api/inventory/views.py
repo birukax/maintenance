@@ -74,7 +74,6 @@ class ShelfViewSet(viewsets.ModelViewSet):
 
         serializer.is_valid(raise_exception=True)
         serializer.save(location=location)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ShelfRowViewSet(viewsets.ModelViewSet):
@@ -101,7 +100,6 @@ class ShelfRowViewSet(viewsets.ModelViewSet):
 
         serializer.is_valid(raise_exception=True)
         serializer.save(shelf=shelf)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ShelfBoxViewSet(viewsets.ModelViewSet):
@@ -128,7 +126,6 @@ class ShelfBoxViewSet(viewsets.ModelViewSet):
 
         serializer.is_valid(raise_exception=True)
         serializer.save(row=row)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UnitOfMeasureViewSet(viewsets.ModelViewSet):
@@ -206,7 +203,6 @@ class ItemViewSet(viewsets.ModelViewSet):
                 Schedule.objects.bulk_create(item_year_list)
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_update(self, serializer):
         suppliers_id = self.request.data.get("suppliers_id")
@@ -410,8 +406,6 @@ class TransferViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             raise serializers.ValidationError({"error", str(e)})
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["PATCH"])
     def ship(self, request, pk=None):

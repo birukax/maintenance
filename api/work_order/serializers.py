@@ -7,6 +7,7 @@ from account.serializers import UserSerializer
 from schedule.models import Schedule
 from breakdown.models import Breakdown
 
+
 class WorkOrderTypeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
@@ -50,24 +51,9 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
             "id",
             "value",
             "remark",
-            "activity",
             "description",
             "work_order",
         ]
-
-    def get_activity(self, obj):
-        try:
-            activity_obj = obj.activity
-            if activity_obj == None:
-                return None
-            return {
-                "id": activity_obj.id,
-                "name": activity_obj.name,
-                "code": activity_obj.code,
-                "description": activity_obj.description,
-            }
-        except Activity.DoesNotExist:
-            return None
 
     def get_work_order(self, obj):
         try:
@@ -166,16 +152,11 @@ class WorkOrderSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
-    activity_type = ActivityTypeSerializer(read_only=True)
-    activity_type_id = serializers.IntegerField(write_only=True)
-
     class Meta:
         model = Activity
         fields = [
             "id",
-            "code",
-            "name",
             "description",
-            "activity_type",
-            "activity_type_id",
+            "active",
+            "schedule_id",
         ]

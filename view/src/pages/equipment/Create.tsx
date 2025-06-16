@@ -25,14 +25,14 @@ const Create = () => {
     machine_id: "",
     code: "",
   });
-  const equipment = useSelector((state:AppState)=>state.equipment.equipment)
+  const equipment = useSelector((state: AppState) => state.equipment.equipment)
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { machines } = useSelector((state: AppState) => state.machine);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -54,7 +54,7 @@ const params = {
       toast.success("Equipment created successfully");
       navigate("/equipments");
     } catch (err) {
-      toast.error(equipment.error?.error||"Something Went Wrong");
+      toast.error(equipment.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -81,11 +81,11 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
-                helperText={equipment.error?.machine_id||""}
+                helperText={equipment.error?.machine_id || ""}
               />
             )}
             id="machine-select"
-            value={Array.isArray(machines.data)&&machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
             onChange={(event, newValue) => {
               setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
             }}
@@ -103,7 +103,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={equipment.error?.code||""}
+          helperText={equipment.error?.code || ""}
         />
         <TextField
           multiline
@@ -116,7 +116,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={equipment.error?.name||""}
+          helperText={equipment.error?.name || ""}
         />
         <Button
           type="submit"
@@ -128,7 +128,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Equipment"}
         </Button>
-         
+
       </Box>
     </Container>
   );

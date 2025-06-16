@@ -53,7 +53,7 @@ export const GenericListPage = ({
   const { tokens } = useSelector((state: AppState) => state.auth);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage,setCurrentPage]=useState(searchParams.get("page")||1)
+  const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)
   if (!tokens) {
     return <Typography>Unauthorized</Typography>;
   }
@@ -72,7 +72,7 @@ export const GenericListPage = ({
       toast.error(JSON.stringify(entityState.error));
     }
   }
-  
+
   return (
     <>
       <div
@@ -96,7 +96,7 @@ export const GenericListPage = ({
             >
               {" "}
               <span style={{ color: "black" }}> Year:</span>
-              {searchParams.get("year__no") }
+              {searchParams.get("year__no")}
             </sub>
           )}
         </Typography>
@@ -159,7 +159,7 @@ export const GenericListPage = ({
                 outlineColor: "blue",
                 maxHeight: "40px",
               }}
-              value={searchParams.get("year__no") !=="null" && searchParams.get("year__no") || new Date().getFullYear()}
+              value={searchParams.get("year__no") !== "null" && searchParams.get("year__no") || new Date().getFullYear()}
               className="year-filter"
             >
               {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
@@ -180,10 +180,10 @@ export const GenericListPage = ({
             </Button>
           )}
           {onEdit && entityState.data?.count > 0 && (
-              <Button variant="outlined" onClick={()=>onEdit(searchParams.get("year__no"))} sx={{ mr: 1 }}>
-                Edit
-              </Button>
-            )}
+            <Button variant="outlined" onClick={() => onEdit(searchParams.get("year__no"))} sx={{ mr: 1 }}>
+              Edit
+            </Button>
+          )}
           <Button
             variant="contained"
             startIcon={<RefreshIcon />}
@@ -226,73 +226,73 @@ export const GenericListPage = ({
           <TableBody>
             {entityState?.data?.results && entityState?.data?.count > 0
               ? entityState?.data?.results?.map((row) => (
-                  <TableRow
-                    key={getKey(row)}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    {columns.map((col) => {
-                      return (
-                        <TableCell
-                          key={col.header}
-                          component="th"
-                          scope="row"
-                          align="left"
-                          size="small"
-                          sx={{padding:1.5}}
-                        >
-                          <Typography noWrap>
-                            {col.renderCell
+                <TableRow
+                  key={getKey(row)}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  {columns.map((col) => {
+                    return (
+                      <TableCell
+                        key={col.header}
+                        component="th"
+                        scope="row"
+                        align="left"
+                        size="small"
+                        sx={{ padding: 1.5 }}
+                      >
+                        <Typography noWrap>
+                          {col.renderCell
                             ? col.renderCell(row)
                             : col.accessor
-                            ? String(getNestedValue(row, String(col.accessor)))
-                            : "N/A"}
-                          </Typography>
-                        </TableCell>
-                      );
-                    })}
+                              ? String(getNestedValue(row, String(col.accessor)))
+                              : "N/A"}
+                        </Typography>
+                      </TableCell>
+                    );
+                  })}
 
-                    {hasDetail && (
-                      <TableCell align="left">
-                        <Button
-                          component={Link}
-                          to={`${detailRouteBase}/${getKey(row)}`}
-                          size="small"
-                        >
-                          Detail
-                        </Button>
-                      </TableCell>
-                    )}
-                    {hasApproval && row.status === "PENDING" && (
-                      <TableCell align="left">
-                        <ButtonGroup
-                          variant="contained"
-                          size="small"
-                          sx={{ display: "flex", gap: 1, boxShadow: 0 }}
-                        >
-                          <Button
-                            onClick={() => onApprove(row.id)}
-                            disabled={entityState.loading}
-                          >
-                            Approve
-                          </Button>
-                          <Button
-                            onClick={() => onReject(row.id)}
-                            disabled={entityState.loading}
-                          >
-                            Reject
-                          </Button>
-                        </ButtonGroup>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))
-              : !entityState.loading && (
-                  <TableRow>
-                    <TableCell colSpan={columns.length + 1} align="left" rowSpan={1}>
-                      No data available.
+                  {hasDetail && (
+                    <TableCell align="left">
+                      <Button
+                        component={Link}
+                        to={`${detailRouteBase}/${getKey(row)}`}
+                        size="small"
+                      >
+                        Detail
+                      </Button>
                     </TableCell>
-                  </TableRow>
-                )}
+                  )}
+                  {hasApproval && row.status === "PENDING" && (
+                    <TableCell align="left">
+                      <ButtonGroup
+                        variant="contained"
+                        size="small"
+                        sx={{ display: "flex", gap: 1, boxShadow: 0 }}
+                      >
+                        <Button
+                          onClick={() => onApprove(row.id)}
+                          disabled={entityState.loading}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          onClick={() => onReject(row.id)}
+                          disabled={entityState.loading}
+                        >
+                          Reject
+                        </Button>
+                      </ButtonGroup>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))
+              : !entityState.loading && (
+                <TableRow>
+                  <TableCell colSpan={columns.length + 1} align="left" rowSpan={1}>
+                    No data available.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </div>

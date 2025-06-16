@@ -31,19 +31,19 @@ import {
 import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
-    start_date:"",
-    machine_id:"",
-    equipment_id:"",
-    reason:"",
-    start_time:""
+    start_date: "",
+    machine_id: "",
+    equipment_id: "",
+    reason: "",
+    start_time: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const breakdown  = useSelector((state: AppState) => state.breakdown.breakdown);
+  const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
   const { machines } = useSelector((state: AppState) => state.machine);
   const { equipments } = useSelector((state: AppState) => state.equipment);
- 
-const params = {
+
+  const params = {
     no_pagination: "true",
   };
   const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +54,7 @@ const params = {
     dispatch(fetchEquipments(params));
   }, []);
 
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +83,7 @@ const params = {
       toast.success("Breakdown created successfully");
       navigate("/breakdowns");
     } catch (err) {
-      toast.error(breakdown.error?.error||"Something Went Wrong");
+      toast.error(breakdown?.error?.error || "Something Went Wrong");
       // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -101,7 +101,7 @@ const params = {
         className="form-gap"
       >
 
-<LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             disableFuture
             label="Start Date"
@@ -114,7 +114,7 @@ const params = {
                 fullWidth: true,
                 required: true,
                 disabled: breakdown.loading,
-                helperText:breakdown.error.start_date,
+                helperText: breakdown?.error?.start_date,
               },
             }}
           />
@@ -133,61 +133,61 @@ const params = {
                 fullWidth: true,
                 required: true,
                 disabled: breakdown.loading,
-                helperText:breakdown.error.start_time,
+                helperText: breakdown?.error?.start_time,
               },
             }}
           />
         </LocalizationProvider>
         <FormControl fullWidth variant="outlined" disabled={loading}>
-                  <Autocomplete
-                    options={machines.data || []}
-                    getOptionLabel={(option) => option.name || ""}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        label="Machine"
-                        placeholder="Search machines..."
-                        required
-                        helperText={breakdown.error?.machine_id}
+          <Autocomplete
+            options={machines.data || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Machine"
+                placeholder="Search machines..."
+                required
+                helperText={breakdown?.error?.machine_id}
 
-                      />
-                    )}
-                    id="machine-select"
-                    value={ Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
-                    onChange={(event, newValue) => {
-                      setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
-                    }}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                  />
-                </FormControl>
-                <FormControl fullWidth variant="outlined" disabled={loading}>
-                  <Autocomplete
-                    options={Array.isArray(equipments.data)&&equipments.data ?.filter(
-                      (equipment) => equipment.machine.id === formData.machine_id
-                    ) || []}
-                    getOptionLabel={(option) => option.name || ""}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        label="Equipment"
-                        placeholder="Search equipments..."
-                        helperText={breakdown.error?.equipment_id}
-                      />
-                    )}
-                    id="equipment-select"
-                    value={
-                      Array.isArray(equipments.data)&&equipments.data?.find(
-                        (equipment) => equipment.id === formData.equipment_id
-                      ) || null
-                    }
-                    onChange={(event, newValue) => {
-                      setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
-                    }}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                  />
-                </FormControl>
+              />
+            )}
+            id="machine-select"
+            value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
+        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            options={Array.isArray(equipments.data) && equipments.data?.filter(
+              (equipment) => equipment.machine.id === formData.machine_id
+            ) || []}
+            getOptionLabel={(option) => option.name || ""}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Equipment"
+                placeholder="Search equipments..."
+                helperText={breakdown?.error?.equipment_id}
+              />
+            )}
+            id="equipment-select"
+            value={
+              Array.isArray(equipments.data) && equipments.data?.find(
+                (equipment) => equipment.id === formData.equipment_id
+              ) || null
+            }
+            onChange={(event, newValue) => {
+              setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
+        </FormControl>
 
         <TextField
           multiline
@@ -200,7 +200,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={breakdown.error?.reason}
+          helperText={breakdown?.error?.reason}
         />
 
         <Button
@@ -213,7 +213,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Breakdown"}
         </Button>
-         
+
       </Box>
     </Container>
   );
