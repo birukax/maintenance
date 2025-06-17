@@ -12,8 +12,8 @@ import AddActivityModal from "./AddActivityModal";
 import AssignUsers from "./AssignUsers";
 
 const Detail = () => {
-  const navigate=useNavigate()
-  const {id}=useParams()
+  const navigate = useNavigate()
+  const { id } = useParams()
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.workOrder.workOrder,
     fetchDetailAction: fetchWorkOrder,
@@ -37,48 +37,26 @@ const Detail = () => {
   const handleActivityModalClose = () => setActivityModalOpen(false);
 
 
-  
+
   const renderButtons = () => (
     <>
       {entityState.data?.status === "Created" &&
         entityState.data?.work_order_activities.length === 0 && (
           <>
-            
+
             {
-            
-            entityState.data.work_order_type?.scheduled ?
-                <>
-                <Modal
-              open={activityModalOpen}
-              onClose={handleActivityModalClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <AddActivityModal
-                entityState={entityState}
-                setModalOpen={setActivityModalOpen}
-              />
-            </Modal>
-                <Button
-              onClick={handleActivityModalOpen}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Add Activity
-            </Button>
-                </>
-                :
+
+            entityState.data.work_order_type?.scheduled === false &&
             <Button
-              onClick={()=>navigate(`/work-order/${id}/add-activities`)}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Add Activity
-            </Button>
+                onClick={() => navigate(`/work-order/${id}/add-activities`)}
+                variant="contained"
+                className="bg-slate-700"
+                sx={{ mr: 1 }}
+              >
+                Add Activity
+              </Button>
             }
-            
+
           </>
 
         )}
@@ -103,6 +81,15 @@ const Detail = () => {
               sx={{ mr: 1 }}
             >
               Assign User
+            </Button>
+            <Button
+              component={Link}
+              to={`/activities/${entityState.id}`}
+              variant="contained"
+              className="bg-slate-700"
+              sx={{ mr: 1 }}
+            >
+              Manage Activities
             </Button>
           </>
         )}
@@ -201,19 +188,19 @@ const Detail = () => {
         </div>
 
         {
-          entityState?.data?.end_date?
-          <div className="clmn">
+          entityState?.data?.end_date ?
+            <div className="clmn">
 
-          <Typography variant="h6">End:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState?.data?.end_date}
-          </Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState?.data?.end_time}
+              <Typography variant="h6">End:</Typography>
+              <Typography variant="body1" className="text-slate-500 mb-2">
+                {entityState?.data?.end_date}
+              </Typography>
+              <Typography variant="body1" className="text-slate-500 mb-2">
+                {entityState?.data?.end_time}
 
-          </Typography>
-        </div>:
-          ""}
+              </Typography>
+            </div> :
+            ""}
 
 
         <div className="clmn">
@@ -224,14 +211,14 @@ const Detail = () => {
           </Typography>
         </div>
 
-{data?.total_time_taken?
-        <div className="clmn">
+        {data?.total_time_taken ?
+          <div className="clmn">
 
-          <Typography variant="h6">Total Time Taken:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {data?.total_time_taken}
-          </Typography>
-        </div>:""}
+            <Typography variant="h6">Total Time Taken:</Typography>
+            <Typography variant="body1" className="text-slate-500 mb-2">
+              {data?.total_time_taken}
+            </Typography>
+          </div> : ""}
 
 
       </div>
@@ -239,7 +226,7 @@ const Detail = () => {
       <h2>Work Details</h2>
       <div className="rw">
 
-        
+
 
 
 
@@ -300,12 +287,12 @@ const Detail = () => {
         )}
       </div>
 
-        <div className="rw">
+      <div className="rw">
 
         <div className="clmn activities-clmn">
 
           <Typography variant="h6">Work Order Activities:</Typography>
-          <Table sx={{ width:"100%" }} className="table">
+          <Table sx={{ width: "100%" }} className="table">
             <TableHead>
               <TableRow>
                 <TableCell >
@@ -320,19 +307,19 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {data?.work_order_activities?.map((work_order_activity) => {
-              return (
+              {data?.work_order_activities?.map((work_order_activity) => {
+                return (
                   <TableRow key={work_order_activity.id}>
                     <TableCell>{work_order_activity?.description}</TableCell>
-                    <TableCell>{work_order_activity?.value ? <Typography color='success'>Checked</Typography>:<Typography color='error'>Not Checked</Typography> }</TableCell>
+                    <TableCell>{work_order_activity?.value ? <Typography color='success'>Checked</Typography> : <Typography color='error'>Not Checked</Typography>}</TableCell>
                     <TableCell>{work_order_activity?.remark}</TableCell>
                   </TableRow>
-              );
-            })}
-                </TableBody>
+                );
+              })}
+            </TableBody>
           </Table>
         </div>
-        </div>
+      </div>
 
 
 

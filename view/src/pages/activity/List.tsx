@@ -4,7 +4,7 @@ import { fetchActivities } from "../../store/slices/activitySlice";
 import { AppState,AppDispatch } from "../../store/store";
 import { GenericListPage } from "../../components/GenericListPage";
 import {useSelector, useDispatch } from "react-redux";
-import {useSearchParams} from "react-router-dom"
+import {useParams, useSearchParams} from "react-router-dom"
 
 const activityColumns = [
   { header: "Code", accessor: "code" },
@@ -14,6 +14,7 @@ const activityColumns = [
 
 const List: React.FC = () => {
 
+  const {id}=useParams()
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord,setKeyWord]=useState("")
@@ -22,8 +23,9 @@ const List: React.FC = () => {
   );
 
   const [params,setParams]=useState({
-      search:searchParams.get("search") ||"",
-      page:searchParams.get("page") || 1
+      // search:searchParams.get("search") ||"",
+      no_pagination:true,
+      schedule__id:id
     })
   const dispatch = useDispatch<AppDispatch>();
 
@@ -55,6 +57,9 @@ const List: React.FC = () => {
       await dispatch(fetchActivities(parameters));
     
     }
+
+    console.log(entityState);
+    
   return (
     <GenericListPage
       title="Activity"

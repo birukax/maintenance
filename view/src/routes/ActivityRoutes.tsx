@@ -9,7 +9,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 const ActivityRoutes = [
   <Route
     key="activity-list"
-    path="/activities"
+    path="/activities/:id"
     element={
       <ProtectedRoute>
         <ActivityList />
