@@ -53,7 +53,7 @@ class ActivityVeiwSet(viewsets.ModelViewSet):
         "description",
     ]
     filterset_fields = [
-        "schedule_id",
+        "schedule__id",
     ]
 
     def perform_create(self, serializer):

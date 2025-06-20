@@ -61,7 +61,7 @@ class Activity(BaseCreatedUpdated):
         verbose_name_plural = "Activities"
 
     def __str__(self):
-        return f"{self.code}"
+        return f"{self.description}"
 
 
 class WorkOrder(BaseCreatedUpdated):
