@@ -38,6 +38,15 @@ const Detail = () => {
       >
         Create Work Order
       </Button>
+      <Button
+              component={Link}
+              to={`/activities/${entityState.id}`}
+              variant="contained"
+              className="bg-slate-700"
+              sx={{ mr: 1 }}
+            >
+              Manage Activities
+            </Button>
     </>
   );
 

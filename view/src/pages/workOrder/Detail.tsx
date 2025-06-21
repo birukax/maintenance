@@ -82,15 +82,7 @@ const Detail = () => {
             >
               Assign User
             </Button>
-            <Button
-              component={Link}
-              to={`/activities/${entityState.id}`}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Manage Activities
-            </Button>
+            
           </>
         )}
       {entityState.data?.status === "Assigned" && (

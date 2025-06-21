@@ -201,3 +201,7 @@
 .css-er619e-MuiFormHelperText-root {
   color: red !important;
 }
+
+tr .diactive{
+  text-decoration: line-through;
+}
