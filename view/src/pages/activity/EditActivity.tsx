@@ -10,7 +10,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-import { createActivity } from "../../store/slices/activitySlice";
+import { fetchActivity, updateActivity } from "../../store/slices/activitySlice";
 
 const style = {
   position: "absolute",
@@ -24,21 +24,28 @@ const style = {
   p: 4,
 };
 
-const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
-  const { id: schedule_id } = useParams();
-  const [formData, setFormData] = useState({
-    schedule_id: schedule_id || "",
-    description: ""
-  });
+const EditActivity = ({ entityState, setModalOpen,handleRefresh,editId }) => {
+  
   const activity = useSelector((state: AppState) => state.activity.activity);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
+  const [formData, setFormData] = useState({
+    description:activity.data?.description|| "" 
+  });
 
+
+  const getActivity= ()=>{
+     dispatch(fetchActivity(Number(editId)))
+  }
   useEffect(() => {
-    // If schedule_id changes, update formData
-    setFormData((prev) => ({ ...prev, schedule_id: schedule_id || "" }));
-  }, [schedule_id]);
+    // Ifactivity_id changes, update formData
+    getActivity()
+  }, [editId]);
+  
+  useEffect(()=>{
 
+    setFormData((prev) => ({ ...prev,description:activity.data?.description|| "" }));
+  },[activity])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -48,7 +55,8 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    await dispatch(createActivity(formData)); // Uncomment if needed
+    const id=editId.toString()
+    await dispatch(updateActivity({id,formData})); // Uncomment if needed
     if(!activity.error){
       setModalOpen(false);
     }
@@ -56,15 +64,17 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
   };
 
 
+
   
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Activity
+        Edit Activity
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
+        onChange={handleChange}
         className="form-gap"
       >
         <TextField
@@ -74,7 +84,7 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
           fullWidth
           multiline
           minRows={3}
-          value={formData.description}
+          value={formData?.description}
           onChange={handleChange}
           required
           disabled={activity.loading}
@@ -91,7 +101,7 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
           {activity.loading ? (
             <CircularProgress size={24} />
           ) : (
-            "Create"
+            "Edit"
           )}
         </Button>
       </Box>
@@ -99,4 +109,4 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
   );
 };
 
-export default CreateActivity;
+export default EditActivity;

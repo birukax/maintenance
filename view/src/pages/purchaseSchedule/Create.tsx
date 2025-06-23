@@ -41,14 +41,12 @@ const Create = () => {
 
     let current=years?.data;
     let plan=current[0]
-    console.log("currrrent",current);
     setFormData(prev=>{
       return{
         ...prev,
         year:plan?plan.no+1:new Date().getFullYear()
       }
     })
-    console.log(years);
   },[years?.data])
 
   

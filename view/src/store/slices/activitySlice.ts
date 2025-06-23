@@ -68,6 +68,17 @@ export const updateActivity = createAsyncThunk<[], { id: string, formData: { [ke
         }
     }
 )
+export const deleteActivity = createAsyncThunk<[], { rejectValue: string }>(
+    'activity/deleteActivity',
+    async ( id, { rejectWithValue }) => {
+        try {
+            const response = await api.delete(`/work-order/activities/${id}/`);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 
 const activitySlice = createSlice({
@@ -122,6 +133,18 @@ const activitySlice = createSlice({
                         state.activity.data = action.payload;
                     })
                     .addCase(updateActivity.rejected, (state, action) => {
+                        state.activity.loading = false;
+                        state.activity.error = action.payload || 'Unknown error';
+                    })
+                    .addCase(deleteActivity.pending, (state) => {
+                        state.activity.loading = true;
+                        state.activity.error = null;
+                    })
+                    .addCase(deleteActivity.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.activity.loading = false;
+                        state.activity.data = action.payload;
+                    })
+                    .addCase(deleteActivity.rejected, (state, action) => {
                         state.activity.loading = false;
                         state.activity.error = action.payload || 'Unknown error';
                     })

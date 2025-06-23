@@ -57,8 +57,6 @@ const List: React.FC = () => {
         await dispatch(fetchTransferHistories(parameters));
       
       }
-  console.log(entityState);
-  
   return (
     <GenericListPage
       title="Transfer History"

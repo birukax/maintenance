@@ -1,7 +1,7 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
 import { fetchActivities } from "../../store/slices/activitySlice";
-import { updateActivity } from "../../store/slices/activitySlice";
+import { updateActivity,deleteActivity } from "../../store/slices/activitySlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { GenericListPage } from "../../components/GenericListPage";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,9 +11,11 @@ import Pagination from "../../components/Pagination";
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CreateActivity from "./CreateActivity";
+import DeleteActivity from "./DeleteActivity";
 import DeleteIcon from '@mui/icons-material/Delete';
 import LayersClearIcon from '@mui/icons-material/LayersClear';
 import EditIcon from '@mui/icons-material/Edit';
+import EditActivity from "./EditActivity";
 const headers = [
   { header: "Description", accessor: "description" },
   { header: "Status", accessor: "active" },
@@ -51,23 +53,39 @@ const List: React.FC = () => {
       dispatch(fetchActivities(params));
     }
   }
+
+  const handleDeleteActivity=async (id)=>{
+await dispatch(deleteActivity(id));
+          if(!activity.error){
+            handleRefresh()
+            handledeleteModalClose()
+          }
+  }
   const [assignmodalOpen, setAssignModalOpen] = useState(false);
+  const [editmodalOpen, setEditModalOpen] = useState(false);
+  const [deletemodalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
+  const [editId, setEditId] = useState("");
 
   const handleAssignModalOpen = () => setAssignModalOpen(true);
   const handleAssignModalClose = () => setAssignModalOpen(false);
+  const handledeleteModalOpen = () => setDeleteModalOpen(true);
+  const handledeleteModalClose = () => setDeleteModalOpen(false);
+  const handleeditModalOpen = () => setEditModalOpen(true);
+  const handleeditModalClose = () => setEditModalOpen(false);
 
   const disableActivity=async (id,active)=>{
       const formData={
         active:!active
       }
-      console.log(formData);
       
           await dispatch(updateActivity({id,formData}));
           if(!activity.error){
             handleRefresh()
           }
   }
-  console.log(entityState);
+
+  
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
   return (
@@ -82,49 +100,53 @@ const List: React.FC = () => {
       >
         <Modal
           open={assignmodalOpen}
-          onClose={handleAssignModalClose}
+          onClose={handleeditModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
           <CreateActivity
             entityState={entityState}
-            setModalOpen={setAssignModalOpen}
+            setModalOpen={setEditModalOpen}
             handleRefresh={handleRefresh}
           />
         </Modal>
+        <Modal
+          open={editmodalOpen}
+          onClose={handleeditModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <EditActivity
+            entityState={entityState}
+            setModalOpen={setEditModalOpen}
+            handleRefresh={handleRefresh} 
+            editId={editId}          />
+        </Modal>
+        <Modal
+          open={deletemodalOpen}
+          onClose={handledeleteModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <DeleteActivity
+          handleDeleteActivity={handleDeleteActivity}
+          handledeleteModalClose={handledeleteModalClose}
+          deleteId={deleteId}
+          activity={activity}
+          />
+        </Modal>
         <Typography variant="h5" className="font-bold ">
-          {/* {title}{" "}
-          {yearFilter && (
-            <sub
-              style={{
-                fontSize: "large",
-                color: "red",
-                marginInlineStart: "1rem",
-              }}
-              className="year-margin"
-            >
-              {" "}
-              <span style={{ color: "black" }}> Year:</span>
-              {searchParams.get("year__no")}
-            </sub>
-          )} */}
+          
         </Typography>
         <div style={{ maxHeight: "fit-content" }}>
 
           <Button
-            // component={Link}
-            // to={createRoute}
             variant="outlined"
             sx={{ mr: 1, padding: ".5rem 2rem", maxHeight: "40px" }}
-            onClick={() => setAssignModalOpen(true)}
+            onClick={handleAssignModalOpen}
           >
             New
           </Button>
-          {/* {onEdit && entityState.data?.count > 0 && (
-            <Button variant="outlined" onClick={() => onEdit(searchParams.get("year__no"))} sx={{ mr: 1 }}>
-              Edit
-            </Button>
-          )} */}
           <Button
             variant="contained"
             startIcon={<RefreshIcon />}
@@ -217,10 +239,16 @@ const List: React.FC = () => {
                         }}>
                         <LayersClearIcon sx={{fontSize:25}}/>
                       </IconButton>
-                      <IconButton aria-label="edit" title="Edit" >
+                      <IconButton aria-label="edit" title="Edit"  onClick={()=>{
+                        setEditId(row.id)
+                        handleeditModalOpen()
+                        }}>
                         <EditIcon sx={{fontSize:25,fill:"#3c83c1"}}/>
                       </IconButton>
-                      <IconButton aria-label="delete" title="Delete" >
+                      <IconButton aria-label="delete" title="Delete" onClick={()=>{
+                        setDeleteId(row.id)
+                        handledeleteModalOpen()
+                      }}>
                         <DeleteIcon sx={{fontSize:25,fill:"#ca4335"}}/>
                       </IconButton>
                     </ButtonGroup>

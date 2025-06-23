@@ -15,7 +15,6 @@ const Detail = () => {
   const [receivemodalOpen,setReceiveModalOpen]=useState(false)
   
 
-  console.log(entityState);
   
   const renderButtons = () => (
     <>
