@@ -42,7 +42,7 @@ const Update = ({ entityState, setModalOpen }) => {
     end_time: "",
     status: "FIXED",
   });
-  const breakdown  = useSelector((state: AppState) => state.breakdown.breakdown);
+  const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const Update = ({ entityState, setModalOpen }) => {
       toast.success("Breakdown updated successfully");
       navigate(`/breakdown/detail/${id}`);
     } catch (err) {
-      toast.error(breakdown.error?.error||"Something Went Wrong");
+      toast.error(breakdown.error?.error || "Something Went Wrong");
       setError(err.response?.data?.detail || "Failed to update Breakdown.");
     }
   };
@@ -90,7 +90,7 @@ const Update = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
         sx={{ minWidth: "90%" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -106,7 +106,7 @@ const Update = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: breakdown.error?.end_date||"",
+                helperText: breakdown.error?.end_date || "",
               },
             }}
           />
@@ -131,7 +131,7 @@ const Update = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: breakdown.error?.end_time||"",
+                helperText: breakdown.error?.end_time || "",
               },
             }}
           />
@@ -148,7 +148,7 @@ const Update = ({ entityState, setModalOpen }) => {
           onChange={handleChange}
           required
           disabled={entityState.loading}
-          helperText={breakdown.error?.remark||""}
+          helperText={breakdown.error?.remark || ""}
         />
         <Button
           type="submit"

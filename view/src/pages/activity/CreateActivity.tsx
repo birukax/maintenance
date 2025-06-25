@@ -24,7 +24,7 @@ const style = {
   p: 4,
 };
 
-const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
+const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
   const { id: schedule_id } = useParams();
   const [formData, setFormData] = useState({
     schedule_id: schedule_id || "",
@@ -42,21 +42,21 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     await dispatch(createActivity(formData)); // Uncomment if needed
-    if(!activity.error){
+    if (!activity.error) {
       setModalOpen(false);
     }
     handleRefresh()
   };
 
 
-  
+
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -65,7 +65,7 @@ const CreateActivity = ({ entityState, setModalOpen,handleRefresh }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Description"

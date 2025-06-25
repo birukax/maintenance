@@ -27,9 +27,9 @@ const Create = () => {
     item_id: "",
     reason: "",
     quantity: "",
-    date:""
+    date: ""
   });
-      const consumption = useSelector((state:AppState)=>state.consumption.consumption)
+  const consumption = useSelector((state: AppState) => state.consumption.consumption)
 
 
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ const Create = () => {
   const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -64,7 +64,7 @@ const params = {
       toast.success("Consumption created successfully");
       navigate("/consumptions");
     } catch (err) {
-      toast.error(consumption.error?.error||"Something Went Wrong");
+      toast.error(consumption.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -75,7 +75,7 @@ const params = {
       <Typography variant="h4" className="mb-6 text-gray-800">
         Create Consumption
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} className="form-gap">
+      <Box component="form" onSubmit={handleSubmit} className="form-gap w-full">
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             options={Array.isArray(items.data) && items.data || []}
@@ -92,7 +92,7 @@ const params = {
               />
             )}
             id="item-select"
-            value={Array.isArray(items.data)&&items.data?.find((item) => item.id === formData.item_id) || null}
+            value={Array.isArray(items.data) && items.data?.find((item) => item.id === formData.item_id) || null}
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,
@@ -156,7 +156,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Consumption"}
         </Button>
-         
+
       </Box>
     </Container>
   );

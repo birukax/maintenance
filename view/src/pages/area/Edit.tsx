@@ -38,12 +38,12 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: area.data?.name,
     });
-  },[area])
-  
+  }, [area])
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -59,7 +59,7 @@ setFormData({
       toast.success("Area edited successfully");
       navigate(`/area/detail/${area.data.id}`);
     } catch (err) {
-      toast.error(area.error?.error||"Something Went Wrong");
+      toast.error(area.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -73,9 +73,9 @@ setFormData({
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
-        
+
         <TextField
           label="Name"
           name="name"
@@ -86,7 +86,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={area.error?.name||""}
+          helperText={area.error?.name || ""}
         />
 
         <Button
@@ -99,7 +99,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Area"}
         </Button>
-         
+
       </Box>
     </Container>
   );

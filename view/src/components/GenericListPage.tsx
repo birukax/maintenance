@@ -18,8 +18,11 @@ import {
   MenuItem,
   Button,
   ButtonGroup,
+  FormControl,
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 import Pagination from "./Pagination";
 
 export interface ColumnDefination {
@@ -76,71 +79,51 @@ export const GenericListPage = ({
   return (
     <>
       <div
-        className="flex gap-8 justify-between table-filters"
-        style={{
-          maxWidth: "100%",
-          minWidth: "fit-content",
-          maxHeight: "fit-content",
-        }}
+        className="flex gap-8 justify-between table-filters mb-2"
+
       >
-        <Typography variant="h5" className="font-bold ">
+        <Typography color='warning' variant="h6" className="tracking-tight! uppercase">
           {title}{" "}
           {yearFilter && (
             <sub
               style={{
-                fontSize: "large",
-                color: "red",
-                marginInlineStart: "1rem",
+                marginInlineStart: "0.5rem",
               }}
-              className="year-margin"
+              className="year-margin text-lg  tracking-wide"
             >
               {" "}
-              <span style={{ color: "black" }}> Year:</span>
+              <span style={{ color: "black" }}> Year:  </span>
               {searchParams.get("year__no")}
             </sub>
           )}
         </Typography>
+
+        {entityState.loading && <CircularProgress />}
         <div style={{ maxHeight: "fit-content" }}>
+
+
           {searchFilter && (
-            <div
-              style={{
-                display: "flex",
-                gap: "0",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <TextField
-                label="Search"
-                name="search"
-                className="mb-8"
-                size="small"
-                variant="outlined"
-                fullWidth
-                value={keyWord}
-                onChange={(e) => setKeyWord(e.target.value)}
-                sx={{
-                  minWidth: "250px",
-                  maxHeight: "40px",
-                  border: "none",
-                  "& .MuiOutlinedInput-root": {
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                    height: "100%",
-                    maxHeight: "40px",
-                  },
-                }}
-              />
+
+            <div className='flex gap-1'>
+              <FormControl size='small'
+                className='w-48 sm:w-54'
+              >
+                <TextField
+                  color='primary'
+                  label="Search"
+                  name="search"
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                  value={keyWord}
+                  onChange={(e) => setKeyWord(e.target.value)}
+                />
+              </FormControl>
               <Button
+                disabled={entityState.loading}
+                size='small'
                 variant="contained"
                 onClick={() => searchFilter("search", keyWord)}
-                sx={{
-                  mr: 1,
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  height: "40px",
-                  border: "1px solid #5d4037",
-                }}
               >
                 <SearchIcon />
               </Button>
@@ -148,6 +131,8 @@ export const GenericListPage = ({
           )}
           {yearFilter && (
             <TextField
+              color='primary'
+              className='year-filter '
               select
               onChange={(e) => yearFilter("year__no", e.target.value)}
               variant="outlined"
@@ -160,10 +145,9 @@ export const GenericListPage = ({
                 maxHeight: "40px",
               }}
               value={searchParams.get("year__no") !== "null" && searchParams.get("year__no") || new Date().getFullYear()}
-              className="year-filter"
             >
               {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
-                <MenuItem key={year} value={year} sx={{ fontWeight: "bold" }}>
+                <MenuItem key={year} value={year} >
                   {year}
                 </MenuItem>
               ))}
@@ -171,32 +155,36 @@ export const GenericListPage = ({
           )}
           {createRoute && (
             <Button
+              disabled={entityState.loading}
               component={Link}
               to={createRoute}
-              variant="outlined"
-              sx={{ mr: 1, padding: ".5rem 2rem", maxHeight: "40px" }}
+              variant="contained"
+              size='small'
             >
               New
             </Button>
           )}
           {onEdit && entityState.data?.count > 0 && (
-            <Button variant="outlined" onClick={() => onEdit(searchParams.get("year__no"))} sx={{ mr: 1 }}>
+            <Button
+              disabled={entityState.loading}
+              size='small'
+              variant="outlined"
+              onClick={() => onEdit(searchParams.get("year__no"))}
+            >
               Edit
             </Button>
           )}
           <Button
-            variant="contained"
-            startIcon={<RefreshIcon />}
+            size='small'
+            variant='outlined'
             onClick={onRefresh}
             disabled={entityState.loading}
             className="btn-refresh"
-            sx={{ maxHeight: "40px" }}
           >
-            Refresh
+            <RefreshIcon />
           </Button>
         </div>
       </div>
-      {entityState.loading && <CircularProgress />}
       {entityState.error && (
         <Typography variant="body2" color="error" className="mb-2">
           {/* <ToastContainer/> */}
@@ -204,20 +192,20 @@ export const GenericListPage = ({
       )}
 
       <div className="table-container">
-        <Table
+        <Table size='small'
           sx={{ minWidth: 650, maxHeight: "40px" }}
           aria-label={`${title} table`}
           className="table"
         >
-          <TableHead>
+          <TableHead >
             <TableRow>
               {headers.map((header) => (
-                <TableCell key={header}>
+                <TableCell size='small' key={header}>
                   <Typography >{header}</Typography>
                 </TableCell>
               ))}
               {(hasDetail || hasApproval) && (
-                <TableCell align="left">
+                <TableCell size='small' align="left">
                   <Typography >Action</Typography>
                 </TableCell>
               )}
@@ -257,6 +245,9 @@ export const GenericListPage = ({
                         component={Link}
                         to={`${detailRouteBase}/${getKey(row)}`}
                         size="small"
+                        variant='text'
+                        color='warning'
+                        className='hover:underline!'
                       >
                         Detail
                       </Button>
@@ -265,21 +256,24 @@ export const GenericListPage = ({
                   {hasApproval && row.status === "PENDING" && (
                     <TableCell align="left">
                       <ButtonGroup
+
                         variant="contained"
                         size="small"
                         sx={{ display: "flex", gap: 1, boxShadow: 0 }}
                       >
                         <Button
+                          variant='contained'
                           onClick={() => onApprove(row.id)}
                           disabled={entityState.loading}
                         >
-                          Approve
+                          <CheckIcon />
                         </Button>
                         <Button
+                          variant='outlined'
                           onClick={() => onReject(row.id)}
                           disabled={entityState.loading}
                         >
-                          Reject
+                          <ClearIcon />
                         </Button>
                       </ButtonGroup>
                     </TableCell>

@@ -98,7 +98,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>

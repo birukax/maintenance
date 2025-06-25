@@ -19,7 +19,7 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
-  const breakdown  = useSelector((state: AppState) => state.breakdown.breakdown);
+  const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const { workOrderType } = useSelector(
@@ -38,11 +38,11 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: workOrderType.data?.name,
     });
-  },[workOrderType])
+  }, [workOrderType])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,7 +59,7 @@ setFormData({
       toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data.id}`);
     } catch (err) {
-      toast.error(breakdown.error?.error||"Something Went Wrong");
+      toast.error(breakdown.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -73,7 +73,7 @@ setFormData({
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Name"

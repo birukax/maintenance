@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useDispatch,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createShelfBox } from "../../store/slices/shelfBoxSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { fetchShelfRows } from "../../store/slices/shelfRowSlice";
+import { Link } from "react-router-dom";
 
 import {
   TextField,
@@ -21,16 +22,16 @@ import {
 import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
-    row_id:"",
+    row_id: "",
     code: "",
     name: "",
   });
-  const shelfBox = useSelector((state:AppState)=>state.shelfBox.shelfBox)
+  const shelfBox = useSelector((state: AppState) => state.shelfBox.shelfBox)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-    const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
+  const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
   const { tokens } = useSelector((state: AppState) => state.auth);
 
   const handleChange = (e) => {
@@ -46,48 +47,48 @@ const Create = () => {
       toast.success("ShelfBox created successfully");
       navigate("/shelf-boxes");
     } catch (err) {
-      toast.error(shelfBox.error?.error||"Something Went Wrong");
+      toast.error(shelfBox.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-      const params = {
-        no_pagination: "true",
-      };
-        dispatch(fetchShelfRows(params));
-    }, []);
-    
+    const params = {
+      no_pagination: "true",
+    };
+    dispatch(fetchShelfRows(params));
+  }, []);
+
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Shelf Box
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <Autocomplete
+          <Autocomplete size='small'
             options={Array.isArray(shelfRows.data) ? shelfRows.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf Row"
-          placeholder="Search shelf rows..."
-          required
-          helperText={shelfBox?.error?.row_id}
+                {...params}
+                variant="outlined"
+                label="Shelf Row"
+                placeholder="Search shelf rows..."
+                required
+                helperText={shelfBox?.error?.row_id}
               />
             )}
             id="shelf-row-select"
             value={
               Array.isArray(shelfRows.data)
-          ? shelfRows.data.find((row) => row.id === formData.row_id)
-          : null
+                ? shelfRows.data.find((row) => row.id === formData.row_id)
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
@@ -97,6 +98,7 @@ const Create = () => {
           />
         </FormControl>
         <TextField
+          size='small'
           label="Code"
           name="code"
           className="mb-8"
@@ -110,6 +112,7 @@ const Create = () => {
         />
 
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -122,18 +125,32 @@ const Create = () => {
           helperText={shelfBox?.error?.name}
 
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create ShelfBox"}
-        </Button>
-         
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/shelf-boxes'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

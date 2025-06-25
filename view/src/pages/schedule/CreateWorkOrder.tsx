@@ -34,7 +34,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const [formData, setFormData] = useState({
     start_date: "",
   });
-    const schedule = useSelector((state:AppState)=>state.schedule.schedule)
+  const schedule = useSelector((state: AppState) => state.schedule.schedule)
 
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -61,7 +61,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
       toast.success("Scheduled Work Order created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(schedule.error?.error||"Something Went Wrong");
+      toast.error(schedule.error?.error || "Something Went Wrong");
       // setError(err.response?.data.detail || err.message);  
       setError(
         err.response?.data.detail || "Failed to create a scheduled work order."
@@ -76,7 +76,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -91,7 +91,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: schedule.loading,
-                helperText: schedule.error?.start_date||"",
+                helperText: schedule.error?.start_date || "",
               },
             }}
           />
@@ -110,7 +110,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             "Create Scheduled Work Order"
           )}
         </Button>
-        
+
       </Box>
     </Container>
   );

@@ -21,7 +21,7 @@ const Edit = () => {
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const schedule = useSelector((state:AppState)=>state.schedule.schedule)
+  const schedule = useSelector((state: AppState) => state.schedule.schedule)
 
   const { workOrderType } = useSelector(
     (state: AppState) => state.workOrderType
@@ -54,7 +54,7 @@ const Edit = () => {
       toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data.id}`);
     } catch (err) {
-      toast.error(schedule.error?.error||"Something Went Wrong");
+      toast.error(schedule.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -68,7 +68,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Name"
@@ -80,7 +80,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={schedule.error?.name||""}
+          helperText={schedule.error?.name || ""}
         />
 
         <Button
@@ -93,7 +93,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Work Order Type"}
         </Button>
-         
+
       </Box>
     </Container>
   );

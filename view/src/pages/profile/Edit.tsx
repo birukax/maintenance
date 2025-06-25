@@ -28,14 +28,14 @@ import { Roles } from "../../utils/choices";
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    password:"",
+    password: "",
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const profile = useSelector((state: AppState) => state.profile.profile);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [comfirmpas,setComfirmPas]=useState("")
+  const [comfirmpas, setComfirmPas] = useState("")
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -45,31 +45,32 @@ const Edit = () => {
     }
   }, []);
 
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    if(comfirmpas===formData.password){
+    if (comfirmpas === formData.password) {
 
-    try {
-      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      await dispatch(updateProfile({ id, formData })).unwrap();
-      toast.success("Profile edited successfully");
-      navigate(`/profile/${id}`);
-    } catch (err) {
-      toast.error(profile.error?.error||"Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
-    }}else{
+      try {
+        // await api.patch(`/inventory/items/${item.data.id}/`, formData);
+        await dispatch(updateProfile({ id, formData })).unwrap();
+        toast.success("Profile edited successfully");
+        navigate(`/profile/${id}`);
+      } catch (err) {
+        toast.error(profile.error?.error || "Something Went Wrong");
+        setError(err.response?.data.detail || err.message);
+      } finally {
+        setLoading(false);
+      }
+    } else {
       toast.error("Password and Comfirm Password must be similar");
       setLoading(false);
     }
@@ -82,9 +83,9 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
-         <TextField
+        <TextField
           label="Password"
           name="password"
           className="mb-8"
@@ -95,7 +96,7 @@ const Edit = () => {
           disabled={loading}
           type="password"
           required
-          helperText={profile.error?.password||""}
+          helperText={profile.error?.password || ""}
         />
         <TextField
           label="Comfirm Password"
@@ -104,11 +105,11 @@ const Edit = () => {
           variant="outlined"
           fullWidth
           value={comfirmpas}
-          onChange={(e)=>setComfirmPas(e.target.value)}
+          onChange={(e) => setComfirmPas(e.target.value)}
           disabled={loading}
           type="password"
           required
-          helperText={profile.error?.password||""}
+          helperText={profile.error?.password || ""}
         />
         <Button
           type="submit"
@@ -120,7 +121,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Profile"}
         </Button>
-         
+
       </Box>
     </Container>
   );

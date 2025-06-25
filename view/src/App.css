@@ -1,7 +1,7 @@
 .form-gap {
   max-width: 450px;
   > * {
-    margin-block: 0.5rem !important;
+    margin-block: 0.4rem !important;
   }
 }
 .sidebar {
@@ -36,9 +36,14 @@
   flex: 1;
   height: 100%;
 }
+table tbody tr:last-child {
+  /* background-color: red; */
+  border: none;
+}
 .table-container:hover {
   scrollbar-color: var(--smoke) transparent;
 }
+
 .boolean {
   width: 10px;
   height: 10px;
@@ -202,6 +207,6 @@
   color: red !important;
 }
 
-tr .diactive{
+tr .diactive {
   text-decoration: line-through;
 }

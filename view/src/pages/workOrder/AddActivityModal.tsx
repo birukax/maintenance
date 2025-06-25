@@ -105,7 +105,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
         sx={{ minWidth: "90%" }}
       >
         <FormControl fullWidth variant="outlined" disabled={entityState.loading}>

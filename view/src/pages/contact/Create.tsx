@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createContact } from "../../store/slices/contactSlice";
-import api from "../../utils/api";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -18,7 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { AppState } from "../../store/store";
 const Create = () => {
-  const contact = useSelector((state:AppState)=>state.contact.contact)
+  const contact = useSelector((state: AppState) => state.contact.contact)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -42,25 +42,26 @@ const Create = () => {
       toast.success("Contact created successfully");
       navigate("/contacts");
     } catch (err) {
-      toast.error(contact.error?.error||"Something Went Wrong");
+      toast.error(contact.error?.error || "Something Went Wrong");
     } finally {
       setLoading(false);
     }
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Contact
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Name"
           name="name"
-          className="mb-8"
+          className="mb-2"
           variant="outlined"
           fullWidth
           value={formData.name}
@@ -72,10 +73,11 @@ const Create = () => {
         />
 
         <TextField
+          size='small'
           label="Email"
           name="email"
           type="email"
-          className="mb-8"
+          className="mb-2"
           variant="outlined"
           fullWidth
           value={formData.email}
@@ -86,9 +88,10 @@ const Create = () => {
 
         />
         <TextField
+          size='small'
           label="address"
           name="address"
-          className="mb-8"
+          className="mb-2"
           variant="outlined"
           fullWidth
           value={formData.address}
@@ -100,9 +103,10 @@ const Create = () => {
         />
 
         <TextField
+          size='small'
           label="Phone No."
           name="phone_no"
-          className="mb-8"
+          className="mb-2"
           variant="outlined"
           fullWidth
           value={formData.phone_no}
@@ -111,18 +115,32 @@ const Create = () => {
           disabled={loading}
           helperText={contact?.error?.phone_no || ""}
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Contact"}
-        </Button>
-        
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/contacts'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

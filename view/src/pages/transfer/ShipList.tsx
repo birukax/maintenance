@@ -27,29 +27,29 @@ const ShipList = () => {
     detailSelector: (state: AppState) => state.transfer.transfer,
     fetchDetailAction: fetchTransfer,
   });
-  const [errorCount,setErrorCount]=useState([])
+  const [errorCount, setErrorCount] = useState([])
   const [formData, setFormData] = useState({
-    shipped_items:[]
+    shipped_items: []
   });
-  const {id}=useParams()
+  const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>();
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
 
-  const handleRefresh=()=>{
+  const handleRefresh = () => {
     try {
       dispatch(fetchTransfer(id))
     } catch (error) {
       return error
-      
+
     }
   }
-  const handleSubmit=async (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await dispatch(shipTransfer({id,formData})).unwrap()
+      await dispatch(shipTransfer({ id, formData })).unwrap()
       navigate(`/transfer/detail/${id}`)
-    } catch (error) {      
+    } catch (error) {
       return error
     }
   }
@@ -57,7 +57,8 @@ const ShipList = () => {
     <>
       <>
         <Button
-        disabled={errorCount.find(el=>el===true)?true:false}
+          size='small'
+          disabled={errorCount.find(el => el === true) ? true : false}
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
@@ -69,39 +70,39 @@ const ShipList = () => {
     </>
   );
 
-  
+
 
   const handleFormChange = async (data) => {
-    
-    let item=formData?.shipped_items?.find(el=>el.item_id===data.item_id)
-    if(!item){
-      
-      setFormData(prev=>{
-      return {
-        ...prev,
-        shipped_items:[...prev?.shipped_items,data]
-      }
-    })
-    }else{
-      
-      setFormData(prev=>{
-      return {
-        ...prev,
-        shipped_items:[...prev?.shipped_items?.filter(el=>{
-          if(el.item_id===data.item_id){
-             el.quantity=data.quantity
-          }
+
+    let item = formData?.shipped_items?.find(el => el.item_id === data.item_id)
+    if (!item) {
+
+      setFormData(prev => {
+        return {
+          ...prev,
+          shipped_items: [...prev?.shipped_items, data]
+        }
+      })
+    } else {
+
+      setFormData(prev => {
+        return {
+          ...prev,
+          shipped_items: [...prev?.shipped_items?.filter(el => {
+            if (el.item_id === data.item_id) {
+              el.quantity = data.quantity
+            }
             return el
-        })]
-      }
-    })
+          })]
+        }
+      })
     }
-    
+
   };
 
   const renderDetails = (data) => (
     <>
-      <Table sx={{ minWidth: 650 }} aria-label={` table`}>
+      <Table size='small' sx={{ minWidth: 650 }} aria-label={` table`}>
         <TableHead>
           <TableRow>
             <TableCell>
@@ -131,8 +132,8 @@ const ShipList = () => {
         </TableHead>
         <TableBody>
           {data &&
-            data?.transfer_items?.map((row,index) => {
-              if(row.remaining_quantity>0) return <ShipListRows
+            data?.transfer_items?.map((row, index) => {
+              if (row.remaining_quantity > 0) return <ShipListRows
                 setErrorCount={setErrorCount}
                 errorCount={errorCount}
                 key={row.id}
@@ -140,10 +141,10 @@ const ShipList = () => {
                 index={index}
                 handleFormChange={handleFormChange}
               />
-})}
-{
-  data && data?.transfer_items?.every(el=>el.remaining_quantity<1)&&<TableRow><Typography>No Shippment Left</Typography></TableRow>
-}
+            })}
+          {
+            data && data?.transfer_items?.every(el => el.remaining_quantity < 1) && <TableRow><Typography>No Shippment Left</Typography></TableRow>
+          }
         </TableBody>
       </Table>
     </>

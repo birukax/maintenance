@@ -6,7 +6,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import EditIcon from '@mui/icons-material/Edit';
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.machine.machine,
@@ -15,8 +15,10 @@ const Detail = () => {
   const renderButtons = () => (
     <>
       <Button
+        size='small'
         variant="contained"
         component={Link}
+        startIcon={<EditIcon />}
         to={`/machine/edit/${entityState.id}`}
         className="bg-slate-700"
       >
@@ -47,13 +49,13 @@ const Detail = () => {
           <Typography variant="body1" className="text-slate-500">
             {data?.area?.plant?.name}
           </Typography>
-          </div>
+        </div>
         <div className="clmn">
           <Typography variant="h6">Area:</Typography>
           <Typography variant="body1" className="text-slate-500">
             {data?.area?.name}
           </Typography>
-          </div>
+        </div>
       </div>
 
 

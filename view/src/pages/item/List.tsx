@@ -1,9 +1,9 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
 import { fetchItems } from "../../store/slices/itemSlice";
-import { AppState,AppDispatch } from "../../store/store";
-import {useSelector, useDispatch } from "react-redux";
-import {useSearchParams} from "react-router-dom"
+import { AppState, AppDispatch } from "../../store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
@@ -21,46 +21,47 @@ const itemColumns = [
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [keyWord,setKeyWord]=useState("")
+  const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
-      (state: AppState) => state.item.items
-    );
-  const [params,setParams]=useState({
-    search:searchParams.get("search") ||"",
-    category:searchParams.get("category") ||"",
-    type:searchParams.get("type") ||"",
-    page:searchParams.get("page") || 1
+    (state: AppState) => state.item.items
+  );
+  const [params, setParams] = useState({
+    search: searchParams.get("search") || "",
+    // category:searchParams.get("category") ||"",
+    // type:searchParams.get("type") ||"",
+    page: searchParams.get("page") || 1
   })
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-      if (tokens) {
-        dispatch(fetchItems(params));
-        // setSearchParams(params)
-      }
-    },[]);
+    if (tokens) {
+      dispatch(fetchItems(params));
+      // setSearchParams(params)
+    }
+  }, []);
 
-    const handleRefresh = () => {
-     if (tokens) {
-       dispatch(fetchItems(params));
-   }}
+  const handleRefresh = () => {
+    if (tokens) {
+      dispatch(fetchItems(params));
+    }
+  }
 
-  const handleFilter=async (field,value)=>{
-    setSearchParams({ ...params});
-     setParams(prev=>{
-      return{
+  const handleFilter = async (field, value) => {
+    setSearchParams({ ...params });
+    setParams(prev => {
+      return {
         ...prev,
-        [field]:value
+        [field]: value
       }
     })
-    const parameters={
+    const parameters = {
       ...params,
       page: 1,
-      [field]:value
+      [field]: value
     }
-     setSearchParams({ ...parameters, [field]: value });
+    setSearchParams({ ...parameters, [field]: value });
     await dispatch(fetchItems(parameters));
-  
+
   }
 
   return (

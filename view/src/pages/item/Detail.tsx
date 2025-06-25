@@ -6,7 +6,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import EditIcon from '@mui/icons-material/Edit';
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.item.item,
@@ -15,20 +15,21 @@ const Detail = () => {
   const renderButtons = () => (
     <>
       <Button
+        size='small'
         variant="contained"
         component={Link}
+        startIcon={<EditIcon />}
         to={`/item/edit/${entityState.id}`}
-        className="bg-slate-700"
       >
         Edit
       </Button>
     </>
   );
 
-  
+
   const renderDetails = (data) => (
     <>
-    <h2>Primary Information</h2>
+      <h2>Primary Information</h2>
       <div className="rw">
         <div className="clmn">
           <Typography variant="h6">ID:</Typography>
@@ -85,18 +86,18 @@ const Detail = () => {
           <Typography variant="body1" className="text-slate-500">
             {data.row && data.row?.name}
           </Typography>
-          </div>
+        </div>
         <div className="clmn"><Typography variant="h6">Shelf Box:</Typography>
           <Typography variant="body1" className="text-slate-500">
             {data.box && data.box?.name}
           </Typography>
-          </div>
+        </div>
       </div>
       <h2>Detail</h2>
       <div className="rw">
-        <div className="clmn" style={{width:"100%",overflow:"scroll"}}>
-        <Typography variant="h6">Suppliers:</Typography>
-          <Table sx={{ width:"100%" }} className="table">
+        <div className="clmn" style={{ width: "100%", overflow: "scroll" }}>
+          <Typography variant="h6">Suppliers:</Typography>
+          <Table sx={{ width: "100%" }} className="table">
             <TableHead>
               <TableRow>
                 <TableCell >
@@ -111,18 +112,28 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {data.suppliers && data.suppliers?.map((supplier, index) => {
-              return (
+              {data?.suppliers?.length > 0 ? data.suppliers?.map((supplier, index) => {
+                return (
                   <TableRow key={supplier.id}>
                     <TableCell>{supplier.name}</TableCell>
                     <TableCell>{supplier.email}</TableCell>
                     <TableCell>{supplier.phone_no}</TableCell>
                   </TableRow>
-              );
-            })}
-                </TableBody>
+                );
+              })
+                :
+                <TableRow>
+                  <TableCell size='small' className='!border-0'>
+                    <Typography color='primary' className='text-base ml-4'>
+                      There are no suppliers for this customer!
+
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              }
+            </TableBody>
           </Table>
-          </div>
+        </div>
       </div>
 
     </>

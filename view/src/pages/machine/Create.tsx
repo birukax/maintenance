@@ -5,7 +5,7 @@ import { createMachine } from "../../store/slices/machineSlice";
 import { fetchPlants } from "../../store/slices/plantSlice";
 import { fetchAreas } from "../../store/slices/areaSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -26,8 +26,8 @@ const Create = () => {
     area_id: "",
     code: "",
   });
-  const machine = useSelector((state:AppState)=>state.machine.machine)
-  const [selectedPlant,setSelectedPlant]=useState("")
+  const machine = useSelector((state: AppState) => state.machine.machine)
+  const [selectedPlant, setSelectedPlant] = useState("")
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,7 +35,7 @@ const Create = () => {
   const { areas } = useSelector((state: AppState) => state.area);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -46,7 +46,7 @@ const params = {
   }, []);
 
 
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -60,7 +60,7 @@ const params = {
       toast.success("Machine created successfully");
       navigate("/machines");
     } catch (err) {
-      toast.error(machine.error?.error||"Something Went Wrong");
+      toast.error(machine.error?.error || "Something Went Wrong");
 
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -68,33 +68,34 @@ const params = {
     }
   };
 
-  
+
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Machine
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={plants.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Plant"
-          placeholder="Search plants..."
-          required
-          helperText={machine.error?.plant_id}
+                {...params}
+                variant="outlined"
+                label="Plant"
+                placeholder="Search plants..."
+                required
+                helperText={machine.error?.plant_id}
               />
             )}
             id="plant-select"
-            value={Array.isArray(plants.data)&&plants.data?.find((plant) => plant.id === selectedPlant) || null}
+            value={Array.isArray(plants.data) && plants.data?.find((plant) => plant.id === selectedPlant) || null}
             onChange={(event, newValue) => {
               setSelectedPlant(newValue ? newValue.id : "");
             }}
@@ -103,20 +104,21 @@ const params = {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={
               areas.data
-          ? areas.data.filter((area) => area.plant.id === selectedPlant)
-          : []
+                ? areas.data.filter((area) => area.plant.id === selectedPlant)
+                : []
             }
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Area"
-          placeholder="Search areas..."
-          required
-          helperText={machine.error?.area_id}
+                {...params}
+                variant="outlined"
+                label="Area"
+                placeholder="Search areas..."
+                required
+                helperText={machine.error?.area_id}
               />
             )}
             id="area-select"
@@ -125,14 +127,15 @@ const params = {
             }
             onChange={(event, newValue) => {
               setFormData({
-          ...formData,
-          area_id: newValue ? newValue.id : "",
+                ...formData,
+                area_id: newValue ? newValue.id : "",
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
         <TextField
+          size='small'
           multiline
           label="Code"
           name="code"
@@ -146,6 +149,7 @@ const params = {
           helperText={machine.error?.code}
         />
         <TextField
+          size='small'
           multiline
           label="Name"
           name="name"
@@ -158,17 +162,32 @@ const params = {
           disabled={loading}
           helperText={machine.error?.name}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Machine"}
-        </Button>
-         
+        <div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/machines'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

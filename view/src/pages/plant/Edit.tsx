@@ -21,7 +21,7 @@ const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
-  const plant = useSelector((state:AppState)=>state.plant.plant)
+  const plant = useSelector((state: AppState) => state.plant.plant)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -37,11 +37,11 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: plant.data?.name,
     });
-  },[plant])
+  }, [plant])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -57,7 +57,7 @@ setFormData({
       toast.success("Plant edited successfully");
       navigate(`/plant/detail/${plant.data.id}`);
     } catch (err) {
-      toast.error(plant.error?.error||"Something Went Wrong");
+      toast.error(plant.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ setFormData({
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Name"
@@ -83,7 +83,7 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={plant.error?.name||""}
+          helperText={plant.error?.name || ""}
         />
 
         <Button
@@ -96,7 +96,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Plant"}
         </Button>
-         
+
       </Box>
     </Container>
   );

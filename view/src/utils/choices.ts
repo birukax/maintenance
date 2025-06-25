@@ -55,10 +55,10 @@ export const SCHEDULE_TYPES = [
 ] as const;
 
 export const Roles = [
-"USER",
-"ADMIN",
-"MANAGER", 
-"PLANNER",
-"SUPERVISOR",
-"ENGINEER",
+    "USER",
+    "ADMIN",
+    "MANAGER",
+    "PLANNER",
+    "SUPERVISOR",
+    "ENGINEER",
 ] as const;

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { createItem } from "../../store/slices/itemSlice";
 import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
+import { Link } from "react-router-dom";
 import { ITEM_TYPES, ITEM_CATEGORIES } from "../../utils/choices";
 import { fetchShelves } from "../../store/slices/shelfSlice";
 import {
@@ -30,11 +30,11 @@ const Create = () => {
     uom_id: "",
     type: "",
     category: "",
-    shelf_id:"",
-    row_id:"",
-    box_id:"",
+    shelf_id: "",
+    row_id: "",
+    box_id: "",
     minimum_stock_level: 0,
-    suppliers_id:[]
+    suppliers_id: []
   });
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -44,11 +44,11 @@ const Create = () => {
   const { unitOfMeasures } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
-  const item = useSelector((state:AppState)=>state.item.item)
+  const item = useSelector((state: AppState) => state.item.item)
 
-    const { shelves } = useSelector((state: AppState) => state.shelf);
-    const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
-    const { shelfBoxes } = useSelector((state: AppState) => state.shelfBox);
+  const { shelves } = useSelector((state: AppState) => state.shelf);
+  const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
+  const { shelfBoxes } = useSelector((state: AppState) => state.shelfBox);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -70,11 +70,11 @@ const Create = () => {
 
     dispatch(fetchUnitOfMeasures(params));
     dispatch(fetchContacts(params));
-            dispatch(fetchShelves(params));
-                    dispatch(fetchShelfRows(params));
-                    dispatch(fetchShelfBoxes(params));
-            
-    
+    dispatch(fetchShelves(params));
+    dispatch(fetchShelfRows(params));
+    dispatch(fetchShelfBoxes(params));
+
+
   }, []);
 
   const handleChange = (e) => {
@@ -100,7 +100,7 @@ const Create = () => {
       toast.success("Item created successfully");
       navigate("/items");
     } catch (err) {
-      toast.error(item.error?.error||"Something Went Wrong");
+      toast.error(item.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -114,24 +114,25 @@ const Create = () => {
   const selectedSuppliers = useMemo(() => {
     return Array.isArray(supplierOptions)
       ? supplierOptions?.filter((option) =>
-          formData.suppliers_id.includes(option.id)
-        )
+        formData.suppliers_id.includes(option.id)
+      )
       : [];
   }, [formData.suppliers_id, supplierOptions]);
-  
 
-  
+
+
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Item
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -145,24 +146,25 @@ const Create = () => {
         />
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
+            size='small'
             options={Array.isArray(unitOfMeasures.data) ? unitOfMeasures.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Unit of Measure"
-          placeholder="Search unit of measure..."
-          required
-          helperText={item.error?.uom_id}
+                {...params}
+                variant="outlined"
+                label="Unit of Measure"
+                placeholder="Search unit of measure..."
+                required
+                helperText={item.error?.uom_id}
 
               />
             )}
             id="uom-select"
             value={
               Array.isArray(unitOfMeasures.data)
-          ? unitOfMeasures.data.find((uom) => uom.id === formData.uom_id)
-          : null
+                ? unitOfMeasures.data.find((uom) => uom.id === formData.uom_id)
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, uom_id: newValue ? newValue.id : "" });
@@ -172,16 +174,16 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
-          
+            size='small'
             options={item_types}
             getOptionLabel={(option) => option.label || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Item Type"
-          placeholder="Search item types..."
-          helperText={item.error?.type}
+                {...params}
+                variant="outlined"
+                label="Item Type"
+                placeholder="Search item types..."
+                helperText={item.error?.type}
 
               />
             )}
@@ -197,16 +199,17 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={item_categories}
             getOptionLabel={(option) => option.label || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Item Category"
-          placeholder="Search item categories..."
-          helperText={item.error?.category}
-          required
+                {...params}
+                variant="outlined"
+                label="Item Category"
+                placeholder="Search item categories..."
+                helperText={item.error?.category}
+                required
 
               />
             )}
@@ -222,24 +225,25 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
+            size='small'
             options={Array.isArray(shelves.data) ? shelves.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf"
-          placeholder="Search shelves..."
-          required
-          helperText={item.error?.shelf}
+                {...params}
+                variant="outlined"
+                label="Shelf"
+                placeholder="Search shelves..."
+                required
+                helperText={item.error?.shelf}
 
               />
             )}
             id="shelf-select"
             value={
               Array.isArray(shelves.data)
-          ? shelves.data.find((shelf) => shelf.id === formData.shelf_id)
-          : null
+                ? shelves.data.find((shelf) => shelf.id === formData.shelf_id)
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
@@ -250,27 +254,27 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
-            
-            options={Array.isArray(shelfRows.data)&&shelfRows.data ?.filter(
+            size='small'
+            options={Array.isArray(shelfRows.data) && shelfRows.data?.filter(
               (shelfRow) => shelfRow?.shelf?.id === formData.shelf_id
             ) || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf Row"
-          placeholder="Search shelf rows..."
-          required
-          helperText={item.error?.row}
+                {...params}
+                variant="outlined"
+                label="Shelf Row"
+                placeholder="Search shelf rows..."
+                required
+                helperText={item.error?.row}
 
               />
             )}
             id="shelf-row-select"
             value={
               Array.isArray(shelfRows.data)
-          ? shelfRows.data.find((row) => row.id === formData.row_id)
-          : null
+                ? shelfRows.data.find((row) => row.id === formData.row_id)
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
@@ -281,26 +285,27 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
-            options={Array.isArray(shelfBoxes.data)&&shelfBoxes.data ?.filter(
+            size='small'
+            options={Array.isArray(shelfBoxes.data) && shelfBoxes.data?.filter(
               (shelfBox) => shelfBox?.row?.id === formData.row_id
             ) || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Shelf Box"
-          placeholder="Search shelf boxes..."
-          required
-          helperText={item.error?.box}
+                {...params}
+                variant="outlined"
+                label="Shelf Box"
+                placeholder="Search shelf boxes..."
+                required
+                helperText={item.error?.box}
 
               />
             )}
             id="shelf-box-select"
             value={
               Array.isArray(shelfBoxes.data)
-          ? shelfBoxes.data.find((box) => box.id === formData.box_id)
-          : null
+                ? shelfBoxes.data.find((box) => box.id === formData.box_id)
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, box_id: newValue ? newValue.id : "" });
@@ -310,6 +315,7 @@ const Create = () => {
           />
         </FormControl>
         <TextField
+          size='small'
           label="Minimum Stock Level"
           name="minimum_stock_level"
           type="number"
@@ -328,39 +334,54 @@ const Create = () => {
 
         />
         <FormControl fullWidth variant="outlined" disabled={loading}>
-                        <Autocomplete
-                          multiple
-                          options={supplierOptions && supplierOptions}
-                          getOptionLabel={(option) => option.name}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              label="Suppliers"
-                              placeholder="Search suppliers..."
-                              helperText={item.error?.supplier}
+          <Autocomplete
+            size='small'
+            multiple
+            options={supplierOptions && supplierOptions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Suppliers"
+                placeholder="Search suppliers..."
+                helperText={item.error?.supplier}
 
-                            />
-                          )}
-                          id="supplier-autocomplete"
-                          value={selectedSuppliers}
-                          onChange={(event, newValue) =>
-                            handleAutocompleteChange("suppliers_id", newValue)
-                          }
-                        ></Autocomplete>
-                      </FormControl>
-                      
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Item"}
-        </Button>
-         
+              />
+            )}
+            id="supplier-autocomplete"
+            value={selectedSuppliers}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("suppliers_id", newValue)
+            }
+          ></Autocomplete>
+        </FormControl>
+        <div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/items'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

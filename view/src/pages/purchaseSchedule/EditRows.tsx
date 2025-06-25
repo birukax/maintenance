@@ -20,22 +20,22 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
     november: row.november || 0,
     december: row.december || 0,
   });
-  const purchase_schedule = useSelector((state:AppState)=>state.purchaseSchedule.purchaseSchedule)
+  const purchase_schedule = useSelector((state: AppState) => state.purchaseSchedule.purchaseSchedule)
 
   useEffect(() => {
     setQuantity(
-        Number(monthValue.january) +
-          Number(monthValue.february) +
-          Number(monthValue.march) +
-          Number(monthValue.april) +
-          Number(monthValue.may) +
-          Number(monthValue.june) +
-          Number(monthValue.july) +
-          Number(monthValue.august) +
-          Number(monthValue.september) +
-          Number(monthValue.october) +
-          Number(monthValue.november) +
-          Number(monthValue.december)
+      Number(monthValue.january) +
+      Number(monthValue.february) +
+      Number(monthValue.march) +
+      Number(monthValue.april) +
+      Number(monthValue.may) +
+      Number(monthValue.june) +
+      Number(monthValue.july) +
+      Number(monthValue.august) +
+      Number(monthValue.september) +
+      Number(monthValue.october) +
+      Number(monthValue.november) +
+      Number(monthValue.december)
     );
   }, [
     monthValue.january,
@@ -67,12 +67,13 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
       <TableCell align="left">{row?.item?.minimum_stock_level}</TableCell>
       <TableCell align="left">{row?.year?.no}</TableCell>
       <TableCell align="left">{quantity}</TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="january"
           type="number"
           value={monthValue.january}
-          helperText={purchase_schedule.error?.january||""}
+          helperText={purchase_schedule.error?.january || ""}
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
             setMonthValue({ ...monthValue, january: value });
@@ -84,15 +85,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="february"
           type="number"
           value={monthValue.february}
-          helperText={purchase_schedule.error?.february||""}
+          helperText={purchase_schedule.error?.february || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -105,15 +107,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="march"
           type="number"
           value={monthValue.march}
-          helperText={purchase_schedule.error?.march||""}
+          helperText={purchase_schedule.error?.march || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -126,15 +129,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="april"
           type="number"
           value={monthValue.april}
-          helperText={purchase_schedule.error?.april||""}
+          helperText={purchase_schedule.error?.april || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -147,15 +151,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="may"
           type="number"
           value={monthValue.may}
-          helperText={purchase_schedule.error?.may||""}
+          helperText={purchase_schedule.error?.may || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -168,15 +173,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="june"
           type="number"
           value={monthValue.june}
-          helperText={purchase_schedule.error?.june||""}
+          helperText={purchase_schedule.error?.june || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -189,15 +195,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="july"
           type="number"
           value={monthValue.july}
-          helperText={purchase_schedule.error?.july||""}
+          helperText={purchase_schedule.error?.july || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -210,15 +217,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="august"
           type="number"
           value={monthValue.august}
-          helperText={purchase_schedule.error?.august||""}
+          helperText={purchase_schedule.error?.august || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -231,15 +239,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="september"
           type="number"
           value={monthValue.september}
-          helperText={purchase_schedule.error?.september||""}
+          helperText={purchase_schedule.error?.september || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -252,15 +261,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="october"
           type="number"
           value={monthValue.october}
-          helperText={purchase_schedule.error?.october||""}
+          helperText={purchase_schedule.error?.october || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -273,15 +283,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="november"
           type="number"
           value={monthValue.november}
-          helperText={purchase_schedule.error?.november||""}
+          helperText={purchase_schedule.error?.november || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -294,15 +305,16 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
-      <TableCell align="left" style={{ padding: "8px" }}>
+      <TableCell align="left" >
         <TextField
+          size='small'
           name="december"
           type="number"
           value={monthValue.december}
-          helperText={purchase_schedule.error?.december||""}
+          helperText={purchase_schedule.error?.december || ""}
 
           onChange={(event) => {
             const value = Math.max(0, event?.target?.value);
@@ -315,11 +327,11 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
               Math.max(0, event?.target?.value)
             );
           }}
-          sx={{ width: "110px", minWidth: "fit-content" }}
+          className='w-28'
         />
       </TableCell>
 
-     
+
     </TableRow>
   );
 };

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { createPurchaseRequest } from "../../store/slices/purchaseRequestSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -26,14 +26,14 @@ const Create = () => {
     quantity: "",
     priority: "",
   });
-  const purchaseRequest = useSelector((state:AppState)=>state.purchaseRequest.purchaseRequest)
+  const purchaseRequest = useSelector((state: AppState) => state.purchaseRequest.purchaseRequest)
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -55,7 +55,7 @@ const params = {
       toast.success("Purchase Request created successfully");
       navigate("/purchase-requests");
     } catch (err) {
-      toast.error(purchaseRequest.error?.error||"Something Went Wrong");
+      toast.error(purchaseRequest.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -63,16 +63,17 @@ const params = {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Purchase Request
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={items.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -86,7 +87,7 @@ const params = {
               />
             )}
             id="item-select"
-            value={Array.isArray(items.data)&&items.data?.find((item) => item.id === formData.item_id) || null}
+            value={Array.isArray(items.data) && items.data?.find((item) => item.id === formData.item_id) || null}
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,
@@ -96,25 +97,27 @@ const params = {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="priority-select-label">Priority</InputLabel>
           <Select
+            size='small'
             labelId="priority-select-label"
             id="priority-select"
             name="priority"
             value={formData.priority}
             onChange={handleChange}
             label="Priority"
-            
+
           >
-            {PRIORITIES.map((priority,index) => (
-                <MenuItem key={index} value={priority[0]}>
-                  {priority[0]}
-                </MenuItem>
-              ))}
+            {PRIORITIES.map((priority, index) => (
+              <MenuItem key={index} value={priority[0]}>
+                {priority[0]}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <TextField
+          size='small'
           label="Quantity"
           name="quantity"
           type="number"
@@ -132,17 +135,32 @@ const params = {
           helperText={purchaseRequest.error?.quantity}
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Item"}
-        </Button>
-         
+        <div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/purchase-requests'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

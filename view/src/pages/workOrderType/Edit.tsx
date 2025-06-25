@@ -16,7 +16,9 @@ import {
   Switch,
   Box,
 } from "@mui/material";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +27,7 @@ const Edit = () => {
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const workOrderType = useSelector((state:AppState)=>state.workOrderType.workOrderType)
+  const workOrderType = useSelector((state: AppState) => state.workOrderType.workOrderType)
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -42,13 +44,13 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: workOrderType?.data?.name,
       scheduled: workOrderType?.data?.scheduled,
       breakdown: workOrderType?.data?.breakdown,
     });
-  },[workOrderType])
+  }, [workOrderType])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,7 +67,7 @@ setFormData({
       toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data.id}`);
     } catch (err) {
-      toast.error(workOrderType.error?.error||"Something Went Wrong");
+      toast.error(workOrderType.error?.error || "Something Went Wrong");
       // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -74,15 +76,21 @@ setFormData({
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit WorkOrderType
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-2! ">
+          Edit Work Order Type
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {workOrderType?.data?.code}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
-         <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+        <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
           <FormControlLabel
             labelPlacement="start"
             label="Scheduled"
@@ -90,13 +98,14 @@ setFormData({
               <Switch
                 name="scheduled"
                 checked={formData.scheduled}
-                onChange={(e) =>{
-                  if(formData.breakdown===true){
-                    setFormData({ ...formData, scheduled: e.target.checked ,breakdown: false})
-                  }else{
+                onChange={(e) => {
+                  if (formData.breakdown === true) {
+                    setFormData({ ...formData, scheduled: e.target.checked, breakdown: false })
+                  } else {
                     setFormData({ ...formData, scheduled: e.target.checked })
-                                  }                }
-                  
+                  }
+                }
+
                 }
                 disabled={loading}
               />
@@ -109,10 +118,10 @@ setFormData({
               <Switch
                 name="breakdown"
                 checked={formData.breakdown || false}
-                onChange={(e) =>{
-                  if(formData.scheduled===true){
-                    setFormData({ ...formData, breakdown: e.target.checked ,scheduled: false})
-                  }else{
+                onChange={(e) => {
+                  if (formData.scheduled === true) {
+                    setFormData({ ...formData, breakdown: e.target.checked, scheduled: false })
+                  } else {
                     setFormData({ ...formData, breakdown: e.target.checked })
                   }
                 }
@@ -123,6 +132,7 @@ setFormData({
           />
         </Box>
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -132,20 +142,35 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={workOrderType.error?.name||""}
+          helperText={workOrderType.error?.name || ""}
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Work Order Type"}
-        </Button>
-         
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={workOrderType.loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/work-order-type/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={workOrderType.loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

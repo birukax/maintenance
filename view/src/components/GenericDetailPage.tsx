@@ -12,7 +12,7 @@ export function GenericDetailPage({
   id,
   renderButtons,
   renderDetails,
-  formDetail=false,
+  formDetail = false,
 }) {
   const { tokens } = useSelector((state: AppState) => state.auth);
 
@@ -27,7 +27,7 @@ export function GenericDetailPage({
 
   return (
     <Container>
-      <Typography variant="h4" className="mb-6 text-slate-800">
+      <Typography variant="h6" color='warning' className="mb-2! uppercase tracking-tight!">
         {titleBase} Detail
       </Typography>
 

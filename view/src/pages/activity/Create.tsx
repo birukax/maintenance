@@ -25,7 +25,7 @@ const Create = () => {
     activity_type_id: "",
     name: "",
   });
-  const activity = useSelector((state:AppState)=>state.activity.activity)
+  const activity = useSelector((state: AppState) => state.activity.activity)
   const [loading, setLoading] = useState(false);
   const { activityTypes } = useSelector(
     (state: AppState) => state.activityType
@@ -54,7 +54,7 @@ const Create = () => {
       toast.success("Activity created successfully");
       navigate("/activities");
     } catch (err) {
-      toast.error(activity.error?.error||"Something Went Wrong");
+      toast.error(activity.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -68,7 +68,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Code"
@@ -101,24 +101,24 @@ const Create = () => {
             getOptionLabel={(option) => (option.code ? `${option.code} - ${option.name}` : option.name || "")}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Activity Type"
-          placeholder="Search activity types..."
-          required
-          helperText={activity.error?.activity_type_id}
+                {...params}
+                variant="outlined"
+                label="Activity Type"
+                placeholder="Search activity types..."
+                required
+                helperText={activity.error?.activity_type_id}
               />
             )}
             id="activity-type-select"
             value={
-              Array.isArray(activityTypes.data)&&activityTypes.data?.find(
-          (activityType) => activityType.id === formData.activity_type_id
+              Array.isArray(activityTypes.data) && activityTypes.data?.find(
+                (activityType) => activityType.id === formData.activity_type_id
               ) || null
             }
             onChange={(event, newValue) => {
               setFormData({
-          ...formData,
-          activity_type_id: newValue ? newValue.id : "",
+                ...formData,
+                activity_type_id: newValue ? newValue.id : "",
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -148,7 +148,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Activity"}
         </Button>
-         
+
       </Box>
     </Container>
   );

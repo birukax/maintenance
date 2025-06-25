@@ -24,40 +24,40 @@ const style = {
   p: 4,
 };
 
-const EditActivity = ({ entityState, setModalOpen,handleRefresh,editId }) => {
-  
+const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
+
   const activity = useSelector((state: AppState) => state.activity.activity);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({
-    description:activity.data?.description|| "" 
+    description: activity.data?.description || ""
   });
 
 
-  const getActivity= ()=>{
-     dispatch(fetchActivity(Number(editId)))
+  const getActivity = () => {
+    dispatch(fetchActivity(Number(editId)))
   }
   useEffect(() => {
     // Ifactivity_id changes, update formData
     getActivity()
   }, [editId]);
-  
-  useEffect(()=>{
 
-    setFormData((prev) => ({ ...prev,description:activity.data?.description|| "" }));
-  },[activity])
+  useEffect(() => {
+
+    setFormData((prev) => ({ ...prev, description: activity.data?.description || "" }));
+  }, [activity])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    const id=editId.toString()
-    await dispatch(updateActivity({id,formData})); // Uncomment if needed
-    if(!activity.error){
+    const id = editId.toString()
+    await dispatch(updateActivity({ id, formData })); // Uncomment if needed
+    if (!activity.error) {
       setModalOpen(false);
     }
     handleRefresh()
@@ -65,7 +65,7 @@ const EditActivity = ({ entityState, setModalOpen,handleRefresh,editId }) => {
 
 
 
-  
+
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h4" className="mb-6 text-gray-800">
@@ -75,7 +75,7 @@ const EditActivity = ({ entityState, setModalOpen,handleRefresh,editId }) => {
         component="form"
         onSubmit={handleSubmit}
         onChange={handleChange}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Description"

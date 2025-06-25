@@ -22,7 +22,7 @@ const Create = () => {
     code: "",
     name: "",
   });
-  const plant = useSelector((state:AppState)=>state.plant.plant)
+  const plant = useSelector((state: AppState) => state.plant.plant)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const Create = () => {
       toast.success("Plant created successfully");
       navigate("/plants");
     } catch (err) {
-      toast.error(plant.error?.error||"Something Went Wrong");
+      toast.error(plant.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ const Create = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Code"
@@ -93,7 +93,7 @@ const Create = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Create Plant"}
         </Button>
-         
+
       </Box>
     </Container>
   );

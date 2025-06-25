@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { createEquipment } from "../../store/slices/equipmentSlice";
 import { fetchMachines } from "../../store/slices/machineSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -62,16 +62,17 @@ const Create = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Equipment
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={machines.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -93,6 +94,7 @@ const Create = () => {
           />
         </FormControl>
         <TextField
+          size='small'
           multiline
           label="Code"
           name="code"
@@ -106,6 +108,7 @@ const Create = () => {
           helperText={equipment.error?.code || ""}
         />
         <TextField
+          size='small'
           multiline
           label="Name"
           name="name"
@@ -118,17 +121,32 @@ const Create = () => {
           disabled={loading}
           helperText={equipment.error?.name || ""}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Equipment"}
-        </Button>
+        <div className='flex gap-4'>
 
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/equipments'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

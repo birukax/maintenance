@@ -115,6 +115,42 @@ const AppLayout = ({ children }) => {
           <ListItemText primary="Contacts" />
         </ListItemButton>
 
+        <ListItemButton onClick={() => toggleSection("shelf")}>
+          <ListItemText primary="Shelf" />
+          {openSections.shelf ? (
+            <ExpandLessIcon color="primary" />
+          ) : (
+            <ExpandMoreIcon color="primary" />
+          )}
+        </ListItemButton>
+        {openSections.shelf && (
+          <List
+            component="div"
+            disablePadding
+            sx={{ minWidth: "fit-content" }}
+          >
+            <ListItemButton component={Link} to="/shelves" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <TableChartIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Shelf" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/shelf-rows" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <TableRowsIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Shelf Row" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/shelf-boxes" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <ArchiveIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Shelf Box" />
+            </ListItemButton>
+          </List>
+        )}
+
+
         <List>
           <ListItemButton onClick={() => toggleSection("inventory")}>
             <ListItemText primary="Inventory" />
@@ -349,40 +385,6 @@ const AppLayout = ({ children }) => {
               </ListItemButton>
             </List>
           )}
-          <ListItemButton onClick={() => toggleSection("shelf")}>
-            <ListItemText primary="Shelf" />
-            {openSections.shelf ? (
-              <ExpandLessIcon color="primary" />
-            ) : (
-              <ExpandMoreIcon color="primary" />
-            )}
-          </ListItemButton>
-          {openSections.shelf && (
-            <List
-              component="div"
-              disablePadding
-              sx={{ minWidth: "fit-content" }}
-            >
-              <ListItemButton component={Link} to="/shelves" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <TableChartIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Shelf" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/shelf-rows" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <TableRowsIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Shelf Row" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/shelf-boxes" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <ArchiveIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Shelf Box" />
-              </ListItemButton>
-            </List>
-          )}
 
           <ListItemButton component={Link} to="/users">
             <ListItemIcon>
@@ -423,26 +425,26 @@ const AppLayout = ({ children }) => {
           >
             <MenuIcon color="primary" />
           </IconButton>
-          <Typography
-            sx={{
-              color: "primary.dark",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: ".5rem",
-            }}
-            variant="h6"
-            noWrap
-            className="title-header"
+          <div
+            // style={{
+            //   color: "primary.dark",
+            //   display: "flex",
+            //   alignItems: "center",
+            //   justifyContent: "center",
+            //   gap: ".5rem",
+            // }}
+            className="title-header "
           >
-            <div className="navigate-back">
+            {/* <div className="navigate-back">
               <div className="back" onClick={() => navigate(-1)}>
-                <ArrowBackIcon sx={{ fontSize: 32, fill: "secondary" }} />
+                <ArrowBackIcon sx={{ fontSize: 28, fill: "secondary" }} />
               </div>
-            </div>
-            Maintenance System
-          </Typography>
-          <Button className="mt-4" variant="contained" onClick={handleLogout}>
+            </div> */}
+            <Typography color='primary' component='h1' variant='h6' className='uppercase text-base! sm:text-xl!'>
+              Maintenance System
+            </Typography>
+          </div>
+          <Button size='medium' className="mt-4" variant="contained" onClick={handleLogout}>
             Logout
           </Button>
         </Toolbar>

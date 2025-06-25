@@ -33,15 +33,15 @@ const style = {
 
 const Receive = ({ id, setModalOpen }) => {
   const [formData, setFormData] = useState({
-    location_id:"",
+    location_id: "",
     received_quantity: 0,
     received_date: "",
   });
-  const purchaseRequest = useSelector((state:AppState)=>state.purchaseRequest.purchaseRequest)
+  const purchaseRequest = useSelector((state: AppState) => state.purchaseRequest.purchaseRequest)
 
   const [loading, setLoading] = useState(false);
 
-    const { locations } = useSelector((state: AppState) => state.location);
+  const { locations } = useSelector((state: AppState) => state.location);
 
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -70,57 +70,59 @@ const Receive = ({ id, setModalOpen }) => {
       toast.success("Item received successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(purchaseRequest.error?.error||"Something Went Wrong");
+      toast.error(purchaseRequest.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || "Failed to receive the item.");
     }
   };
   useEffect(() => {
     const params = {
-    no_pagination: "true",
-  };
+      no_pagination: "true",
+    };
     if (purchaseRequest.error) {
       setError(purchaseRequest.error);
     }
     dispatch(fetchLocations(params))
   }, [purchaseRequest.error]);
 
-  
+
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-6 ">
         Receive Item
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={locations.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Location"
-          placeholder="Search locations..."
-          required
-          helperText={purchaseRequest.error?.location_id||""}
+                {...params}
+                variant="outlined"
+                label="Location"
+                placeholder="Search locations..."
+                required
+                helperText={purchaseRequest.error?.location_id || ""}
               />
             )}
             id="location-select"
-            value={Array.isArray(locations.data)&&locations.data?.find((location) => location.id === formData?.location_id) || null}
-          onChange={(_, newValue) => {
+            value={Array.isArray(locations.data) && locations.data?.find((location) => location.id === formData?.location_id) || null}
+            onChange={(_, newValue) => {
               setFormData({
-          ...formData,
-          location_id: newValue.id,
+                ...formData,
+                location_id: newValue.id,
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
         <TextField
+          size='small'
           label="Quantity"
           name="received_quantity"
           type="number"
@@ -132,13 +134,16 @@ const Receive = ({ id, setModalOpen }) => {
           required
           disabled={purchaseRequest.loading}
           inputProps={{ min: 0 }}
-          helperText={purchaseRequest.error?.received_quantity||""}
+          helperText={purchaseRequest.error?.received_quantity || ""}
 
         />
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+
+          dateAdapter={AdapterDayjs}>
           <DatePicker
             disableFuture
+            minDate={dayjs(purchaseRequest.data?.requested_date)}
             label="Receive Date"
             name="received_date"
             value={
@@ -147,17 +152,19 @@ const Receive = ({ id, setModalOpen }) => {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
                 disabled: purchaseRequest.loading,
-                helperText:purchaseRequest.error?.received_date||""
-,
+                helperText: purchaseRequest.error?.received_date || ""
+                ,
               },
             }}
           />
         </LocalizationProvider>
         <Button
+          size='small'
           type="submit"
           variant="contained"
           color="primary"

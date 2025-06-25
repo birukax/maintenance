@@ -25,17 +25,17 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { jwtDecode } from "jwt-decode";
 import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
 const Edit = () => {
-  const [searchParams,setSearchParams]=useSearchParams()
-  const [currentPage,setCurrentPage]=useState(searchParams.get("page")||1)
-  const {year}=useParams()
-const [loading,setLoading]=useState(true)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)
+  const { year } = useParams()
+  const [loading, setLoading] = useState(true)
   const [params, setParams] = useState({
     year__no: year || new Date().getFullYear(),
     search: searchParams.get("search") || "",
     page: searchParams.get("page") || 1,
   });
 
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const { purchaseSchedules } = useSelector(
     (state: AppState) => state.purchaseSchedule
   );
@@ -43,15 +43,15 @@ const [loading,setLoading]=useState(true)
 
   const renderButtons = () => <></>;
 
-  const fetch= async ()=>{
+  const fetch = async () => {
     await dispatch(fetchPurchaseSchedules(params)).unwrap();
     setLoading(false)
   }
   useEffect(() => {
-    fetch()    
+    fetch()
   }, []);
 
-const searchFilter = async (field, value) => {
+  const searchFilter = async (field, value) => {
     // Handle filter action here
     const parameters = {
       year__no: year,
@@ -64,7 +64,7 @@ const searchFilter = async (field, value) => {
 
     await dispatch(fetchPurchaseSchedules(parameters));
   };
-  
+
   const handleRefresh = async () => {
     try {
       await dispatch(fetchPurchaseSchedules(params)).unwrap();
@@ -105,30 +105,27 @@ const searchFilter = async (field, value) => {
     "November",
     "December",
   ];
-  
-    return (
-      <>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
+
+  return (
+    <>
+      <div
+        className='w-full flex gap-4 items-center mb-2'
+      >
+        <Button
+          size='small'
+          variant="contained"
+          onClick={() => {
+            navigate("/purchase-schedules")
           }}
+          sx={{ mr: 1 }}
         >
-        {purchaseSchedules.loading && <CircularProgress/>}
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate("/purchase-schedules")
-            }}
-            sx={{ mr: 1 }}
-          >
-            Save
-          </Button>
-        </div>
-        {!loading && <Table sx={{ minWidth: 650 }} aria-label={` table`}>
-          <TableHead>
+          Save
+        </Button>
+        {purchaseSchedules.loading && <CircularProgress />}
+      </div>
+      {!loading &&
+        <Table size='small' className='w-full' aria-label={`table`}>
+          <TableHead >
             <TableRow>
               {purchaseScheduleColumns.map((column) => (
                 <TableCell key={column}>
@@ -139,17 +136,17 @@ const searchFilter = async (field, value) => {
           </TableHead>
           <TableBody>
             {purchaseSchedules?.data?.results?.map((row) => (
-                <EditRows
-                  key={row.id}
-                  row={row}
-                  handleUpdateSchedule={handlePurchaseSchedule}
-                />
-              ))
+              <EditRows
+                key={row.id}
+                row={row}
+                handleUpdateSchedule={handlePurchaseSchedule}
+              />
+            ))
             }
           </TableBody>
         </Table>}
-        
-        <Pagination
+
+      <Pagination
         cur={currentPage}
         setCur={setCurrentPage}
         next={purchaseSchedules?.data?.next}
@@ -157,9 +154,9 @@ const searchFilter = async (field, value) => {
         count={purchaseSchedules?.data?.count}
         searchByPage={searchFilter}
       />
-      </>
-    );
-  
+    </>
+  );
+
 };
 
 export default Edit;

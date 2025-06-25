@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createArea } from "../../store/slices/areaSlice";
 import { fetchPlants } from "../../store/slices/plantSlice";
@@ -24,7 +24,7 @@ const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     name: "",
-    plant_id:""
+    plant_id: ""
   });
 
   const area = useSelector((state: AppState) => state.area.area);
@@ -34,15 +34,15 @@ const Create = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-const params = {
+  const params = {
     no_pagination: "true",
   };
 
-    useEffect(() => {
-      if (tokens) {
-        dispatch(fetchPlants(params));
-      }
-    }, []);
+  useEffect(() => {
+    if (tokens) {
+      dispatch(fetchPlants(params));
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +57,7 @@ const params = {
       toast.success("Area created successfully");
       navigate("/areas");
     } catch (err) {
-       toast.error(area.error?.error||"Something Went Wrong");
+      toast.error(area.error?.error || "Something Went Wrong");
 
       setError(err.response?.data.detail || err.message);
     } finally {
@@ -72,7 +72,7 @@ const params = {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
@@ -89,7 +89,7 @@ const params = {
               />
             )}
             id="plant-select"
-            value={Array.isArray(plants.data)&&plants.data?.find((plant) => plant.id === formData.plant_id) || null}
+            value={Array.isArray(plants.data) && plants.data?.find((plant) => plant.id === formData.plant_id) || null}
             onChange={(event, newValue) => {
               setFormData({ ...formData, plant_id: newValue ? newValue.id : "" });
             }}
@@ -106,7 +106,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-                helperText={area?.error?.code}
+          helperText={area?.error?.code}
 
         />
 
@@ -120,7 +120,7 @@ const params = {
           onChange={handleChange}
           required
           disabled={loading}
-                helperText={area?.error?.name}
+          helperText={area?.error?.name}
 
         />
 
@@ -134,7 +134,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Area"}
         </Button>
-         
+
       </Box>
     </Container>
   );

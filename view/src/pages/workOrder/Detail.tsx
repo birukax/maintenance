@@ -46,8 +46,9 @@ const Detail = () => {
 
             {
 
-            entityState.data.work_order_type?.scheduled === false &&
-            <Button
+              entityState.data.work_order_type?.scheduled === false &&
+              <Button
+                size='small'
                 onClick={() => navigate(`/work-order/${id}/add-activities`)}
                 variant="contained"
                 className="bg-slate-700"
@@ -75,6 +76,7 @@ const Detail = () => {
               />
             </Modal>
             <Button
+              size='small'
               onClick={handleAssignModalOpen}
               variant="contained"
               className="bg-slate-700"
@@ -82,7 +84,7 @@ const Detail = () => {
             >
               Assign User
             </Button>
-            
+
           </>
         )}
       {entityState.data?.status === "Assigned" && (

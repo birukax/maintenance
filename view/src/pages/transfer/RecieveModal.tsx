@@ -1,4 +1,4 @@
-import { useState, useEffect,useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { receiveTransfer } from "../../store/slices/transferSlice";
@@ -31,17 +31,17 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   minWidth: "fit-content",
-  width:"40%",
+  width: "40%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   padding: 2,
-  maxHeight:"400px",
-  overflow:"hidden",
+  maxHeight: "400px",
+  overflow: "hidden",
 
 };
 
-const AddActivity = ({ entityState,setReceiveModalOpen }) => {
+const AddActivity = ({ entityState, setReceiveModalOpen }) => {
   const [formData, setFormData] = useState({
     activity_ids: [],
   });
@@ -51,68 +51,68 @@ const AddActivity = ({ entityState,setReceiveModalOpen }) => {
 
 
 
-  const handlereceiveTransfer=async (id)=>{
-    
-    await dispatch(receiveTransfer({id})).unwrap()
+  const handlereceiveTransfer = async (id) => {
+
+    await dispatch(receiveTransfer({ id })).unwrap()
     setReceiveModalOpen(false)
   }
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography color='primary' variant="h5" className="mb-2!">
         Receive Transfer
       </Typography>
       <Box
-        sx={{maxWidth:"100%",height:"100%",overflow:"scroll"}}
+        sx={{ maxWidth: "100%", height: "100%", overflow: "scroll" }}
       >
-        <Table sx={{ maxWidth:"100%" }} aria-label={` table`}>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography noWrap>Item</Typography>
-            </TableCell>
+        <Table className='my-3!' size='small' sx={{ maxWidth: "100%" }} aria-label={` table`}>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Typography noWrap>Item</Typography>
+              </TableCell>
 
-            <TableCell>
-              <Typography noWrap>Requested Date</Typography>
-            </TableCell>
+              <TableCell>
+                <Typography noWrap>Requested Date</Typography>
+              </TableCell>
 
-            <TableCell>
-              <Typography noWrap>Requested Quantity</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography noWrap>Shipped Quantity</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {entityState &&
-            entityState.data.transfer_items.filter(el=>el.shipped_quantity>0).map((row,index) => (
-              <TableRow key={index}>
-            <TableCell>
-              <Typography noWrap>{row.item.name}</Typography>
-            </TableCell>
+              <TableCell>
+                <Typography noWrap>Requested Quantity</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography noWrap>Shipped Quantity</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {entityState &&
+              entityState.data.transfer_items.filter(el => el.shipped_quantity > 0).map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Typography noWrap>{row.item.name}</Typography>
+                  </TableCell>
 
-            <TableCell>
-              <Typography noWrap>{entityState?.data?.requested_date}</Typography>
-            </TableCell>
+                  <TableCell>
+                    <Typography noWrap>{entityState?.data?.requested_date}</Typography>
+                  </TableCell>
 
-            <TableCell>
-              <Typography noWrap>{row?.requested_quantity}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography noWrap>{row?.shipped_quantity}</Typography>
-            </TableCell>
-          </TableRow>
-            ))}
-          
-        </TableBody>
-      </Table>
+                  <TableCell>
+                    <Typography noWrap>{row?.requested_quantity}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography noWrap>{row?.shipped_quantity}</Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+
+          </TableBody>
+        </Table>
         <Button
           variant="contained"
           color="primary"
           fullWidth
           disabled={entityState.loading}
           className="mt-4"
-          onClick={()=>handlereceiveTransfer(entityState.data.id)}
+          onClick={() => handlereceiveTransfer(entityState.data.id)}
         >
           {entityState.loading ? (
             <CircularProgress size={24} />

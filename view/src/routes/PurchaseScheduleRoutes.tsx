@@ -2,7 +2,6 @@
 import { Route } from "react-router-dom";
 import CreatePurchaseSchedule from "../pages/purchaseSchedule/Create";
 import PurchaseScheduleList from "../pages/purchaseSchedule/List";
-import PurchaseScheduleDetail from "../pages/purchaseSchedule/Detail";
 import PurchaseScheduleEdit from "../pages/purchaseSchedule/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -22,15 +21,6 @@ const PurchaseScheduleRoutes = [
     element={
       <ProtectedRoute>
         <CreatePurchaseSchedule />
-      </ProtectedRoute>
-    }
-  />,
-  <Route
-    key="purchase-schedule-detail"
-    path="/purchase-schedule/detail/:id"
-    element={
-      <ProtectedRoute>
-        <PurchaseScheduleDetail />
       </ProtectedRoute>
     }
   />,

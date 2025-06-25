@@ -1,4 +1,4 @@
-import { useState, useEffect,useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { createBreakdownWorkOrder } from "../../store/slices/breakdownSlice";
@@ -44,11 +44,11 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
     start_date: "",
-    work_order_type_id:"",
-    activity_type_id:"",
-    total_time_required:null,
-    tools_required_id:[],
-    spareparts_required_id:[]
+    work_order_type_id: "",
+    activity_type_id: "",
+    total_time_required: null,
+    tools_required_id: [],
+    spareparts_required_id: []
   });
   const { breakdown } = useSelector((state: AppState) => state.breakdown);
   const [error, setError] = useState(null);
@@ -59,7 +59,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   const { workOrderTypes } = useSelector(
     (state: AppState) => state.workOrderType
   );
-const params = {
+  const params = {
     no_pagination: "true",
   };
 
@@ -68,34 +68,34 @@ const params = {
   const navigate = useNavigate();
 
   useEffect(() => {
-      dispatch(fetchWorkOrderTypes(params));
-      dispatch(fetchActivityTypes(params));
-      dispatch(fetchItems(params));
-    }, []);
+    dispatch(fetchWorkOrderTypes(params));
+    dispatch(fetchActivityTypes(params));
+    dispatch(fetchItems(params));
+  }, []);
 
-    const toolOptions = useMemo(() => {
-        return items.data
-          ? items.data.filter((item) => item.category === "TOOL")
-          : [];
-      }, [items.data]);
-    
-      const sparepartOptions = useMemo(() => {
-        return items.data
-          ? items.data.filter((item) => item.category === "SPAREPART")
-          : [];
-      }, [items.data]);
-    
-      const selectedSpareparts = useMemo(() => {
-        return sparepartOptions.filter((option) =>
-          formData.spareparts_required_id.includes(option.id)
-        );
-      }, [formData.spareparts_required_id, sparepartOptions]);
-    
-      const selectedTools = useMemo(() => {
-        return toolOptions.filter((option) =>
-          formData.tools_required_id.includes(option.id)
-        );
-      }, [formData.tools_required_id, toolOptions]);
+  const toolOptions = useMemo(() => {
+    return items.data
+      ? items.data.filter((item) => item.category === "TOOL")
+      : [];
+  }, [items.data]);
+
+  const sparepartOptions = useMemo(() => {
+    return items.data
+      ? items.data.filter((item) => item.category === "SPAREPART")
+      : [];
+  }, [items.data]);
+
+  const selectedSpareparts = useMemo(() => {
+    return sparepartOptions.filter((option) =>
+      formData.spareparts_required_id.includes(option.id)
+    );
+  }, [formData.spareparts_required_id, sparepartOptions]);
+
+  const selectedTools = useMemo(() => {
+    return toolOptions.filter((option) =>
+      formData.tools_required_id.includes(option.id)
+    );
+  }, [formData.tools_required_id, toolOptions]);
 
   const handleChange = (e) => {
 
@@ -130,7 +130,7 @@ const params = {
       toast.success("Breakdown Work Order created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(breakdown.error?.error||"Something Went Wrong");
+      toast.error(breakdown.error?.error || "Something Went Wrong");
       // setError(err.response?.data.detail || err.message);  
       setError(
         err.response?.data.detail || "Failed to create a breakdown work order."
@@ -145,11 +145,11 @@ const params = {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            minDate={dayjs(breakdown.data?.start_date)} 
+            minDate={dayjs(breakdown.data?.start_date)}
             label="Start Date"
             name="start_date"
             value={formData.start_date ? dayjs(formData.start_date) : null}
@@ -210,27 +210,27 @@ const params = {
           </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
-                        <Autocomplete
-                          multiple
-                          options={sparepartOptions}
-                          getOptionLabel={(option) => option.name}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              label="Spareparts Required"
-                              placeholder="Search spareparts..."
-                              helperText={breakdown.error?.spareparts_required_id ||""}
-                            />
-                          )}
-                          id="sparepart-autocomplete"
-                          value={selectedSpareparts}
-                          onChange={(event, newValue) =>
-                            handleAutocompleteChange("spareparts_required_id", newValue)
-                          }
-                        ></Autocomplete>
-                      </FormControl>
-                      <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
+          <Autocomplete
+            multiple
+            options={sparepartOptions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Spareparts Required"
+                placeholder="Search spareparts..."
+                helperText={breakdown.error?.spareparts_required_id || ""}
+              />
+            )}
+            id="sparepart-autocomplete"
+            value={selectedSpareparts}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("spareparts_required_id", newValue)
+            }
+          ></Autocomplete>
+        </FormControl>
+        <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
           <Autocomplete
             multiple
             options={toolOptions}
@@ -241,7 +241,7 @@ const params = {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
-                helperText={breakdown.error?.tools_required_id||""}
+                helperText={breakdown.error?.tools_required_id || ""}
               />
             )}
             id="tool-select"
@@ -252,19 +252,19 @@ const params = {
           ></Autocomplete>
         </FormControl>
         <TextField
-                  label="Total Time Required (In minutes)"
-                  name="total_time_required"
-                  type="number"
-                  className="mb-8"
-                  variant="outlined"
-                  fullWidth
-                  value={formData.total_time_required}
-                  onChange={handleChange}
-                  required
-                  disabled={breakdown.loading}
-                  helperText={breakdown.error?.total_time_required||""}
-                />
-        
+          label="Total Time Required (In minutes)"
+          name="total_time_required"
+          type="number"
+          className="mb-8"
+          variant="outlined"
+          fullWidth
+          value={formData.total_time_required}
+          onChange={handleChange}
+          required
+          disabled={breakdown.loading}
+          helperText={breakdown.error?.total_time_required || ""}
+        />
+
         <Button
           type="submit"
           variant="contained"
@@ -279,7 +279,7 @@ const params = {
             "Create Breakdown Work Order"
           )}
         </Button>
-        
+
       </Box>
     </Container>
   );

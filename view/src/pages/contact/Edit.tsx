@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   fetchContact,
   updateContact,
@@ -23,7 +24,7 @@ const Edit = () => {
     phone_no: "",
     address: "",
   });
-  const contact = useSelector((state:AppState)=>state.contact.contact)
+  const contact = useSelector((state: AppState) => state.contact.contact)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -41,13 +42,13 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       email: contact.data?.email,
       phone_no: contact.data?.phone_no,
       address: contact.data?.address,
     });
-  },[contact])
+  }, [contact])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -63,7 +64,7 @@ setFormData({
       toast.success("Contact edited successfully");
       navigate(`/contact/detail/${contact.data.id}`);
     } catch (err) {
-      toast.error(contact.error?.error||"Something Went Wrong");
+      toast.error(contact.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -71,15 +72,23 @@ setFormData({
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Contact
-      </Typography>
+      <div className='flex gap-4 '>
+
+        <Typography variant="h5" color='primary' className="mb-4! ">
+          Edit Contact
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {contact?.data?.name}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Email"
           name="email"
           type="email"
@@ -90,10 +99,11 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={contact.error?.email||""}
+          helperText={contact.error?.email || ""}
         />
-        
+
         <TextField
+          size='small'
           label="address"
           name="address"
           className="mb-8"
@@ -103,10 +113,11 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={contact.error?.address||""}
+          helperText={contact.error?.address || ""}
         />
 
         <TextField
+          size='small'
           label="Phone No."
           name="phone_no"
           className="mb-8"
@@ -116,20 +127,35 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={contact.error?.phone_no||""}
+          helperText={contact.error?.phone_no || ""}
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Contact"}
-        </Button>
-         
+        <div className='flex gap-4'>
+
+          <Button
+            type="submit"
+            size='small'
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/contact/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

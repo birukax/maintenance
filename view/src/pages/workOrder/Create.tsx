@@ -8,6 +8,7 @@ import { fetchEquipments } from "../../store/slices/equipmentSlice";
 import { fetchMachines } from "../../store/slices/machineSlice";
 import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
 import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -39,7 +40,7 @@ const Create = () => {
     total_days: 0,
     total_minutes: 0,
   });
-  const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
+  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
@@ -54,7 +55,7 @@ const Create = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -65,7 +66,7 @@ const params = {
     dispatch(fetchItems(params));
   }, []);
 
-  
+
   const toolOptions = useMemo(() => {
     return Array.isArray(items.data)
       ? items.data.filter((item) => item.category === "TOOL")
@@ -73,7 +74,7 @@ const params = {
   }, [items.data]);
 
   const sparepartOptions = useMemo(() => {
-    return Array.isArray(items.data)&&items.data
+    return Array.isArray(items.data) && items.data
       ? items.data.filter((item) => item.category === "SPAREPART")
       : [];
   }, [items.data]);
@@ -115,34 +116,34 @@ const params = {
     setLoading(true);
     setError(null);
 
-    if(formData?.total_days>0 ||formData?.total_hours>0 || formData?.total_minutes>0){
+    if (formData?.total_days > 0 || formData?.total_hours > 0 || formData?.total_minutes > 0) {
       try {
-      await dispatch(createWorkOrder(formData)).unwrap();
-      toast.success("Work Order created successfully");
-      navigate("/work-orders");
-    } catch (err) {
-      toast.error(workOrder.error?.error||"Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
-    }
-    }else{
+        await dispatch(createWorkOrder(formData)).unwrap();
+        toast.success("Work Order created successfully");
+        navigate("/work-orders");
+      } catch (err) {
+        toast.error(workOrder.error?.error || "Something Went Wrong");
+        setError(err.response?.data.detail || err.message);
+      } finally {
+        setLoading(false);
+      }
+    } else {
       toast.warning("At least one field of total time required must be greater than 0 ")
       setLoading(false);
     }
-    
+
   };
 
 
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Work Order
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -153,16 +154,18 @@ const params = {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                helperText: workOrder.error?.start_date||"",
+                helperText: workOrder.error?.start_date || "",
               },
             }}
           />
         </LocalizationProvider>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={machines.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -172,12 +175,12 @@ const params = {
                 label="Machine"
                 placeholder="Search machines..."
                 required
-                helperText={workOrder.error?.machine_id||""}
+                helperText={workOrder.error?.machine_id || ""}
 
               />
             )}
             id="machine-select"
-            value={ Array.isArray(machines.data)&& machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
             onChange={(event, newValue) => {
               setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
             }}
@@ -186,7 +189,8 @@ const params = {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
-            options={Array.isArray(equipments.data)&&equipments.data ?.filter(
+            size='small'
+            options={Array.isArray(equipments.data) && equipments.data?.filter(
               (equipment) => equipment.machine.id === formData.machine_id
             ) || []}
             getOptionLabel={(option) => option.name || ""}
@@ -196,12 +200,12 @@ const params = {
                 variant="outlined"
                 label="Equipment"
                 placeholder="Search equipments..."
-                helperText={workOrder.error?.equipment_id||""}
+                helperText={workOrder.error?.equipment_id || ""}
               />
             )}
             id="equipment-select"
             value={
-              Array.isArray(equipments.data)&&equipments.data?.find(
+              Array.isArray(equipments.data) && equipments.data?.find(
                 (equipment) => equipment.id === formData.equipment_id
               ) || null
             }
@@ -211,43 +215,44 @@ const params = {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        
+
 
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={
               Array.isArray(workOrderTypes.data)
-          ? workOrderTypes.data.filter(
-              (workOrderType) =>
-                workOrderType.scheduled === false &&
-                workOrderType.breakdown === false
-            )
-          : []
+                ? workOrderTypes.data.filter(
+                  (workOrderType) =>
+                    workOrderType.scheduled === false &&
+                    workOrderType.breakdown === false
+                )
+                : []
             }
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Work Order Type"
-          placeholder="Search work order types..."
-          required
-          helperText={workOrder.error?.work_order_type_id}
+                {...params}
+                variant="outlined"
+                label="Work Order Type"
+                placeholder="Search work order types..."
+                required
+                helperText={workOrder.error?.work_order_type_id}
               />
             )}
             id="work-order-type-select"
             value={
               Array.isArray(workOrderTypes.data)
-          ? workOrderTypes.data.find(
-              (workOrderType) =>
-                workOrderType.id === formData.work_order_type_id
-            ) || null
-          : null
+                ? workOrderTypes.data.find(
+                  (workOrderType) =>
+                    workOrderType.id === formData.work_order_type_id
+                ) || null
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({
-          ...formData,
-          work_order_type_id: newValue ? newValue.id : "",
+                ...formData,
+                work_order_type_id: newValue ? newValue.id : "",
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -255,12 +260,13 @@ const params = {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={
-              Array.isArray(activityTypes.data)&& activityTypes.data
-                ?Array.isArray(activityTypes.data)&& activityTypes.data.filter(
-                    (activityType) =>
-                      activityType.work_order_type.id === formData.work_order_type_id
-                  )
+              Array.isArray(activityTypes.data) && activityTypes.data
+                ? activityTypes.data.filter(
+                  (activityType) =>
+                    activityType.work_order_type?.id === formData.work_order_type_id
+                )
                 : []
             }
             getOptionLabel={(option) => option.name || ""}
@@ -271,15 +277,15 @@ const params = {
                 label="Activity Type"
                 placeholder="Search activity types..."
                 required
-                helperText={workOrder.error?.activity_type_id||""}
+                helperText={workOrder.error?.activity_type_id || ""}
               />
             )}
             id="activity-type-select"
             value={
               Array.isArray(activityTypes.data) && activityTypes.data
                 ? Array.isArray(activityTypes.data) && activityTypes.data.find(
-                    (activityType) => activityType.id === formData.activity_type_id
-                  ) || null
+                  (activityType) => activityType.id === formData.activity_type_id
+                ) || null
                 : null
             }
             onChange={(event, newValue) => {
@@ -292,37 +298,39 @@ const params = {
           />
         </FormControl>
 
-       
-
-              
-              <FormControl fullWidth variant="outlined" disabled={loading}>
-                <Autocomplete
-                  multiple
-                  options={sparepartOptions}
-                  getOptionLabel={(option) => option.name}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="Spareparts Required"
-                      placeholder="Search spareparts..."
-                      helperText={workOrder.error?.spareparts_required_id||""}
-                    />
-                  )}
-                  id="sparepart-autocomplete"
-                  value={selectedSpareparts}
-                  onChange={(event, newValue) =>
-                    handleAutocompleteChange("spareparts_required_id", newValue)
-                  }
-                ></Autocomplete>
-              </FormControl>
 
 
 
-
-        
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
+            multiple
+            options={sparepartOptions}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Spareparts Required"
+                placeholder="Search spareparts..."
+                helperText={workOrder.error?.spareparts_required_id || ""}
+              />
+            )}
+            id="sparepart-autocomplete"
+            value={selectedSpareparts}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("spareparts_required_id", newValue)
+            }
+          ></Autocomplete>
+        </FormControl>
+
+
+
+
+
+        <FormControl fullWidth variant="outlined" disabled={loading}>
+          <Autocomplete
+            size='small'
             multiple
             options={toolOptions}
             getOptionLabel={(option) => option.name}
@@ -332,7 +340,7 @@ const params = {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
-                helperText={workOrder.error?.tools_required_id||""}
+                helperText={workOrder.error?.tools_required_id || ""}
               />
             )}
             id="tool-select"
@@ -344,54 +352,71 @@ const params = {
         </FormControl>
 
         <div className="total-time-group">
-        <TextField
-          label="Total Days"
-          name="total_days"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.total_days}
-          onChange={handleChange}
-          disabled={loading}
-        />
-        <TextField
-          label="Total Hours"
-          name="total_hours"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.total_hours}
-          onChange={handleChange}
-          disabled={loading}
-        />
-        <TextField
-          label="Total Minutes"
-          name="total_minutes"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.total_minutes}
-          onChange={handleChange}
-          disabled={loading}
-        />
+          <TextField
+            size='small'
+            label="Total Days"
+            name="total_days"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.total_days}
+            onChange={handleChange}
+            disabled={loading}
+          />
+          <TextField
+            size='small'
+            label="Total Hours"
+            name="total_hours"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.total_hours}
+            onChange={handleChange}
+            disabled={loading}
+          />
+          <TextField
+            size='small'
+            label="Total Minutes"
+            name="total_minutes"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.total_minutes}
+            onChange={handleChange}
+            disabled={loading}
+          />
         </div>
 
-        
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Work Order"}
-        </Button>
-         
+        <div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/work-orders'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

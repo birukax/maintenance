@@ -95,27 +95,27 @@ const Submit = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
         sx={{ minWidth: "90%" }}
       >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                minDate={dayjs(entityState?.data?.start_date)}
-                label="End Date"
-                name="end_date"
-                value={formData.end_date ? dayjs(formData.end_date) : null}
-                onChange={handleDateChange}
-                slotProps={{
-                  textField: {
-                    variant: "outlined",
-                    fullWidth: true,
-                    required: true,
-                    disabled: entityState.loading,
-                    helperText: error,
-                  },
-                }}
-              />
-            </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            minDate={dayjs(entityState?.data?.start_date)}
+            label="End Date"
+            name="end_date"
+            value={formData.end_date ? dayjs(formData.end_date) : null}
+            onChange={handleDateChange}
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+                required: true,
+                disabled: entityState.loading,
+                helperText: error,
+              },
+            }}
+          />
+        </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimePicker
             label="Start Time"

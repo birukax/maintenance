@@ -12,43 +12,45 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.transfer.transfer,
     fetchDetailAction: fetchTransfer,
   });
-  const [receivemodalOpen,setReceiveModalOpen]=useState(false)
-  
+  const [receivemodalOpen, setReceiveModalOpen] = useState(false)
 
-  
+
+
   const renderButtons = () => (
     <>
       <>
-            <Modal
-              open={receivemodalOpen}
-              onClose={()=>setReceiveModalOpen(false)}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <ReceiveModal
-                entityState={entityState}
-                setReceiveModalOpen={setReceiveModalOpen}
-              />
-            </Modal>
-          </>
-          
-      <Button
-            onClick={()=>setReceiveModalOpen(true)}
-            variant="contained"
-            sx={{ mr: 1 }}
-          disabled={entityState?.data && entityState?.data?.transfer_items?.every(el=>Number(el.requested_quantity)===Number(el.received_quantity))||entityState?.data && entityState?.data?.transfer_items?.every(el=>el.shipped_quantity===0)?true:false }
-          >
-            Receive
-          </Button>
+        <Modal
+          open={receivemodalOpen}
+          onClose={() => setReceiveModalOpen(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <ReceiveModal
+            entityState={entityState}
+            setReceiveModalOpen={setReceiveModalOpen}
+          />
+        </Modal>
+      </>
 
-      {entityState?.data && entityState?.data?.transfer_items?.every(el=>el.remaining_quantity<1)?"":<Button
-            component={Link}
-            to={`/transfer/${entityState.data.id}/ship`}
-            variant="contained"
-            sx={{ mr: 1 }}
-          >
-            Ship
-          </Button>}
+      <Button
+        size='small'
+        onClick={() => setReceiveModalOpen(true)}
+        variant="contained"
+        sx={{ mr: 1 }}
+        disabled={entityState?.data && entityState?.data?.transfer_items?.every(el => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data && entityState?.data?.transfer_items?.every(el => el.shipped_quantity === 0) ? true : false}
+      >
+        Receive
+      </Button>
+
+      {entityState?.data && entityState?.data?.transfer_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
+        size='small'
+        component={Link}
+        to={`/transfer/${entityState.data.id}/ship`}
+        variant="contained"
+        sx={{ mr: 1 }}
+      >
+        Ship
+      </Button>}
     </>
   );
 
@@ -83,30 +85,30 @@ const Detail = () => {
             {data?.status}
           </Typography>
         </div>
-        {data?.approved_by?.name?
-        <div className="clmn">
+        {data?.approved_by?.name ?
+          <div className="clmn">
 
-          <Typography variant="h6">Approved By:</Typography>
-             <Typography
-                variant="body1"
-                className="text-slate-500 mb-2"
-              >
-                {data?.approved_by?.name}
-              </Typography>
-            
-        </div>:""}
-        {data?.approved_date?
-        <div className="clmn">
+            <Typography variant="h6">Approved By:</Typography>
+            <Typography
+              variant="body1"
+              className="text-slate-500 mb-2"
+            >
+              {data?.approved_by?.name}
+            </Typography>
 
-          <Typography variant="h6">Approved Date:</Typography>
-             <Typography
-                variant="body1"
-                className="text-slate-500 mb-2"
-              >
-                {data?.approved_date}
-              </Typography>
-            
-        </div>:""}
+          </div> : ""}
+        {data?.approved_date ?
+          <div className="clmn">
+
+            <Typography variant="h6">Approved Date:</Typography>
+            <Typography
+              variant="body1"
+              className="text-slate-500 mb-2"
+            >
+              {data?.approved_date}
+            </Typography>
+
+          </div> : ""}
       </div>
 
 
@@ -125,24 +127,24 @@ const Detail = () => {
         </div>
 
         {
-          entityState?.data?.shipment_date?
+          entityState?.data?.shipment_date ?
+            <div className="clmn">
+
+              <Typography variant="h6">Shipment Date:</Typography>
+              <Typography variant="body1" className="text-slate-500 mb-2">
+                {entityState?.data?.shipment_date}
+              </Typography>
+            </div> :
+            ""}
+
+        {data?.total_time_taken ?
           <div className="clmn">
 
-          <Typography variant="h6">Shipment Date:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState?.data?.shipment_date}
-          </Typography>
-        </div>:
-          ""}
-
-{data?.total_time_taken?
-        <div className="clmn">
-
-          <Typography variant="h6">Total Time Taken:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {data?.total_time_taken}
-          </Typography>
-        </div>:""}
+            <Typography variant="h6">Total Time Taken:</Typography>
+            <Typography variant="body1" className="text-slate-500 mb-2">
+              {data?.total_time_taken}
+            </Typography>
+          </div> : ""}
 
 
       </div>
@@ -151,7 +153,7 @@ const Detail = () => {
         <div className="clmn activities-clmn">
 
           <Typography variant="h6">Transfer Requested Items:</Typography>
-          <Table sx={{ width:"100%" }} className="table">
+          <Table size='small' sx={{ width: "100%" }} className="table">
             <TableHead>
               <TableRow>
                 <TableCell >
@@ -164,25 +166,29 @@ const Detail = () => {
                   <Typography noWrap>Shipped</Typography>
                 </TableCell>
                 <TableCell>
+                  <Typography noWrap>Shipped not Received</Typography>
+                </TableCell>
+                <TableCell>
                   <Typography noWrap>Received</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            {data?.transfer_items?.map((item) => {
-              return (
+              {data?.transfer_items?.map((item) => {
+                return (
                   <TableRow key={item.id}>
                     <TableCell>{item?.item?.name}</TableCell>
                     <TableCell>{item?.requested_quantity}</TableCell>
+                    <TableCell>{item?.total_shipped_quantity}</TableCell>
                     <TableCell>{item?.shipped_quantity}</TableCell>
                     <TableCell>{item?.received_quantity}</TableCell>
                   </TableRow>
-              );
-            })}
-                </TableBody>
+                );
+              })}
+            </TableBody>
           </Table>
         </div>
-        </div>
+      </div>
 
 
 

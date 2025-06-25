@@ -1,4 +1,4 @@
-import { useState, useEffect,useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchProfiles } from "../../store/slices/profileSlice";
@@ -26,7 +26,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   minWidth: 300,
-  width:"40%",
+  width: "40%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -36,9 +36,9 @@ const style = {
 const AssignUsers = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
-    user_ids: entityState.data.assigned_users.map(user=>user.id) || [],
+    user_ids: entityState.data.assigned_users.map(user => user.id) || [],
   });
-  const workOrder = useSelector((state:AppState)=>state.workOrder.workOrder)
+  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
   const { profiles } = useSelector((state: AppState) => state.profile);
   const [inputs, setInputs] = useState(5);
   const [error, setError] = useState(null);
@@ -53,19 +53,19 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   }, []);
 
   const userOptions = useMemo(() => {
-      return profiles.data
-        ? profiles.data.filter(
-          (profile) =>
-            profile.role ==="ENGINEER"
-        )
-        : [];
-    }, [profiles.data]);
+    return profiles.data
+      ? profiles.data.filter(
+        (profile) =>
+          profile.role === "ENGINEER"
+      )
+      : [];
+  }, [profiles.data]);
 
-    const selectedUsers = useMemo(() => {
-        return userOptions.filter((option) =>
-          formData.user_ids.includes(option.user.id)
-        );
-      }, [formData.user_ids, userOptions]);
+  const selectedUsers = useMemo(() => {
+    return userOptions.filter((option) =>
+      formData.user_ids.includes(option.user.id)
+    );
+  }, [formData.user_ids, userOptions]);
 
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
@@ -90,7 +90,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
       toast.success("Users assigned successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(workOrder.error?.error||"Something Went Wrong");
+      toast.error(workOrder.error?.error || "Something Went Wrong");
       setError(
         err.response?.data.detail || "Failed to assign Users."
       );
@@ -105,30 +105,30 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
-        sx={{minWidth:"90%"}}
+        className="form-gap w-full"
+        sx={{ minWidth: "90%" }}
       >
         <FormControl fullWidth variant="outlined" disabled={entityState.loading}>
-                        <Autocomplete
-                          multiple
-                          options={userOptions}
-                          getOptionLabel={(option) => option.user.username}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              label="Users"
-                              placeholder="Search users..."
-                              helperText={workOrder.error?.user_ids||""}
-                            />
-                          )}
-                          id="user-autocomplete"
-                          value={selectedUsers}
-                          onChange={(event, newValue) =>
-                            handleAutocompleteChange("user_ids", newValue)
-                          }
-                        ></Autocomplete>
-                      </FormControl>
+          <Autocomplete
+            multiple
+            options={userOptions}
+            getOptionLabel={(option) => option.user.username}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Users"
+                placeholder="Search users..."
+                helperText={workOrder.error?.user_ids || ""}
+              />
+            )}
+            id="user-autocomplete"
+            value={selectedUsers}
+            onChange={(event, newValue) =>
+              handleAutocompleteChange("user_ids", newValue)
+            }
+          ></Autocomplete>
+        </FormControl>
         <Button
           type="submit"
           variant="contained"

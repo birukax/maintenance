@@ -17,10 +17,10 @@ import {
 import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
-    name:"",
+    name: "",
     description: ""
   });
-  const activity = useSelector((state:AppState)=>state.activity.activity)
+  const activity = useSelector((state: AppState) => state.activity.activity)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -37,12 +37,12 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     setFormData({
       name: activity.data?.name,
       description: activity.data?.description,
     });
-  },[activity])
+  }, [activity])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,7 +59,7 @@ const Edit = () => {
       toast.success("Activity edited successfully");
       navigate(`/activity/detail/${activity.data.id}`);
     } catch (err) {
-            toast.error(activity.error?.error||"Something Went Wrong");
+      toast.error(activity.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -73,7 +73,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           multiline
@@ -86,7 +86,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={activity.error?.name||""}
+          helperText={activity.error?.name || ""}
         />
         <TextField
           multiline
@@ -99,7 +99,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={activity.error?.description||""}
+          helperText={activity.error?.description || ""}
         />
         <Button
           type="submit"
@@ -111,7 +111,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Activity"}
         </Button>
-         
+
       </Box>
     </Container>
   );

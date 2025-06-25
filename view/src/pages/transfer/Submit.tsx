@@ -42,7 +42,7 @@ const Submit = ({ entityState, setModalOpen }) => {
     end_date: dayjs(entityState?.data?.start_date).format("YYYY-MM-DD") || null,
     end_time: "",
   });
-    const transfer = useSelector((state:AppState)=>state.transfer.transfer)
+  const transfer = useSelector((state: AppState) => state.transfer.transfer)
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const Submit = ({ entityState, setModalOpen }) => {
       toast.success("Work Order submitted successfully");
       navigate(`/work-order/detail/${id}`);
     } catch (err) {
-      toast.error(transfer.error?.error||"Something Went Wrong");
+      toast.error(transfer.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || "Failed to submit Work Order.");
     }
   };
@@ -95,27 +95,27 @@ const Submit = ({ entityState, setModalOpen }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
         sx={{ minWidth: "90%" }}
       >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                minDate={dayjs(entityState?.data?.start_date)}
-                label="End Date"
-                name="end_date"
-                value={formData.end_date ? dayjs(formData.end_date) : null}
-                onChange={handleDateChange}
-                slotProps={{
-                  textField: {
-                    variant: "outlined",
-                    fullWidth: true,
-                    required: true,
-                    disabled: entityState.loading,
-                    helperText: transfer.error?.end_date||"",
-                  },
-                }}
-              />
-            </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            minDate={dayjs(entityState?.data?.start_date)}
+            label="End Date"
+            name="end_date"
+            value={formData.end_date ? dayjs(formData.end_date) : null}
+            onChange={handleDateChange}
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                fullWidth: true,
+                required: true,
+                disabled: entityState.loading,
+                helperText: transfer.error?.end_date || "",
+              },
+            }}
+          />
+        </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimePicker
             label="Start Time"
@@ -133,7 +133,7 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: transfer.error?.start_date||"",
+                helperText: transfer.error?.start_date || "",
 
               },
             }}
@@ -159,7 +159,7 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: transfer.error?.end_time||"",
+                helperText: transfer.error?.end_time || "",
 
               },
             }}
@@ -177,7 +177,7 @@ const Submit = ({ entityState, setModalOpen }) => {
           onChange={handleChange}
           required
           disabled={entityState.loading}
-          helperText={transfer.error?.remark||""}
+          helperText={transfer.error?.remark || ""}
         />
         <Button
           type="submit"

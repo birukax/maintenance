@@ -7,7 +7,7 @@ import {
 } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { toast } from "react-toastify";
-import api from "../../utils/api";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -26,7 +26,7 @@ const Edit = () => {
   const { unitOfMeasure } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
-  const uom = useSelector((state:AppState)=>state.unitOfMeasure.unitOfMeasure)
+  const uom = useSelector((state: AppState) => state.unitOfMeasure.unitOfMeasure)
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,11 +41,11 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: unitOfMeasure.data?.name,
     });
-  },[unitOfMeasure])
+  }, [unitOfMeasure])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +62,7 @@ setFormData({
       toast.success("Unit of Measure edited successfully");
       navigate(`/unit-of-measure/detail/${unitOfMeasure.data.id}`);
     } catch (err) {
-      toast.error(uom.error?.error||"Something Went Wrong");
+      toast.error(uom.error?.error || "Something Went Wrong");
 
       // setError(err.response?.data.detail || err.message);
       setError(err.response?.data.detail || err.message);
@@ -72,15 +72,22 @@ setFormData({
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Unit Of Measure
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-2! ">
+          Edit Unit of Measure
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {unitOfMeasure?.data?.code}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -90,19 +97,35 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={uom.error?.name||""}
+          helperText={uom.error?.name || ""}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Unit of Measure"}
-        </Button>
-         
+        <div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/unit-of-measure/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

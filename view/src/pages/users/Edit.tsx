@@ -28,12 +28,12 @@ import { Roles } from "../../utils/choices";
 
 const Edit = () => {
   const [formData, setFormData] = useState({
-    role:"",
+    role: "",
     is_active: false,
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const profile = useSelector((state:AppState)=>state.profile.profile)
+  const profile = useSelector((state: AppState) => state.profile.profile)
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -49,18 +49,18 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       role: profile.data?.role,
       is_active: profile.data?.user?.is_active,
     });
-  },[profile])
+  }, [profile])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -71,7 +71,7 @@ setFormData({
       toast.success("Profile edited successfully");
       navigate(`/profile/detail/${profile.data.id}`);
     } catch (err) {
-      toast.error(profile.error?.error||"Something Went Wrong");
+      toast.error(profile.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -85,46 +85,47 @@ setFormData({
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
-         <FormControlLabel
-                    labelPlacement="start"
-                    label="Is Active"
-                    control={
-                      <Switch
-                        name="is_active"
-                        checked={formData.is_active}
-                        onChange={(e) =>{
-                          
-                          if(formData.is_active===true){
-                            setFormData({ ...formData, is_active: e.target.checked})
-                          }else{
-                            setFormData({ ...formData, is_active: e.target.checked })
-                                          }                }
-                          
-                        }
-                        disabled={loading}
-                        
-                      />
-                    }
-                  />
+        <FormControlLabel
+          labelPlacement="start"
+          label="Is Active"
+          control={
+            <Switch
+              name="is_active"
+              checked={formData.is_active}
+              onChange={(e) => {
+
+                if (formData.is_active === true) {
+                  setFormData({ ...formData, is_active: e.target.checked })
+                } else {
+                  setFormData({ ...formData, is_active: e.target.checked })
+                }
+              }
+
+              }
+              disabled={loading}
+
+            />
+          }
+        />
         <FormControl fullWidth variant="outlined" required disabled={loading}>
-                  <InputLabel id="role">Role</InputLabel>
-                  <Select
-                    labelId="role"
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    label="Role"
-          
-                  >
-                    {Roles.map((role) => (
-                      <MenuItem key={role} value={role}>
-                        {role}
-                      </MenuItem>
-                    ))}
-                  </Select>
+          <InputLabel id="role">Role</InputLabel>
+          <Select
+            labelId="role"
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            label="Role"
+
+          >
+            {Roles.map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
 
         <Button
@@ -137,7 +138,7 @@ setFormData({
         >
           {loading ? <CircularProgress size={24} /> : "Edit Profile"}
         </Button>
-         
+
       </Box>
     </Container>
   );

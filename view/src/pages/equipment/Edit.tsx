@@ -19,6 +19,7 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -65,15 +66,22 @@ const Edit = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Equipment
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-2! ">
+          Edit Equipment
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {equipment?.data?.code}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           multiline
           label="Name"
           name="name"
@@ -86,17 +94,33 @@ const Edit = () => {
           disabled={equipment.loading}
           helperText={equipment?.error?.name || ""}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={equipment.loading}
-          className="mt-4"
-        >
-          {equipment.loading ? <CircularProgress size={24} /> : "Edit Equipment"}
-        </Button>
+        <div className='flex gap-4'>
 
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={equipment.loading}
+            className="mt-4"
+          >
+            {equipment.loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/equipment/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={equipment.loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

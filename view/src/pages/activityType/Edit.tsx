@@ -15,11 +15,12 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
-  const activityType = useSelector((state:AppState)=>state.activityType.activityType)
+  const activityType = useSelector((state: AppState) => state.activityType.activityType)
 
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -36,11 +37,11 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: activityType.data?.name,
     });
-  },[activityType])
+  }, [activityType])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -56,7 +57,7 @@ setFormData({
       toast.success("Activity Type edited successfully");
       navigate(`/activity-type/detail/${activityType.data.id}`);
     } catch (err) {
-      toast.error(activityType.error?.error||"Something Went Wrong");
+      toast.error(activityType.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -64,15 +65,22 @@ setFormData({
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Activity Type
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-2! ">
+          Edit Activity Type
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {activityType?.data?.code}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -82,19 +90,35 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={activityType.error?.name||""}
+          helperText={activityType.error?.name || ""}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Activity Type"}
-        </Button>
-         
+        <div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={activityType.loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/activity-type/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={activityType.loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

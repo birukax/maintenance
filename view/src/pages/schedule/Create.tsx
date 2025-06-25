@@ -37,7 +37,7 @@ const Create = () => {
     planned_hours: 0,
     planned_minutes: 0,
   });
-  const schedule = useSelector((state:AppState)=>state.schedule.schedule)
+  const schedule = useSelector((state: AppState) => state.schedule.schedule)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
@@ -52,7 +52,7 @@ const Create = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-const params = {
+  const params = {
     no_pagination: "true",
   };
   useEffect(() => {
@@ -79,22 +79,22 @@ const params = {
     setLoading(true);
     setError(null);
 
-    if(formData.planned_days>0 || formData.planned_hours>0 || formData.planned_minutes>0){
-    try {
-      await dispatch(createSchedule(formData)).unwrap();
-      toast.success("Schedule created successfully");
-      navigate("/schedules");
-    } catch (err) {
-      toast.error(schedule.error?.error||"Something Went Wrong");
-      // setError(err.response?.data.detail || err.message);
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
+    if (formData.planned_days > 0 || formData.planned_hours > 0 || formData.planned_minutes > 0) {
+      try {
+        await dispatch(createSchedule(formData)).unwrap();
+        toast.success("Schedule created successfully");
+        navigate("/schedules");
+      } catch (err) {
+        toast.error(schedule.error?.error || "Something Went Wrong");
+        // setError(err.response?.data.detail || err.message);
+        setError(err.response?.data.detail || err.message);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false)
+      toast.warning("At least one field of planned time must be greater than 0")
     }
-  }else{
-    setLoading(false)
-    toast.warning("At least one field of planned time must be greater than 0")
-  }
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
@@ -104,7 +104,7 @@ const params = {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
@@ -112,12 +112,12 @@ const params = {
             getOptionLabel={(option) => option[1] || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Type"
-          placeholder="Search types..."
-          required
-          helperText={schedule.error?.type}
+                {...params}
+                variant="outlined"
+                label="Type"
+                placeholder="Search types..."
+                required
+                helperText={schedule.error?.type}
               />
             )}
             id="types-select"
@@ -158,7 +158,7 @@ const params = {
               />
             )}
             id="machine-select"
-            value={ Array.isArray(machines.data)&& machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
             onChange={(event, newValue) => {
               setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
             }}
@@ -167,7 +167,7 @@ const params = {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
-            options={Array.isArray(equipments.data)&&equipments.data ?.filter(
+            options={Array.isArray(equipments.data) && equipments.data?.filter(
               (equipment) => equipment.machine.id === formData.machine_id
             ) || []}
             getOptionLabel={(option) => option.name || ""}
@@ -177,13 +177,13 @@ const params = {
                 variant="outlined"
                 label="Equipment"
                 placeholder="Search equipments..."
-          helperText={schedule.error?.equipment_id}
+                helperText={schedule.error?.equipment_id}
 
               />
             )}
             id="equipment-select"
             value={
-              Array.isArray(equipments.data)&&equipments.data?.find(
+              Array.isArray(equipments.data) && equipments.data?.find(
                 (equipment) => equipment.id === formData.equipment_id
               ) || null
             }
@@ -209,7 +209,7 @@ const params = {
                 label="Work Order Type"
                 placeholder="Search work order types..."
                 required
-          helperText={schedule.error?.work_order_type_id}
+                helperText={schedule.error?.work_order_type_id}
 
               />
             )}
@@ -229,31 +229,31 @@ const params = {
           <Autocomplete
             options={
               Array.isArray(activityTypes.data)
-          ? activityTypes.data.filter(
-              (activityType) =>
-                activityType.work_order_type.id === formData.work_order_type_id
-            )
-          : []
+                ? activityTypes.data.filter(
+                  (activityType) =>
+                    activityType.work_order_type.id === formData.work_order_type_id
+                )
+                : []
             }
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Activity Type"
-          placeholder="Search activity types..."
-          required
-          helperText={schedule.error?.activity_type_id}
+                {...params}
+                variant="outlined"
+                label="Activity Type"
+                placeholder="Search activity types..."
+                required
+                helperText={schedule.error?.activity_type_id}
 
               />
             )}
             id="activity-type-select"
             value={
               Array.isArray(activityTypes.data)
-          ? activityTypes.data.find(
-              (activityType) => activityType.id === formData.activity_type_id
-            ) || null
-          : null
+                ? activityTypes.data.find(
+                  (activityType) => activityType.id === formData.activity_type_id
+                ) || null
+                : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, activity_type_id: newValue ? newValue.id : "" });
@@ -264,28 +264,28 @@ const params = {
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             multiple
-            options={Array.isArray(items.data)&& items.data ? items.data.filter((item) => item.category === "SPAREPART") : []}
+            options={Array.isArray(items.data) && items.data ? items.data.filter((item) => item.category === "SPAREPART") : []}
             getOptionLabel={(option) => option.name || ""}
             value={
               Array.isArray(items.data)
-          ? items.data.filter((item) =>
-              formData.spareparts_required_id.includes(item.id)
-            )
-          : []
+                ? items.data.filter((item) =>
+                  formData.spareparts_required_id.includes(item.id)
+                )
+                : []
             }
             onChange={(_, newValue) => {
               setFormData({
-          ...formData,
-          spareparts_required_id: newValue.map((item) => item.id),
+                ...formData,
+                spareparts_required_id: newValue.map((item) => item.id),
               });
             }}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Spareparts Required"
-          placeholder="Search spareparts..."
-          helperText={schedule.error?.spareparts_required_id}
+                {...params}
+                variant="outlined"
+                label="Spareparts Required"
+                placeholder="Search spareparts..."
+                helperText={schedule.error?.spareparts_required_id}
 
               />
             )}
@@ -296,28 +296,28 @@ const params = {
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             multiple
-            options={Array.isArray(items.data)&&items.data ? items.data.filter((item) => item.category === "TOOL") : []}
+            options={Array.isArray(items.data) && items.data ? items.data.filter((item) => item.category === "TOOL") : []}
             getOptionLabel={(option) => option.name || ""}
             value={
               Array.isArray(items.data)
-          ? items.data.filter((item) =>
-              formData.tools_required_id.includes(item.id)
-            )
-          : []
+                ? items.data.filter((item) =>
+                  formData.tools_required_id.includes(item.id)
+                )
+                : []
             }
             onChange={(_, newValue) => {
               setFormData({
-          ...formData,
-          tools_required_id: newValue.map((item) => item.id),
+                ...formData,
+                tools_required_id: newValue.map((item) => item.id),
               });
             }}
             renderInput={(params) => (
               <TextField
-          {...params}
-          variant="outlined"
-          label="Tools Required"
-          placeholder="Search tools..."
-          helperText={schedule.error?.tools_required_id}
+                {...params}
+                variant="outlined"
+                label="Tools Required"
+                placeholder="Search tools..."
+                helperText={schedule.error?.tools_required_id}
 
               />
             )}
@@ -326,40 +326,40 @@ const params = {
           />
         </FormControl>
         <div className="planned-time-group">
-        <TextField
-          label="Planned Days"
-          name="planned_days"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.planned_days}
-          onChange={handleChange}
-          disabled={loading}
+          <TextField
+            label="Planned Days"
+            name="planned_days"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.planned_days}
+            onChange={handleChange}
+            disabled={loading}
 
-        />
-        <TextField
-          label="Planned Hours"
-          name="planned_hours"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.planned_hours}
-          onChange={handleChange}
-          disabled={loading}
-        />
-        <TextField
-          label="Planned Minutes"
-          name="planned_minutes"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.planned_minutes}
-          onChange={handleChange}
-          disabled={loading}
-        />
+          />
+          <TextField
+            label="Planned Hours"
+            name="planned_hours"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.planned_hours}
+            onChange={handleChange}
+            disabled={loading}
+          />
+          <TextField
+            label="Planned Minutes"
+            name="planned_minutes"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.planned_minutes}
+            onChange={handleChange}
+            disabled={loading}
+          />
         </div>
 
         <Button
@@ -372,7 +372,7 @@ const params = {
         >
           {loading ? <CircularProgress size={24} /> : "Create Schedule"}
         </Button>
-         
+
       </Box>
     </Container>
   );

@@ -43,7 +43,7 @@ const Edit = () => {
     });
   }, []);
 
- 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -55,11 +55,11 @@ const Edit = () => {
     setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-     await dispatch(updateReturn({ id, formData })).unwrap();
+      await dispatch(updateReturn({ id, formData })).unwrap();
       toast.success("Return edited successfully");
       navigate(`/return/detail/${ret.data.id}`);
     } catch (err) {
-      toast.error(ret.error?.error||"Something Went Wrong");
+      toast.error(ret.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -73,7 +73,7 @@ const Edit = () => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
           label="Email"
@@ -86,7 +86,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={ret.error?.email||""}
+          helperText={ret.error?.email || ""}
         />
         <TextField
           label="Location"
@@ -98,7 +98,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={ret.error?.location_id||""}
+          helperText={ret.error?.location_id || ""}
 
         />
 
@@ -112,7 +112,7 @@ const Edit = () => {
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={ret.error?.phone_no||""}
+          helperText={ret.error?.phone_no || ""}
 
         />
 
@@ -126,7 +126,7 @@ const Edit = () => {
         >
           {loading ? <CircularProgress size={24} /> : "Edit Return"}
         </Button>
-         
+
       </Box>
     </Container>
   );

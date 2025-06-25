@@ -14,12 +14,13 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
   });
-  const shelf = useSelector((state:AppState)=>state.shelf.shelf)
+  const shelf = useSelector((state: AppState) => state.shelf.shelf)
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [loading, setLoading] = useState(false);
@@ -35,11 +36,11 @@ const Edit = () => {
     });
   }, []);
 
-  useEffect(()=>{
-setFormData({
+  useEffect(() => {
+    setFormData({
       name: shelf.data?.name,
     });
-  },[shelf])
+  }, [shelf])
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -55,7 +56,7 @@ setFormData({
       toast.success("Shelf edited successfully");
       navigate(`/shelf/detail/${shelf.data.id}`);
     } catch (err) {
-      toast.error(shelf.error?.error||"Something Went Wrong");
+      toast.error(shelf.error?.error || "Something Went Wrong");
       setError(err.response?.data.detail || err.message);
     } finally {
       setLoading(false);
@@ -63,15 +64,21 @@ setFormData({
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Shelf
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-4! ">
+          Edit Shelf
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {shelf?.data?.code}
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
-        className="form-gap"
+        className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -81,20 +88,35 @@ setFormData({
           onChange={handleChange}
           required
           disabled={loading}
-          helperText={shelf.error?.name||""}
+          helperText={shelf.error?.name || ""}
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Shelf"}
-        </Button>
-         
+        <div className='flex gap-4'>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/shelf/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );
