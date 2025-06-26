@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
 import { createSchedule } from "../../store/slices/scheduleSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
@@ -98,7 +98,7 @@ const Create = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Schedule
       </Typography>
       <Box
@@ -108,6 +108,7 @@ const Create = () => {
       >
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={SCHEDULE_TYPES}
             getOptionLabel={(option) => option[1] || ""}
             renderInput={(params) => (
@@ -129,6 +130,7 @@ const Create = () => {
           />
         </FormControl>
         <TextField
+          size='small'
           multiline
           label="Description"
           name="description"
@@ -144,6 +146,7 @@ const Create = () => {
         />
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={machines.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -167,6 +170,7 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={Array.isArray(equipments.data) && equipments.data?.filter(
               (equipment) => equipment.machine.id === formData.machine_id
             ) || []}
@@ -196,6 +200,7 @@ const Create = () => {
 
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={
               Array.isArray(workOrderTypes.data)
                 ? workOrderTypes.data.filter((workOrderType) => workOrderType.scheduled === true)
@@ -227,6 +232,7 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={
               Array.isArray(activityTypes.data)
                 ? activityTypes.data.filter(
@@ -263,6 +269,7 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             multiple
             options={Array.isArray(items.data) && items.data ? items.data.filter((item) => item.category === "SPAREPART") : []}
             getOptionLabel={(option) => option.name || ""}
@@ -295,6 +302,7 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             multiple
             options={Array.isArray(items.data) && items.data ? items.data.filter((item) => item.category === "TOOL") : []}
             getOptionLabel={(option) => option.name || ""}
@@ -327,6 +335,7 @@ const Create = () => {
         </FormControl>
         <div className="planned-time-group">
           <TextField
+            size='small'
             label="Planned Days"
             name="planned_days"
             type="number"
@@ -339,6 +348,7 @@ const Create = () => {
 
           />
           <TextField
+            size='small'
             label="Planned Hours"
             name="planned_hours"
             type="number"
@@ -350,6 +360,7 @@ const Create = () => {
             disabled={loading}
           />
           <TextField
+            size='small'
             label="Planned Minutes"
             name="planned_minutes"
             type="number"
@@ -361,18 +372,32 @@ const Create = () => {
             disabled={loading}
           />
         </div>
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Schedule"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/schedules'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
 
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

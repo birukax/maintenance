@@ -18,6 +18,7 @@ import {
   TableCell,
   TextField,
   Checkbox,
+  TableContainer,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -32,7 +33,7 @@ const CheckList = () => {
   const handleSubmitModalOpen = () => setSubmitModalOpen(true);
   const handleSubmitModalClose = () => setSubmitModalOpen(false);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const renderButtons = () => (
     <>
       <>
@@ -45,7 +46,8 @@ const CheckList = () => {
           <Submit entityState={entityState} setModalOpen={setSubmitModalOpen} />
         </Modal>
         <Button
-          onClick={()=>navigate(`/work-order/detail/${entityState.id}`)}
+          size='small'
+          onClick={() => navigate(`/work-order/detail/${entityState.id}`)}
           variant="outlined"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
@@ -53,6 +55,7 @@ const CheckList = () => {
           Save
         </Button>
         <Button
+          size='small'
           onClick={handleSubmitModalOpen}
           variant="contained"
           className="bg-slate-700"
@@ -102,7 +105,7 @@ const CheckList = () => {
 
   const renderDetails = (data) => (
     <>
-      <Table sx={{ minWidth: 650 }} aria-label={` table`}>
+      <Table className='table table-auto' stickyHeader size='small' aria-label={` table`}>
         <TableHead>
           <TableRow>
             <TableCell>

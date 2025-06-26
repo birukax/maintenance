@@ -31,22 +31,23 @@ const Detail = () => {
           setModalOpen={setModalOpen}
         />
       </Modal>
-      <Button
-        onClick={handleModalOpen}
-        variant="contained"
-        className="bg-slate-700"
-      >
-        Create Work Order
-      </Button>
-      <Button
-              component={Link}
-              to={`/activities/${entityState.id}`}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Manage Activities
-            </Button>
+      <div className='flex gap-2'>
+        <Button
+          size='small'
+          onClick={handleModalOpen}
+          variant="contained"
+        >
+          Create Work Order
+        </Button>
+        <Button
+          size='small'
+          component={Link}
+          to={`/activities/${entityState.id}`}
+          variant="contained"
+        >
+          Manage Activities
+        </Button>
+      </div>
     </>
   );
 

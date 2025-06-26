@@ -31,10 +31,10 @@
 }
 .table-container {
   overflow: scroll;
-  max-height: 85vh !important;
+  /* max-height: 80vh !important; */
   scrollbar-color: var(--smoke) transparent;
   flex: 1;
-  height: 100%;
+  /* height: 100%; */
 }
 table tbody tr:last-child {
   /* background-color: red; */
@@ -182,7 +182,7 @@ table tbody tr:last-child {
 }
 
 .pagination {
-  position: fixed;
+  /* position: fixed; */
   bottom: 1rem;
   flex: 0;
   * {

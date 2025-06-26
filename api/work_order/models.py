@@ -176,6 +176,6 @@ class WorkOrderActivity(BaseCreatedUpdated):
         verbose_name_plural = "Work Order Activities"
 
     def __str__(self):
-        if self.activity:
-            return f"{self.activity} - {self.value}"
+        if self.description:
+            return f"{self.description} - {self.value}"
         return f"{self.value}"

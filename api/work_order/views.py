@@ -158,7 +158,7 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     def create_activities(self, request, pk=None):
         work_order = self.get_object()
-        if work_order.work_order_type.schedules:
+        if work_order.work_order_type.scheduled:
             raise serializers.ValidationError({"error": "Invalid Work Order Type."})
 
         try:

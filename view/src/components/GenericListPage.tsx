@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SearchIcon from '@mui/icons-material/Search';
-
+import IconButton from '@mui/material/IconButton';
 import {
   Typography,
   CircularProgress,
@@ -77,38 +77,58 @@ export const GenericListPage = ({
   }
 
   return (
-    <>
+    <div className='flex flex-col h-full'>
       <div
-        className="flex gap-8 justify-between table-filters mb-2"
+        className="flex flex-wrap gap-8 justify-between table-filters mb-2"
 
       >
-        <Typography color='warning' variant="h6" className="tracking-tight! uppercase">
-          {title}{" "}
-          {yearFilter && (
-            <sub
-              style={{
-                marginInlineStart: "0.5rem",
-              }}
-              className="year-margin text-lg  tracking-wide"
+        <div>
+          <Typography color='warning' variant="h6" className="tracking-tight! uppercase">
+            {title}{" "}
+            {yearFilter && (
+              <sub
+                style={{
+                  marginInlineStart: "0.5rem",
+                }}
+                className="year-margin text-lg  tracking-wide"
+              >
+                {" "}
+                <span style={{ color: "black" }}> Year:  </span>
+                {searchParams.get("year__no")}
+              </sub>
+            )}
+          </Typography>
+
+        </div>
+        <div className='flex flex-wrap items-center'>
+
+          <div>
+
+            {entityState.loading && <CircularProgress size={30} />}
+          </div>
+          <div className='items-center'>
+
+            <IconButton
+              color='primary'
+              size='small'
+              onClick={onRefresh}
+              disabled={entityState.loading}
+              className="btn-refresh"
             >
-              {" "}
-              <span style={{ color: "black" }}> Year:  </span>
-              {searchParams.get("year__no")}
-            </sub>
-          )}
-        </Typography>
+              <RefreshIcon />
+            </IconButton>
 
-        {entityState.loading && <CircularProgress />}
-        <div style={{ maxHeight: "fit-content" }}>
-
+          </div>
 
           {searchFilter && (
 
-            <div className='flex gap-1'>
+            <div className='flex'>
               <FormControl size='small'
-                className='w-48 sm:w-54'
+                className='w-48 sm:w-54 '
+
               >
                 <TextField
+
                   color='primary'
                   label="Search"
                   name="search"
@@ -117,12 +137,19 @@ export const GenericListPage = ({
                   fullWidth
                   value={keyWord}
                   onChange={(e) => setKeyWord(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0
+                    }
+                  }}
                 />
               </FormControl>
               <Button
                 disabled={entityState.loading}
                 size='small'
                 variant="contained"
+                className='rounded-tr-full! rounded-br-full!'
                 onClick={() => searchFilter("search", keyWord)}
               >
                 <SearchIcon />
@@ -142,7 +169,6 @@ export const GenericListPage = ({
                 marginRight: "8px",
                 minWidth: "130px",
                 outlineColor: "blue",
-                maxHeight: "40px",
               }}
               value={searchParams.get("year__no") !== "null" && searchParams.get("year__no") || new Date().getFullYear()}
             >
@@ -153,13 +179,14 @@ export const GenericListPage = ({
               ))}
             </TextField>
           )}
+
           {createRoute && (
             <Button
               disabled={entityState.loading}
               component={Link}
               to={createRoute}
               variant="contained"
-              size='small'
+              size='medium'
             >
               New
             </Button>
@@ -167,35 +194,26 @@ export const GenericListPage = ({
           {onEdit && entityState.data?.count > 0 && (
             <Button
               disabled={entityState.loading}
-              size='small'
+              size='medium'
               variant="outlined"
               onClick={() => onEdit(searchParams.get("year__no"))}
             >
               Edit
             </Button>
           )}
-          <Button
-            size='small'
-            variant='outlined'
-            onClick={onRefresh}
-            disabled={entityState.loading}
-            className="btn-refresh"
-          >
-            <RefreshIcon />
-          </Button>
+
         </div>
       </div>
-      {entityState.error && (
+      {/* {entityState.error && (
         <Typography variant="body2" color="error" className="mb-2">
-          {/* <ToastContainer/> */}
+          <ToastContainer/>
         </Typography>
-      )}
+      )} */}
 
-      <div className="table-container">
-        <Table size='small'
-          sx={{ minWidth: 650, maxHeight: "40px" }}
+      <div className="table-container flex-1">
+        <Table stickyHeader size='small'
           aria-label={`${title} table`}
-          className="table"
+          className="table table-auto"
         >
           <TableHead >
             <TableRow>
@@ -214,7 +232,7 @@ export const GenericListPage = ({
           <TableBody>
             {entityState?.data?.results && entityState?.data?.count > 0
               ? entityState?.data?.results?.map((row) => (
-                <TableRow
+                <TableRow hover
                   key={getKey(row)}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
@@ -298,6 +316,6 @@ export const GenericListPage = ({
         count={entityState?.data?.count}
         searchByPage={searchFilter}
       />
-    </>
+    </div>
   );
 };

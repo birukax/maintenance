@@ -70,7 +70,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   };
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2!">
         Create Scheduled Work Order
       </Typography>
       <Box
@@ -87,6 +87,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -107,7 +108,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
           {schedule.loading ? (
             <CircularProgress size={24} />
           ) : (
-            "Create Scheduled Work Order"
+            "Create"
           )}
         </Button>
 

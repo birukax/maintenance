@@ -7,6 +7,7 @@ import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutl
 function Pagination(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const ContainerStyle = {
+    marginTop: '1rem',
     width: "100%",
     display: "flex",
     alignItems: "center",
@@ -34,11 +35,11 @@ function Pagination(props) {
   const currentPagin = (pgNum) => {
     props.setCur(pgNum);
   };
-  useEffect(()=>{
-    if(searchParams.get("page") !== null){
+  useEffect(() => {
+    if (searchParams.get("page") !== null) {
       props.setCur(Number(searchParams.get("page")))
     }
-  },[])
+  }, [])
   return (
     <div className='pagination' style={ContainerStyle}>
       {props?.prev !== null &&
@@ -53,7 +54,7 @@ function Pagination(props) {
         </IconButton>}
       {getDisplayPages().map((pgNumber, idx) =>
         pgNumber === '...' ? (
-          <li key={`dots-${idx}`} className="disabled" style={{ pointerEvents: 'none',listStyle:"none"}}>
+          <li key={`dots-${idx}`} className="disabled" style={{ pointerEvents: 'none', listStyle: "none" }}>
             <span className="page-link">...</span>
           </li>
         ) : (

@@ -89,7 +89,7 @@ const Submit = ({ entityState, setModalOpen }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2!">
         Submit Work Order
       </Typography>
       <Box
@@ -107,6 +107,7 @@ const Submit = ({ entityState, setModalOpen }) => {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -129,6 +130,7 @@ const Submit = ({ entityState, setModalOpen }) => {
             // views={['hours', 'minutes', 'seconds']}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -154,6 +156,7 @@ const Submit = ({ entityState, setModalOpen }) => {
             // views={['hours', 'minutes', 'seconds']}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -165,6 +168,7 @@ const Submit = ({ entityState, setModalOpen }) => {
         </LocalizationProvider>
 
         <TextField
+          size='small'
           multiline
           label="Remark"
           name="remark"
@@ -177,6 +181,7 @@ const Submit = ({ entityState, setModalOpen }) => {
           disabled={entityState.loading}
         />
         <Button
+          size='small'
           type="submit"
           variant="contained"
           color="primary"
@@ -187,7 +192,7 @@ const Submit = ({ entityState, setModalOpen }) => {
           {entityState.loading ? (
             <CircularProgress size={24} />
           ) : (
-            "Submit Check-List"
+            "Submit"
           )}
         </Button>
         {error && (

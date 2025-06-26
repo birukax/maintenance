@@ -1,14 +1,14 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
 import { fetchActivities } from "../../store/slices/activitySlice";
-import { updateActivity,deleteActivity } from "../../store/slices/activitySlice";
+import { updateActivity, deleteActivity } from "../../store/slices/activitySlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { GenericListPage } from "../../components/GenericListPage";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom"
 import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import Pagination from "../../components/Pagination";
-import SearchIcon from '@mui/icons-material/Search';
+import BlockIcon from '@mui/icons-material/Block';
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CreateActivity from "./CreateActivity";
 import DeleteActivity from "./DeleteActivity";
@@ -32,8 +32,8 @@ const List: React.FC = () => {
     (state: AppState) => state.activity.activities
   );
   const activity = useSelector((state: AppState) => state.activity.activity);
-  const formDate=useState({
-    active:""
+  const formDate = useState({
+    active: ""
   })
   const [params, setParams] = useState({
     // search:searchParams.get("search") ||"",
@@ -54,12 +54,12 @@ const List: React.FC = () => {
     }
   }
 
-  const handleDeleteActivity=async (id)=>{
-await dispatch(deleteActivity(id));
-          if(!activity.error){
-            handleRefresh()
-            handledeleteModalClose()
-          }
+  const handleDeleteActivity = async (id) => {
+    await dispatch(deleteActivity(id));
+    if (!activity.error) {
+      handleRefresh()
+      handledeleteModalClose()
+    }
   }
   const [assignmodalOpen, setAssignModalOpen] = useState(false);
   const [editmodalOpen, setEditModalOpen] = useState(false);
@@ -74,18 +74,18 @@ await dispatch(deleteActivity(id));
   const handleeditModalOpen = () => setEditModalOpen(true);
   const handleeditModalClose = () => setEditModalOpen(false);
 
-  const disableActivity=async (id,active)=>{
-      const formData={
-        active:!active
-      }
-      
-          await dispatch(updateActivity({id,formData}));
-          if(!activity.error){
-            handleRefresh()
-          }
+  const disableActivity = async (id, active) => {
+    const formData = {
+      active: !active
+    }
+
+    await dispatch(updateActivity({ id, formData }));
+    if (!activity.error) {
+      handleRefresh()
+    }
   }
 
-  
+
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
   return (
@@ -100,7 +100,7 @@ await dispatch(deleteActivity(id));
       >
         <Modal
           open={assignmodalOpen}
-          onClose={handleeditModalClose}
+          onClose={handleAssignModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -119,8 +119,8 @@ await dispatch(deleteActivity(id));
           <EditActivity
             entityState={entityState}
             setModalOpen={setEditModalOpen}
-            handleRefresh={handleRefresh} 
-            editId={editId}          />
+            handleRefresh={handleRefresh}
+            editId={editId} />
         </Modal>
         <Modal
           open={deletemodalOpen}
@@ -129,37 +129,37 @@ await dispatch(deleteActivity(id));
           aria-describedby="modal-modal-description"
         >
           <DeleteActivity
-          handleDeleteActivity={handleDeleteActivity}
-          handledeleteModalClose={handledeleteModalClose}
-          deleteId={deleteId}
-          activity={activity}
+            handleDeleteActivity={handleDeleteActivity}
+            handledeleteModalClose={handledeleteModalClose}
+            deleteId={deleteId}
+            activity={activity}
           />
         </Modal>
         <Typography variant="h5" className="font-bold ">
-          
+
         </Typography>
-        <div style={{ maxHeight: "fit-content" }}>
+        <div >
+          {entityState.loading && <CircularProgress size={30} />}
 
           <Button
+            size='small'
             variant="outlined"
-            sx={{ mr: 1, padding: ".5rem 2rem", maxHeight: "40px" }}
             onClick={handleAssignModalOpen}
           >
             New
           </Button>
           <Button
+            size='small'
             variant="contained"
             startIcon={<RefreshIcon />}
             onClick={handleRefresh}
             disabled={entityState.loading}
             className="btn-refresh"
-            sx={{ maxHeight: "40px" }}
           >
             Refresh
           </Button>
         </div>
       </div>
-      {entityState.loading && <CircularProgress />}
       {entityState.error && (
         <Typography variant="body2" color="error" className="mb-2">
           {/* <ToastContainer/> */}
@@ -168,8 +168,8 @@ await dispatch(deleteActivity(id));
 
       <div className="table-container">
         <Table
-          sx={{ minWidth: 650, maxHeight: "40px" }}
-          aria-label={`ACtivity table`}
+          size='small'
+          aria-label={`Activity table`}
           className="table"
         >
           <TableHead>
@@ -182,7 +182,6 @@ await dispatch(deleteActivity(id));
                   <Typography >{header.header}</Typography>
                 </TableCell>
               ))}
-
               <TableCell align="left">
                 <Typography >Action</Typography>
               </TableCell>
@@ -193,14 +192,11 @@ await dispatch(deleteActivity(id));
               ? entityState?.data?.map((row, index) => (
                 <TableRow
                   key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell
-                    component="th"
                     scope="row"
                     align="left"
                     size="small"
-                    sx={{ padding: 1.5 }}
                   >
                     <Typography noWrap>
                       {index + 1}
@@ -210,13 +206,11 @@ await dispatch(deleteActivity(id));
                     return (
                       <TableCell
                         key={col.header}
-                        component="th"
                         scope="row"
                         align="left"
                         size="small"
-                        sx={{ padding: 1.5 }}
                       >
-                        <Typography className={`${col.header==="Description" && !row?.active?"diactive":""}`} sx={{fontSize:18}}>
+                        <Typography className={`${col.header === "Description" && !row?.active ? "Disable" : ""}`} >
                           {col.renderCell
                             ? col.renderCell(row)
                             : col.accessor
@@ -227,29 +221,28 @@ await dispatch(deleteActivity(id));
                     );
                   })}
 
-
                   <TableCell align="left">
                     <ButtonGroup
                       variant="contained"
                       size="small"
                       sx={{ display: "flex", gap: 1, boxShadow: 0 }}
                     >
-                      <IconButton aria-label="disable" title="Disable" onClick={()=>{
-                        disableActivity(row.id,row.active)
-                        }}>
-                        <LayersClearIcon sx={{fontSize:25}}/>
+                      <IconButton aria-label="disable" title="Disable" onClick={() => {
+                        disableActivity(row.id, row.active)
+                      }}>
+                        <BlockIcon color='warning' />
                       </IconButton>
-                      <IconButton aria-label="edit" title="Edit"  onClick={()=>{
+                      <IconButton aria-label="edit" title="Edit" onClick={() => {
                         setEditId(row.id)
                         handleeditModalOpen()
-                        }}>
-                        <EditIcon sx={{fontSize:25,fill:"#3c83c1"}}/>
+                      }}>
+                        <EditIcon color='primary' />
                       </IconButton>
-                      <IconButton aria-label="delete" title="Delete" onClick={()=>{
+                      <IconButton aria-label="delete" title="Delete" onClick={() => {
                         setDeleteId(row.id)
                         handledeleteModalOpen()
                       }}>
-                        <DeleteIcon sx={{fontSize:25,fill:"#ca4335"}}/>
+                        <DeleteIcon color='error' />
                       </IconButton>
                     </ButtonGroup>
                   </TableCell>

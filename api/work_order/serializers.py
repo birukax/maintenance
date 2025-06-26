@@ -72,8 +72,8 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
 class WorkOrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
-    schedule = serializers.SerializerMethodField(read_only=True)
-    breakdown = serializers.SerializerMethodField(read_only=True)
+    schedule = serializers.PrimaryKeyRelatedField(read_only=True)
+    breakdown = serializers.PrimaryKeyRelatedField(read_only=True)
 
     machine = MachineSerializer(read_only=True)
     machine_id = serializers.IntegerField(write_only=True)
@@ -123,30 +123,30 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "assigned_users",
         ]
 
-    def get_schedule(self, obj):
-        try:
-            schedule_obj = obj.schedule
-            if schedule_obj == None:
-                return None
-            return {
-                "id": schedule_obj.id,
-                "type": schedule_obj.type,
-                "description": schedule_obj.description,
-            }
-        except Schedule.DoesNotExist:
-            return None
+    # def get_schedule(self, obj):
+    #     try:
+    #         schedule_obj = obj.schedule
+    #         if schedule_obj == None:
+    #             return None
+    #         return {
+    #             "id": schedule_obj.id,
+    #             "type": schedule_obj.type,
+    #             "description": schedule_obj.description,
+    #         }
+    #     except Schedule.DoesNotExist:
+    #         return None
 
-    def get_breakdown(self, obj):
-        try:
-            breakdown_obj = obj.breakdown
-            if breakdown_obj == None:
-                return None
-            return {
-                "id": breakdown_obj.id,
-                "reason": breakdown_obj.reason,
-            }
-        except Breakdown.DoesNotExist:
-            return None
+    # def get_breakdown(self, obj):
+    #     try:
+    #         breakdown_obj = obj.breakdown
+    #         if breakdown_obj == None:
+    #             return None
+    #         return {
+    #             "id": breakdown_obj.id,
+    #             "reason": breakdown_obj.reason,
+    #         }
+    #     except Breakdown.DoesNotExist:
+    #         return None
 
 
 class ActivitySerializer(serializers.ModelSerializer):

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { AppDispatch, AppState } from "../../store/store";
 import { createWorkOrderActivities } from "../../store/slices/workOrderSlice";
-
+import IconButton from '@mui/material/IconButton';
 import {
   TextField,
   Button,
@@ -46,42 +46,42 @@ const AddActivityPage = () => {
 
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Create Work Order
+      <Typography variant="h5" color='primary' className="mb-2! ">
+        Add Work Order Activity
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        {
-          formData?.description_list?.map((el, index) => {
-            return <TextField
-              key={index}
-              name="remark"
-              required
-              label="Activity Description"
-              sx={{ width: "100%" }}
-              value={el}
-              size="small"
-              helperText={workOrder.error?.remark || ""}
-              onChange={(e) => {
-                setFormData(prev => {
-                  return {
-                    ...prev,
-                    description_list: prev.description_list.map((item, i) => i === index ? e.target.value : item)
-                  }
-                })
-              }}
+        <>
+          {
+            formData?.description_list?.map((el, index) => {
+              return <TextField
+                key={index}
+                name="remark"
+                required
+                label="Activity Description"
+                sx={{ width: "100%" }}
+                value={el}
+                size="small"
+                helperText={workOrder.error?.remark || ""}
+                onChange={(e) => {
+                  setFormData(prev => {
+                    return {
+                      ...prev,
+                      description_list: prev.description_list.map((item, i) => i === index ? e.target.value : item)
+                    }
+                  })
+                }}
 
-            />
-          })
-        }
+              />
+            })
+          }</>
 
-        <Button
+        <IconButton
           size='small'
           type="button"
-          variant="contained"
           color="primary"
           disabled={loading}
           onClick={() => setFormData(prev => {
@@ -92,20 +92,35 @@ const AddActivityPage = () => {
           })}
         >
           {loading ? <CircularProgress size={24} /> : <AddIcon sx={{ fontSize: 30 }} />}
-        </Button>
+        </IconButton>
 
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Add Work Order Activities"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={workOrder.loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/work-order/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={workOrder.loading}
 
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

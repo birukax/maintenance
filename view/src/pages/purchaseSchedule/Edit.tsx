@@ -12,14 +12,12 @@ import {
   CircularProgress,
   Typography,
   Button,
-  Modal,
+  Box,
   TableRow,
   TableBody,
   Table,
   TableHead,
   TableCell,
-  TextField,
-  Checkbox,
 } from "@mui/material";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -107,24 +105,32 @@ const Edit = () => {
   ];
 
   return (
-    <>
-      <div
-        className='w-full flex gap-4 items-center mb-2'
-      >
-        <Button
-          size='small'
-          variant="contained"
-          onClick={() => {
-            navigate("/purchase-schedules")
-          }}
-          sx={{ mr: 1 }}
-        >
-          Save
-        </Button>
-        {purchaseSchedules.loading && <CircularProgress />}
+
+    <div
+      className='h-full flex flex-col'
+    >
+      <div className='flex gap-4 mb-4 items-center'>
+        <div>
+          <Button
+            size='small'
+            variant="contained"
+            onClick={() => {
+              navigate("/purchase-schedules")
+            }}
+          >
+            Save
+          </Button>
+        </div>
+        <div>
+          <Typography color='warning' className='font-semibold! text-lg! uppercase'>
+            <span className='text-black font-normal!'>Year: </span>
+            {year}
+          </Typography>
+        </div>
+        {purchaseSchedules.loading && <CircularProgress size={30} />}
       </div>
-      {!loading &&
-        <Table size='small' className='w-full' aria-label={`table`}>
+      <div className="flex-1 overflow-scroll">
+        <Table stickyHeader size='small' className='table table-auto' aria-label={`table`}>
           <TableHead >
             <TableRow>
               {purchaseScheduleColumns.map((column) => (
@@ -135,16 +141,19 @@ const Edit = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {purchaseSchedules?.data?.results?.map((row) => (
-              <EditRows
-                key={row.id}
-                row={row}
-                handleUpdateSchedule={handlePurchaseSchedule}
-              />
-            ))
+            {!loading &&
+              purchaseSchedules?.data?.results?.map((row) => (
+                <EditRows
+                  key={row.id}
+                  row={row}
+                  handleUpdateSchedule={handlePurchaseSchedule}
+                />
+              ))
+
             }
           </TableBody>
-        </Table>}
+        </Table>
+      </div>
 
       <Pagination
         cur={currentPage}
@@ -154,7 +163,7 @@ const Edit = () => {
         count={purchaseSchedules?.data?.count}
         searchByPage={searchFilter}
       />
-    </>
+    </div>
   );
 
 };

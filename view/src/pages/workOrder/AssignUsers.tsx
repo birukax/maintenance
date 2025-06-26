@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { fetchProfiles } from "../../store/slices/profileSlice";
 import { assignWorkOrderUsers } from "../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../store/store";
@@ -99,7 +99,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Assign Users
       </Typography>
       <Box
@@ -110,6 +110,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
       >
         <FormControl fullWidth variant="outlined" disabled={entityState.loading}>
           <Autocomplete
+            size='small'
             multiple
             options={userOptions}
             getOptionLabel={(option) => option.user.username}
@@ -130,6 +131,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
           ></Autocomplete>
         </FormControl>
         <Button
+          size='small'
           type="submit"
           variant="contained"
           color="primary"
@@ -140,7 +142,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
           {entityState.loading ? (
             <CircularProgress size={24} />
           ) : (
-            "ASsign Users"
+            "Save"
           )}
         </Button>
         {error && (

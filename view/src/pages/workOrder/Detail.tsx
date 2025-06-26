@@ -40,65 +40,56 @@ const Detail = () => {
 
   const renderButtons = () => (
     <>
-      {entityState.data?.status === "Created" &&
-        entityState.data?.work_order_activities.length === 0 && (
-          <>
 
-            {
+      <Button
+        disabled={entityState.data.work_order_type?.scheduled === true ||
+          entityState.data?.status !== 'Created'}
+        size='small'
+        onClick={() => navigate(`/work-order/${id}/add-activities`)}
+        variant="contained"
+        className="bg-slate-700"
+        sx={{ mr: 1 }}
+      >
+        Add Activity
+      </Button>
 
-              entityState.data.work_order_type?.scheduled === false &&
-              <Button
-                size='small'
-                onClick={() => navigate(`/work-order/${id}/add-activities`)}
-                variant="contained"
-                className="bg-slate-700"
-                sx={{ mr: 1 }}
-              >
-                Add Activity
-              </Button>
-            }
 
-          </>
+      <Modal
+        open={assignmodalOpen}
+        onClose={handleAssignModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <AssignUsers
+          entityState={entityState}
+          setModalOpen={setAssignModalOpen}
+        />
+      </Modal>
+      <Button
+        disabled={entityState.data.work_order_activities?.length === 0 ||
+          (entityState.data.status !== "Created" &&
+            entityState.data?.status !== "Assigned")
+        }
+        size='small'
+        onClick={handleAssignModalOpen}
+        variant="contained"
+        className="bg-slate-700"
+        sx={{ mr: 1 }}
+      >
+        Assign User
+      </Button>
 
-        )}
-      {(entityState.data?.status === "Created" ||
-        entityState.data?.status === "Assigned") && (
-          <>
-            <Modal
-              open={assignmodalOpen}
-              onClose={handleAssignModalClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <AssignUsers
-                entityState={entityState}
-                setModalOpen={setAssignModalOpen}
-              />
-            </Modal>
-            <Button
-              size='small'
-              onClick={handleAssignModalOpen}
-              variant="contained"
-              className="bg-slate-700"
-              sx={{ mr: 1 }}
-            >
-              Assign User
-            </Button>
+      <Button
+        disabled={entityState.data?.status !== "Assigned"}
+        size='small'
+        component={Link}
+        to={`/work-order/check-list/${entityState.id}`}
+        variant="contained"
+        sx={{ mr: 1 }}
+      >
+        Checklist
+      </Button>
 
-          </>
-        )}
-      {entityState.data?.status === "Assigned" && (
-        <>
-          <Button
-            component={Link}
-            to={`/work-order/check-list/${entityState.id}`}
-            variant="contained"
-            sx={{ mr: 1 }}
-          >
-            Check-List
-          </Button>
-        </>
-      )}
     </>
   );
 
@@ -286,7 +277,7 @@ const Detail = () => {
         <div className="clmn activities-clmn">
 
           <Typography variant="h6">Work Order Activities:</Typography>
-          <Table sx={{ width: "100%" }} className="table">
+          <Table size='small' sx={{ width: "100%" }} className="table">
             <TableHead>
               <TableRow>
                 <TableCell >
@@ -301,7 +292,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.work_order_activities?.map((work_order_activity) => {
+              {data?.work_order_activities?.length > 0 ? data?.work_order_activities?.map((work_order_activity) => {
                 return (
                   <TableRow key={work_order_activity.id}>
                     <TableCell>{work_order_activity?.description}</TableCell>
@@ -309,7 +300,15 @@ const Detail = () => {
                     <TableCell>{work_order_activity?.remark}</TableCell>
                   </TableRow>
                 );
-              })}
+              })
+                : <TableRow>
+                  <TableCell className='border-none!'>
+                    <Typography color='primary' className='ml-6! '>
+                      There are no activities assigned to this work order.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              }
             </TableBody>
           </Table>
         </div>
