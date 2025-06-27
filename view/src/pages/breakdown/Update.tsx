@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   updateBreakdown,
-  fetchBreakdown,
 } from "../../store/slices/breakdownSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -84,14 +83,13 @@ const Update = ({ entityState, setModalOpen }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Update Breakdown
       </Typography>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="form-gap w-full"
-        sx={{ minWidth: "90%" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -102,6 +100,7 @@ const Update = ({ entityState, setModalOpen }) => {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -127,6 +126,7 @@ const Update = ({ entityState, setModalOpen }) => {
             // views={['hours', 'minutes', 'seconds']}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -138,6 +138,7 @@ const Update = ({ entityState, setModalOpen }) => {
         </LocalizationProvider>
 
         <TextField
+          size='small'
           multiline
           label="Remark"
           name="remark"
@@ -151,6 +152,7 @@ const Update = ({ entityState, setModalOpen }) => {
           helperText={breakdown.error?.remark || ""}
         />
         <Button
+          size='small'
           type="submit"
           variant="contained"
           color="primary"
@@ -161,7 +163,7 @@ const Update = ({ entityState, setModalOpen }) => {
           {entityState.loading ? (
             <CircularProgress size={24} />
           ) : (
-            "Update Breakdown"
+            "Update"
           )}
         </Button>
       </Box>

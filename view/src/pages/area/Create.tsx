@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createArea } from "../../store/slices/areaSlice";
 import { fetchPlants } from "../../store/slices/plantSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -12,9 +11,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -66,7 +62,7 @@ const Create = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2!">
         Create Area
       </Typography>
       <Box
@@ -76,6 +72,7 @@ const Create = () => {
       >
         <FormControl fullWidth variant="outlined" required disabled={loading}>
           <Autocomplete
+            size='small'
             options={plants.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -97,6 +94,7 @@ const Create = () => {
           />
         </FormControl>
         <TextField
+          size='small'
           label="Code"
           name="code"
           className="mb-8"
@@ -111,6 +109,7 @@ const Create = () => {
         />
 
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -123,17 +122,32 @@ const Create = () => {
           helperText={area?.error?.name}
 
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Area"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/areas'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
 
       </Box>
     </Container>

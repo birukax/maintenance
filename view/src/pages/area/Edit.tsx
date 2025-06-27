@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchArea,
   updateArea,
   fetchAreas,
 } from "../../store/slices/areaSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -67,9 +66,15 @@ const Edit = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Area
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-2! ">
+          Edit Area
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {area?.data?.code}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -77,6 +82,7 @@ const Edit = () => {
       >
 
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -88,18 +94,32 @@ const Edit = () => {
           disabled={loading}
           helperText={area.error?.name || ""}
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Area"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={area.loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/area/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={area.loading}
 
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

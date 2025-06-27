@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createProfile } from "../../store/slices/profileSlice";
 import { Roles } from "../../utils/choices";
-
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -63,7 +61,7 @@ const Create = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create User
       </Typography>
       <Box
@@ -72,6 +70,7 @@ const Create = () => {
         className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Username"
           name="username"
           className="mb-8"
@@ -84,12 +83,13 @@ const Create = () => {
           helperText={profile?.error?.username}
         />
 
-        <FormControl fullWidth className="mb-8" disabled={loading}>
+        <FormControl size='small' fullWidth className="mb-8" disabled={loading}>
           <Box display="flex" alignItems="center" gap={2}>
             {/* Country Code Selection */}
-            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+            <FormControl size='small' variant="outlined" sx={{ minWidth: 120 }}>
               <InputLabel id="country-code-label">Code</InputLabel>
               <Select
+                size='small'
                 labelId="country-code-label"
                 id="country-code-select"
                 name="countryCode"
@@ -108,6 +108,7 @@ const Create = () => {
 
             {/* Phone Number Input */}
             <TextField
+              size='small'
               label="Phone Number"
               name="phone_no"
               variant="outlined"
@@ -123,6 +124,7 @@ const Create = () => {
         </FormControl>
 
         <TextField
+          size='small'
           label="Email"
           name="email"
           className="mb-8"
@@ -136,9 +138,10 @@ const Create = () => {
 
         />
 
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={loading}>
           <InputLabel id="role">Role</InputLabel>
           <Select
+            size='small'
             labelId="role"
             id="role"
             name="role"
@@ -154,6 +157,7 @@ const Create = () => {
           </Select>
         </FormControl>
         <TextField
+          size='small'
           label="Password"
           name="password"
           className="mb-8"
@@ -168,6 +172,7 @@ const Create = () => {
 
         />
         <TextField
+          size='small'
           label="Comfirm Password"
           name="comfirm_password"
           className="mb-8"
@@ -180,17 +185,32 @@ const Create = () => {
           required
           helperText={profile?.error?.password}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create User"}
-        </Button>
+        <div className='flex gap-4'>
 
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/users'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
+
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

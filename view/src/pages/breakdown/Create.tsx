@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
 import { createBreakdown } from "../../store/slices/breakdownSlice";
-// import { fetchItems } from "../../store/slices/itemSlice";
 import { fetchEquipments } from "../../store/slices/equipmentSlice";
 import { fetchMachines } from "../../store/slices/machineSlice";
-// import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
-// import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -20,9 +17,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -92,7 +86,7 @@ const Create = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2!">
         Create Breakdown
       </Typography>
       <Box
@@ -110,6 +104,7 @@ const Create = () => {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -129,6 +124,7 @@ const Create = () => {
             // views={['hours', 'minutes', 'seconds']}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -140,6 +136,7 @@ const Create = () => {
         </LocalizationProvider>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={machines.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -163,6 +160,7 @@ const Create = () => {
         </FormControl>
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
+            size='small'
             options={Array.isArray(equipments.data) && equipments.data?.filter(
               (equipment) => equipment.machine.id === formData.machine_id
             ) || []}
@@ -190,6 +188,7 @@ const Create = () => {
         </FormControl>
 
         <TextField
+          size='small'
           multiline
           label="Reason"
           name="reason"
@@ -202,18 +201,32 @@ const Create = () => {
           disabled={loading}
           helperText={breakdown?.error?.reason}
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Breakdown"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/breakdowns'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
 
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

@@ -19,7 +19,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -68,7 +67,7 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Edit Activity
       </Typography>
       <Box
@@ -78,12 +77,14 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
         className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Description"
           name="description"
           variant="outlined"
+          className='mb-3!'
           fullWidth
           multiline
-          minRows={3}
+          minRows={2}
           value={formData?.description}
           onChange={handleChange}
           required
@@ -91,6 +92,7 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
           helperText={activity.error?.description || ""}
         />
         <Button
+          size='small'
           type="submit"
           variant="contained"
           color="primary"

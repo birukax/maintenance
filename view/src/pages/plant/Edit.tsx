@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchPlant,
   updatePlant,
@@ -65,18 +65,24 @@ const Edit = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
-        Edit Plant
-      </Typography>
+      <div className='flex gap-4 '>
+        <Typography variant="h5" color='primary' className="mb-2! ">
+          Edit Plant
+        </Typography>
+        <Typography variant="h5" color='warning' >
+          {plant?.data?.code}
+
+        </Typography>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Name"
           name="name"
-          className="mb-8"
           variant="outlined"
           fullWidth
           value={formData.name}
@@ -85,18 +91,33 @@ const Edit = () => {
           disabled={loading}
           helperText={plant.error?.name || ""}
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Plant"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={plant.loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/plant/detail/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={plant.loading}
 
+          >
+            Cancel
+          </Button>
+
+        </div>
       </Box>
     </Container>
   );

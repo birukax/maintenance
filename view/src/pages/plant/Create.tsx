@@ -1,18 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createPlant } from "../../store/slices/plantSlice";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
@@ -49,7 +44,7 @@ const Create = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Plant
       </Typography>
       <Box
@@ -58,6 +53,7 @@ const Create = () => {
         className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Code"
           name="code"
           className="mb-8"
@@ -71,6 +67,7 @@ const Create = () => {
         />
 
         <TextField
+          size='small'
           label="Name"
           name="name"
           className="mb-8"
@@ -82,18 +79,32 @@ const Create = () => {
           disabled={loading}
           helperText={plant?.error?.name}
         />
+        <div className='flex gap-4'>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Create Plant"}
-        </Button>
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Create"}
+          </Button>
+          <Button
+            component={Link}
+            to='/plants'
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={loading}
 
+          >
+            Cancel
+          </Button>
+        </div>
       </Box>
     </Container>
   );

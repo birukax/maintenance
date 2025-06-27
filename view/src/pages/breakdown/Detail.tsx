@@ -48,10 +48,11 @@ const Detail = () => {
             />
           </Modal>
           <Button
+            size='small'
             onClick={handleModalOpen}
             variant="contained"
-            className="bg-slate-700"
             sx={{ mr: 1 }}
+
           >
             Create Work Order
           </Button>
@@ -69,10 +70,9 @@ const Detail = () => {
                 />
               </Modal>
               <Button
+                size='small'
                 onClick={handleUpdateModalOpen}
                 variant="contained"
-                className="bg-slate-700"
-                sx={{ mr: 1 }}
               >
                 Update
               </Button>
@@ -86,76 +86,76 @@ const Detail = () => {
   const renderDetails = (data) => (
     <>
 
-    <h2>
-      Primary Information
-    </h2>
-    <div className="rw">
-      <div className="clmn">
-        <Typography variant="h6">Machine:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data?.machine?.code} - {data?.machine?.name}
-      </Typography>
-      </div>
-      <div className="clmn">
-      <Typography variant="h6">Equipment:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data?.equipment?.code} - {data?.equipment?.name}
-      </Typography>
-
-      </div>
-      <div className="clmn">
-      <Typography variant="h6">Status:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data?.status}
-      </Typography>
-      </div>
-    </div>
-
-    <h2>
-      Timeline
-    </h2>
-
-    <div className="rw">
-      <div className="clmn">
-<Typography variant="h6">Start:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {start()}
-      </Typography>
-      </div>
-      <div className="clmn">
-{data?.end_date && (
-        <>
-          <Typography variant="h6">End:</Typography>
+      <h2>
+        Primary Information
+      </h2>
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Machine:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {end()}
+            {data?.machine?.code} - {data?.machine?.name}
           </Typography>
-        </>
-      )}
+        </div>
+        <div className="clmn">
+          <Typography variant="h6">Equipment:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data?.equipment?.code} - {data?.equipment?.name}
+          </Typography>
+
+        </div>
+        <div className="clmn">
+          <Typography variant="h6">Status:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data?.status}
+          </Typography>
+        </div>
       </div>
-    </div>
-      
+
+      <h2>
+        Timeline
+      </h2>
+
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Start:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {start()}
+          </Typography>
+        </div>
+        <div className="clmn">
+          {data?.end_date && (
+            <>
+              <Typography variant="h6">End:</Typography>
+              <Typography variant="body1" className="text-slate-500 mb-2">
+                {end()}
+              </Typography>
+            </>
+          )}
+        </div>
+      </div>
+
       <h2>Detail</h2>
       <div className="rw">
         <div className="clmn">
 
-      <Typography variant="h6">Reason:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data?.reason}
-      </Typography>
+          <Typography variant="h6">Reason:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data?.reason}
+          </Typography>
         </div>
         <div className="clmn">
-{data?.remark && (
-        <>
-          <Typography variant="h6">Remark:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {data?.remark}
-          </Typography>
-        </>
-      )}
+          {data?.remark && (
+            <>
+              <Typography variant="h6">Remark:</Typography>
+              <Typography variant="body1" className="text-slate-500 mb-2">
+                {data?.remark}
+              </Typography>
+            </>
+          )}
         </div>
       </div>
-      
-      
+
+
     </>
   );
   return (

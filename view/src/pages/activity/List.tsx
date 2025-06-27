@@ -5,11 +5,9 @@ import { updateActivity, deleteActivity } from "../../store/slices/activitySlice
 import { AppState, AppDispatch } from "../../store/store";
 import { GenericListPage } from "../../components/GenericListPage";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams, Link } from "react-router-dom"
 import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import Pagination from "../../components/Pagination";
 import BlockIcon from '@mui/icons-material/Block';
-import RefreshIcon from "@mui/icons-material/Refresh";
 import CreateActivity from "./CreateActivity";
 import DeleteActivity from "./DeleteActivity";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -106,7 +104,7 @@ const List: React.FC = () => {
         >
           <CreateActivity
             entityState={entityState}
-            setModalOpen={setEditModalOpen}
+            setModalOpen={setAssignModalOpen}
             handleRefresh={handleRefresh}
           />
         </Modal>
@@ -149,14 +147,16 @@ const List: React.FC = () => {
             New
           </Button>
           <Button
+            component={Link}
+            to={`/schedule/detail/${id}`}
+            type='button'
             size='small'
-            variant="contained"
-            startIcon={<RefreshIcon />}
-            onClick={handleRefresh}
+            variant='contained'
+            fullWidth
             disabled={entityState.loading}
-            className="btn-refresh"
+
           >
-            Refresh
+            Save
           </Button>
         </div>
       </div>
@@ -230,7 +230,7 @@ const List: React.FC = () => {
                       <IconButton aria-label="disable" title="Disable" onClick={() => {
                         disableActivity(row.id, row.active)
                       }}>
-                        <BlockIcon color='warning' />
+                        <BlockIcon color='action' />
                       </IconButton>
                       <IconButton aria-label="edit" title="Edit" onClick={() => {
                         setEditId(row.id)
@@ -242,7 +242,7 @@ const List: React.FC = () => {
                         setDeleteId(row.id)
                         handledeleteModalOpen()
                       }}>
-                        <DeleteIcon color='error' />
+                        <DeleteIcon color='warning' />
                       </IconButton>
                     </ButtonGroup>
                   </TableCell>

@@ -12,9 +12,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 380,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -23,37 +22,37 @@ const DeleteActivity = ({ handleDeleteActivity, handledeleteModalClose, deleteId
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      {/* <Typography variant="h5" color='primary' className="mb-2! ">
         Delete Activity
-      </Typography>
+      </Typography> */}
       <Box
-        className="form-gap w-full"
+        className="w-full"
       >
-        <Typography variant="h6">
+        <Typography color='primary' variant='h6' >
           Are you sure you want to delete this activity?
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
+        <Box className='flex gap-4 mt-4 justify-end' >
           <Button
-            variant="outlined"
-            sx={{ mr: 1, padding: ".5rem 2rem", maxHeight: "40px" }}
+            size='small'
+            variant="contained"
             onClick={handledeleteModalClose}
           >
             {activity.loading ? (
               <CircularProgress size={24} />
             ) : (
-              "Cancel"
+              "No"
             )}
           </Button>
 
           <Button
+            size='small'
             variant="outlined"
-            sx={{ mr: 1, padding: ".5rem 2rem", maxHeight: "40px", backgroundColor: "#ca4335", color: "white" }}
             onClick={() => handleDeleteActivity(deleteId)}
           >
             {activity.loading ? (
               <CircularProgress size={24} />
             ) : (
-              "Delete"
+              "Yes"
             )}
           </Button></Box>
       </Box>

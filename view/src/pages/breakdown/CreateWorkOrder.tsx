@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createBreakdownWorkOrder } from "../../store/slices/breakdownSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,8 +10,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
 import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
-
-
 
 import {
   TextField,
@@ -35,7 +33,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -139,7 +136,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   };
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Create Breakdown Work Order
       </Typography>
       <Box
@@ -156,6 +153,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             onChange={handleDateChange}
             slotProps={{
               textField: {
+                size: 'small',
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
@@ -165,11 +163,12 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             }}
           />
         </LocalizationProvider>
-        <FormControl fullWidth variant="outlined" required disabled={breakdown.loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown.loading}>
           <InputLabel id="work-order-type-select-label">
             Work Order Type
           </InputLabel>
           <Select
+            size='small'
             labelId="work-order-type-select-label"
             id="work-order-type-select"
             name="work_order_type_id"
@@ -185,9 +184,10 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
               ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={breakdown.loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown.loading}>
           <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
           <Select
+            size='small'
             labelId="activity-type-select-label"
             id="activity-type-select"
             name="activity_type_id"
@@ -212,6 +212,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
         <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
           <Autocomplete
             multiple
+            size='small'
             options={sparepartOptions}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
@@ -230,8 +231,9 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
             }
           ></Autocomplete>
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
+        <FormControl size='small' fullWidth variant="outlined" disabled={breakdown.loading}>
           <Autocomplete
+            size='small'
             multiple
             options={toolOptions}
             getOptionLabel={(option) => option.name}
@@ -252,6 +254,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
           ></Autocomplete>
         </FormControl>
         <TextField
+          size='small'
           label="Total Time Required (In minutes)"
           name="total_time_required"
           type="number"
@@ -266,6 +269,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
         />
 
         <Button
+          size='small'
           type="submit"
           variant="contained"
           color="primary"
@@ -276,7 +280,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
           {breakdown.loading ? (
             <CircularProgress size={24} />
           ) : (
-            "Create Breakdown Work Order"
+            "Create"
           )}
         </Button>
 

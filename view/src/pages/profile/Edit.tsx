@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchProfile,
   updateProfile,
-  fetchProfiles,
 } from "../../store/slices/profileSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -15,16 +13,8 @@ import {
   Container,
   CircularProgress,
   Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControlLabel,
-  Switch,
-  FormHelperText,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { Roles } from "../../utils/choices";
 
 const Edit = () => {
   const [formData, setFormData] = useState({
@@ -77,7 +67,7 @@ const Edit = () => {
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
-      <Typography variant="h4" className="mb-6 text-gray-800">
+      <Typography variant="h5" color='primary' className="mb-2! ">
         Reset Password
       </Typography>
       <Box
@@ -86,9 +76,9 @@ const Edit = () => {
         className="form-gap w-full"
       >
         <TextField
+          size='small'
           label="Password"
           name="password"
-          className="mb-8"
           variant="outlined"
           fullWidth
           value={formData.password}
@@ -99,9 +89,9 @@ const Edit = () => {
           helperText={profile.error?.password || ""}
         />
         <TextField
+          size='small'
           label="Comfirm Password"
           name="comfirm_password"
-          className="mb-8"
           variant="outlined"
           fullWidth
           value={comfirmpas}
@@ -110,17 +100,33 @@ const Edit = () => {
           type="password"
           required
           helperText={profile.error?.password || ""}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={loading}
-          className="mt-4"
-        >
-          {loading ? <CircularProgress size={24} /> : "Edit Profile"}
-        </Button>
+        /><div className='flex gap-4'>
+
+          <Button
+            size='small'
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={profile.loading}
+            className="mt-4"
+          >
+            {loading ? <CircularProgress size={24} /> : "Save"}
+          </Button>
+          <Button
+            component={Link}
+            to={`/profile/${id}`}
+            type='button'
+            size='small'
+            variant='outlined'
+            fullWidth
+            disabled={profile.loading}
+
+          >
+            Cancel
+          </Button>
+
+        </div>
 
       </Box>
     </Container>
