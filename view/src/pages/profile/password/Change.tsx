@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchProfile,
-  updateProfile,
-} from "../../store/slices/profileSlice";
-import { AppState, AppDispatch } from "../../store/store";
+  resetPassword,
+} from "../../../store/slices/profileSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import {
   TextField,
   Button,
@@ -16,10 +16,10 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 
-const Edit = () => {
+const Change = () => {
   const [formData, setFormData] = useState({
-      old_password: "",
-      password: ""
+    old_password: "",
+    password: ""
   });
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
@@ -52,9 +52,9 @@ const Edit = () => {
 
       try {
         // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-          await dispatch(updateProfile({ formData })).unwrap();
+        await dispatch(resetPassword({ formData })).unwrap();
         toast.success("Profile edited successfully");
-        navigate(`/profile/${id}`);
+        navigate(`/profile/`);
       } catch (err) {
         toast.error(profile.error?.error || "Something Went Wrong");
         setError(err.response?.data.detail || err.message);
@@ -71,7 +71,7 @@ const Edit = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <Typography variant="h5" color='primary' className="mb-2! ">
-              Change Information
+        Reset Password
       </Typography>
       <Box
         component="form"
@@ -80,31 +80,49 @@ const Edit = () => {
       >
         <TextField
           size='small'
-                  label="Email"
-                  name="email"
+          label="Old Password"
+          name="old_password"
           variant="outlined"
           fullWidth
-                  value={formData.old_password}
+          value={formData.old_password}
           onChange={handleChange}
           disabled={loading}
-                  type="email"
+          type="password"
           required
-                  helperText={profile.error?.email || ""}
+          helperText={profile.error?.old_password || ""}
         />
         <TextField
           size='small'
-                  label="Phone No."
-                  name="phone_no"
+          label="Password"
+          name="password"
           variant="outlined"
           fullWidth
-                  value={formData.phone_no}
-                  onChange={handleChange}
+          value={formData.password}
+          onChange={handleChange}
           disabled={loading}
-                  type="phone_no"
+          type="password"
           required
-                  helperText={profile.error?.phone_no || ""}
-              />
-              <div className='flex gap-4'>
+          helperText={profile.error?.password || ""}
+
+        />
+        {/* {(profile.error?.password && Array.isArray(profile.error?.password)) &&
+          profile.error?.password?.map(el => {
+            return <Typography variant="body1" color="error">{el}</Typography>
+          })
+        } */}
+        <TextField
+          size='small'
+          label="Comfirm Password"
+          name="comfirm_password"
+          variant="outlined"
+          fullWidth
+          value={comfirmpas}
+          onChange={(e) => setComfirmPas(e.target.value)}
+          disabled={loading}
+          type="password"
+          required
+        // helperText={profile.error?.password || ""}
+        /><div className='flex gap-4'>
 
           <Button
             size='small'
@@ -137,4 +155,4 @@ const Edit = () => {
   );
 };
 
-export default Edit;
+export default Change;

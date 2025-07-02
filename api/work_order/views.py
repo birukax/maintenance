@@ -118,22 +118,22 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
                 work_order_type = WorkOrderType.objects.get(id=work_order_type_id)
         except Machine.DoesNotExist:
             raise serializers.ValidationError(
-                {"machine_id": f"Machine with id {machine_id} does not exist."}
+                {"machine_id": f"Machine does not exist."}
             )
         except Equipment.DoesNotExist:
             raise serializers.ValidationError(
-                {"equipment_id": f"Equipment with id {equipment_id} does not exist."}
+                {"equipment_id": f"Equipment does not exist."}
             )
         except ActivityType.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "activity_type_id": f"Activity type with id {activity_type_id} does not exist."
+                    "activity_type_id": f"Activity type does not exist."
                 }
             )
         except WorkOrderType.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "work_order_type_id": f"Work order type with id {work_order_type_id} does not exist."
+                    "work_order_type_id": f"Work order type does not exist."
                 }
             )
         serializer.is_valid(raise_exception=True)
@@ -231,28 +231,20 @@ class WorkOrderActivityVeiwSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderActivitySerializer
     queryset = WorkOrderActivity.objects.all()
     search_fields = ["activity__name", "activity__code"]
-    filterset_fields = ["value"]
+    filterset_fields = ["value", 'work_order__id']
 
     def perform_create(self, serializer):
-        activity_id = self.request.data.get("activity_id")
         work_order_id = self.request.data.get("work_order_id")
         try:
-            if activity_id:
-                activity = ActivityType.objects.get(id=activity_id)
             if work_order_id:
-                work_order = WorkOrderType.objects.get(id=work_order_id)
-        except ActivityType.DoesNotExist:
-            raise serializers.ValidationError(
-                {"activity_id": f"Activity type with id {activity_id} does not exist."}
-            )
-        except WorkOrderType.DoesNotExist:
+                work_order = WorkOrder.objects.get(id=work_order_id)
+        except WorkOrder.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "work_order_id": f"Work order type with id {work_order_id} does not exist."
+                    "work_order_id": f"Work order does not exist."
                 }
             )
         serializer.is_valid(raise_exception=True)
         serializer.save(
-            activity=activity,
             work_order=work_order,
         )

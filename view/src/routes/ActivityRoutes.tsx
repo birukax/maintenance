@@ -1,9 +1,9 @@
 // src/routes/ActivityRoutes.tsx
 import { Route } from "react-router-dom";
-import CreateActivity from "../pages/activity/Create";
-import ActivityList from "../pages/activity/List";
-import ActivityDetail from "../pages/activity/Detail";
-import ActivityEdit from "../pages/activity/Edit";
+import CreateActivity from "../pages/schedule/activity/ManageActivity";
+import ActivityList from "../pages/schedule/activity/List";
+import ActivityDetail from "../pages/schedule/activity/Detail";
+import ActivityEdit from "../pages/schedule/activity/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const ActivityRoutes = [

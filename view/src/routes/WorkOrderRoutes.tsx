@@ -5,7 +5,7 @@ import WorkOrderList from "../pages/workOrder/List";
 import WorkOrderDetail from "../pages/workOrder/Detail";
 import ProtectedRoute from "../components/ProtectedRoute";
 import CheckList from "../pages/workOrderActivity/CheckList";
-import AddActivityPage from "../pages/workOrder/AddActivityPage";
+import ManageActivityPage from "../pages/workOrder/Activity/List";
 const WorkOrderRoutes = [
   <Route
     key="work-order-list"
@@ -34,12 +34,21 @@ const WorkOrderRoutes = [
       </ProtectedRoute>
     }
   />,
+  // <Route
+  //   key="work-order-detail"
+  //   path="/work-order/:id/add-activities"
+  //   element={
+  //     <ProtectedRoute>
+  //       <AddActivityPage />
+  //     </ProtectedRoute>
+  //   }
+  // />,
   <Route
     key="work-order-detail"
-    path="/work-order/:id/add-activities"
+    path="/work-order/:id/manage-activities"
     element={
       <ProtectedRoute>
-        <AddActivityPage />
+        <ManageActivityPage />
       </ProtectedRoute>
     }
   />,
