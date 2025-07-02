@@ -169,10 +169,10 @@ class WorkOrderActivity(BaseCreatedUpdated):
     description = models.TextField(max_length=300)
     value = models.BooleanField(choices=choices.YES_NO_NONE, default=False)
     # extra = models.BooleanField(choices=choices.YESNO, default=False)
-    remark = models.TextField(max_length=250)
+    remark = models.TextField(max_length=250, null=True, blank=True)
 
     class Meta:
-        ordering = ["description", "-created_at", "-updated_at"]
+        ordering = ["created_at", "updated_at","description"]
         verbose_name_plural = "Work Order Activities"
 
     def __str__(self):

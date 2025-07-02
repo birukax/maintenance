@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchActivity,
   updateActivity,
-} from "../../store/slices/activitySlice";
-import { AppState, AppDispatch } from "../../store/store";
+} from "../../../store/slices/activitySlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import {
   TextField,
   Button,

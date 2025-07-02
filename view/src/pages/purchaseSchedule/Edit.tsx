@@ -115,7 +115,7 @@ const Edit = () => {
             size='small'
             variant="contained"
             onClick={() => {
-              navigate("/purchase-schedules")
+              navigate(`/purchase-schedules?year__no=${year}`)
             }}
           >
             Save

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AppState, AppDispatch } from "../../store/store";
-import { createActivity } from "../../store/slices/activitySlice";
-import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
+import { AppState, AppDispatch } from "../../../store/store";
+import { createActivity } from "../../../store/slices/activitySlice";
+import { fetchActivityTypes } from "../../../store/slices/activityTypeSlice";
 import {
   TextField,
   Button,

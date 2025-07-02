@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { AppState, AppDispatch } from "../../store/store";
+import { AppState, AppDispatch } from "../../../store/store";
 import {
   TextField,
   Button,
@@ -10,7 +10,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-import { createActivity } from "../../store/slices/activitySlice";
+import { createWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
 
 const style = {
   position: "absolute",
@@ -25,19 +25,19 @@ const style = {
 };
 
 const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
-  const { id: schedule_id } = useParams();
+  const { id: work_order_id } = useParams();
   const [formData, setFormData] = useState({
-    schedule_id: schedule_id || "",
-    description: ""
+    work_order_id: work_order_id || "",
+    description: "",
   });
   const activity = useSelector((state: AppState) => state.activity.activity);
   const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // If schedule_id changes, update formData
-    setFormData((prev) => ({ ...prev, schedule_id: schedule_id || "" }));
-  }, [schedule_id]);
+    // If work_order_id changes, update formData
+    setFormData((prev) => ({ ...prev, work_order_id: work_order_id || "" }));
+  }, [work_order_id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +48,7 @@ const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    await dispatch(createActivity(formData)); // Uncomment if needed
+    await dispatch(createWorkOrderActivity(formData)); // Uncomment if needed
     if (!activity.error) {
       setModalOpen(false);
     }
@@ -60,7 +60,7 @@ const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
       <Typography variant="h5" color='primary' className="mb-2! ">
-        Create Activity
+        Create WorkOrder Activity
       </Typography>
       <Box
         component="form"

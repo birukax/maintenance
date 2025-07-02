@@ -13,37 +13,54 @@ class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     search_fields = ["phone_no", "user__username", "user__email"]
-    filterset_fields = ["role", "user__is_active"]
+    filterset_fields = ["role", "user__is_active","user__id"]
 
-    # def perform_create(self, serializer):
-    #     username = self.request.data.get("username")
-    #     email = self.request.data.get("email")
-    #     try:
-    #         user = User(
-    #             username=username,
-    #             email=email,
-    #         )
-    #         user.save()
-    #     except Exception as e:
-    #         raise serializers.ValidationError("error", str(e))
+    def perform_create(self, serializer):
+        username = self.request.data.get("username")
+        email = self.request.data.get("email")
+        try:
+            user = User(
+                username=username,
+                email=email,
+            )
+            user.save()
+        except Exception as e:
+            raise serializers.ValidationError("error", str(e))
 
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(user=user)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    # def perform_update(self, serializer):
-    #     is_active = self.request.data.get("is_active")
-    #     try:
-    #         user = User.objects.get(profile=serializer.instance)
-    #         user.is_active = is_active
-    #         user.save()
-    #     except User.DoesNotExist():
-    #         raise serializers.ValidationError("error", "User does not exist!")
-    #     except Exception as e:
-    #         raise serializers.ValidationError("error", str(e))
-    #     return super().perform_update(serializer)
+    def perform_update(self, serializer):
+        is_active = self.request.data.get("is_active")
+        
+        email = self.request.data.get('email')
+        try:
+            user = User.objects.get(id=serializer.instance.user_id)
+            if is_active != None:
+                user.is_active = is_active
+            if email != None:
+                user.email = email
+            user.save()
+        except User.DoesNotExist():
+            raise serializers.ValidationError("error", "User does not exist!")
+        except Exception as e:
+            raise serializers.ValidationError("error", str(e))
+        return super().perform_update(serializer)
 
-    @action(detail=False, methods=["patch"])
+    @action(detail=False, methods=['GET'])
+    def get_user_profile(self, request):
+        user = self.request.user
+        try:
+            profile = Profile.objects.get(user__id = user.id)
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError({'error': "Profile does not exist."})
+        except Exception as e:
+            raise serializers.ValidationError({'error': str(e)})
+        serializer = self.serializer_class(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["PATCH"])
     def change_password(self, request):
         user = self.request.user
         old_password = request.data.get("old_password")
@@ -60,7 +77,7 @@ class ProfileViewset(viewsets.ModelViewSet):
                 raise serializers.ValidationError(
                     {"error": "User is not authenticated"}
                 )
-            if user.password != old_password:
+            if not user.check_password(old_password):
                 raise serializers.ValidationError(
                     {"old_password": "Old password is incorrect."}
                 )
@@ -68,6 +85,6 @@ class ProfileViewset(viewsets.ModelViewSet):
             user.set_password(password)
         except DjangoValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})
-        except Exception as e:
-            raise serializers.ValidationError("error", str(e))
+        # except Exception as e:
+        #     raise serializers.ValidationError("error", str(e))
         return Response(status=status.HTTP_200_OK)

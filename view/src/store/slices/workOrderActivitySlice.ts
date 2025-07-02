@@ -17,11 +17,11 @@ const initialState: WorkOrderActivityState = {
     workOrderActivity: {data: [], loading: false, error: null},
 };
 
-export const fetchWorkOrderActivities = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchWorkOrderActivities = createAsyncThunk<[],  {params:null}, {rejectValue: string}>(
     'workOrderActivity/fetchWorkOrderActivities',
-    async(_, {rejectWithValue }) => {
+    async(params, {rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/work-order-activities/');
+            const response = await api.get('/work-order/work-order-activities/',{params});
             return response.data;
         }
         catch (error) {
@@ -36,6 +36,18 @@ export const fetchWorkOrderActivity = createAsyncThunk<[], number, { rejectValue
     async (id, { rejectWithValue }) => {
         try {
             const response = await api.get(`/work-order/work-order-activities/${id}/`)
+            return response.data;
+        }
+        catch (error) {
+            return rejectWithValue(error.response?.data || 'Failed to fetch work order');
+        }
+    }
+)
+export const deleteWorkOrderActivity = createAsyncThunk<[], number, { rejectValue: string }>(
+    'workOrderActivity/fetchWorkOrderActivity',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await api.delete(`/work-order/work-order-activities/${id}/`)
             return response.data;
         }
         catch (error) {

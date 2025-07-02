@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { fetchActivity } from "../../store/slices/activitySlice";
-import { AppState } from "../../store/store";
-import { useEntityDetail } from "../../hooks/useEntityDetail";
-import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { fetchActivity } from "../../../store/slices/activitySlice";
+import { AppState } from "../../../store/store";
+import { useEntityDetail } from "../../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 

@@ -88,28 +88,19 @@ const Create = () => {
             {/* Country Code Selection */}
             <FormControl size='small' variant="outlined" sx={{ minWidth: 120 }}>
               <InputLabel id="country-code-label">Code</InputLabel>
-              <Select
-                size='small'
-                labelId="country-code-label"
-                id="country-code-select"
-                name="countryCode"
-                value={countryCode} // Default to +1 (US)
-                onChange={(e) => setCountryCode(e.target.value)}
-                label="Code"
-              >
-                <MenuItem value="+251">+251 (Eth)</MenuItem>
+              
+                <TextField value="+251" size="small" disabled>+251 (Eth)</TextField>
                 {/* <MenuItem value="+1">+1 (US)</MenuItem>
         <MenuItem value="+44">+44 (UK)</MenuItem>
         <MenuItem value="+91">+91 (India)</MenuItem>
         <MenuItem value="+61">+61 (Australia)</MenuItem> */}
                 {/* Add more country codes as needed */}
-              </Select>
             </FormControl>
 
-            {/* Phone Number Input */}
+            {/* Phone No. Input */}
             <TextField
               size='small'
-              label="Phone Number"
+              label="Phone No."
               name="phone_no"
               variant="outlined"
               fullWidth

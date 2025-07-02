@@ -40,17 +40,14 @@ const Detail = () => {
 
   const renderButtons = () => (
     <>
-
       <Button
-        disabled={entityState.data.work_order_type?.scheduled === true ||
-          entityState.data?.status !== 'Created'}
         size='small'
-        onClick={() => navigate(`/work-order/${id}/add-activities`)}
+        onClick={() => navigate(`/work-order/${id}/manage-activities`)}
         variant="contained"
         className="bg-slate-700"
         sx={{ mr: 1 }}
       >
-        Add Activity
+        Manage Activities
       </Button>
 
 

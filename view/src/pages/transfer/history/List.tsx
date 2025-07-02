@@ -26,7 +26,7 @@ const List: React.FC = () => {
         );
       const [params,setParams]=useState({
         search:searchParams.get("search") ||"",
- page:searchParams.get("page")||1       
+        page:searchParams.get("page")||1       
       })
       const dispatch = useDispatch<AppDispatch>();
       

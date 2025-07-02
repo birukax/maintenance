@@ -5,7 +5,7 @@ import UserList from "../pages/users/List";
 import UserDetail from "../pages/users/Detail";
 import UserEdit from "../pages/users/Edit";
 import ProfileDetail from "../pages/profile/Detail";
-import ProfileEdit from "../pages/profile/Edit";
+import ProfileChangePassword from "../pages/profile/password/Change";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const UserRoutes = [
@@ -37,8 +37,17 @@ const UserRoutes = [
     }
   />,
   <Route
+    key="user-edit"
+    path="/user/edit/:id"
+    element={
+      <ProtectedRoute>
+        <UserEdit />
+      </ProtectedRoute>
+    }
+  />,
+  <Route
     key="profile-detail"
-    path="/profile/:id"
+    path="/profile/"
     element={
       <ProtectedRoute>
         <ProfileDetail />
@@ -47,10 +56,10 @@ const UserRoutes = [
   />,
   <Route
     key="profile-edit"
-    path="/profile/passwordreset/:id"
+    path="/profile/password/change"
     element={
       <ProtectedRoute>
-        <ProfileEdit />
+        <ProfileChangePassword />
       </ProtectedRoute>
     }
   />,

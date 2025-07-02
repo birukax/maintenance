@@ -43,6 +43,18 @@ export const fetchProfile = createAsyncThunk<[], number, { rejectValue: string }
         }
     }
 )
+export const fetchUserProfile = createAsyncThunk<[], { rejectValue: string }>(
+    'profile/fetchUserProfile',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await api.get(`/account/profiles/get_user_profile/`)
+            return response.data;
+        }
+        catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
 
 export const createProfile = createAsyncThunk<[],  formData  , { rejectValue: string }>(
     'profile/createProfile',
@@ -62,6 +74,17 @@ export const updateProfile = createAsyncThunk<[], { id: string, formData: { [key
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/account/profiles/${id}/`, formData);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+)
+export const resetPassword = createAsyncThunk<[], {formData: { [key: string] } }, { rejectValue: string }>(
+    'profile/resetPassword',
+    async ({formData }, { rejectWithValue }) => {
+        try {
+            const response = await api.patch(`/account/profiles/change_password/`, formData);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -103,6 +126,18 @@ const profileSlice = createSlice({
                         state.profile.loading = false;
                         state.profile.error = action.payload || 'Unknown error';
                     })
+        .addCase(fetchUserProfile.pending, (state) => {
+                        state.profile.loading = true;
+                        state.profile.error = null;
+                    })
+                    .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.profile.loading = false;
+                        state.profile.data = action.payload;
+                    })
+                    .addCase(fetchUserProfile.rejected, (state, action) => {
+                        state.profile.loading = false;
+                        state.profile.error = action.payload || 'Unknown error';
+                    })
                     .addCase(createProfile.pending, (state) => {
                         state.profile.loading = true;
                         state.profile.error = null;
@@ -124,6 +159,18 @@ const profileSlice = createSlice({
                         state.profile.data = action.payload;
                     })
                     .addCase(updateProfile.rejected, (state, action) => {
+                        state.profile.loading = false;
+                        state.profile.error = action.payload || 'Unknown error';
+                    })
+                    .addCase(resetPassword.pending, (state) => {
+                        state.profile.loading = true;
+                        state.profile.error = null;
+                    })
+                    .addCase(resetPassword.fulfilled, (state, action: PayloadAction<[]>) => {
+                        state.profile.loading = false;
+                        state.profile.data = action.payload;
+                    })
+                    .addCase(resetPassword.rejected, (state, action) => {
                         state.profile.loading = false;
                         state.profile.error = action.payload || 'Unknown error';
                     })

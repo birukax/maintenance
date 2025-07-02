@@ -24,6 +24,7 @@ import workOrderReducer from './slices/workOrderSlice';
 import consumptionReducer from './slices/consumptionSlice';
 import activityTypeReducer from './slices/activityTypeSlice';
 import workOrderTypeReducer from './slices/workOrderTypeSlice';
+import workOrderActivityReducer from './slices/workOrderActivitySlice';
 import unitOfMeasureReducer from './slices/unitOfMeasureSlice';
 import purchaseRequestReducer from './slices/purchaseRequestSlice';
 import purchaseApprovalReducer from './slices/purchaseApprovalSlice';
@@ -54,6 +55,7 @@ interface RootState {
   consumption: ReturnType<typeof consumptionReducer>;
   activityType: ReturnType<typeof activityTypeReducer>;
   workOrderType: ReturnType<typeof workOrderTypeReducer>;
+  workOrderActivity: ReturnType<typeof workOrderActivityReducer>;
   unitOfMeasure: ReturnType<typeof unitOfMeasureReducer>;
   purchaseRequest: ReturnType<typeof purchaseRequestReducer>;
   purchaseApproval: ReturnType<typeof purchaseApprovalReducer>;
@@ -85,6 +87,7 @@ const rootReducer = combineReducers({
     consumption: consumptionReducer,
     activityType: activityTypeReducer,
     workOrderType: workOrderTypeReducer,
+    workOrderActivity: workOrderActivityReducer,
     unitOfMeasure: unitOfMeasureReducer,
     purchaseRequest: purchaseRequestReducer,
     purchaseApproval: purchaseApprovalReducer,
