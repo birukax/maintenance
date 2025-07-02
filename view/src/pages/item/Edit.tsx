@@ -76,9 +76,9 @@ const Create = () => {
   }, [contacts.data]);
 
   const selectedSuppliers = useMemo(() => {
-    return supplierOptions.filter((option) =>
+    return supplierOptions ? supplierOptions.filter((option) =>
       formData.suppliers_id?.includes(option.id)
-    );
+    ) : [];
   }, [formData.suppliers_id, supplierOptions]);
 
 
