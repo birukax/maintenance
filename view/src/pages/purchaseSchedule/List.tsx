@@ -15,7 +15,7 @@ const purchaseScheduleColumns = [
   { header: "Item", accessor: "item.name" },
   { header: "UoM", accessor: "item.uom.name" },
   { header: "Current Balance", accessor: "balance" },
-  { header: "Min Stock Level", accessor: "item.minimum_stock_level" },
+  { header: "Minimum Balance", accessor: "item.minimum_stock_level" },
   { header: "Year", accessor: "year.no" },
   { header: "Quantity", accessor: "quantity" },
   { header: "Purchased Quantity", accessor: "purchased_quantity" },

@@ -30,15 +30,30 @@
   }
 }
 .table-container {
+  margin-top: 1rem;
   overflow: scroll;
   /* max-height: 80vh !important; */
   scrollbar-color: var(--smoke) transparent;
   flex: 1;
+  /* box-shadow: 0 -15px 35px -29px ; */
   /* height: 100%; */
+}
+
+table thead tr th{
+  padding: .5rem !important;
+  background-color: #5d4037 !important;
+  color: white !important;
+  p{
+    font-size: large !important;
+    /* font-weight: 600 !important; */
+  }
 }
 table tbody tr:last-child {
   /* background-color: red; */
   border: none;
+}
+table tbody tr:nth-child(even){
+  background-color: #f2f2f2b7;
 }
 .table-container:hover {
   scrollbar-color: var(--smoke) transparent;
