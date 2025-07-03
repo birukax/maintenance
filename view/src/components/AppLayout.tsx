@@ -11,6 +11,7 @@ import { logout } from "../store/slices/authSlice";
 import { ToastContainer } from "react-toastify";
 import {
   AppBar,
+  Collapse,
   Toolbar,
   Button,
   Typography,
@@ -83,10 +84,51 @@ const AppLayout = ({ children }) => {
       navigate("/login", { replace: true });
     }
   }, [tokens, navigate]);
+  useEffect(() => {
+    const path = location.pathname;
+
+    const sectionPaths = {
+      shelf: ["/shelves", "/shelf-rows", "/shelf-boxes"],
+      inventory: [
+        "/item",
+        "/items",
+        "/inventories",
+        "/locations",
+        "/unit-of-measures",
+        "/transfers",
+      ],
+      purchase: [
+        "/purchase-schedules",
+        "/purchase-requests",
+        "/purchase-approvals",
+      ],
+      maintenance: [
+        "/machines",
+        "/equipments",
+        "/activity-types",
+        "/work-order-types",
+        "/work-orders",
+        "/schedules",
+        "/breakdowns",
+      ],
+      location: ["/plants", "/areas"],
+    }
+    const activeSectionKey = Object.keys(sectionPaths).find((section) =>
+      sectionPaths[section].some((p) => path.startsWith(p))
+    )
+    if (activeSectionKey) {
+      setOpenSections((prevOpenSections) => {
+        if (!prevOpenSections[activeSectionKey]) {
+          return { ...prevOpenSections, [activeSectionKey]: true }
+        }
+        return prevOpenSections;
+      })
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     sessionStorage.setItem("previousRoute", location.pathname);
-  }, [navigate]);
+  }, [location.pathname]);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -102,19 +144,18 @@ const AppLayout = ({ children }) => {
       </div> */}
       <Toolbar sx={{ minWidth: "fit-content" }} />
       <List sx={{ minWidth: "fit-content" }}>
-        <ListItemButton component={Link} to="/dashboard">
+        <ListItemButton selected={location.pathname === '/dashboard'} component={Link} to="/dashboard">
           <ListItemIcon>
             <DashboardIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItemButton>
-        <ListItemButton component={Link} to="/contacts">
+        <ListItemButton selected={location.pathname === "/contacts"} component={Link} to="/contacts">
           <ListItemIcon>
             <ContactsIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Contacts" />
         </ListItemButton>
-
         <ListItemButton onClick={() => toggleSection("shelf")}>
           <ListItemText primary="Shelf" />
           {openSections.shelf ? (
@@ -123,284 +164,285 @@ const AppLayout = ({ children }) => {
             <ExpandMoreIcon color="primary" />
           )}
         </ListItemButton>
-        {openSections.shelf && (
+        <Collapse in={openSections.shelf} timeout='auto' unmountOnExit>
           <List
             component="div"
             disablePadding
             sx={{ minWidth: "fit-content" }}
           >
-            <ListItemButton component={Link} to="/shelves" sx={{ pl: 4 }}>
+            <ListItemButton selected={location.pathname === "/shelves"} component={Link} to="/shelves" sx={{ pl: 4 }}>
               <ListItemIcon>
                 <TableChartIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Shelf" />
             </ListItemButton>
-            <ListItemButton component={Link} to="/shelf-rows" sx={{ pl: 4 }}>
+            <ListItemButton selected={location.pathname === "/shelf-rows"} component={Link} to="/shelf-rows" sx={{ pl: 4 }}>
               <ListItemIcon>
                 <TableRowsIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Shelf Row" />
             </ListItemButton>
-            <ListItemButton component={Link} to="/shelf-boxes" sx={{ pl: 4 }}>
+            <ListItemButton selected={location.pathname === "/shelf-boxes"} component={Link} to="/shelf-boxes" sx={{ pl: 4 }}>
               <ListItemIcon>
                 <ArchiveIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Shelf Box" />
             </ListItemButton>
           </List>
-        )}
+        </Collapse>
 
 
-        <List>
-          <ListItemButton onClick={() => toggleSection("inventory")}>
-            <ListItemText primary="Inventory" />
-            {openSections.inventory ? (
-              <ExpandLessIcon color="primary" />
-            ) : (
-              <ExpandMoreIcon color="primary" />
-            )}
-          </ListItemButton>
-          {openSections.inventory && (
-            <List
-              component="div"
-              disablePadding
-              sx={{ minWidth: "fit-content" }}
+        <ListItemButton onClick={() => toggleSection("inventory")}>
+          <ListItemText primary="Inventory" />
+          {openSections.inventory ? (
+            <ExpandLessIcon color="primary" />
+          ) : (
+            <ExpandMoreIcon color="primary" />
+          )}
+        </ListItemButton>
+        <Collapse in={openSections.inventory} timeout='auto' unmountOnExit>
+          <List
+            component="div"
+            disablePadding
+            sx={{ minWidth: "fit-content" }}
+          >
+            <ListItemButton selected={location.pathname === "/items"} component={Link} to="/items" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <CategoryIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Items" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/inventories"} component={Link} to="/inventories" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <InventoryIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Inventory" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/locations"} component={Link} to="/locations" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <PlaceIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Location"
+                sx={{ minWidth: "fit-content" }}
+              />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/unit-of-measures"}
+              component={Link}
+              to="/unit-of-measures"
+              sx={{ pl: 4 }}
             >
-              <ListItemButton component={Link} to="/items" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <CategoryIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Items" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/inventories" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <InventoryIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Inventory" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/locations" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <PlaceIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Location"
-                  sx={{ minWidth: "fit-content" }}
-                />
-              </ListItemButton>
-              <ListItemButton
-                component={Link}
-                to="/unit-of-measures"
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <ScaleIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Unit of Measures"
-                  sx={{ minWidth: "fit-content" }}
-                />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/transfers" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <UndoIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Transfer" />
-              </ListItemButton>
-              {/* <ListItemButton component={Link} to="/consumptions" sx={{ pl: 4 }} >
+              <ListItemIcon>
+                <ScaleIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Unit of Measures"
+                sx={{ minWidth: "fit-content" }}
+              />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/transfers"} component={Link} to="/transfers" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <UndoIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Transfer" />
+            </ListItemButton>
+            {/* <ListItemButton selected={location.pathname ===} component={Link} to="/consumptions" sx={{ pl: 4 }} >
                 <ListItemIcon>
                   <LocalShippingIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Consumption" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/returns" sx={{ pl: 4 }}>
+                </ListItemButton>
+                <ListItemButton selected={location.pathname ===} component={Link} to="/returns" sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <UndoIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Return" />
-              </ListItemButton> */}
-            </List>
-          )}
-
-          <ListItemButton onClick={() => toggleSection("purchase")}>
-            <ListItemText primary="Purchase" />
-            {openSections.purchase ? (
-              <ExpandLessIcon color="primary" />
-            ) : (
-              <ExpandMoreIcon color="primary" />
-            )}
-          </ListItemButton>
-          {openSections.purchase && (
-            <List
-              component="div"
-              disablePadding
-              sx={{ minWidth: "fit-content" }}
-            >
-              {
-                <ListItemButton
-                  component={Link}
-                  to={"/purchase-schedules"}
-                  sx={{ pl: 4 }}
-                >
-                  <ListItemIcon>
-                    <CalendarMonthIcon color="primary" />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Purchase Schedule"
-                    sx={{ minWidth: "fit-content" }}
-                  />
-                </ListItemButton>
-              }
+                  <ListItemText primary="Return" />
+              </ListItemButton> */}
+          </List>
+        </Collapse>
 
-              <ListItemButton
+        <ListItemButton onClick={() => toggleSection("purchase")}>
+          <ListItemText primary="Purchase" />
+          {openSections.purchase ? (
+            <ExpandLessIcon color="primary" />
+          ) : (
+            <ExpandMoreIcon color="primary" />
+          )}
+        </ListItemButton>
+        <Collapse in={openSections.purchase} timeout='auto' unmountOnExit>
+
+          <List
+            component="div"
+            disablePadding
+            sx={{ minWidth: "fit-content" }}
+          >
+            {
+              <ListItemButton selected={location.pathname === "/purchase-schedules"}
                 component={Link}
-                to="/purchase-requests"
+                to="/purchase-schedules"
                 sx={{ pl: 4 }}
               >
                 <ListItemIcon>
-                  <RequestPageIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Purchase Request" />
-              </ListItemButton>
-              <ListItemButton
-                component={Link}
-                to="/purchase-approvals"
-                sx={{ pl: 4, minWidth: "fit-content" }}
-              >
-                <ListItemIcon>
-                  <CheckCircleIcon color="primary" />
+                  <CalendarMonthIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Purchase Approval"
+                  primary="Purchase Schedule"
                   sx={{ minWidth: "fit-content" }}
                 />
               </ListItemButton>
-            </List>
-          )}
+            }
 
-          <ListItemButton onClick={() => toggleSection("maintenance")}>
-            <ListItemText primary="Maintenance" />
-            {openSections.maintenance ? (
-              <ExpandLessIcon color="primary" />
-            ) : (
-              <ExpandMoreIcon color="primary" />
-            )}
-          </ListItemButton>
-          {openSections.maintenance && (
-            <List
-              component="div"
-              disablePadding
-              sx={{ minWidth: "fit-content" }}
+            <ListItemButton selected={location.pathname === "/purchase-requests"}
+              component={Link}
+              to="/purchase-requests"
+              sx={{ pl: 4 }}
             >
-              <ListItemButton component={Link} to="/machines" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <PrecisionManufacturingIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Machine" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/equipments" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <HomeRepairServiceIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Equipment" />
-              </ListItemButton>
+              <ListItemIcon>
+                <RequestPageIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Purchase Request" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/purchase-approvals"}
+              component={Link}
+              to="/purchase-approvals"
+              sx={{ pl: 4, minWidth: "fit-content" }}
+            >
+              <ListItemIcon>
+                <CheckCircleIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Purchase Approval"
+                sx={{ minWidth: "fit-content" }}
+              />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <ListItemButton onClick={() => toggleSection("maintenance")}>
+          <ListItemText primary="Maintenance" />
+          {openSections.maintenance ? (
+            <ExpandLessIcon color="primary" />
+          ) : (
+            <ExpandMoreIcon color="primary" />
+          )}
+        </ListItemButton>
+        <Collapse in={openSections.maintenance} timeout='auto' unmountOnExit>
+          <List
+            component="div"
+            disablePadding
+            sx={{ minWidth: "fit-content" }}
+          >
+            <ListItemButton selected={location.pathname === "/machines"} component={Link} to="/machines" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <PrecisionManufacturingIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Machine" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/equipments"} component={Link} to="/equipments" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <HomeRepairServiceIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Equipment" />
+            </ListItemButton>
 
-              {/* <ListItemButton component={Link} to="/activities" sx={{ pl: 4 }}>
+            {/* <ListItemButton selected={location.pathname ===} component={Link} to="/activities" sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <PlaylistAddCheckIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText primary="Activity" />
               </ListItemButton> */}
 
-              <ListItemButton
-                component={Link}
-                to="/activity-types"
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <ContactsIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Activity Type" />
-              </ListItemButton>
-
-              <ListItemButton
-                component={Link}
-                to="/work-order-types"
-                sx={{ pl: 4 }}
-              >
-                <ListItemIcon>
-                  <EngineeringIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Work Order Type"
-                  sx={{ minWidth: "fit-content" }}
-                />
-              </ListItemButton>
-
-              <ListItemButton component={Link} to="/work-orders" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <ConstructionIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Work Order" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/schedules" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <EditCalendarIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Schedule" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/breakdowns" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <HardwareIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Breakdown" />
-              </ListItemButton>
-            </List>
-          )}
-
-          <ListItemButton onClick={() => toggleSection("location")}>
-            <ListItemText primary="Location" />
-            {openSections.location ? (
-              <ExpandLessIcon color="primary" />
-            ) : (
-              <ExpandMoreIcon color="primary" />
-            )}
-          </ListItemButton>
-          {openSections.location && (
-            <List
-              component="div"
-              disablePadding
-              sx={{ minWidth: "fit-content" }}
+            <ListItemButton selected={location.pathname === "/activity-types"}
+              component={Link}
+              to="/activity-types"
+              sx={{ pl: 4 }}
             >
-              <ListItemButton component={Link} to="/plants" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <FactoryIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Plant" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/areas" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <AreaChartIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Area" />
-              </ListItemButton>
-            </List>
-          )}
+              <ListItemIcon>
+                <ContactsIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Activity Type" />
+            </ListItemButton>
 
-          <ListItemButton component={Link} to="/users">
-            <ListItemIcon>
-              <PersonIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Users" />
-          </ListItemButton>
-          <ListItemButton component={Link} to={`/profile/${user?.user_id}`}>
-            <ListItemIcon>
-              <PersonIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItemButton>
-        </List>
+            <ListItemButton selected={location.pathname === "/work-order-types"}
+              component={Link}
+              to="/work-order-types"
+              sx={{ pl: 4 }}
+            >
+              <ListItemIcon>
+                <EngineeringIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Work Order Type"
+                sx={{ minWidth: "fit-content" }}
+              />
+            </ListItemButton>
+
+            <ListItemButton selected={location.pathname === "/work-orders"} component={Link} to="/work-orders" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <ConstructionIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Work Order" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/schedules"} component={Link} to="/schedules" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <EditCalendarIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Schedule" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/breakdowns"} component={Link} to="/breakdowns" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <HardwareIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Breakdown" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+
+
+        <ListItemButton onClick={() => toggleSection("location")}>
+          <ListItemText primary="Location" />
+          {openSections.location ? (
+            <ExpandLessIcon color="primary" />
+          ) : (
+            <ExpandMoreIcon color="primary" />
+          )}
+        </ListItemButton>
+        <Collapse in={openSections.location} timeout='auto' unmountOnExit>
+
+          <List
+            component="div"
+            disablePadding
+            sx={{ minWidth: "fit-content" }}
+          >
+            <ListItemButton selected={location.pathname === "/plants"} component={Link} to="/plants" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <FactoryIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Plant" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/areas"} component={Link} to="/areas" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <AreaChartIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Area" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+
+
+        <ListItemButton selected={location.pathname === "/users"} component={Link} to="/users">
+          <ListItemIcon>
+            <PersonIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary="Users" />
+        </ListItemButton>
+        <ListItemButton selected={location.pathname.startsWith('/profile')} component={Link} to={`/profile/${user?.user_id}`}>
+          <ListItemIcon>
+            <PersonIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary="Profile" />
+        </ListItemButton>
       </List>
-    </div>
+    </div >
   );
   return (
     <Box sx={{ display: "flex" }}>
