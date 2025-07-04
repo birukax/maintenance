@@ -1,6 +1,7 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchShelf } from "../../store/slices/shelfSlice";
+import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
@@ -11,8 +12,9 @@ import EditIcon from '@mui/icons-material/Edit';
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.shelf.shelf,
-    fetchDetailAction: fetchShelf,
+    fetchDetailAction: fetchShelf
   });
+
   const renderButtons = () => (
     <>
       <Button
@@ -28,19 +30,30 @@ const Detail = () => {
     </>
   );
 
+
+
   const renderDetails = (data) => (
     <>
       <div className="rw">
         <div className="clmn">
           <Typography variant="h6">Code:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.code}
+            {data?.code}
           </Typography>
         </div>
         <div className="clmn">
           <Typography variant="h6">Name:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.name}
+            {data?.name}
+          </Typography>
+        </div>
+      </div>
+      <h2 className="title">Location :</h2>
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Location:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.location?.name}
           </Typography>
         </div>
       </div>

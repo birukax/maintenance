@@ -75,7 +75,7 @@ const Detail = () => {
           <>
             <Typography variant="h6">Requested By:</Typography>
             <Typography variant="body1" className="text-slate-500">
-              {data.requested_by?.username}
+              {data?.requested_by?.username}
             </Typography>
           </>
 
@@ -102,19 +102,19 @@ const Detail = () => {
           <>
             <Typography variant="h6">Requested Date:</Typography>
             <Typography variant="body1" className="text-slate-500">
-              {data.requested_date}
+              {data?.requested_date}
             </Typography>
           </>
 
 
         </div>
 
-        {data.received_date && (<div className="clmn">
+        {data?.received_date && (<div className="clmn">
 
           <>
             <Typography variant="h6">Received Date:</Typography>
             <Typography variant="body1" className="text-slate-500">
-              {data.received_date}
+              {data?.received_date}
             </Typography>
           </>
 
@@ -137,11 +137,11 @@ const Detail = () => {
             {data?.received_quantity}
           </Typography>
         </div>
-        {data.location ?
+        {data?.location ?
           <div className="clmn">
             <Typography variant="h6">Received Location:</Typography>
             <Typography variant="body1" className="text-slate-500">
-              {data.location?.name}
+              {data?.location?.name}
             </Typography>
           </div> : ""}
         <div className="clmn">
@@ -149,17 +149,17 @@ const Detail = () => {
             <>
               <Typography variant="h6">Requested By:</Typography>
               <Typography variant="body1" className="text-slate-500">
-                {data.requested_by?.username}
+                {data?.requested_by?.username}
               </Typography>
             </>
           )}
         </div>
         <div className="clmn">
-          {data.approved_by ? (
+          {data?.approved_by ? (
             <>
               <Typography variant="h6">Approved By:</Typography>
               <Typography variant="body1" className="text-slate-500">
-                {data.approved_by.username}
+                {data?.approved_by.username}
               </Typography>
             </>
           ) :

@@ -33,13 +33,28 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Code:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.code}
+            {data?.code}
           </Typography>
         </div>
         <div className="clmn">
           <Typography variant="h6">Name:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.name}
+            {data?.name}
+          </Typography>
+        </div>
+      </div>
+      <h2>Location</h2>
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Shelf:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.shelf?.name}
+          </Typography>
+        </div>
+        <div className="clmn">
+          <Typography variant="h6">Location:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data?.shelf?.location?.name}
           </Typography>
         </div>
       </div>

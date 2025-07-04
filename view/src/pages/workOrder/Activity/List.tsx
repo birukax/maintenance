@@ -85,7 +85,6 @@ const List: React.FC = () => {
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
 
-  console.log(entityState);
   
   return (
     <>

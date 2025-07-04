@@ -32,14 +32,14 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Name:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.name}
+            {data?.name}
           </Typography>
 
         </div>
         <div className="clmn">
           <Typography variant="h6">Phone No:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.phone_no}
+            {data?.phone_no}
           </Typography>
 
         </div>
@@ -49,13 +49,13 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Email:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.email}
+            {data?.email}
           </Typography>
         </div>
         <div className="clmn">
           <Typography variant="h6">address:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.address}
+            {data?.address}
           </Typography>
         </div>
       </div>

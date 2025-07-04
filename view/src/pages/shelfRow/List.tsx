@@ -12,6 +12,8 @@ import {
 const shelfColumns = [
   { header: "Code", accessor: "code" },
   { header: "Name", accessor: "name" },
+  { header: "Shelf", accessor: "shelf.name" },
+  { header: "Location", accessor: "shelf.location.name" },
 ];
 
 const List: React.FC = () => {

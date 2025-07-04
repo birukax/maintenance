@@ -73,7 +73,6 @@ const Create = () => {
       })
       : [];
 
-  console.log(selectedItems);
 
   return (
     <Container className="flex flex-col items-center justify-start min-h-full p-9">

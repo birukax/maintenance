@@ -134,7 +134,7 @@ const Detail = () => {
           </Typography>
         </div>
 
-        {data.breakdown && (
+        {data?.breakdown && (
           <div className="clmn">
             <Typography variant="h6">Breakdown Reason:</Typography>
             <Typography variant="body1" className="text-slate-500 mb-2">
@@ -144,7 +144,7 @@ const Detail = () => {
         )}
 
 
-        {data.schedule && (
+        {data?.schedule && (
           <div className="clmn">
             <Typography variant="h6">Schedule:</Typography>
             <Typography variant="body1" className="text-slate-500 mb-2">
@@ -259,7 +259,7 @@ const Detail = () => {
             );
           })}
         </div>
-        {data.completed_by && (
+        {data?.completed_by && (
           <div className="clmn">
             <Typography variant="h6">Completed By:</Typography>
             <Typography variant="body1" className="text-slate-500 mb-2">

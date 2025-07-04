@@ -16,7 +16,6 @@ const Detail = () => {
     dispatch(fetchUserProfile())
 
   }, [])
-  console.log(entityState);
 
   const renderButtons = () => (
     <>

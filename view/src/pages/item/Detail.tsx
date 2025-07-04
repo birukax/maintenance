@@ -34,17 +34,17 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">ID:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.no}
+            {data?.no}
           </Typography>
         </div>
         <div className="clmn"><Typography variant="h6">Name:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data.name}
+            {data?.name}
           </Typography>
         </div>
         <div className="clmn"><Typography variant="h6">Type:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.type}
+            {data?.type}
           </Typography>
 
 
@@ -52,18 +52,18 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Category:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.category}
+            {data?.category}
           </Typography></div>
         <div className="clmn">
           <Typography variant="h6">Unit of Measure:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.uom && data.uom.name}
+            {data?.uom && data.uom.name}
           </Typography>
         </div>
         <div className="clmn">
           <Typography variant="h6">Minimum Stock Level:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.minimum_stock_level}
+            {data?.minimum_stock_level}
           </Typography>
         </div>
       </div>
@@ -73,23 +73,23 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Location:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.shelf && data.shelf?.location?.name}
+            {data?.shelf && data.shelf?.location?.name}
           </Typography>
         </div>
         <div className="clmn">
           <Typography variant="h6">Shelf:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.shelf && data.shelf?.name}
+            {data?.shelf && data.shelf?.name}
           </Typography>
         </div>
         <div className="clmn"><Typography variant="h6">Shelf Row:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.row && data.row?.name}
+            {data?.row && data.row?.name}
           </Typography>
         </div>
         <div className="clmn"><Typography variant="h6">Shelf Box:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data.box && data.box?.name}
+            {data?.box && data.box?.name}
           </Typography>
         </div>
       </div>

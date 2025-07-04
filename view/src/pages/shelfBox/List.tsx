@@ -12,19 +12,23 @@ import {
 const shelfColumns = [
   { header: "Code", accessor: "code" },
   { header: "Name", accessor: "name" },
+  { header: "Row", accessor: "row.name" },
+  { header: "Shelf", accessor: "row.shelf.name" },
+  { header: "Location", accessor: "row.shelf.location.name" },
 ];
+
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
-      const [searchParams, setSearchParams] = useSearchParams();
-      const [keyWord,setKeyWord]=useState("")
-      const entityState = useSelector(
-          (state: AppState) => state.shelfBox.shelfBoxes
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyWord,setKeyWord]=useState("")
+  const entityState = useSelector(
+    (state: AppState) => state.shelfBox.shelfBoxes
         );
-      const [params,setParams]=useState({
-        search:searchParams.get("search") ||"",
- page:searchParams.get("page")||1       
-      })
+        const [params,setParams]=useState({
+          search:searchParams.get("search") ||"",
+          page:searchParams.get("page")||1       
+        })
       const dispatch = useDispatch<AppDispatch>();
       
       useEffect(() => {

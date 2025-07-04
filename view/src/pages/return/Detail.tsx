@@ -25,7 +25,7 @@ const Detail = () => {
       <div className="clmn">
       <Typography variant="h6">Item:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.item?.name}
+            {data?.item?.name}
       </Typography>
       
       </div>
@@ -39,7 +39,7 @@ const Detail = () => {
       <div className="clmn">
       <Typography variant="h6">Quantity:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.quantity}
+            {data?.quantity}
       </Typography>
       </div>
     </div>
@@ -49,7 +49,7 @@ const Detail = () => {
       <div className="clmn">
       <Typography variant="h6">Date:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.date}
+            {data?.date}
       </Typography>
       </div>
     </div>
@@ -60,14 +60,14 @@ const Detail = () => {
       <div className="clmn">
 <Typography variant="h6">Reason:</Typography>
       <Typography variant="body1" className="text-slate-500 mb-2">
-        {data.reason}
+            {data?.reason}
       </Typography>
       
       </div>
       <div className="clmn">
 <Typography variant="h6">Used:</Typography>
       <Typography variant="body1" className="text-slate-500">
-        {data.used ? "Yes" : "No"}
+            {data?.used ? "Yes" : "No"}
       </Typography>
       </div>
     </div>

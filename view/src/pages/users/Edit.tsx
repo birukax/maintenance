@@ -78,7 +78,6 @@ const Edit = () => {
     }
   };
 
-  console.log(profile.data);
   
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
