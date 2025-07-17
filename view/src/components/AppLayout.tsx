@@ -63,7 +63,7 @@ const AppLayout = ({ children }) => {
     purchase: false,
     maintenance: false,
     consumption: false,
-    location: false,
+    asset: false,
     shelf: false,
   });
   const [searchParams, setSearchParams] = useSearchParams();
@@ -103,15 +103,17 @@ const AppLayout = ({ children }) => {
         "/purchase-approvals",
       ],
       maintenance: [
-        "/machines",
-        "/equipments",
         "/activity-types",
         "/work-order-types",
         "/work-orders",
         "/schedules",
         "/breakdowns",
       ],
-      location: ["/plants", "/areas"],
+      asset: ["/plants",
+        "/areas",
+        "/machines",
+        "/equipments",
+      ],
     }
     const activeSectionKey = Object.keys(sectionPaths).find((section) =>
       sectionPaths[section].some((p) => path.startsWith(p))
@@ -331,18 +333,6 @@ const AppLayout = ({ children }) => {
             disablePadding
             sx={{ minWidth: "fit-content" }}
           >
-            <ListItemButton selected={location.pathname === "/machines"} component={Link} to="/machines" sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <PrecisionManufacturingIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="Machine" />
-            </ListItemButton>
-            <ListItemButton selected={location.pathname === "/equipments"} component={Link} to="/equipments" sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <HomeRepairServiceIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText primary="Equipment" />
-            </ListItemButton>
 
             {/* <ListItemButton selected={location.pathname ===} component={Link} to="/activities" sx={{ pl: 4 }}>
                 <ListItemIcon>
@@ -398,15 +388,15 @@ const AppLayout = ({ children }) => {
         </Collapse>
 
 
-        <ListItemButton onClick={() => toggleSection("location")}>
-          <ListItemText primary="Location" />
-          {openSections.location ? (
+        <ListItemButton onClick={() => toggleSection("asset")}>
+          <ListItemText primary="Asset" />
+          {openSections.asset ? (
             <ExpandLessIcon color="primary" />
           ) : (
             <ExpandMoreIcon color="primary" />
           )}
         </ListItemButton>
-        <Collapse in={openSections.location} timeout='auto' unmountOnExit>
+        <Collapse in={openSections.asset} timeout='auto' unmountOnExit>
 
           <List
             component="div"
@@ -425,6 +415,18 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText primary="Area" />
             </ListItemButton>
+            <ListItemButton selected={location.pathname === "/machines"} component={Link} to="/machines" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <PrecisionManufacturingIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Machine" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/equipments"} component={Link} to="/equipments" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <HomeRepairServiceIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Equipment" />
+            </ListItemButton>
           </List>
         </Collapse>
 
@@ -435,7 +437,7 @@ const AppLayout = ({ children }) => {
           </ListItemIcon>
           <ListItemText primary="Users" />
         </ListItemButton>
-        <ListItemButton selected={location.pathname.startsWith('/profile')} component={Link} to={`/profile/${user?.user_id}`}>
+        <ListItemButton selected={location.pathname === '/profile'} component={Link} to={`/profile`}>
           <ListItemIcon>
             <PersonIcon color="primary" />
           </ListItemIcon>

@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <Container className="flex flex-col items-center justify-center min-h-screen">
       <Typography variant="h4" color='primary' className="mb-6! ">
-        Welcome
+        WELCOME
       </Typography>
       <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4">
         <div className='flex-col'>

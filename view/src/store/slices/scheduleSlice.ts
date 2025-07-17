@@ -13,15 +13,15 @@ interface ScheduleState {
 }
 
 const initialState: ScheduleState = {
-    schedules: {data: [], loading: false, error: null},
-    schedule: {data: [], loading: false, error: null},
+    schedules: { data: [], loading: false, error: null },
+    schedule: { data: [], loading: false, error: null },
 };
 
-export const fetchSchedules = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchSchedules = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'schedule/fetchSchedules',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/schedule/schedules/',{params});
+            const response = await api.get('/schedule/schedules/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchSchedule = createAsyncThunk<[], number, { rejectValue: string 
     }
 )
 
-export const createSchedule = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createSchedule = createAsyncThunk<[], formData, { rejectValue: string }>(
     'schedule/createSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -77,7 +77,9 @@ export const createScheduledWorkOrder = createAsyncThunk<[], { id: string, formD
             const response = await api.post(`/schedule/schedules/${id}/create_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue( error.response?.data || {message: 'Failed to create work order.'});
+            console.log(error.response)
+            console.log(error.response.data.error)
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 )
@@ -88,69 +90,69 @@ const scheduleSlice = createSlice({
     name: 'schedule',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchSchedules.pending, (state) => {
-            state.schedules.loading = true;
-            state.schedules.error = null;
-        })
-        .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.schedules.loading = false;
-            state.schedules.data = action.payload;
-        })
-        .addCase(fetchSchedules.rejected, (state, action) => {
-            state.schedules.loading = false;
-            state.schedules.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchSchedule.pending, (state) => {
-                        state.schedule.loading = true;
-                        state.schedule.error = null;
-                    })
-        .addCase(fetchSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.schedule.loading = false;
-            state.schedule.data = action.payload;
-        })
-        .addCase(fetchSchedule.rejected, (state, action) => {
-            state.schedule.loading = false;
-            state.schedule.error = action.payload || 'Unknown error';
-        })
-        .addCase(createSchedule.pending, (state) => {
-            state.schedule.loading = true;
-            state.schedule.error = null;
-        })
-        .addCase(createSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.schedule.loading = false;
-            state.schedule.data = action.payload;
-        })
-        .addCase(createSchedule.rejected, (state, action) => {
-            state.schedule.loading = false;
-            state.schedule.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateSchedule.pending, (state) => {
-            state.schedule.loading = true;
-            state.schedule.error = null;
-        })
-        .addCase(updateSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.schedule.loading = false;
-            state.schedule.data = action.payload;
-        })
-        .addCase(updateSchedule.rejected, (state, action) => {
-            state.schedule.loading = false;
-            state.schedule.error = action.payload || 'Unknown error';
-        })
-        .addCase(createScheduledWorkOrder.pending, (state) => {
-            state.schedule.loading = true;
-            state.schedule.error = null;
-        })
-        .addCase(createScheduledWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.schedule.loading = false;
-            state.schedule.data = action.payload;
-        })
-        .addCase(createScheduledWorkOrder.rejected, (state, action) => {
-            state.schedule.loading = false;
-            state.schedule.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchSchedules.pending, (state) => {
+                state.schedules.loading = true;
+                state.schedules.error = null;
+            })
+            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.schedules.loading = false;
+                state.schedules.data = action.payload;
+            })
+            .addCase(fetchSchedules.rejected, (state, action) => {
+                state.schedules.loading = false;
+                state.schedules.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchSchedule.pending, (state) => {
+                state.schedule.loading = true;
+                state.schedule.error = null;
+            })
+            .addCase(fetchSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.schedule.loading = false;
+                state.schedule.data = action.payload;
+            })
+            .addCase(fetchSchedule.rejected, (state, action) => {
+                state.schedule.loading = false;
+                state.schedule.error = action.payload || 'Unknown error';
+            })
+            .addCase(createSchedule.pending, (state) => {
+                state.schedule.loading = true;
+                state.schedule.error = null;
+            })
+            .addCase(createSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.schedule.loading = false;
+                state.schedule.data = action.payload;
+            })
+            .addCase(createSchedule.rejected, (state, action) => {
+                state.schedule.loading = false;
+                state.schedule.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateSchedule.pending, (state) => {
+                state.schedule.loading = true;
+                state.schedule.error = null;
+            })
+            .addCase(updateSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.schedule.loading = false;
+                state.schedule.data = action.payload;
+            })
+            .addCase(updateSchedule.rejected, (state, action) => {
+                state.schedule.loading = false;
+                state.schedule.error = action.payload || 'Unknown error';
+            })
+            .addCase(createScheduledWorkOrder.pending, (state) => {
+                state.schedule.loading = true;
+                state.schedule.error = null;
+            })
+            .addCase(createScheduledWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.schedule.loading = false;
+                state.schedule.data = action.payload;
+            })
+            .addCase(createScheduledWorkOrder.rejected, (state, action) => {
+                state.schedule.loading = false;
+                state.schedule.error = action.payload || 'Unknown error';
+            })
     }
 })
 

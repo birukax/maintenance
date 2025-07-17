@@ -61,23 +61,19 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
                 work_order_type = WorkOrderType.objects.get(id=work_order_type_id)
         except Machine.DoesNotExist:
             raise serializers.ValidationError(
-                {"machine_id": f"Machine with id {machine_id} does not exist."}
+                {"machine_id": f"Machine does not exist."}
             )
         except Equipment.DoesNotExist:
             raise serializers.ValidationError(
-                {"equipment_id": f"Equipment with id {equipment_id} does not exist."}
+                {"equipment_id": f"Equipment does not exist."}
             )
         except ActivityType.DoesNotExist:
             raise serializers.ValidationError(
-                {
-                    "activity_type_id": f"Activity type with id {activity_type_id} does not exist."
-                }
+                {"activity_type_id": f"Activity type does not exist."}
             )
         except WorkOrderType.DoesNotExist:
             raise serializers.ValidationError(
-                {
-                    "work_order_type_id": f"Work order type with id {work_order_type_id} does not exist."
-                }
+                {"work_order_type_id": f"Work order type does not exist."}
             )
         serializer.is_valid(raise_exception=True)
         serializer.save(
@@ -96,7 +92,7 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
     def create_work_order(self, request, pk=None):
         schedule = self.get_object()
         start_date = request.data.get("start_date")
-        activities = Activity.objects.filter(schedule=schedule, active=False)
+        activities = Activity.objects.filter(schedule=schedule, active=True)
 
         if not activities.exists():
             raise serializers.ValidationError(
@@ -137,6 +133,6 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
                 )
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
-        serializer = self.serializer_class(self.queryset)
+        serializer = self.serializer_class(schedule)
 
         return Response(serializer.data, status=status.HTTP_200_OK)

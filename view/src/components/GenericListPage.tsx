@@ -244,7 +244,7 @@ export const GenericListPage = ({
                         scope="row"
                         align="left"
                         size="small"
-                        sx={{ padding: 1.5 }}
+                        sx={{ padding: 1 }}
                       >
                         <Typography noWrap>
                           {col.renderCell

@@ -139,7 +139,7 @@ class Item(BaseCreatedUpdated):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ["name", "-created_at"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.name}"
@@ -174,7 +174,7 @@ class Inventory(BaseCreatedUpdated):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        ordering = ["item__no", "location__code"]
+        ordering = ["-item__created_at", "location__code"]
         verbose_name_plural = "inventories"
 
     def __str__(self):

@@ -36,13 +36,7 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   });
   const schedule = useSelector((state: AppState) => state.schedule.schedule)
 
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const handleDateChange = (value) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
@@ -54,18 +48,16 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createScheduledWorkOrder({ id, formData })).unwrap();
       toast.success("Scheduled Work Order created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(schedule.error?.error || "Something Went Wrong");
+      toast.error(schedule.error?.error || err || "Something Went Wrong");
+      console.log(schedule.error?.start_date)
       // setError(err.response?.data.detail || err.message);  
-      setError(
-        err.response?.data.detail || "Failed to create a scheduled work order."
-      );
+
     }
   };
   return (

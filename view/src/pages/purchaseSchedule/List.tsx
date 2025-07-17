@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import Edit from "./Edit";
 import { useNavigate } from "react-router-dom";
 const purchaseScheduleColumns = [
+  { header: "Item ID", accessor: "item.no" },
   { header: "Item", accessor: "item.name" },
   { header: "UoM", accessor: "item.uom.name" },
   { header: "Current Balance", accessor: "balance" },
@@ -37,11 +38,11 @@ const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = useState({
-    year__no: searchParams.get("year__no") && searchParams.get("year__no") !=="null" ? searchParams.get("year__no") : new Date().getFullYear(),
-    page:searchParams.get("page") ||1
+    year__no: searchParams.get("year__no") && searchParams.get("year__no") !== "null" ? searchParams.get("year__no") : new Date().getFullYear(),
+    page: searchParams.get("page") || 1
 
   });
-  
+
   const [keyWord, setKeyWord] = useState("");
   const entityState = useSelector(
     (state: AppState) => state.purchaseSchedule.purchaseSchedules
@@ -54,7 +55,7 @@ const List: React.FC = () => {
     setSearchParams(params);
   }, []);
 
-  
+
 
   const handleRefresh = () => {
     if (tokens) {
@@ -70,17 +71,17 @@ const List: React.FC = () => {
     let parameters
     // Handle filter action here
     if (field === "year__no") {
-      if(!searchParams.get("search")){
+      if (!searchParams.get("search")) {
         parameters = {
-        [field]: value
-      }
-      }else{
+          [field]: value
+        }
+      } else {
         parameters = {
-        search: searchParams.get("search"),
-        [field]: value,
-      };
+          search: searchParams.get("search"),
+          [field]: value,
+        };
       }
-       
+
       setSearchParams({ ...parameters });
       await dispatch(fetchPurchaseSchedules(parameters));
     }
@@ -99,7 +100,7 @@ const List: React.FC = () => {
     await dispatch(fetchPurchaseSchedules(parameters));
   };
 
-  
+
   return (
     <GenericListPage
       title="Purchase Schedules"

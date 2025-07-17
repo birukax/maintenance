@@ -1,12 +1,13 @@
 // src/pages/List.tsx
-import React, { useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import { fetchBreakdowns } from "../../store/slices/breakdownSlice";
-import { AppState,AppDispatch } from "../../store/store";
-import {useSelector, useDispatch } from "react-redux";
-import {useSearchParams} from "react-router-dom"
+import { AppState, AppDispatch } from "../../store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom"
 import { GenericListPage } from "../../components/GenericListPage";
 
 const breakdownColumns = [
+  { header: "ID", accessor: 'id' },
   { header: "Machine", accessor: "machine.name" },
   { header: "Equipment", accessor: "equipment.name" },
   { header: "Status", accessor: "status" },
@@ -17,48 +18,49 @@ const breakdownColumns = [
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
-      const [searchParams, setSearchParams] = useSearchParams();
-      const [keyWord,setKeyWord]=useState("")
-      const entityState = useSelector(
-          (state: AppState) => state.breakdown.breakdowns
-        );
-      const [params,setParams]=useState({
-        search:searchParams.get("search") ||"",
-        page:searchParams.get("page") ||1
-      })
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyWord, setKeyWord] = useState("")
+  const entityState = useSelector(
+    (state: AppState) => state.breakdown.breakdowns
+  );
+  const [params, setParams] = useState({
+    search: searchParams.get("search") || "",
+    page: searchParams.get("page") || 1
+  })
 
-      const dispatch = useDispatch<AppDispatch>();
-          
-          useEffect(() => {
-              if (tokens) {
-                dispatch(fetchBreakdowns(params));
-                // setSearchParams(params)
-              }
-            },[]);
-        
-            const handleRefresh = () => {
-             if (tokens) {
-               dispatch(fetchBreakdowns(params));
-           }}
-        
-          const handleFilter=async (field,value)=>{
-       setSearchParams({ ...params, page: 1 });
+  const dispatch = useDispatch<AppDispatch>();
 
-             setParams(prev=>{
-              return{
-                ...prev,
-                [field]:value
-              }
-            })
-            const parameters={
-              ...params,
-              page:1,
-              [field]:value
-            }
-             setSearchParams({ ...parameters, [field]: value });
-            await dispatch(fetchBreakdowns(parameters));
-          
-          }
+  useEffect(() => {
+    if (tokens) {
+      dispatch(fetchBreakdowns(params));
+      // setSearchParams(params)
+    }
+  }, []);
+
+  const handleRefresh = () => {
+    if (tokens) {
+      dispatch(fetchBreakdowns(params));
+    }
+  }
+
+  const handleFilter = async (field, value) => {
+    setSearchParams({ ...params, page: 1 });
+
+    setParams(prev => {
+      return {
+        ...prev,
+        [field]: value
+      }
+    })
+    const parameters = {
+      ...params,
+      page: 1,
+      [field]: value
+    }
+    setSearchParams({ ...parameters, [field]: value });
+    await dispatch(fetchBreakdowns(parameters));
+
+  }
 
   return (
     <GenericListPage
