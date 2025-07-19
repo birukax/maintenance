@@ -27,35 +27,28 @@ const Create = () => {
     password: ""
   });
   const profile = useSelector((state: AppState) => state.profile.profile)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [comfirmpas, setComfirmPas] = useState("")
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
 
     setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     if (comfirmpas === formData.password) {
+      setFormData({ ...formData, phone_no: countryCode + formData.phone_no })
       try {
-        await dispatch(createProfile({ ...formData, phone_no: countryCode + formData.phone_no })).unwrap();
+        await dispatch(createProfile(formData)).unwrap();
         toast.success("Profile created successfully");
-        navigate("/profiles");
+        navigate("/users");
       } catch (err) {
-        toast.error(profile.error?.error || "Something Went Wrong");
-        setError(err.response?.data.detail || err.message);
-      } finally {
-        setLoading(false);
+        toast.error(profile?.error?.error || "Something Went Wrong");
       }
     } else {
       toast.error("Password and Comfirm Password must be similar");
-      setLoading(false);
     }
 
   };
@@ -79,22 +72,16 @@ const Create = () => {
           value={formData.username}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={profile.loading}
           helperText={profile?.error?.username}
         />
 
-        <FormControl size='small' fullWidth className="mb-8" disabled={loading}>
-          <Box display="flex" alignItems="center" gap={2}>
+        <FormControl size='small' fullWidth className="mb-8" disabled={profile.loading}>
+          <Box display="flex" alignItems="center" gap={1}>
             {/* Country Code Selection */}
-            <FormControl size='small' variant="outlined" sx={{ minWidth: 120 }}>
-              <InputLabel id="country-code-label">Code</InputLabel>
-              
-                <TextField value="+251" size="small" disabled>+251 (Eth)</TextField>
-                {/* <MenuItem value="+1">+1 (US)</MenuItem>
-        <MenuItem value="+44">+44 (UK)</MenuItem>
-        <MenuItem value="+91">+91 (India)</MenuItem>
-        <MenuItem value="+61">+61 (Australia)</MenuItem> */}
-                {/* Add more country codes as needed */}
+            <FormControl className='w-20' size='small' variant="outlined">
+
+              <TextField value="+251" size="small" disabled />
             </FormControl>
 
             {/* Phone No. Input */}
@@ -106,7 +93,7 @@ const Create = () => {
               fullWidth
               value={`${formData.phone_no}`}
               onChange={handleChange}
-              disabled={loading}
+              disabled={profile.loading}
               type="tel"
               helperText={profile?.error?.phone_no}
 
@@ -123,13 +110,13 @@ const Create = () => {
           fullWidth
           value={formData.email}
           onChange={handleChange}
-          disabled={loading}
+          disabled={profile.loading}
           type="email"
           helperText={profile?.error?.email}
 
         />
 
-        <FormControl size='small' fullWidth variant="outlined" required disabled={loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={profile.loading}>
           <InputLabel id="role">Role</InputLabel>
           <Select
             size='small'
@@ -156,7 +143,7 @@ const Create = () => {
           fullWidth
           value={formData.password}
           onChange={handleChange}
-          disabled={loading}
+          disabled={profile.loading}
           type="password"
           required
           helperText={profile?.error?.password}
@@ -171,10 +158,10 @@ const Create = () => {
           fullWidth
           value={comfirmpas}
           onChange={(e) => setComfirmPas(e.target.value)}
-          disabled={loading}
+          disabled={profile.loading}
           type="password"
           required
-          helperText={profile?.error?.password}
+        // helperText={profile?.error?.password}
         />
         <div className='flex gap-4'>
 
@@ -184,10 +171,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={profile.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {profile.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -196,7 +183,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={profile.loading}
 
           >
             Cancel

@@ -8,6 +8,7 @@ from work_order.serializers import (
     ActivitySerializer,
 )
 from .models import Schedule
+from work_order.models import WorkOrder, Activity
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -48,3 +49,36 @@ class ScheduleSerializer(serializers.ModelSerializer):
             "activities",
             "planned_time",
         ]
+
+
+class CreateWorkOrderSerializer(serializers.Serializer):
+    schedule_id = serializers.IntegerField()
+    start_date = serializers.DateField()
+
+    def validate(self, data):
+        try:
+            schedule = Schedule.objects.get(id=data["schedule_id"])
+            start_date = data["start_date"]
+        except Schedule.DoesNotExist:
+            raise serializers.ValidationError("The schedule can not be found.")
+        except Exception as e:
+            print(e)
+            raise serializers.ValidationError(
+                "An unknown error occured while creating the Work Order."
+            )
+        scheduled_workorders = WorkOrder.objects.filter(schedule=schedule)
+
+        if scheduled_workorders.exclude(status="Completed").exists():
+            raise serializers.ValidationError(
+                "There's an active work order for this schedule."
+            )
+
+        if scheduled_workorders.filter(start_date=start_date).exists():
+            raise serializers.ValidationError(
+                "Duplicate work order on this date for this schedule."
+            )
+        if not Activity.objects.filter(schedule=schedule, active=True).exists():
+            raise serializers.ValidationError(
+                "The schedule must have at least one active activity."
+            )
+        return data

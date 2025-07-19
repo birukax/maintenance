@@ -4,7 +4,7 @@ import api from '../../utils/api';
 interface DataState {
     data: [] | null;
     loading: boolean;
-    error: string | null;
+    error: [] | null;
 }
 
 interface ScheduleState {
@@ -13,8 +13,8 @@ interface ScheduleState {
 }
 
 const initialState: ScheduleState = {
-    schedules: { data: [], loading: false, error: null },
-    schedule: { data: [], loading: false, error: null },
+    schedules: { data: [], loading: false, error: [] },
+    schedule: { data: [], loading: false, error: [] },
 };
 
 export const fetchSchedules = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
@@ -39,7 +39,7 @@ export const fetchSchedule = createAsyncThunk<[], number, { rejectValue: string 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Failed to fetch schedule.');
         }
     }
 )
@@ -52,7 +52,7 @@ export const createSchedule = createAsyncThunk<[], formData, { rejectValue: stri
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || "Failed to create schedule.");
         }
     }
 )
@@ -64,22 +64,20 @@ export const updateSchedule = createAsyncThunk<[], { id: string, formData: { [ke
             const response = await api.patch(`/schedule/schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || "Failed to update schedule.");
         }
     }
 )
 
 
-export const createScheduledWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const createScheduledWorkOrder = createAsyncThunk(
     'schedule/createScheduledWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/schedule/schedules/${id}/create_work_order/`, formData);
             return response.data;
         } catch (error) {
-            console.log(error.response)
-            console.log(error.response.data.error)
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || "Failed to create work order.");
         }
     }
 )
@@ -103,7 +101,7 @@ const scheduleSlice = createSlice({
             })
             .addCase(fetchSchedules.rejected, (state, action) => {
                 state.schedules.loading = false;
-                state.schedules.error = action.payload || 'Unknown error';
+                state.schedules.error = action.payload;
             })
             .addCase(fetchSchedule.pending, (state) => {
                 state.schedule.loading = true;
@@ -115,7 +113,7 @@ const scheduleSlice = createSlice({
             })
             .addCase(fetchSchedule.rejected, (state, action) => {
                 state.schedule.loading = false;
-                state.schedule.error = action.payload || 'Unknown error';
+                state.schedule.error = action.payload;
             })
             .addCase(createSchedule.pending, (state) => {
                 state.schedule.loading = true;
@@ -127,7 +125,7 @@ const scheduleSlice = createSlice({
             })
             .addCase(createSchedule.rejected, (state, action) => {
                 state.schedule.loading = false;
-                state.schedule.error = action.payload || 'Unknown error';
+                state.schedule.error = action.payload;
             })
             .addCase(updateSchedule.pending, (state) => {
                 state.schedule.loading = true;
@@ -139,7 +137,7 @@ const scheduleSlice = createSlice({
             })
             .addCase(updateSchedule.rejected, (state, action) => {
                 state.schedule.loading = false;
-                state.schedule.error = action.payload || 'Unknown error';
+                state.schedule.error = action.payload;
             })
             .addCase(createScheduledWorkOrder.pending, (state) => {
                 state.schedule.loading = true;
@@ -147,11 +145,11 @@ const scheduleSlice = createSlice({
             })
             .addCase(createScheduledWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
                 state.schedule.loading = false;
-                state.schedule.data = action.payload;
+                // state.schedule.data = action.payload;
             })
             .addCase(createScheduledWorkOrder.rejected, (state, action) => {
                 state.schedule.loading = false;
-                state.schedule.error = action.payload || 'Unknown error';
+                state.schedule.error = action.payload
             })
     }
 })

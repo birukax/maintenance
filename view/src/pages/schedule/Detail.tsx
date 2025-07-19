@@ -6,7 +6,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal } from "@mui/material";
 import { Link } from "react-router-dom";
-import CreateWorkOrder from "../../pages/schedule/CreateWorkOrder";
+import Create from "./workOrder/Create";
 
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -26,7 +26,7 @@ const Detail = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <CreateWorkOrder
+        <Create
           entityState={entityState}
           setModalOpen={setModalOpen}
         />

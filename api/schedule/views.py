@@ -2,6 +2,7 @@ import datetime
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from .models import Schedule
 from inventory.models import Item
 from asset.models import Machine, Equipment
@@ -12,7 +13,7 @@ from work_order.models import (
     WorkOrderActivity,
     WorkOrder,
 )
-from .serializers import ScheduleSerializer
+from .serializers import ScheduleSerializer, CreateWorkOrderSerializer
 
 
 class ScheduleVeiwSet(viewsets.ModelViewSet):
@@ -88,28 +89,15 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
         serializer.instance.spareparts_required.set(spareparts_required_id)
         serializer.instance.tools_required.set(tools_required_id)
 
-    @action(detail=True, methods=["POST"])
+    @action(detail=True, methods=["POST"], serializer_class=CreateWorkOrderSerializer)
     def create_work_order(self, request, pk=None):
-        schedule = self.get_object()
-        start_date = request.data.get("start_date")
-        activities = Activity.objects.filter(schedule=schedule, active=True)
-
-        if not activities.exists():
-            raise serializers.ValidationError(
-                {"error": "There are no active activites for this schedule!"}
-            )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        schedule_id = serializer.validated_data.pop("schedule_id")
+        start_date = serializer.validated_data.pop("start_date")
 
         try:
-            if (
-                WorkOrder.objects.filter(schedule=schedule)
-                .exclude(status="Completed")
-                .exists()
-            ):
-                raise serializers.ValidationError(
-                    {
-                        "error": "Work order already exists for this schedule and start_date."
-                    }
-                )
+            schedule = Schedule.objects.get(id=schedule_id)
             work_order = WorkOrder(
                 schedule=schedule,
                 start_date=start_date,
@@ -132,7 +120,9 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
                     description=a.description,
                 )
         except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-        serializer = self.serializer_class(schedule)
+            print(e)
+            raise serializers.ValidationError(
+                "error while creating scheduled work order."
+            )
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)

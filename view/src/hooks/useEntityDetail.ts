@@ -25,13 +25,13 @@ export function useEntityDetail({
   const { tokens } = useSelector((state: AppState) => state.auth);
   const entityState = useSelector(detailSelector);
   const dispatch = useDispatch<AppDispatch>();
-  const { id } = useParams<{ id: string }>(); 
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-      if (tokens && id) {
-       dispatch(fetchDetailAction(id));
+    if (tokens && id) {
+      dispatch(fetchDetailAction(id));
     }
-  }, [dispatch, fetchDetailAction, tokens, id]); 
+  }, [dispatch, fetchDetailAction, tokens, id]);
 
   return {
     ...entityState,

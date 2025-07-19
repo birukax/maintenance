@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { createScheduledWorkOrder } from "../../store/slices/scheduleSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { createScheduledWorkOrder } from "../../../store/slices/scheduleSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -29,12 +29,12 @@ const style = {
   p: 4,
 };
 
-const CreateWorkOrder = ({ entityState, setModalOpen }) => {
+const Create = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
+    schedule_id: id,
     start_date: "",
   });
-  const schedule = useSelector((state: AppState) => state.schedule.schedule)
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -51,12 +51,11 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createScheduledWorkOrder({ id, formData })).unwrap();
-      toast.success("Scheduled Work Order created successfully");
       setModalOpen(false);
+      toast.success("Scheduled Work Order created successfully");
     } catch (err) {
-      toast.error(schedule.error?.error || err || "Something Went Wrong");
-      console.log(schedule.error?.start_date)
-      // setError(err.response?.data.detail || err.message);  
+      console.log(err)
+      toast.error(err?.non_field_errors.join(' ') || err?.non_field_errors || "An unknown error occured.");
 
     }
   };
@@ -83,8 +82,8 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                disabled: schedule.loading,
-                helperText: schedule.error?.start_date || "",
+                disabled: entityState.loading,
+                helperText: entityState.error?.start_date,
               },
             }}
           />
@@ -94,10 +93,10 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={schedule.loading}
+          disabled={entityState.loading}
           className="mt-4"
         >
-          {schedule.loading ? (
+          {entityState.loading ? (
             <CircularProgress size={24} />
           ) : (
             "Create"
@@ -109,4 +108,4 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   );
 };
 
-export default CreateWorkOrder;
+export default Create;

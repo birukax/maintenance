@@ -13,15 +13,15 @@ interface ProfileState {
 }
 
 const initialState: ProfileState = {
-    profiles: {data: [], loading: false, error: null},
-    profile: {data: [], loading: false, error: null},
+    profiles: { data: [], loading: false, error: null },
+    profile: { data: [], loading: false, error: null },
 };
 
-export const fetchProfiles = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchProfiles = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'profile/fetchProfiles',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/account/profiles/',{params});
+            const response = await api.get('/account/profiles/', { params });
             return response.data;
         }
         catch (error) {
@@ -56,7 +56,7 @@ export const fetchUserProfile = createAsyncThunk<[], { rejectValue: string }>(
     }
 )
 
-export const createProfile = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createProfile = createAsyncThunk<[], formData, { rejectValue: string }>(
     'profile/createProfile',
     async (formData, { rejectWithValue }) => {
         try {
@@ -80,9 +80,9 @@ export const updateProfile = createAsyncThunk<[], { id: string, formData: { [key
         }
     }
 )
-export const resetPassword = createAsyncThunk<[], {formData: { [key: string] } }, { rejectValue: string }>(
+export const resetPassword = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: string }>(
     'profile/resetPassword',
-    async ({formData }, { rejectWithValue }) => {
+    async ({ formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/account/profiles/change_password/`, formData);
             return response.data;
@@ -99,82 +99,82 @@ const profileSlice = createSlice({
     name: 'profile',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchProfiles.pending, (state) => {
-            state.profiles.loading = true;
-            state.profiles.error = null;
-        })
-        .addCase(fetchProfiles.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.profiles.loading = false;
-            state.profiles.data = action.payload;
-        })
-        .addCase(fetchProfiles.rejected, (state, action) => {
-            state.profiles.loading = false;
-            state.profiles.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchProfile.pending, (state) => {
-                        state.profile.loading = true;
-                        state.profile.error = null;
-                    })
-                    .addCase(fetchProfile.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.profile.loading = false;
-                        state.profile.data = action.payload;
-                    })
-                    .addCase(fetchProfile.rejected, (state, action) => {
-                        state.profile.loading = false;
-                        state.profile.error = action.payload || 'Unknown error';
-                    })
-        .addCase(fetchUserProfile.pending, (state) => {
-                        state.profile.loading = true;
-                        state.profile.error = null;
-                    })
-                    .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.profile.loading = false;
-                        state.profile.data = action.payload;
-                    })
-                    .addCase(fetchUserProfile.rejected, (state, action) => {
-                        state.profile.loading = false;
-                        state.profile.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createProfile.pending, (state) => {
-                        state.profile.loading = true;
-                        state.profile.error = null;
-                    })
-                    .addCase(createProfile.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.profile.loading = false;
-                        state.profile.data = action.payload;
-                    })
-                    .addCase(createProfile.rejected, (state, action) => {
-                        state.profile.loading = false;
-                        state.profile.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateProfile.pending, (state) => {
-                        state.profile.loading = true;
-                        state.profile.error = null;
-                    })
-                    .addCase(updateProfile.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.profile.loading = false;
-                        state.profile.data = action.payload;
-                    })
-                    .addCase(updateProfile.rejected, (state, action) => {
-                        state.profile.loading = false;
-                        state.profile.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(resetPassword.pending, (state) => {
-                        state.profile.loading = true;
-                        state.profile.error = null;
-                    })
-                    .addCase(resetPassword.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.profile.loading = false;
-                        state.profile.data = action.payload;
-                    })
-                    .addCase(resetPassword.rejected, (state, action) => {
-                        state.profile.loading = false;
-                        state.profile.error = action.payload || 'Unknown error';
-                    })
-                    
+            .addCase(fetchProfiles.pending, (state) => {
+                state.profiles.loading = true;
+                state.profiles.error = null;
+            })
+            .addCase(fetchProfiles.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.profiles.loading = false;
+                state.profiles.data = action.payload;
+            })
+            .addCase(fetchProfiles.rejected, (state, action) => {
+                state.profiles.loading = false;
+                state.profiles.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchProfile.pending, (state) => {
+                state.profile.loading = true;
+                state.profile.error = null;
+            })
+            .addCase(fetchProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.profile.loading = false;
+                state.profile.data = action.payload;
+            })
+            .addCase(fetchProfile.rejected, (state, action) => {
+                state.profile.loading = false;
+                state.profile.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchUserProfile.pending, (state) => {
+                state.profile.loading = true;
+                state.profile.error = null;
+            })
+            .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.profile.loading = false;
+                state.profile.data = action.payload;
+            })
+            .addCase(fetchUserProfile.rejected, (state, action) => {
+                state.profile.loading = false;
+                state.profile.error = action.payload || 'Unknown error';
+            })
+            .addCase(createProfile.pending, (state) => {
+                state.profile.loading = true;
+                state.profile.error = null;
+            })
+            .addCase(createProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.profile.loading = false;
+                state.profile.data = action.payload;
+            })
+            .addCase(createProfile.rejected, (state, action) => {
+                state.profile.loading = false;
+                state.profile.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateProfile.pending, (state) => {
+                state.profile.loading = true;
+                state.profile.error = null;
+            })
+            .addCase(updateProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.profile.loading = false;
+                state.profile.data = action.payload;
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
+                state.profile.loading = false;
+                state.profile.error = action.payload || 'Unknown error';
+            })
+            .addCase(resetPassword.pending, (state) => {
+                state.profile.loading = true;
+                state.profile.error = null;
+            })
+            .addCase(resetPassword.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.profile.loading = false;
+                state.profile.data = action.payload;
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.profile.loading = false;
+                state.profile.error = action.payload || 'Unknown error';
+            })
+
     }
 })
 

@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.core import validators
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from .models import Profile
@@ -13,29 +14,37 @@ class ProfileViewset(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     search_fields = ["phone_no", "user__username", "user__email"]
-    filterset_fields = ["role", "user__is_active","user__id"]
+    filterset_fields = ["role", "user__is_active", "user__id"]
 
     def perform_create(self, serializer):
-        username = self.request.data.get("username")
-        email = self.request.data.get("email")
         try:
+            username = serializer.validated_data.pop("username")
+            email = serializer.validated_data.pop("email")
+            password = serializer.validated_data.pop("password")
+            validate_password(password)
             user = User(
                 username=username,
                 email=email,
             )
             user.save()
+            user.set_password(password)
+
+        except DjangoValidationError as e:
+            raise serializers.ValidationError({"password": list(e.messages)})
         except Exception as e:
-            raise serializers.ValidationError("error", str(e))
+            print(e)
+            raise serializers.ValidationError(
+                {"error": "Error while creating the user."}
+            )
 
         serializer.is_valid(raise_exception=True)
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_update(self, serializer):
-        is_active = self.request.data.get("is_active")
-        
-        email = self.request.data.get('email')
         try:
+            is_active = serializer.validated_data.pop("is_active")
+            email = serializer.validated_data.pop("email")
             user = User.objects.get(id=serializer.instance.user_id)
             if is_active != None:
                 user.is_active = is_active
@@ -48,15 +57,15 @@ class ProfileViewset(viewsets.ModelViewSet):
             raise serializers.ValidationError("error", str(e))
         return super().perform_update(serializer)
 
-    @action(detail=False, methods=['GET'])
+    @action(detail=False, methods=["GET"])
     def get_user_profile(self, request):
         user = self.request.user
         try:
-            profile = Profile.objects.get(user__id = user.id)
+            profile = Profile.objects.get(user__id=user.id)
         except Profile.DoesNotExist:
-            raise serializers.ValidationError({'error': "Profile does not exist."})
+            raise serializers.ValidationError({"error": "Profile does not exist."})
         except Exception as e:
-            raise serializers.ValidationError({'error': str(e)})
+            raise serializers.ValidationError({"error": str(e)})
         serializer = self.serializer_class(profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
