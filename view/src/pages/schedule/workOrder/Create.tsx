@@ -35,6 +35,7 @@ const Create = ({ entityState, setModalOpen }) => {
     schedule_id: id,
     start_date: "",
   });
+  const scheduledWorkOrder = useSelector((state: AppState) => state.schedule.scheduledWorkOrder);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -54,8 +55,8 @@ const Create = ({ entityState, setModalOpen }) => {
       setModalOpen(false);
       toast.success("Scheduled Work Order created successfully");
     } catch (err) {
-      console.log(err)
-      toast.error(err?.non_field_errors.join(' ') || err?.non_field_errors || "An unknown error occured.");
+      // console.log(scheduledWorkOrder.error.non_field_errors[0])
+      toast.error(Array.isArray(scheduledWorkOrder.error.non_field_errors) ? scheduledWorkOrder.error.non_field_errors.join(' ') : scheduledWorkOrder.error.non_field_errors);
 
     }
   };
@@ -82,8 +83,8 @@ const Create = ({ entityState, setModalOpen }) => {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                disabled: entityState.loading,
-                helperText: entityState.error?.start_date,
+                disabled: scheduledWorkOrder.loading,
+                helperText: scheduledWorkOrder.error?.start_date,
               },
             }}
           />
@@ -93,10 +94,10 @@ const Create = ({ entityState, setModalOpen }) => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={entityState.loading}
+          disabled={scheduledWorkOrder.loading}
           className="mt-4"
         >
-          {entityState.loading ? (
+          {scheduledWorkOrder.loading ? (
             <CircularProgress size={24} />
           ) : (
             "Create"

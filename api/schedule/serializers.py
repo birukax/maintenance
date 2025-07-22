@@ -48,6 +48,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
             "spareparts_required",
             "activities",
             "planned_time",
+            "total_work_orders",
         ]
 
 

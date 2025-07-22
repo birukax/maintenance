@@ -1,23 +1,30 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 
-interface DataState {
-    data: [] | null;
+interface Schedule {
+    id: number;
+    [key: string]: any;
+}
+
+interface DataState<T> {
+    data: T;
     loading: boolean;
-    error: [] | null;
+    error: any;
 }
 
 interface ScheduleState {
-    schedules: DataState;
-    schedule: DataState;
+    schedules: DataState<Schedule[]>;
+    schedule: DataState<Schedule | null>;
+    scheduledWorkOrder: { loading: boolean; error: any };
 }
 
 const initialState: ScheduleState = {
-    schedules: { data: [], loading: false, error: [] },
-    schedule: { data: [], loading: false, error: [] },
+    schedules: { data: [], loading: false, error: null },
+    schedule: { data: null, loading: false, error: null },
+    scheduledWorkOrder: { loading: false, error: null },
 };
 
-export const fetchSchedules = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchSchedules = createAsyncThunk<Schedule[], { params: null | undefined }, { rejectValue: any }>(
     'schedule/fetchSchedules',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +38,7 @@ export const fetchSchedules = createAsyncThunk<[], { params: null }, { rejectVal
 )
 
 
-export const fetchSchedule = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchSchedule = createAsyncThunk<Schedule, number, { rejectValue: any }>(
     'schedule/fetchSchedule',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +51,7 @@ export const fetchSchedule = createAsyncThunk<[], number, { rejectValue: string 
     }
 )
 
-export const createSchedule = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createSchedule = createAsyncThunk<Schedule, { [key: string]: any }, { rejectValue: any }>(
     'schedule/createSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +64,7 @@ export const createSchedule = createAsyncThunk<[], formData, { rejectValue: stri
     }
 )
 
-export const updateSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateSchedule = createAsyncThunk<Schedule, { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'schedule/updateSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -70,7 +77,7 @@ export const updateSchedule = createAsyncThunk<[], { id: string, formData: { [ke
 )
 
 
-export const createScheduledWorkOrder = createAsyncThunk(
+export const createScheduledWorkOrder = createAsyncThunk<any, { id: string | number, formData: { [key: string]: any } }, { rejectValue: any }>(
     'schedule/createScheduledWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -95,7 +102,7 @@ const scheduleSlice = createSlice({
                 state.schedules.loading = true;
                 state.schedules.error = null;
             })
-            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<Schedule[]>) => {
                 state.schedules.loading = false;
                 state.schedules.data = action.payload;
             })
@@ -107,7 +114,7 @@ const scheduleSlice = createSlice({
                 state.schedule.loading = true;
                 state.schedule.error = null;
             })
-            .addCase(fetchSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchSchedule.fulfilled, (state, action: PayloadAction<Schedule>) => {
                 state.schedule.loading = false;
                 state.schedule.data = action.payload;
             })
@@ -119,7 +126,7 @@ const scheduleSlice = createSlice({
                 state.schedule.loading = true;
                 state.schedule.error = null;
             })
-            .addCase(createSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createSchedule.fulfilled, (state, action: PayloadAction<Schedule>) => {
                 state.schedule.loading = false;
                 state.schedule.data = action.payload;
             })
@@ -131,7 +138,7 @@ const scheduleSlice = createSlice({
                 state.schedule.loading = true;
                 state.schedule.error = null;
             })
-            .addCase(updateSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateSchedule.fulfilled, (state, action: PayloadAction<Schedule>) => {
                 state.schedule.loading = false;
                 state.schedule.data = action.payload;
             })
@@ -140,16 +147,16 @@ const scheduleSlice = createSlice({
                 state.schedule.error = action.payload;
             })
             .addCase(createScheduledWorkOrder.pending, (state) => {
-                state.schedule.loading = true;
-                state.schedule.error = null;
+                state.scheduledWorkOrder.loading = true;
+                state.scheduledWorkOrder.error = null;
             })
-            .addCase(createScheduledWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-                state.schedule.loading = false;
-                // state.schedule.data = action.payload;
+            .addCase(createScheduledWorkOrder.fulfilled, (state, action: PayloadAction<any>) => {
+                state.scheduledWorkOrder.loading = false;
+                // state.scheduledWorkOrder.data = action.payload;
             })
             .addCase(createScheduledWorkOrder.rejected, (state, action) => {
-                state.schedule.loading = false;
-                state.schedule.error = action.payload
+                state.scheduledWorkOrder.loading = false;
+                state.scheduledWorkOrder.error = action.payload
             })
     }
 })

@@ -2,7 +2,8 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from main.models import BaseCreatedUpdated
-from schedule.models import Schedule
+
+# from schedule.models import Schedule
 from breakdown.models import Breakdown
 from main import choices
 
@@ -42,7 +43,7 @@ class Activity(BaseCreatedUpdated):
     description = models.TextField(max_length=250)
     active = models.BooleanField(default=True)
     schedule = models.ForeignKey(
-        Schedule,
+        "schedule.Schedule",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -73,7 +74,7 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
     )
     schedule = models.ForeignKey(
-        Schedule,
+        "schedule.Schedule",
         on_delete=models.RESTRICT,
         related_name="work_orders",
         null=True,
@@ -172,7 +173,7 @@ class WorkOrderActivity(BaseCreatedUpdated):
     remark = models.TextField(max_length=250, null=True, blank=True)
 
     class Meta:
-        ordering = ["created_at", "updated_at","description"]
+        ordering = ["created_at", "updated_at", "description"]
         verbose_name_plural = "Work Order Activities"
 
     def __str__(self):

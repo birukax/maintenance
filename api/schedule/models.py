@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from main.models import BaseCreatedUpdated
 from inventory.models import Item
 from asset.models import Machine, Equipment
+from work_order.models import WorkOrder
 
 
 class Schedule(BaseCreatedUpdated):
@@ -51,3 +52,10 @@ class Schedule(BaseCreatedUpdated):
         if self.machine:
             return f"{self.machine.name} - {self.type}"
         return f"{self.type}"
+
+    @property
+    def total_work_orders(self):
+        try:
+            return WorkOrder.objects.filter(schedule=self).count()
+        except:
+            return 0
