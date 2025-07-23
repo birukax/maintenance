@@ -1,23 +1,36 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
 import { fetchSchedule } from "../../store/slices/scheduleSlice";
+import { fetchWorkOrders } from "../../store/slices/workOrderSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
-import { Typography, Button, Modal } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Typography, Button, Modal, Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
 import Create from "./workOrder/Create";
 
 const Detail = () => {
+  const {id}=useParams()
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.schedule.schedule,
     fetchDetailAction: fetchSchedule,
   });
-
+    const dispatch = useDispatch();
+const work_orders = useSelector(
+    (state: AppState) => state.workOrder.workOrders
+  );
   const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
+
+  useEffect(()=>{
+    const params={
+      no_pagination:true,
+      schedule__id:id
+    }
+    dispatch(fetchWorkOrders(params))
+  },[])
   const renderButtons = () => (
     <>
       <Modal
@@ -51,6 +64,8 @@ const Detail = () => {
     </>
   );
 
+  console.log(work_orders);
+  
   const renderDetails = (data) => (
     <>
       <h2>Primary Information</h2>
@@ -126,6 +141,55 @@ const Detail = () => {
               </Typography>
             );
           })}
+        </div>
+      </div>
+      <div className="rw">
+
+        <div className="clmn activities-clmn" style={{maxHeight:"500px"}}>
+
+          <Typography variant="h6">Work Orders:</Typography>
+          <Table size='small' sx={{ width: "100%" }} className="table">
+            <TableHead>
+              <TableRow>
+                <TableCell >
+                  <Typography noWrap>Activity Id</Typography>
+                </TableCell>
+                <TableCell >
+                  <Typography noWrap>Start Date</Typography>
+                </TableCell>
+                <TableCell >
+                  <Typography noWrap>End Date</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Status</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Remark</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {work_orders?.data?.length > 0 ? work_orders?.data?.map((work_order) => {
+                return (
+                  <TableRow key={work_order?.id}>
+                    <TableCell><Link to={`/work-order/detail/${work_order?.id}`} type="link"> {work_order?.id}</Link></TableCell>
+                    <TableCell>{work_order?.start_date}</TableCell>
+                    <TableCell>{work_order?.end_date}</TableCell>
+                    <TableCell>{work_order?.status }</TableCell>
+                    <TableCell>{work_order?.remark}</TableCell>
+                  </TableRow>
+                );
+              })
+                : <TableRow>
+                  <TableCell className='border-none!'>
+                    <Typography color='primary' className='ml-6! '>
+                      There are no activities assigned to this work order.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              }
+            </TableBody>
+          </Table>
         </div>
       </div>
     </>

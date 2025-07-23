@@ -86,6 +86,8 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
         "end_date",
         "end_time",
         "total_time_required",
+        "schedule__id",
+        "breakdown__id",
     ]
     filterset_fields = ["status"]
 
