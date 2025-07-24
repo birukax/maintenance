@@ -1,8 +1,36 @@
 from django.db import models
 from django.contrib.auth.models import User
 from main import choices
-from location.models import Area, Plant
 from main.models import BaseCreatedUpdated
+
+
+class Plant(BaseCreatedUpdated):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Area(BaseCreatedUpdated):
+    plant = models.ForeignKey(
+        Plant,
+        on_delete=models.SET_NULL,
+        related_name="areas",
+        null=True,
+    )
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["code"]
+        unique_together = ["code", "plant"]
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Machine(BaseCreatedUpdated):
@@ -10,8 +38,9 @@ class Machine(BaseCreatedUpdated):
     name = models.CharField(max_length=100)
     area = models.ForeignKey(
         Area,
-        on_delete=models.RESTRICT,
+        on_delete=models.SET_NULL,
         related_name="machines",
+        null=True,
     )
 
     class Meta:
@@ -28,8 +57,9 @@ class Equipment(BaseCreatedUpdated):
     name = models.CharField(max_length=100)
     machine = models.ForeignKey(
         Machine,
-        on_delete=models.RESTRICT,
+        on_delete=models.SET_NULL,
         related_name="equipments",
+        null=True,
     )
 
     class Meta:

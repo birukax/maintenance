@@ -107,7 +107,7 @@ const Create = () => {
             size='small'
             options={
               areas.data
-                ? areas.data.filter((area) => area.plant.id === selectedPlant)
+                ? areas?.data?.filter((area) => area?.plant?.id === selectedPlant)
                 : []
             }
             getOptionLabel={(option) => option.name || ""}

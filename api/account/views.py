@@ -16,6 +16,10 @@ class ProfileViewset(viewsets.ModelViewSet):
     search_fields = ["phone_no", "user__username", "user__email"]
     filterset_fields = ["role", "user__is_active", "user__id"]
 
+    def get_queryset(self):
+        queryset = Profile.objects.exclude(user=self.request.user)
+        return queryset
+
     def perform_create(self, serializer):
         try:
             username = serializer.validated_data.pop("username")

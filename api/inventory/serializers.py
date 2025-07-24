@@ -46,7 +46,9 @@ class LocationSerializer(serializers.ModelSerializer):
 class ShelfSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     location = LocationSerializer(read_only=True)
-    location_id = serializers.IntegerField(write_only=True)
+    location_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Location.objects.all(), source="location"
+    )
 
     class Meta:
         model = Shelf
@@ -62,7 +64,9 @@ class ShelfSerializer(serializers.ModelSerializer):
 class ShelfRowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     shelf = ShelfSerializer(read_only=True)
-    shelf_id = serializers.IntegerField(write_only=True)
+    shelf_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Shelf.objects.all(), source="shelf"
+    )
 
     class Meta:
         model = ShelfRow
@@ -78,7 +82,9 @@ class ShelfRowSerializer(serializers.ModelSerializer):
 class ShelfBoxSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     row = ShelfRowSerializer(read_only=True)
-    row_id = serializers.IntegerField(write_only=True)
+    row_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=ShelfRow.objects.all(), source="row"
+    )
 
     class Meta:
         model = ShelfBox
@@ -106,15 +112,30 @@ class UnitOfMeasureSerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     uom = UnitOfMeasureSerializer(read_only=True)
-    uom_id = serializers.IntegerField(write_only=True)
+    uom_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=UnitOfMeasure.objects.all(), source="uom"
+    )
     shelf = ShelfSerializer(read_only=True)
-    shelf_id = serializers.IntegerField(write_only=True)
+    shelf_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Shelf.objects.all(), source="shelf"
+    )
     row = ShelfRowSerializer(read_only=True)
-    row_id = serializers.IntegerField(write_only=True)
+    row_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=ShelfRow.objects.all(), source="row"
+    )
     box = ShelfBoxSerializer(read_only=True)
-    box_id = serializers.IntegerField(write_only=True)
+    box_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=ShelfBox.objects.all(), source="box"
+    )
     # inventory = serializers.SerializerMethodField(read_only=True)
     suppliers = ContactSerializer(read_only=True, many=True, required=False)
+    suppliers_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Contact.objects.all(),
+        many=True,
+        source="suppliers",
+        required=False,
+    )
 
     class Meta:
         model = Item
@@ -135,6 +156,7 @@ class ItemSerializer(serializers.ModelSerializer):
             "type",
             "category",
             "suppliers",
+            "suppliers_id",
         ]
 
     # def get_inventory(self, obj):
@@ -213,9 +235,13 @@ class TransferSerializer(serializers.ModelSerializer):
     requested_by = UserSerializer(read_only=True)
     approved_by = UserSerializer(read_only=True)
     from_location = LocationSerializer(read_only=True)
-    from_location_id = serializers.IntegerField(write_only=True)
+    from_location_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Location.objects.all(), source="from_location"
+    )
     to_location = LocationSerializer(read_only=True)
-    to_location_id = serializers.IntegerField(write_only=True)
+    to_location_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Location.objects.all(), source="to_location"
+    )
     transfer_items = TransferItemSerializer(read_only=True, many=True, required=False)
 
     class Meta:
@@ -258,7 +284,9 @@ class TransferHistorySerializer(serializers.ModelSerializer):
 
 class ConsumptionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    item_id = serializers.IntegerField(write_only=True)
+    item_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Item.objects.all(), source="item"
+    )
     item = ItemSerializer(read_only=True)
 
     class Meta:
@@ -276,7 +304,9 @@ class ConsumptionSerializer(serializers.ModelSerializer):
 class ReturnSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    item_id = serializers.IntegerField(write_only=True)
+    item_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Item.objects.all(), source="item"
+    )
     item = ItemSerializer(read_only=True)
 
     class Meta:

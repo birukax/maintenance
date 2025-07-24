@@ -49,6 +49,22 @@ class LocationViewSet(viewsets.ModelViewSet):
     search_fields = ["code", "name"]
     filterset_fields = []
 
+    def perform_create(self, serializer):
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        items = Item.objects.all()
+        if items.exists():
+            try:
+                item_location_list = [
+                    Inventory(location=instance, item=i) for i in items
+                ]
+                Inventory.objects.bulk_create(item_location_list)
+            except Exception as e:
+                print(e)
+                raise serializers.ValidationError(
+                    {"error": "Error while creating Location."}
+                )
+
 
 class ShelfViewSet(viewsets.ModelViewSet):
     serializer_class = ShelfSerializer
@@ -60,20 +76,6 @@ class ShelfViewSet(viewsets.ModelViewSet):
         "location__name",
     ]
     filterset_fields = []
-
-    def perform_create(self, serializer):
-        location_id = serializer.validated_data.pop("location_id")
-        try:
-            location = Location.objects.get(id=location_id)
-        except Location.DoesNotExist:
-            raise serializers.ValidationError(
-                {"location_id": f"Location with id {location_id} does not exist."}
-            )
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-
-        serializer.is_valid(raise_exception=True)
-        serializer.save(location=location)
 
 
 class ShelfRowViewSet(viewsets.ModelViewSet):
@@ -87,20 +89,6 @@ class ShelfRowViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = []
 
-    def perform_create(self, serializer):
-        shelf_id = serializer.validated_data.pop("shelf_id")
-        try:
-            shelf = Shelf.objects.get(id=shelf_id)
-        except Shelf.DoesNotExist:
-            raise serializers.ValidationError(
-                {"shelf_id": f"Shelf with id {shelf_id} does not exist."}
-            )
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-
-        serializer.is_valid(raise_exception=True)
-        serializer.save(shelf=shelf)
-
 
 class ShelfBoxViewSet(viewsets.ModelViewSet):
     serializer_class = ShelfBoxSerializer
@@ -112,20 +100,6 @@ class ShelfBoxViewSet(viewsets.ModelViewSet):
         "row__name",
     ]
     filterset_fields = []
-
-    def perform_create(self, serializer):
-        row_id = serializer.validated_data.pop("row_id")
-        try:
-            row = ShelfRow.objects.get(id=row_id)
-        except ShelfRow.DoesNotExist:
-            raise serializers.ValidationError(
-                {"row_id": f"Shelf Row with id {row_id} does not exist."}
-            )
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-
-        serializer.is_valid(raise_exception=True)
-        serializer.save(row=row)
 
 
 class UnitOfMeasureViewSet(viewsets.ModelViewSet):
@@ -154,44 +128,11 @@ class ItemViewSet(viewsets.ModelViewSet):
     filterset_fields = ["type", "category"]
 
     def perform_create(self, serializer):
-        uom_id = serializer.validated_data.pop("uom_id")
-        shelf_id = serializer.validated_data.pop("shelf_id")
-        row_id = serializer.validated_data.pop("row_id")
-        box_id = serializer.validated_data.pop("box_id")
-        suppliers_id = self.request.data.get("suppliers_id")
-        try:
-            uom = UnitOfMeasure.objects.get(id=uom_id)
-            shelf = Shelf.objects.get(id=shelf_id)
-            box = ShelfBox.objects.get(id=box_id)
-            row = ShelfRow.objects.get(id=row_id)
-            suppliers = Contact.objects.filter(id__in=suppliers_id)
-        except UnitOfMeasure.DoesNotExist:
-            raise serializers.ValidationError(
-                {"uom_id": f"Unit of measure  does not exist."}
-            )
-        except Contact.DoesNotExist:
-            raise serializers.ValidationError(
-                {"suppliers_id": f"Suppliers does not exist."}
-            )
-        except Shelf.DoesNotExist:
-            raise serializers.ValidationError({"shelf_id": "Shelf does not exist."})
-        except ShelfRow.DoesNotExist:
-            raise serializers.ValidationError({"row_id": "Shelf Row does not exist."})
-        except ShelfBox.DoesNotExist:
-            raise serializers.ValidationError({"box_id": "Shelf Box does not exist."})
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
+
         try:
             serializer.is_valid(raise_exception=True)
-            item = serializer.save(
-                uom=uom,
-                shelf=shelf,
-                row=row,
-                box=box,
-            )
-            if suppliers.exists():
-                item.suppliers.set(suppliers)
-                item.save()
+            item = serializer.save()
+            item.save()
             if Location.objects.exists():
                 item_location_list = [
                     Inventory(location=l, item=item) for l in Location.objects.all()
@@ -202,24 +143,8 @@ class ItemViewSet(viewsets.ModelViewSet):
                 item_year_list = [Schedule(year=y, item=item) for y in years]
                 Schedule.objects.bulk_create(item_year_list)
         except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-
-    def perform_update(self, serializer):
-        suppliers_id = self.request.data.get("suppliers_id")
-        try:
-            suppliers = Contact.objects.filter(id__in=suppliers_id)
-        except Contact.DoesNotExist:
-            raise serializers.ValidationError(
-                {"suppliers_id": f"Suppliers does not exist."}
-            )
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-
-        serializer.is_valid(raise_exception=True)
-        item = serializer.save()
-        if suppliers.exists():
-            item.suppliers.set(suppliers)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            print(e)
+            raise serializers.ValidationError({"error": "Error while creating item"})
 
 
 class InventoryViewSet(viewsets.ModelViewSet):
@@ -245,22 +170,6 @@ class InventoryViewSet(viewsets.ModelViewSet):
         all_purchases = Request.objects.values("item_id").annotate(
             total_received=Sum("received_quantity")
         )
-        # all_consumptions = Consumption.objects.values("item_id").annotate(
-        #     total_consumed=Sum("quantity")
-        # )
-        # all_returns = (
-        #     Return.objects.filter(used=False)
-        #     .values("item_id")
-        #     .annotate(total_returned=Sum("quantity"))
-        # )
-
-        purchase_map = {
-            p["item_id"]: p["total_received"]
-            for p in all_purchases
-            if p["total_received"] > 0
-        }
-        # consumptions_map = {c["item_id"]: c["total_consumed"] for c in all_consumptions}
-        # returns_map = {r["item_id"]: r["total_returned"] for r in all_returns}
 
         inventories_to_update = Inventory.objects.all()
         updated_inventory_instances = []
@@ -280,7 +189,6 @@ class InventoryViewSet(viewsets.ModelViewSet):
                 print(f"Purchased error {e}")
                 inv_item.purchased = 0
             try:
-                # inv_item.purchased = purchase_map.get(inv_item.item_id, 0) or 0
                 inv_item.inbound_transfers = (
                     TransferHistory.objects.filter(
                         location=inv_item.location, item=inv_item.item, type="INBOUND"
@@ -313,8 +221,6 @@ class InventoryViewSet(viewsets.ModelViewSet):
                     "purchased",
                     "inbound_transfers",
                     "outbound_transfers",
-                    # "consumed_quantity",
-                    # "returned_quantity",
                     "balance",
                 ],
             )
@@ -349,46 +255,21 @@ class TransferViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         requested_by = self.request.user
-        from_location_id = serializer.validated_data.pop("from_location_id")
-        to_location_id = serializer.validated_data.pop("to_location_id")
         requested_items = self.request.data.get("requested_items")
 
-        try:
-            from_location = Location.objects.get(id=from_location_id)
-            to_location = Location.objects.get(id=to_location_id)
-            for i in requested_items:
+        for i in requested_items:
+            if i["quantity"] is None or i["quantity"] <= 0 or i["quantity"] == "":
+                raise serializers.ValidationError({"quantity": "Quantity is invalid."})
 
-                if i["quantity"] is None or i["quantity"] <= 0 or i["quantity"] == "":
-                    raise serializers.ValidationError(
-                        {"quantity": "Quantity is invalid."}
-                    )
-
-                if not Item.objects.filter(id=i["item_id"]).exists():
-                    raise serializers.ValidationError(
-                        {
-                            "item_id",
-                            f"Item Does not exist!",
-                        },
-                    )
-
-        except Location.DoesNotExist:
-            raise serializers.ValidationError(
-                {
-                    "from_location",
-                    f"Location Does not exist!",
-                },
-                {
-                    "to_location",
-                    f"Location Does not exist!",
-                },
-            )
-
+            if not Item.objects.filter(id=i["item_id"]).exists():
+                raise serializers.ValidationError(
+                    {
+                        "item_id",
+                        f"Item Does not exist!",
+                    },
+                )
         serializer.is_valid(raise_exception=True)
-        transfer = serializer.save(
-            requested_by=requested_by,
-            from_location=from_location,
-            to_location=to_location,
-        )
+        transfer = serializer.save(requested_by=requested_by)
 
         try:
             transfer_item_list = [

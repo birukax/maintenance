@@ -15,6 +15,17 @@ router.register(
     basename="equipment",
 )
 
+router.register(
+    r"plants",
+    views.PlantViewSet,
+    basename="plant",
+)
+router.register(
+    r"areas",
+    views.AreaViewSet,
+    basename="area",
+)
+
 urlpatterns = [
     path("", include(router.urls)),
 ]
