@@ -6,10 +6,12 @@ from .models import (
     Request,
     Year,
 )
+from inventory.models import Item, Location
 
 
 class YearSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Year
         fields = ["id", "no"]
@@ -46,10 +48,17 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
 class RequestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    item_id = serializers.IntegerField(write_only=True)
+    item_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Item.objects.all(), source="item"
+    )
     item = ItemSerializer(read_only=True)
-    location_id = serializers.IntegerField(write_only=True, required=False)
     location = LocationSerializer(read_only=True)
+    location_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Location.objects.all(),
+        source="location",
+        required=False,
+    )
     requested_by = UserSerializer(read_only=True)
     approved_by = UserSerializer(read_only=True)
 

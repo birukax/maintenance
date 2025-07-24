@@ -36,24 +36,14 @@ class RequestViewSet(viewsets.ModelViewSet):
     filterset_fields = ["status", "priority"]
 
     def perform_create(self, serializer):
-        item_id = serializer.validated_data.pop("item_id")
-        try:
-            item = Item.objects.get(id=item_id)
-        except Item.DoesNotExist:
-            raise serializers.ValidationError({"item_id": f"Item does not exist."})
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
         serializer.is_valid(raise_exception=True)
-        purchase_request = serializer.save(
-            requested_by=self.request.user,
-            item=item,
-        )
-        Purchase.objects.create(purchase_request=purchase_request)
+        instance = serializer.save(requested_by=self.request.user)
+        Purchase.objects.create(purchase_request=instance)
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["PATCH"])
     def receive(self, request, pk=None):
-        purchase_request = self.get_object()
+        instance = self.get_object()
         received_quantity = int(request.data.get("received_quantity"))
         received_date = request.data.get("received_date")
         location_id = request.data.get("location_id")
@@ -66,7 +56,7 @@ class RequestViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise serializers.ValidationError({"error": str(e)})
         if received_quantity is not None:
-            if received_quantity > purchase_request.quantity:
+            if received_quantity > instance.quantity:
                 raise serializers.ValidationError(
                     {
                         "received_quantity": "Received quantity cannot be greater than requested quantity."
@@ -81,12 +71,12 @@ class RequestViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {"received_quantity": "Received quantity is required."}
             )
-        purchase_request.received_quantity = received_quantity
-        purchase_request.received_date = received_date
-        purchase_request.status = "RECEIVED"
-        purchase_request.location = location
-        purchase_request.save()
-        serializer = RequestSerializer(purchase_request)
+        instance.received_quantity = received_quantity
+        instance.received_date = received_date
+        instance.status = "RECEIVED"
+        instance.location = location
+        instance.save()
+        serializer = RequestSerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

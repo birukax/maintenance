@@ -254,7 +254,6 @@ class TransferViewSet(viewsets.ModelViewSet):
     ]
 
     def perform_create(self, serializer):
-        requested_by = self.request.user
         requested_items = self.request.data.get("requested_items")
 
         for i in requested_items:
@@ -269,7 +268,7 @@ class TransferViewSet(viewsets.ModelViewSet):
                     },
                 )
         serializer.is_valid(raise_exception=True)
-        transfer = serializer.save(requested_by=requested_by)
+        transfer = serializer.save(requested_by=self.request.user)
 
         try:
             transfer_item_list = [

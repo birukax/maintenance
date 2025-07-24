@@ -9,7 +9,6 @@ from asset.models import Machine, Equipment
 from work_order.models import (
     WorkOrderType,
     ActivityType,
-    Activity,
     WorkOrderActivity,
     WorkOrder,
 )
@@ -33,15 +32,6 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
     filterset_fields = []
 
     def perform_create(self, serializer):
-        type = self.request.data.get("type")
-        description = self.request.data.get("description")
-        machine_id = self.request.data.get("machine_id")
-        equipment_id = self.request.data.get("equipment_id")
-        activity_type_id = self.request.data.get("activity_type_id")
-        work_order_type_id = self.request.data.get("work_order_type_id")
-        spareparts_required_id = self.request.data.get("spareparts_required_id")
-        tools_required_id = self.request.data.get("tools_required_id")
-        # planned_time = self.request.data.get("planned_time")
         planned_days = self.request.data.get("planned_days")
         planned_hours = self.request.data.get("planned_hours")
         planned_minutes = self.request.data.get("planned_minutes")
@@ -50,44 +40,8 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
             hours=int(planned_hours) or 0,
             minutes=int(planned_minutes) or 0,
         )
-
-        try:
-            if machine_id:
-                machine = Machine.objects.get(id=machine_id)
-            if equipment_id:
-                equipment = Equipment.objects.get(id=equipment_id)
-            if activity_type_id:
-                activity_type = ActivityType.objects.get(id=activity_type_id)
-            if work_order_type_id:
-                work_order_type = WorkOrderType.objects.get(id=work_order_type_id)
-        except Machine.DoesNotExist:
-            raise serializers.ValidationError(
-                {"machine_id": f"Machine does not exist."}
-            )
-        except Equipment.DoesNotExist:
-            raise serializers.ValidationError(
-                {"equipment_id": f"Equipment does not exist."}
-            )
-        except ActivityType.DoesNotExist:
-            raise serializers.ValidationError(
-                {"activity_type_id": f"Activity type does not exist."}
-            )
-        except WorkOrderType.DoesNotExist:
-            raise serializers.ValidationError(
-                {"work_order_type_id": f"Work order type does not exist."}
-            )
         serializer.is_valid(raise_exception=True)
-        serializer.save(
-            type=type,
-            description=description,
-            machine=machine,
-            equipment=equipment,
-            activity_type=activity_type,
-            work_order_type=work_order_type,
-            planned_time=planned_time,
-        )
-        serializer.instance.spareparts_required.set(spareparts_required_id)
-        serializer.instance.tools_required.set(tools_required_id)
+        serializer.save(planned_time=planned_time)
 
     @action(detail=True, methods=["POST"], serializer_class=CreateWorkOrderSerializer)
     def create_work_order(self, request, pk=None):

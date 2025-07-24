@@ -4,6 +4,7 @@ from inventory.models import Item
 from asset.serializers import MachineSerializer, EquipmentSerializer
 from inventory.serializers import ItemSerializer
 from account.serializers import UserSerializer
+from asset.models import Machine, Equipment
 from schedule.models import Schedule
 from breakdown.models import Breakdown
 
@@ -26,7 +27,9 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
     work_order_type = WorkOrderTypeSerializer(read_only=True)
-    work_order_type_id = serializers.IntegerField(write_only=True)
+    work_order_type_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=WorkOrderType.objects.all(), source="work_order_type"
+    )
 
     class Meta:
         model = ActivityType
@@ -43,7 +46,9 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
     work_order = serializers.SerializerMethodField(read_only=True)
-    # activity = serializers.SerializerMethodField(read_only=True)
+    work_order_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=WorkOrder.objects.all(), source="work_order"
+    )
 
     class Meta:
         model = WorkOrderActivity
@@ -76,22 +81,44 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     breakdown = serializers.SerializerMethodField(read_only=True)
 
     machine = MachineSerializer(read_only=True)
-    machine_id = serializers.IntegerField(write_only=True)
+    machine_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Machine.objects.all(), source="machine"
+    )
 
     equipment = EquipmentSerializer(read_only=True)
-    equipment_id = serializers.IntegerField(write_only=True)
+    equipment_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Equipment.objects.all(), source="equipment"
+    )
 
     work_order_type = WorkOrderTypeSerializer(read_only=True)
-    work_order_type_id = serializers.IntegerField(write_only=True)
+    work_order_type_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=WorkOrderType.objects.all(), source="work_order_type"
+    )
 
     activity_type = ActivityTypeSerializer(read_only=True)
-    activity_type_id = serializers.IntegerField(write_only=True)
+    activity_type_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=ActivityType.objects.all(), source="activity_type"
+    )
 
     completed_by = UserSerializer(read_only=True)
 
     spareparts_required = ItemSerializer(many=True, read_only=True)
     tools_required = ItemSerializer(many=True, read_only=True)
-    work_order_activities = WorkOrderActivitySerializer(many=True, read_only=True)
+    tools_required_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Item.objects.filter(category="TOOL"),
+        many=True,
+        source="tools_required",
+        required=False,
+    )
+    spareparts_required = ItemSerializer(many=True, read_only=True)
+    spareparts_required_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        queryset=Item.objects.filter(category="SPAREPART"),
+        many=True,
+        source="spareparts_required",
+        required=False,
+    )
     assigned_users = UserSerializer(many=True, read_only=True)
 
     class Meta:
@@ -115,10 +142,12 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "work_order_type",
             "work_order_type_id",
             "completed_by",
-            "tools_required",
             "total_time_required",
             "total_time_taken",
+            "tools_required",
+            "tools_required_id",
             "spareparts_required",
+            "spareparts_required_id",
             "work_order_activities",
             "assigned_users",
         ]
@@ -151,6 +180,9 @@ class WorkOrderSerializer(serializers.ModelSerializer):
 
 class ActivitySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    schedule_id = serializers.PrimaryKeyRelatedField(
+        write_only=True, queryset=Schedule.objects.all(), source="schedule"
+    )
 
     class Meta:
         model = Activity
@@ -158,5 +190,6 @@ class ActivitySerializer(serializers.ModelSerializer):
             "id",
             "description",
             "active",
+            "schedule",
             "schedule_id",
         ]
