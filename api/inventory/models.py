@@ -126,16 +126,23 @@ class Item(BaseCreatedUpdated):
     suppliers = models.ManyToManyField(Contact, related_name="items", blank=True)
 
     def save(self, *args, **kwargs):
+
         if self.pk is None:
             if self.type:
                 prefix = f"{self.type[0:4]}"
             else:
                 prefix = f"ITEM"
-            last_item = Item.objects.filter(type=self.type).order_by("-id").first()
+            last_item = Item.objects.filter(type=self.type).order_by("-id")
             # next_id = last_item.pk + 1 if last_item else 1
-            next_id = last_item.no.split("-")[-1] if last_item else 0
-            next_id = int(next_id) + 1
-            self.no = f"{prefix}-{next_id}"
+            current_id = last_item.first().no[-4:] if last_item.exists() else 0
+            next_id = int(current_id) + 1
+            digits = len(str(next_id))
+            total_expected_zeros = 4 - digits
+            zeros = "0" * total_expected_zeros
+            print(zeros)
+            if total_expected_zeros == 0:
+                self.no = f"{prefix}{next_id}"
+            self.no = f"{prefix}{zeros}{next_id}"
         super().save(*args, **kwargs)
 
     class Meta:
@@ -148,7 +155,7 @@ class Item(BaseCreatedUpdated):
 class Inventory(BaseCreatedUpdated):
     item = models.ForeignKey(
         Item,
-        on_delete=models.RESTRICT,
+        on_delete=models.CASCADE,
         related_name="inventory",
     )
     location = models.ForeignKey(
