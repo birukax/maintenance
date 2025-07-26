@@ -79,10 +79,10 @@ const Create = () => {
       <Box component="form" className="form-gap w-full! min-w-full">
         <div className="flex gap-4">
           <Typography variant="h5" color='primary' className="mb-2! min-w-fit!" noWrap>
-        Create Transfer
+            Create Transfer
           </Typography>
           <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <Autocomplete
+            <Autocomplete
               size="small"
               options={
                 Array.isArray(locations.data)
@@ -91,37 +91,37 @@ const Create = () => {
                   )
                   : []
               }
-            getOptionLabel={(option) => option.name || ""}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="From Location"
-                placeholder="Search locations..."
-                required
-                helperText={transfer.error?.from_location_id}
-              />
-            )}
-            id="location-select"
-            value={
-              Array.isArray(locations.data)
-                ? locations.data.find(
-                  (location) => location.id === formData.from_location_id
-                )
-                : null
-            }
-            onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
-                from_location_id: newValue ? newValue.id : "",
-              });
-            }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
-          />
-        </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
-          <Autocomplete
+              getOptionLabel={(option) => option.name || ""}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="From Location"
+                  placeholder="Search locations..."
+                  required
+                  helperText={transfer.error?.from_location_id}
+                />
+              )}
+              id="location-select"
+              value={
+                Array.isArray(locations.data)
+                  ? locations.data.find(
+                    (location) => location.id === formData.from_location_id
+                  )
+                  : null
+              }
+              onChange={(event, newValue) => {
+                setFormData({
+                  ...formData,
+                  from_location_id: newValue ? newValue.id : "",
+                });
+              }}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              disabled={loading}
+            />
+          </FormControl>
+          <FormControl fullWidth variant="outlined" required disabled={loading}>
+            <Autocomplete
               size="small"
               options={
                 Array.isArray(locations.data)
@@ -130,35 +130,35 @@ const Create = () => {
                   )
                   : []
               }
-            getOptionLabel={(option) => option.name || ""}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                label="To Location"
-                placeholder="Search locations..."
-                required
-                helperText={transfer.error?.to_location_id}
-              />
-            )}
-            id="location-select"
-            value={
-              Array.isArray(locations.data)
-                ? locations.data.find(
-                  (location) => location.id === formData.to_location_id
-                )
-                : null
-            }
-            onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
-                to_location_id: newValue ? newValue.id : "",
-              });
-            }}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
-          />
-        </FormControl>
+              getOptionLabel={(option) => option.name || ""}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="To Location"
+                  placeholder="Search locations..."
+                  required
+                  helperText={transfer.error?.to_location_id}
+                />
+              )}
+              id="location-select"
+              value={
+                Array.isArray(locations.data)
+                  ? locations.data.find(
+                    (location) => location.id === formData.to_location_id
+                  )
+                  : null
+              }
+              onChange={(event, newValue) => {
+                setFormData({
+                  ...formData,
+                  to_location_id: newValue ? newValue.id : "",
+                });
+              }}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              disabled={loading}
+            />
+          </FormControl>
         </div>
 
 
@@ -211,7 +211,6 @@ const Create = () => {
           {selectedItems?.map((item) => (
             <TableRow
               key={item[0].id}
-
             >
               <TableCell>
                 {item[0].no}
@@ -250,7 +249,7 @@ const Create = () => {
                         ],
                       };
                     })
-              }
+                  }
                 />
               </TableCell>
             </TableRow>
