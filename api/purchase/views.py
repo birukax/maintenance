@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from approval.models import Purchase
 from inventory.models import Item, Location
-from .models import Schedule, Request, Year
+from .models import Schedule, Request, Year, RequestItem, PurchaseHistory
 from .serializers import (
     ScheduleSerializer,
     RequestSerializer,
@@ -36,9 +36,37 @@ class RequestViewSet(viewsets.ModelViewSet):
     filterset_fields = ["status", "priority"]
 
     def perform_create(self, serializer):
-        serializer.is_valid(raise_exception=True)
-        instance = serializer.save(requested_by=self.request.user)
-        Purchase.objects.create(purchase_request=instance)
+        requested_items = self.request.data.get("requested_items")
+
+        for i in requested_items:
+            if i["quantity"] is None or i["quantity"] <= 0 or i["quantity"] == "":
+                raise serializers.ValidationError({"error": "Invalid Quantity"})
+            if not Item.objects.filter(id=i["item_id"]).exists():
+                raise serializers.ValidationError(
+                    {
+                        "item_id",
+                        f"Item Does not exist!",
+                    },
+                )
+        try:
+            serializer.is_valid(raise_exception=True)
+            instance = serializer.save(requested_by=self.request.user)
+
+            request_item_list = [
+                RequestItem(
+                    request=instance,
+                    item=Item.objects.get(id=i["item_id"]),
+                    requested_quantity=i["quantity"],
+                )
+                for i in requested_items
+            ]
+            RequestItem.objects.bulk_create(request_item_list)
+            Purchase.objects.create(purchase_request=instance)
+        except Exception as e:
+            print(e)
+            raise serializers.ValidationError(
+                {"error": "Error while creating purchase request."}
+            )
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["PATCH"])

@@ -24,16 +24,6 @@ class Year(BaseCreatedUpdated):
 
 
 class Request(BaseCreatedUpdated):
-    item = models.ForeignKey(
-        Item, on_delete=models.RESTRICT, related_name="purchase_requests"
-    )
-    quantity = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=0,
-    )
-    received_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    requested_date = models.DateField(default=datetime.date.today)
     requested_by = models.ForeignKey(
         User,
         on_delete=models.RESTRICT,
@@ -48,10 +38,11 @@ class Request(BaseCreatedUpdated):
         null=True,
         blank=True,
     )
-    received_date = models.DateField(null=True, blank=True)
     location = models.ForeignKey(
-        Location, on_delete=models.RESTRICT, null=True, blank=True
+        Location, on_delete=models.RESTRICT, related_name="purchase_requests"
     )
+    requested_date = models.DateField(default=datetime.date.today)
+    approved_date = models.DateField(null=True, blank=True)
     priority = models.CharField(
         choices=choices.PRIORITIES, max_length=25, default="MEDIUM"
     )
@@ -67,6 +58,56 @@ class Request(BaseCreatedUpdated):
             return f"{self.item.name} - {self.requested_by}"
         elif self.item:
             return f"{self.item.name}"
+
+
+class PurchaseHistory(BaseCreatedUpdated):
+    request = models.ForeignKey(
+        Request,
+        on_delete=models.CASCADE,
+        related_name="purchase_histories",
+    )
+    item = models.ForeignKey(
+        Item, on_delete=models.RESTRICT, related_name="purchase_histories"
+    )
+    location = models.ForeignKey(
+        Location, on_delete=models.RESTRICT, related_name="purchase_histories"
+    )
+    date = models.DateField(default=datetime.date.today)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    class Meta:
+        ordering = ["-created_at", "request__id", "item__name"]
+        verbose_name_plural = "purchase histories"
+
+    def __str__(self):
+        if self.item and self.location:
+            return f"{self.item.name} - {self.location.name} | {self.quantity}"
+        return f"{self.date} - {self.quantity}"
+
+
+class RequestItem(BaseCreatedUpdated):
+    request = models.ForeignKey(
+        Request,
+        on_delete=models.CASCADE,
+        related_name="request_items",
+    )
+    item = models.ForeignKey(
+        Item, on_delete=models.RESTRICT, related_name="request_items"
+    )
+    requested_quantity = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+    )
+
+    @property
+    def received_quantity(self):
+        return (
+            PurchaseHistory.objects.filter(
+                request=self.request, item=self.item
+            ).aggregate(total_received=models.Sum("quantity")["total_received"])
+            or 0
+        )
 
 
 class Schedule(BaseCreatedUpdated):

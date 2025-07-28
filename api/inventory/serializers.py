@@ -209,20 +209,22 @@ class TransferItemSerializer(serializers.ModelSerializer):
             transfer_obj = obj.transfer
             return {
                 "id": transfer_obj.id,
-                "requested_by": {
-                    "id": transfer_obj.requested_by.id,
-                    "username": transfer_obj.requested_by.username,
-                },
-                "approved_by": {
-                    "id": transfer_obj.approved_by.id,
-                    "username": transfer_obj.approved_by.username,
-                },
+                # "requested_by": {
+                #     "id": transfer_obj.requested_by.id,
+                #     "username": transfer_obj.requested_by.username,
+                # },
+                # "approved_by": {
+                #     "id": transfer_obj.approved_by.id,
+                #     "username": transfer_obj.approved_by.username,
+                # },
                 "from_location": {
                     "id": transfer_obj.from_location.id,
+                    "code": transfer_obj.from_location.code,
                     "name": transfer_obj.from_location.name,
                 },
                 "from_location": {
                     "id": transfer_obj.from_location.id,
+                    "code": transfer_obj.to_location.code,
                     "name": transfer_obj.from_location.name,
                 },
             }
@@ -263,7 +265,6 @@ class TransferSerializer(serializers.ModelSerializer):
 
 
 class TransferHistorySerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
     transfer = TransferSerializer(read_only=True)
     item = ItemSerializer(read_only=True)
     location = LocationSerializer(read_only=True)
@@ -272,14 +273,15 @@ class TransferHistorySerializer(serializers.ModelSerializer):
         model = TransferHistory
         fields = [
             "id",
-            "transfer",
-            "item",
-            "location",
             "type",
             "date",
             "quantity",
             "completed",
+            "transfer",
+            "item",
+            "location",
         ]
+        read_only_fields = ["id", "type", "quantity", "completed", "date"]
 
 
 class ConsumptionSerializer(serializers.ModelSerializer):
