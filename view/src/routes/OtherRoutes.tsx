@@ -24,15 +24,6 @@ const OtherRoutes = [
       </ProtectedRoute>
     }
   />,
-  <Route
-    key="purchase-approval-list"
-    path="/purchase-approvals"
-    element={
-      <ProtectedRoute>
-        <PurchaseApprovalList />
-      </ProtectedRoute>
-    }
-  />,
 ];
 
 export default OtherRoutes;

@@ -1,8 +1,8 @@
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Purchase
-from .serializers import PurchaseSerializer
+from .models import Purchase, Transfer
+from .serializers import PurchaseSerializer, TransferSerializer
 
 
 class PurchaseViewSet(viewsets.ReadOnlyModelViewSet):
@@ -37,4 +37,37 @@ class PurchaseViewSet(viewsets.ReadOnlyModelViewSet):
         purchase.purchase_request.status = "REJECTED"
         purchase.purchase_request.save()
         serializer = self.get_serializer(purchase)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TransferViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TransferSerializer
+    queryset = Transfer.objects.all()
+
+    search_fields = ["transfer__id"]
+    filterset_fields = ["status", "transfer__id"]
+
+    @action(detail=True, methods=["POST"])
+    def approve(self, request, pk=None):
+        transfer = self.get_object()
+        transfer.status = "APPROVED"
+        transfer.by = request.user
+        transfer.remark = request.data.get("remark")
+        transfer.save()
+        transfer.transfer.status = "APPROVED"
+        transfer.transfer.approved_by = request.user
+        transfer.transfer.save()
+        serializer = self.get_serializer(transfer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["POST"])
+    def reject(self, request, pk=None):
+        transfer = self.get_object()
+        transfer.status = "REJECTED"
+        transfer.by = request.user
+        transfer.remark = request.data.get("remark")
+        transfer.save()
+        transfer.transfer.status = "REJECTED"
+        transfer.transfer.save()
+        serializer = self.get_serializer(transfer)
         return Response(serializer.data, status=status.HTTP_200_OK)

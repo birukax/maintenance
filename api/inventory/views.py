@@ -19,6 +19,7 @@ from .models import (
     Return,
     TransferHistory,
 )
+from approval.models import Transfer as TransferApproval
 from .serializers import (
     ContactSerializer,
     LocationSerializer,
@@ -267,10 +268,10 @@ class TransferViewSet(viewsets.ModelViewSet):
                         f"Item Does not exist!",
                     },
                 )
-        serializer.is_valid(raise_exception=True)
-        transfer = serializer.save(requested_by=self.request.user)
 
         try:
+            serializer.is_valid(raise_exception=True)
+            transfer = serializer.save(requested_by=self.request.user)
             transfer_item_list = [
                 TransferItem(
                     transfer=transfer,
@@ -280,12 +281,14 @@ class TransferViewSet(viewsets.ModelViewSet):
                 for i in requested_items
             ]
             TransferItem.objects.bulk_create(transfer_item_list)
-
+            TransferApproval.objects.create(transfer=transfer)
         except Item.DoesNotExist:
             raise serializers.ValidationError({"item_id", "Item does not exist!"})
-
         except Exception as e:
-            raise serializers.ValidationError({"error", str(e)})
+            print(e)
+            raise serializers.ValidationError(
+                {"error", "Error while creating Transfer."}
+            )
 
     @action(detail=True, methods=["PATCH"])
     def ship(self, request, pk=None):

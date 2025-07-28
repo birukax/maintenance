@@ -18,39 +18,44 @@ const Detail = () => {
 
   const renderButtons = () => (
     <>
-      <>
-        <Modal
-          open={receivemodalOpen}
-          onClose={() => setReceiveModalOpen(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <ReceiveModal
-            entityState={entityState}
-            setReceiveModalOpen={setReceiveModalOpen}
-          />
-        </Modal>
-      </>
+      {
+        entityState?.data?.status === 'APPROVED' &&
+        <>
+          <>
+            <Modal
+              open={receivemodalOpen}
+              onClose={() => setReceiveModalOpen(false)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <ReceiveModal
+                entityState={entityState}
+                setReceiveModalOpen={setReceiveModalOpen}
+              />
+            </Modal>
+          </>
 
-      <Button
-        size='small'
-        onClick={() => setReceiveModalOpen(true)}
-        variant="contained"
-        sx={{ mr: 1 }}
-        disabled={entityState?.data && entityState?.data?.transfer_items?.every(el => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data && entityState?.data?.transfer_items?.every(el => el.shipped_quantity === 0) ? true : false}
-      >
-        Receive
-      </Button>
+          <Button
+            size='small'
+            onClick={() => setReceiveModalOpen(true)}
+            variant="contained"
+            sx={{ mr: 1 }}
+            disabled={entityState?.data && entityState?.data?.transfer_items?.every(el => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data && entityState?.data?.transfer_items?.every(el => el.shipped_quantity === 0) ? true : false}
+          >
+            Receive
+          </Button>
 
-      {entityState?.data && entityState?.data?.transfer_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
-        size='small'
-        component={Link}
-        to={`/transfer/${entityState.data.id}/ship`}
-        variant="contained"
-        sx={{ mr: 1 }}
-      >
-        Ship
-      </Button>}
+          {entityState?.data && entityState?.data?.transfer_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
+            size='small'
+            component={Link}
+            to={`/transfer/${entityState.data.id}/ship`}
+            variant="contained"
+            sx={{ mr: 1 }}
+          >
+            Ship
+          </Button>}
+        </>
+      }
     </>
   );
 

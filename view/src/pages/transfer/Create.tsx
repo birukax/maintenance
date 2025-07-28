@@ -219,38 +219,40 @@ const Create = () => {
                 {item[0]?.name}{" "}
               </TableCell>
               <TableCell>
-                <TextField
-                  variant="outlined"
-                  label="Quantity"
-                  type="number"
-                  value={
-                    formData.requested_items.filter(
-                      (el) => el.item_id === item[0].id
-                    )[0]?.quantity
-                  }
-                  required
-                  sx={{ width: "160px", padding: "0" }}
-                  size="small"
-                  inputProps={{ min: 1 }}
-                  InputLabelProps={{
-                    style: { fontSize: 14 },
-                  }}
-                  onChange={(e) =>
-                    setFormData((prev) => {
-                      return {
-                        ...prev,
-                        requested_items: [
-                          ...prev.requested_items.filter((el) => {
-                            if (el.item_id === item[0].id) {
-                              el.quantity = Number(e.target.value);
-                            }
-                            return el;
-                          }),
-                        ],
-                      };
-                    })
-                  }
-                />
+                <FormControl>
+                  <TextField
+                    variant="outlined"
+                    label="Quantity"
+                    type="number"
+                    value={
+                      formData.requested_items.filter(
+                        (el) => el.item_id === item[0].id
+                      )[0]?.quantity
+                    }
+                    required
+                    sx={{ width: "160px", padding: "0" }}
+                    size="small"
+                    inputProps={{ min: 1 }}
+                    InputLabelProps={{
+                      style: { fontSize: 14 },
+                    }}
+                    onChange={(e) =>
+                      setFormData((prev) => {
+                        return {
+                          ...prev,
+                          requested_items: [
+                            ...prev.requested_items.filter((el) => {
+                              if (el.item_id === item[0].id) {
+                                el.quantity = Number(e.target.value);
+                              }
+                              return el;
+                            }),
+                          ],
+                        };
+                      })
+                    }
+                  />
+                </FormControl>
               </TableCell>
             </TableRow>
           ))}

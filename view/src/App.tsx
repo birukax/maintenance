@@ -2,6 +2,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import OtherRoutes from "./routes/OtherRoutes";
+import ApprovalRoutes from "./routes/ApprovalRoutes";
 import ItemRoutes from "./routes/ItemRoutes";
 import ReturnRoutes from "./routes/ReturnRoutes";
 import ContactRoutes from "./routes/ContactRoutes";
@@ -19,21 +20,21 @@ import UnitOfMeasureRoutes from "./routes/UnitOfMeasureRoutes";
 import PurchaseRequestRoutes from "./routes/PurchaseRequestRoutes";
 import PurchaseScheduleRoutes from "./routes/PurchaseScheduleRoutes";
 import BreakdownRoutes from "./routes/BreakdownRoutes";
-
-import "./App.css";
 import ProfileRoutes from "./routes/ProfileRoutes";
 import ShelfRoutes from "./routes/ShelfRoutes";
 import ShelfRowRoutes from "./routes/ShelfRowRoutes";
 import ShelfBoxRoutes from "./routes/ShelfBoxRoutes";
 import LocationRoutes from "./routes/LocationRoutes";
 import TransferRoutes from "./routes/transferRoutes";
-const App: React.FC = () => {
 
-  
+import "./App.css";
+
+const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       {OtherRoutes}
+      {ApprovalRoutes}
       {ItemRoutes}
       {TransferRoutes}
       {ReturnRoutes}

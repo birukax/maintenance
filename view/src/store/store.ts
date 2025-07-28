@@ -28,89 +28,62 @@ import workOrderActivityReducer from './slices/workOrderActivitySlice';
 import unitOfMeasureReducer from './slices/unitOfMeasureSlice';
 import purchaseRequestReducer from './slices/purchaseRequestSlice';
 import purchaseApprovalReducer from './slices/purchaseApprovalSlice';
+import transferApprovalReducer from './slices/transferApprovalSlice';
 import purchaseScheduleReducer from './slices/purchaseScheduleSlice';
 import monthlyPurchaseScheduleReducer from './slices/monthlyPurchaseScheduleSlice';
 
-interface RootState {
-  auth: ReturnType<typeof authReducer>;
-  item: ReturnType<typeof itemReducer>;
-  return: ReturnType<typeof returnReducer>;
-  contact: ReturnType<typeof contactReducer>;
-  year: ReturnType<typeof yearReducer>;
-  profile: ReturnType<typeof profileReducer>;
-  machine: ReturnType<typeof machineReducer>;
-  location: ReturnType<typeof locationReducer>;
-  plant: ReturnType<typeof plantReducer>;
-  transfer: ReturnType<typeof transferReducer>;
-  shelf: ReturnType<typeof shelfReducer>;
-  shelfRow: ReturnType<typeof shelfRowReducer>;
-  shelfBox: ReturnType<typeof shelfBoxReducer>;
-  area: ReturnType<typeof areaReducer>;
-  activity: ReturnType<typeof activityReducer>;
-  schedule: ReturnType<typeof scheduleReducer>;
-  breakdown: ReturnType<typeof breakdownReducer>;
-  equipment: ReturnType<typeof equipmentReducer>;
-  inventory: ReturnType<typeof inventoryReducer>;
-  workOrder: ReturnType<typeof workOrderReducer>;
-  consumption: ReturnType<typeof consumptionReducer>;
-  activityType: ReturnType<typeof activityTypeReducer>;
-  workOrderType: ReturnType<typeof workOrderTypeReducer>;
-  workOrderActivity: ReturnType<typeof workOrderActivityReducer>;
-  unitOfMeasure: ReturnType<typeof unitOfMeasureReducer>;
-  purchaseRequest: ReturnType<typeof purchaseRequestReducer>;
-  purchaseApproval: ReturnType<typeof purchaseApprovalReducer>;
-  purchaseSchedule: ReturnType<typeof purchaseScheduleReducer>;
-  monthlyPurchaseSchedule: ReturnType<typeof monthlyPurchaseScheduleReducer>;
-}
 
 const rootReducer = combineReducers({
-    auth: authReducer,
-    item: itemReducer,
-    return: returnReducer,
-    contact: contactReducer,
-    year: yearReducer,
-    profile: profileReducer,
-    machine: machineReducer,
-    location: locationReducer,
-    plant: plantReducer,
-    transfer: transferReducer,
-    shelf: shelfReducer,
-    shelfRow: shelfRowReducer,
-    shelfBox: shelfBoxReducer,
-    area: areaReducer,
-    activity: activityReducer,
-    schedule: scheduleReducer,
-    breakdown: breakdownReducer,
-    equipment: equipmentReducer,
-    inventory: inventoryReducer,
-    workOrder: workOrderReducer,
-    consumption: consumptionReducer,
-    activityType: activityTypeReducer,
-    workOrderType: workOrderTypeReducer,
-    workOrderActivity: workOrderActivityReducer,
-    unitOfMeasure: unitOfMeasureReducer,
-    purchaseRequest: purchaseRequestReducer,
-    purchaseApproval: purchaseApprovalReducer,
-    purchaseSchedule: purchaseScheduleReducer,
-    monthlyPurchaseSchedule: monthlyPurchaseScheduleReducer,
+  auth: authReducer,
+  item: itemReducer,
+  return: returnReducer,
+  contact: contactReducer,
+  year: yearReducer,
+  profile: profileReducer,
+  machine: machineReducer,
+  location: locationReducer,
+  plant: plantReducer,
+  transfer: transferReducer,
+  shelf: shelfReducer,
+  shelfRow: shelfRowReducer,
+  shelfBox: shelfBoxReducer,
+  area: areaReducer,
+  activity: activityReducer,
+  schedule: scheduleReducer,
+  breakdown: breakdownReducer,
+  equipment: equipmentReducer,
+  inventory: inventoryReducer,
+  workOrder: workOrderReducer,
+  consumption: consumptionReducer,
+  activityType: activityTypeReducer,
+  workOrderType: workOrderTypeReducer,
+  workOrderActivity: workOrderActivityReducer,
+  unitOfMeasure: unitOfMeasureReducer,
+  purchaseRequest: purchaseRequestReducer,
+  purchaseApproval: purchaseApprovalReducer,
+  transferApproval: transferApprovalReducer,
+  purchaseSchedule: purchaseScheduleReducer,
+  monthlyPurchaseSchedule: monthlyPurchaseScheduleReducer,
 })
 
+export type RootState = ReturnType<typeof rootReducer>
+
 const persistConfig: PersistConfig<RootState> = {
-    key: 'root',
-    storage,
-    whitelist: ['auth'],
+  key: 'root',
+  storage,
+  whitelist: ['auth'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer:  persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-          serializableCheck: {
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-          },
-        }),
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 export const persistor = persistStore(store);
 

@@ -60,6 +60,7 @@ const drawerWidth = 260;
 const AppLayout = ({ children }) => {
   const [openSections, setOpenSections] = useState({
     inventory: false,
+    approval: false,
     purchase: false,
     maintenance: false,
     consumption: false,
@@ -97,10 +98,13 @@ const AppLayout = ({ children }) => {
         "/unit-of-measures",
         "/transfers",
       ],
+      approval: [
+        'purchase/approval/list',
+        'transfer/approval/list',
+      ],
       purchase: [
         "/purchase-schedules",
         "/purchase-requests",
-        "/purchase-approvals",
       ],
       maintenance: [
         "/activity-types",
@@ -304,6 +308,22 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText primary="Purchase Request" />
             </ListItemButton>
+          </List>
+        </Collapse>
+        <ListItemButton onClick={() => toggleSection("approval")}>
+          <ListItemText primary="Approval" />
+          {openSections.approval ? (
+            <ExpandLessIcon color="primary" />
+          ) : (
+            <ExpandMoreIcon color="primary" />
+          )}
+        </ListItemButton>
+        <Collapse in={openSections.approval} timeout='auto' unmountOnExit>
+          <List
+            component="div"
+            disablePadding
+            sx={{ minWidth: "fit-content" }}
+          >
             <ListItemButton selected={location.pathname === "/purchase-approvals"}
               component={Link}
               to="/purchase-approvals"
@@ -314,6 +334,19 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText
                 primary="Purchase Approval"
+                sx={{ minWidth: "fit-content" }}
+              />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/transfer-approvals"}
+              component={Link}
+              to="/transfer-approvals"
+              sx={{ pl: 4, minWidth: "fit-content" }}
+            >
+              <ListItemIcon>
+                <CheckCircleIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Transfer Approval"
                 sx={{ minWidth: "fit-content" }}
               />
             </ListItemButton>
