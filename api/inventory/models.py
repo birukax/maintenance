@@ -260,6 +260,20 @@ class TransferItem(BaseCreatedUpdated):
     # received_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     @property
+    def available_balance(self):
+        try:
+            return (
+                Inventory.objects.filter(
+                    item=self.item, location=self.transfer.from_location
+                )
+                .first()
+                .balance
+                or 0
+            )
+        except Exception as e:
+            return 0
+
+    @property
     def shipped_quantity(self):
         return (
             TransferHistory.objects.filter(

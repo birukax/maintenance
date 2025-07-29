@@ -197,6 +197,7 @@ class TransferItemSerializer(serializers.ModelSerializer):
             "transfer",
             "item",
             "item_id",
+            "available_balance",
             "requested_quantity",
             "shipped_quantity",
             "received_quantity",

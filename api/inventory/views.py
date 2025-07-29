@@ -3,7 +3,7 @@ from django.db.models import Sum
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from purchase.models import Request, Schedule, Year
+from purchase.models import Request, Schedule, Year, PurchaseHistory
 from .models import (
     Contact,
     Location,
@@ -168,22 +168,19 @@ class InventoryViewSet(viewsets.ModelViewSet):
             for location in locations:
                 Inventory.objects.get_or_create(item=item, location=location)
 
-        all_purchases = Request.objects.values("item_id").annotate(
-            total_received=Sum("received_quantity")
-        )
+        # all_purchases = Request.objects.values("item_id").annotate(
+        #     total_received=Sum("received_quantity")
+        # )
 
         inventories_to_update = Inventory.objects.all()
         updated_inventory_instances = []
 
         for inv_item in inventories_to_update:
             try:
-
                 inv_item.purchased = (
-                    Request.objects.filter(
+                    PurchaseHistory.objects.filter(
                         item=inv_item.item, location=inv_item.location
-                    ).aggregate(total_received=Sum("received_quantity"))[
-                        "total_received"
-                    ]
+                    ).aggregate(total_received=Sum("quantity"))["total_received"]
                     or 0
                 )
             except Exception as e:
@@ -219,7 +216,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
             Inventory.objects.bulk_update(
                 updated_inventory_instances,
                 [
-                    "purchased",
+                    # "purchased",
                     "inbound_transfers",
                     "outbound_transfers",
                     "balance",

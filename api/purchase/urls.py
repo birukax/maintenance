@@ -21,8 +21,16 @@ router.register(
     views.RequestViewSet,
     basename="request",
 )
-
-
+router.register(
+    r"request-items",
+    views.RequestItemViewSet,
+    basename="request-item",
+)
+router.register(
+    r"purchase-histories",
+    views.PurchaseHistoryViewSet,
+    basename="purchase-history",
+)
 urlpatterns = [
     path("", include(router.urls)),
 ]

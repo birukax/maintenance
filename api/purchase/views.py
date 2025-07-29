@@ -9,6 +9,8 @@ from .models import Schedule, Request, Year, RequestItem, PurchaseHistory
 from .serializers import (
     ScheduleSerializer,
     RequestSerializer,
+    RequestItemSerializer,
+    PurchaseHistorySerializer,
     YearSerializer,
 )
 
@@ -106,6 +108,30 @@ class RequestViewSet(viewsets.ModelViewSet):
         instance.save()
         serializer = RequestSerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RequestItemViewSet(viewsets.ModelViewSet):
+    serializer_class = RequestItemSerializer
+    queryset = RequestItem.objects.all()
+    search_fields = [
+        "item__no",
+        "item__name",
+    ]
+    filterset_fields = []
+
+
+class PurchaseHistoryViewSet(viewsets.ModelViewSet):
+    serializer_class = PurchaseHistorySerializer
+    queryset = PurchaseHistory.objects.all()
+    serach_fields = [
+        "item__no",
+        "item__name",
+        "location__code",
+        "location_name",
+    ]
+    filterset_fields = [
+        "date",
+    ]
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
