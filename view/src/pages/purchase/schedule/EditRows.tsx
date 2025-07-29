@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, Checkbox, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
-import { AppState } from "../../store/store";
+import { AppState } from "../../../store/store";
 
 const EditRows = ({ row, handleUpdateSchedule }) => {
   const [quantity, setQuantity] = useState(row.quantity || 0);

@@ -6,7 +6,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Checkbox, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import ReceiveModal from "./RecieveModal"
+import ReceiveModal from "./receive/Modal"
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.transfer.transfer,
@@ -67,14 +67,17 @@ const Detail = () => {
       <h2>Primary Information</h2>
       <div className="rw">
         <div className="clmn">
-
+          <Typography variant="h6">Requested Date:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {entityState?.data?.requested_date}
+          </Typography>
+        </div>
+        <div className="clmn">
           <Typography variant="h6">Requested By:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
             {data?.requested_by?.username}
           </Typography>
         </div>
-
-
 
         <div className="clmn">
           <Typography variant="h6">Transfer Location:</Typography>
@@ -119,17 +122,7 @@ const Detail = () => {
 
       <h2>Timeline</h2>
       <div className="rw timeline">
-        <div className="clmn">
 
-          <Typography variant="h6">Requested Date:</Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState?.data?.requested_date}
-          </Typography>
-          <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState?.data?.start_time}
-
-          </Typography>
-        </div>
 
         {
           entityState?.data?.shipment_date ?
@@ -162,7 +155,13 @@ const Detail = () => {
             <TableHead>
               <TableRow>
                 <TableCell >
+                  <Typography noWrap>Item ID</Typography>
+                </TableCell>
+                <TableCell >
                   <Typography noWrap>Item</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Available</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography noWrap>Requested</Typography>
@@ -182,7 +181,9 @@ const Detail = () => {
               {data?.transfer_items?.map((item) => {
                 return (
                   <TableRow key={item.id}>
+                    <TableCell>{item?.item?.no}</TableCell>
                     <TableCell>{item?.item?.name}</TableCell>
+                    <TableCell>{item?.available_balance}</TableCell>
                     <TableCell>{item?.requested_quantity}</TableCell>
                     <TableCell>{item?.total_shipped_quantity}</TableCell>
                     <TableCell>{item?.shipped_quantity}</TableCell>

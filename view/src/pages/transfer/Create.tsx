@@ -11,12 +11,8 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
-  Card,
   TableRow,
   Table,
   TableHead,
@@ -32,10 +28,8 @@ const Create = () => {
     to_location_id: null,
     requested_items: [],
   });
-  const transfer = useSelector((state: AppState) => state.transfer.transfer);
+  const { transfer } = useSelector((state: AppState) => state.transfer);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
   const { locations } = useSelector((state: AppState) => state.location);
 
@@ -51,8 +45,6 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
 
     try {
       await dispatch(createTransfer(formData)).unwrap();
@@ -60,9 +52,6 @@ const Create = () => {
       navigate("/transfers");
     } catch (err) {
       toast.error(transfer.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -81,7 +70,7 @@ const Create = () => {
           <Typography variant="h5" color='primary' className="mb-2! min-w-fit!" noWrap>
             Create Transfer
           </Typography>
-          <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <FormControl fullWidth variant="outlined" required disabled={transfer.loading}>
             <Autocomplete
               size="small"
               options={
@@ -117,10 +106,10 @@ const Create = () => {
                 });
               }}
               isOptionEqualToValue={(option, value) => option.id === value.id}
-              disabled={loading}
+              disabled={transfer.loading}
             />
           </FormControl>
-          <FormControl fullWidth variant="outlined" required disabled={loading}>
+          <FormControl fullWidth variant="outlined" required disabled={transfer.loading}>
             <Autocomplete
               size="small"
               options={
@@ -156,13 +145,13 @@ const Create = () => {
                 });
               }}
               isOptionEqualToValue={(option, value) => option.id === value.id}
-              disabled={loading}
+              disabled={transfer.loading}
             />
           </FormControl>
         </div>
 
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={transfer.loading}>
           <Autocomplete
             size="small"
             multiple
@@ -195,7 +184,7 @@ const Create = () => {
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={transfer.loading}
           />
         </FormControl>
       </Box>
@@ -266,11 +255,11 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading || selectedItems.length <= 0}
+            disabled={transfer.loading || selectedItems.length <= 0}
             onClick={handleSubmit}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {transfer.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -279,7 +268,7 @@ const Create = () => {
             size="small"
             variant="outlined"
             fullWidth
-            disabled={loading}
+            disabled={transfer.loading}
           >
             Cancel
           </Button>

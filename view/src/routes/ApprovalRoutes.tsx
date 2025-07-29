@@ -1,6 +1,7 @@
 // src/routes/OtherRoutes.tsx
 import { Route } from 'react-router-dom';
 import PurchaseApprovalList from "../pages/approval/purchase/List";
+import PurchaseApprovalDetail from "../pages/approval/purchase/Detail";
 import TransferApprovalList from "../pages/approval/transfer/List";
 import TransferApprovalDetail from "../pages/approval/transfer/Detail";
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -14,7 +15,14 @@ const ApprovalRoutes = [
                 <PurchaseApprovalList />
             </ProtectedRoute>
         }
-    />,
+    />, <Route
+        key='/purchase-approval-detail'
+        path='/purchase/approval/detail/:id'
+        element={
+            <ProtectedRoute>
+                <PurchaseApprovalDetail />
+            </ProtectedRoute>
+        } />,
     <Route
         key="transfer/approval/list"
         path="/transfer-approvals"

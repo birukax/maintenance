@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, Checkbox, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
-import { AppState } from "../../store/store";
+import { AppState } from "../../../store/store";
 
 const CheckListRows = ({ row, handleFormChange, index, errorCount, setErrorCount }) => {
 
@@ -20,16 +20,16 @@ const CheckListRows = ({ row, handleFormChange, index, errorCount, setErrorCount
         {row?.item?.name}
       </TableCell>
       <TableCell align="left">
+        {row?.item?.uom?.code}
+      </TableCell>
+      <TableCell align="left">
         {row?.requested_quantity}
       </TableCell>
       <TableCell align="left">
-        {row?.shipped_quantity}
+        {row?.received_quantity}
       </TableCell>
       <TableCell align="left">
-        {row?.total_shipped_quantity}
-      </TableCell>
-      <TableCell align="left">
-        {row?.remaining_quantity}
+        {row?.row.requested_quantity - row.received_quantity}
       </TableCell>
       <TableCell align="left">
         <TextField
@@ -37,11 +37,11 @@ const CheckListRows = ({ row, handleFormChange, index, errorCount, setErrorCount
           name="quantity"
           type="number"
           required
-          inputProps={{ min: 0, max: row.remaining_quantity }}
+          inputProps={{ min: 0, max: row.requested_quantity - row.received_quantity }}
           helperText={transfer.error?.quantity || ""}
           style={error ? { border: "1px solid red" } : {}}
           onChange={(e) => {
-            if (e.target.value > row.remaining_quantity) {
+            if (Number(e.target.value) > row.requested_quantity - row.received_quantity) {
               setError(true)
               errorList[index] = true
               setErrorCount([...errorList])

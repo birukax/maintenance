@@ -1,19 +1,21 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
-import { fetchShelfRows } from "../../store/slices/shelfRowSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { fetchPurchaseRequests } from "../../../store/slices/purchaseRequestSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
-} from "../../components/GenericListPage";
+} from "../../../components/GenericListPage";
 
-const shelfColumns = [
-  { header: "Code", accessor: "code" },
-  { header: "Name", accessor: "name" },
-  { header: "Location", accessor: "shelf.location.name" },
-  { header: "Shelf", accessor: "shelf.name" },
+const purchaseRequestColumns = [
+  { header: "ID", accessor: "id" },
+  { header: "Location", accessor: "location.name" },
+  { header: "Requested By", accessor: "requested_by.username" },
+  { header: "Requested Date", accessor: "requested_date" },
+  { header: "Priority", accessor: "priority" },
+  { header: "Status", accessor: "status" },
 ];
 
 const List: React.FC = () => {
@@ -21,7 +23,7 @@ const List: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
-    (state: AppState) => state.shelfRow.shelfRows
+    (state: AppState) => state.purchaseRequest.purchaseRequests
   );
   const [params, setParams] = useState({
     search: searchParams.get("search") || "",
@@ -31,14 +33,14 @@ const List: React.FC = () => {
 
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchShelfRows(params));
+      dispatch(fetchPurchaseRequests(params));
       // setSearchParams(params)
     }
   }, []);
 
   const handleRefresh = () => {
     if (tokens) {
-      dispatch(fetchShelfRows(params));
+      dispatch(fetchPurchaseRequests(params));
     }
   }
 
@@ -50,24 +52,22 @@ const List: React.FC = () => {
       }
     })
     const parameters = {
-      ...params,
-      page: 1,
+      ...params, page: 1,
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });
-    await dispatch(fetchShelfRows(parameters));
+    await dispatch(fetchPurchaseRequests(parameters));
 
   }
-
   return (
     <GenericListPage
-      title="Shelf Rows"
+      title="Purchase Requests"
       entityState={entityState}
-      columns={shelfColumns}
-      createRoute="/shelf-row/create"
-      detailRouteBase="/shelf-row/detail"
+      columns={purchaseRequestColumns}
+      createRoute="/purchase-request/create"
+      detailRouteBase="/purchase-request/detail"
       onRefresh={handleRefresh}
-      getKey={(shelfRow) => shelfRow.id}
+      getKey={(purchaseRequest) => purchaseRequest.id}
       searchFilter={handleFilter}
       keyWord={keyWord}
       setKeyWord={setKeyWord}

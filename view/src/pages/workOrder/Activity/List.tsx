@@ -1,18 +1,18 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
-import { fetchWorkOrderActivities,deleteWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
+import { fetchWorkOrderActivities, deleteWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
 
 import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useSearchParams, Link } from "react-router-dom"
 import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import BlockIcon from '@mui/icons-material/Block';
-import CreateActivity from "./CreateActivity";
-import DeleteActivity from "./DeleteActivity";
+import CreateActivity from "./Create";
+import DeleteActivity from "./Delete";
 import DeleteIcon from '@mui/icons-material/Delete';
 import LayersClearIcon from '@mui/icons-material/LayersClear';
 import EditIcon from '@mui/icons-material/Edit';
-import EditActivity from "./EditActivity";
+import EditActivity from "./Edit";
 const headers = [
   { header: "Description", accessor: "description" },
   { header: "Value", accessor: "value" },
@@ -85,7 +85,7 @@ const List: React.FC = () => {
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
 
-  
+
   return (
     <>
       <div

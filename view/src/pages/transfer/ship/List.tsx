@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTransfer } from "../../store/slices/transferSlice";
-import { updateWorkOrderActivity } from "../../store/slices/workOrderActivitySlice";
-import { AppState, AppDispatch } from "../../store/store";
-import { useEntityDetail } from "../../hooks/useEntityDetail";
-import { GenericDetailPage } from "../../components/GenericDetailPage";
-import ShipListRows from "./ShipListRows";
-import { shipTransfer } from "../../store/slices/transferSlice";
+import { fetchTransfer } from "../../../store/slices/transferSlice";
+import { updateWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
+import { AppState, AppDispatch } from "../../../store/store";
+import { useEntityDetail } from "../../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../../components/GenericDetailPage";
+import ShipListRows from "./Rows";
+import { shipTransfer } from "../../../store/slices/transferSlice";
 import {
   Typography,
   Button,
@@ -58,7 +58,7 @@ const ShipList = () => {
       <>
         <Button
           size='small'
-          disabled={errorCount.find(el => el === true) ? true : false}
+          disabled={errorCount.find(el => el === true) ? true : false || formData.shipped_items.filter((e) => e.quantity > 0).length === 0}
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
@@ -110,20 +110,23 @@ const ShipList = () => {
             </TableCell>
 
             <TableCell>
-              <Typography noWrap>Transfer Item</Typography>
+              <Typography noWrap>Item</Typography>
             </TableCell>
 
             <TableCell>
-              <Typography noWrap>Requested Quantity</Typography>
+              <Typography noWrap>Requested</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>Shipped Quantity</Typography>
+              <Typography noWrap>Available</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>Total Shipped Quantity</Typography>
+              <Typography noWrap>Shipped</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>Remaining Quantity</Typography>
+              <Typography noWrap>Total Shipped</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>Remaining</Typography>
             </TableCell>
             <TableCell>
               <Typography noWrap>Ship</Typography>

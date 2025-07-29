@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { receivePurchaseRequest } from "../../store/slices/purchaseRequestSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { receivePurchaseRequest } from "../../../store/slices/purchaseRequestSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -18,7 +18,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { fetchLocations } from "../../store/slices/locationSlice";
+import { fetchLocations } from "../../../store/slices/locationSlice";
 const style = {
   position: "absolute",
   top: "50%",

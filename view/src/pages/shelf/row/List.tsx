@@ -1,29 +1,27 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
-import { fetchShelfBoxes } from "../../store/slices/shelfBoxSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { fetchShelfRows } from "../../../store/slices/shelfRowSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
-} from "../../components/GenericListPage";
+} from "../../../components/GenericListPage";
 
 const shelfColumns = [
   { header: "Code", accessor: "code" },
   { header: "Name", accessor: "name" },
-  { header: "Location", accessor: "row.shelf.location.name" },
-  { header: "Shelf", accessor: "row.shelf.name" },
-  { header: "Row", accessor: "row.name" },
+  { header: "Location", accessor: "shelf.location.name" },
+  { header: "Shelf", accessor: "shelf.name" },
 ];
-
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
-    (state: AppState) => state.shelfBox.shelfBoxes
+    (state: AppState) => state.shelfRow.shelfRows
   );
   const [params, setParams] = useState({
     search: searchParams.get("search") || "",
@@ -33,14 +31,14 @@ const List: React.FC = () => {
 
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchShelfBoxes(params));
+      dispatch(fetchShelfRows(params));
       // setSearchParams(params)
     }
   }, []);
 
   const handleRefresh = () => {
     if (tokens) {
-      dispatch(fetchShelfBoxes(params));
+      dispatch(fetchShelfRows(params));
     }
   }
 
@@ -57,19 +55,19 @@ const List: React.FC = () => {
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });
-    await dispatch(fetchShelfBoxes(parameters));
+    await dispatch(fetchShelfRows(parameters));
 
   }
 
   return (
     <GenericListPage
-      title="Shelf Boxes"
+      title="Shelf Rows"
       entityState={entityState}
       columns={shelfColumns}
-      createRoute="/shelf-box/create"
-      detailRouteBase="/shelf-box/detail"
+      createRoute="/shelf-row/create"
+      detailRouteBase="/shelf-row/detail"
       onRefresh={handleRefresh}
-      getKey={(shelfBox) => shelfBox.id}
+      getKey={(shelfRow) => shelfRow.id}
       searchFilter={handleFilter}
       keyWord={keyWord}
       setKeyWord={setKeyWord}

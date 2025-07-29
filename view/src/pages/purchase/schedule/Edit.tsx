@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchWorkOrder } from "../../store/slices/workOrderSlice";
-import { updateWorkOrderActivity } from "../../store/slices/workOrderActivitySlice";
-import { AppState, AppDispatch } from "../../store/store";
-import { useEntityDetail } from "../../hooks/useEntityDetail";
-import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { fetchWorkOrder } from "../../../store/slices/workOrderSlice";
+import { updateWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
+import { AppState, AppDispatch } from "../../../store/store";
+import { useEntityDetail } from "../../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import EditRows from "./EditRows";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 // import Submit from "./Submit";
 import {
   CircularProgress,
@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../store/slices/purchaseScheduleSlice";
+import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../../store/slices/purchaseScheduleSlice";
 const Edit = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)

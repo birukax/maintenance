@@ -1,9 +1,9 @@
 // src/routes/ShelfRowRoutes.tsx
 import { Route } from "react-router-dom";
-import CreateShelfRow from "../pages/shelfRow/Create";
-import ShelfRowList from "../pages/shelfRow/List";
-import ShelfRowDetail from "../pages/shelfRow/Detail";
-import ShelfRowEdit from "../pages/shelfRow/Edit";
+import CreateShelfRow from "../pages/shelf/row/Create";
+import ShelfRowList from "../pages/shelf/row/List";
+import ShelfRowDetail from "../pages/shelf/row/Detail";
+import ShelfRowEdit from "../pages/shelf/row/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const ShelfRowRoutes = [

@@ -4,8 +4,8 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchShelfRow,
   updateShelfRow,
-} from "../../store/slices/shelfRowSlice";
-import { AppState, AppDispatch } from "../../store/store";
+} from "../../../store/slices/shelfRowSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import {
   TextField,
   Button,

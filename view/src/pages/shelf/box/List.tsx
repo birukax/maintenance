@@ -1,29 +1,29 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
-import { fetchTransfers } from "../../store/slices/transferSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { fetchShelfBoxes } from "../../../store/slices/shelfBoxSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
   ColumnDefination,
-} from "../../components/GenericListPage";
+} from "../../../components/GenericListPage";
 
-const transferColumns = [
-  { header: "ID", accessor: "id" },
-  { header: "Requested By", accessor: "requested_by.username" },
-  { header: "Requested Date", accessor: "requested_date" },
-  { header: "Status", accessor: "status" },
-  { header: "From", accessor: "from_location.name" },
-  { header: "To", accessor: "to_location.name" }
+const shelfColumns = [
+  { header: "Code", accessor: "code" },
+  { header: "Name", accessor: "name" },
+  { header: "Location", accessor: "row.shelf.location.name" },
+  { header: "Shelf", accessor: "row.shelf.name" },
+  { header: "Row", accessor: "row.name" },
 ];
+
 
 const List: React.FC = () => {
   const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
-    (state: AppState) => state.transfer.transfers
+    (state: AppState) => state.shelfBox.shelfBoxes
   );
   const [params, setParams] = useState({
     search: searchParams.get("search") || "",
@@ -33,14 +33,14 @@ const List: React.FC = () => {
 
   useEffect(() => {
     if (tokens) {
-      dispatch(fetchTransfers(params));
+      dispatch(fetchShelfBoxes(params));
       // setSearchParams(params)
     }
   }, []);
 
   const handleRefresh = () => {
     if (tokens) {
-      dispatch(fetchTransfers(params));
+      dispatch(fetchShelfBoxes(params));
     }
   }
 
@@ -52,26 +52,24 @@ const List: React.FC = () => {
       }
     })
     const parameters = {
-      ...params, page: 1,
+      ...params,
+      page: 1,
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });
-    await dispatch(fetchTransfers(parameters));
+    await dispatch(fetchShelfBoxes(parameters));
 
   }
 
   return (
     <GenericListPage
-      title="Transfer"
-      entityState={{
-        ...entityState
-        // data: entityState.data?.filter((transfer) => transfer.work_order_type.scheduled === true),
-      }}
-      columns={transferColumns}
-      createRoute="/transfer/create"
-      detailRouteBase="/transfer/detail"
+      title="Shelf Boxes"
+      entityState={entityState}
+      columns={shelfColumns}
+      createRoute="/shelf-box/create"
+      detailRouteBase="/shelf-box/detail"
       onRefresh={handleRefresh}
-      getKey={(transfer) => transfer.id}
+      getKey={(shelfBox) => shelfBox.id}
       searchFilter={handleFilter}
       keyWord={keyWord}
       setKeyWord={setKeyWord}

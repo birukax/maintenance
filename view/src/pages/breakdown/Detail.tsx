@@ -6,7 +6,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal } from "@mui/material";
 import dayjs from "dayjs";
-import CreateWorkOrder from "../../pages/breakdown/CreateWorkOrder";
+import CreateWorkOrder from "./workOrder/Create";
 import Update from "./Update";
 const Detail = () => {
   const entityState = useEntityDetail({

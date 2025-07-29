@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { fetchShelfBox } from "../../store/slices/shelfBoxSlice";
-import { AppState } from "../../store/store";
-import { useEntityDetail } from "../../hooks/useEntityDetail";
-import { GenericDetailPage } from "../../components/GenericDetailPage";
+import { fetchShelfBox } from "../../../store/slices/shelfBoxSlice";
+import { AppState } from "../../../store/store";
+import { useEntityDetail } from "../../../hooks/useEntityDetail";
+import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';

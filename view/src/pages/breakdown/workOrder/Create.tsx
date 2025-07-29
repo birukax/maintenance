@@ -1,15 +1,15 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { createBreakdownWorkOrder } from "../../store/slices/breakdownSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { createBreakdownWorkOrder } from "../../../store/slices/breakdownSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { fetchItems } from "../../store/slices/itemSlice";
-import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
-import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
+import { fetchItems } from "../../../store/slices/itemSlice";
+import { fetchActivityTypes } from "../../../store/slices/activityTypeSlice";
+import { fetchWorkOrderTypes } from "../../../store/slices/workOrderTypeSlice";
 
 import {
   TextField,
@@ -37,7 +37,7 @@ const style = {
   p: 4,
 };
 
-const CreateWorkOrder = ({ entityState, setModalOpen }) => {
+const Create = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
     start_date: "",
@@ -289,4 +289,4 @@ const CreateWorkOrder = ({ entityState, setModalOpen }) => {
   );
 };
 
-export default CreateWorkOrder;
+export default Create;

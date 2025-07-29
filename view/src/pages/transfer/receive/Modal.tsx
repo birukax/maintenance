@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { receiveTransfer } from "../../store/slices/transferSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { receiveTransfer } from "../../../store/slices/transferSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import {
   Button,
   Typography,
@@ -23,7 +23,7 @@ import {
 
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { useEntityDetail } from "../../hooks/useEntityDetail";
+import { useEntityDetail } from "../../../hooks/useEntityDetail";
 const style = {
   boxSizing: "border-box",
   position: "absolute",

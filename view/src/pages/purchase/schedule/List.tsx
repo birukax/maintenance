@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchPurchaseSchedules,
   clear,
-} from "../../store/slices/purchaseScheduleSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import { GenericListPage } from "../../components/GenericListPage";
+} from "../../../store/slices/purchaseScheduleSlice";
+import { AppState, AppDispatch } from "../../../store/store";
+import { GenericListPage } from "../../../components/GenericListPage";
 import { useSearchParams } from "react-router-dom";
 import Edit from "./Edit";
 import { useNavigate } from "react-router-dom";

@@ -1,8 +1,8 @@
 // src/routes/PurchaseRequestRoutes.tsx
 import { Route } from "react-router-dom";
-import CreatePurchaseRequest from "../pages/purchaseRequest/Create";
-import PurchaseRequestList from "../pages/purchaseRequest/List";
-import PurchaseRequestDetail from "../pages/purchaseRequest/Detail";
+import CreatePurchaseRequest from "../pages/purchase/request/Create";
+import PurchaseRequestList from "../pages/purchase/request/List";
+import PurchaseRequestDetail from "../pages/purchase/request/Detail";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const PurchaseRequestRoutes = [

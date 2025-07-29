@@ -25,8 +25,6 @@ const List: React.FC = () => {
   const entityState = useSelector(
     (state: AppState) => state.transferApproval.transferApprovals
   );
-  const [handlers, setHandlers] = React.useState(false);
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const [params, setParams] = useState({
@@ -38,10 +36,7 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchTransferApprovals(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchTransferApprovals(params));
   }, []);
 
 

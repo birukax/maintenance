@@ -7,7 +7,7 @@ import TransferDetail from "../pages/transfer/Detail";
 // import TransferEdit from "../pages/transfer/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Receive from "../pages/transfer/Receive"
-import ShipList from "../pages/transfer/ShipList";
+import ShipList from "../pages/transfer/ship/List";
 const TransferRoutes = [
   <Route
     key="transfer-list"

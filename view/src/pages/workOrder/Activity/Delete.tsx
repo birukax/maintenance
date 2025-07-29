@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-const DeleteActivity = ({ handleDeleteActivity, handledeleteModalClose, deleteId, workOrderActivity }) => {
+const Delete = ({ handleDeleteActivity, handledeleteModalClose, deleteId, workOrderActivity }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
@@ -60,4 +60,4 @@ const DeleteActivity = ({ handleDeleteActivity, handledeleteModalClose, deleteId
   );
 };
 
-export default DeleteActivity;
+export default Delete;

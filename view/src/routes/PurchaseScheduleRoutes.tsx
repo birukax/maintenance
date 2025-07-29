@@ -1,8 +1,8 @@
 // src/routes/PurchaseScheduleRoutes.tsx
 import { Route } from "react-router-dom";
-import CreatePurchaseSchedule from "../pages/purchaseSchedule/Create";
-import PurchaseScheduleList from "../pages/purchaseSchedule/List";
-import PurchaseScheduleEdit from "../pages/purchaseSchedule/Edit";
+import CreatePurchaseSchedule from "../pages/purchase/schedule/Create";
+import PurchaseScheduleList from "../pages/purchase/schedule/List";
+import PurchaseScheduleEdit from "../pages/purchase/schedule/Edit";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const PurchaseScheduleRoutes = [
