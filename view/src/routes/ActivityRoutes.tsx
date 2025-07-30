@@ -1,6 +1,6 @@
 // src/routes/ActivityRoutes.tsx
 import { Route } from "react-router-dom";
-import CreateActivity from "../pages/schedule/activity/ManageActivity";
+import CreateActivity from "../pages/schedule/activity/Manage";
 import ActivityList from "../pages/schedule/activity/List";
 import ActivityDetail from "../pages/schedule/activity/Detail";
 import ActivityEdit from "../pages/schedule/activity/Edit";
@@ -25,7 +25,7 @@ const ActivityRoutes = [
       </ProtectedRoute>
     }
   />,
-  
+
   <Route
     key="activity-detail"
     path="/activity/detail/:id"

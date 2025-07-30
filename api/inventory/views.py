@@ -292,14 +292,14 @@ class TransferViewSet(viewsets.ModelViewSet):
         transfer = self.get_object()
         shipped_items = request.data.get("shipped_items")
         if not shipped_items:
-            raise serializers.ValidationError({"error": "Shipped items are required."})
+            raise serializers.ValidationError({"error": "Nothing to Ship."})
         try:
             shipment_list = []
             for i in shipped_items:
                 item = Item.objects.get(id=i["item_id"])
                 transfer_item = TransferItem.objects.get(transfer=transfer, item=item)
                 if transfer_item.remaining_quantity < int(i["quantity"]):
-                    raise serializer.ValidationError(
+                    raise serializers.ValidationError(
                         {
                             "error": "The shipped quantity cannot be greater than the remaining quantity."
                         }
@@ -323,7 +323,7 @@ class TransferViewSet(viewsets.ModelViewSet):
                 {"error": "Transfer for one or more item does not exist."}
             )
         except Exception as e:
-            raise serializers.ValidationError({"error", str(e)})
+            raise serializers.ValidationError({"error", "Error while shipping."})
 
         TransferHistory.objects.bulk_create(shipment_list)
         serializer = self.get_serializer(transfer)

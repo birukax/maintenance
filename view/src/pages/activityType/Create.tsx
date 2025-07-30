@@ -75,7 +75,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             size='small'
-            options={workOrderTypes.data || []}
+            options={workOrderTypes?.data || []}
             getOptionLabel={(option) =>
               option.code ? `${option.code} - ${option.name}` : option.name || ""
             }
@@ -86,12 +86,12 @@ const Create = () => {
                 label="Work Order Type"
                 placeholder="Search work order types..."
                 required
-                helperText={activityType.error?.work_order_type_id}
+                helperText={activityType?.error?.work_order_type_id || ''}
               />
             )}
             id="work-order-type-select"
             value={
-              Array.isArray(workOrderTypes) && workOrderTypes.data?.find(
+              Array.isArray(workOrderTypes?.data) && workOrderTypes?.data?.find(
                 (workOrderType) => workOrderType.id === formData.work_order_type_id
               ) || null
             }

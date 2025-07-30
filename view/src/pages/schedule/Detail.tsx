@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchSchedule } from "../../store/slices/scheduleSlice";
 import { fetchWorkOrders } from "../../store/slices/workOrderSlice";
 import { AppState } from "../../store/store";
@@ -10,27 +10,27 @@ import { Link, useParams } from "react-router-dom";
 import Create from "./workOrder/Create";
 
 const Detail = () => {
-  const {id}=useParams()
+  const { id } = useParams()
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.schedule.schedule,
     fetchDetailAction: fetchSchedule,
   });
-    const dispatch = useDispatch();
-const work_orders = useSelector(
+  const dispatch = useDispatch();
+  const work_orders = useSelector(
     (state: AppState) => state.workOrder.workOrders
   );
   const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
+  const params = {
+    no_pagination: true,
+    schedule__id: id
+  }
 
 
-  useEffect(()=>{
-    const params={
-      no_pagination:true,
-      schedule__id:id
-    }
+  useEffect(() => {
     dispatch(fetchWorkOrders(params))
-  },[])
+  }, [])
   const renderButtons = () => (
     <>
       <Modal
@@ -42,6 +42,7 @@ const work_orders = useSelector(
         <Create
           entityState={entityState}
           setModalOpen={setModalOpen}
+          params={params}
         />
       </Modal>
       <div className='flex gap-2'>
@@ -49,6 +50,7 @@ const work_orders = useSelector(
           size='small'
           onClick={handleModalOpen}
           variant="contained"
+          disabled={entityState?.data?.activities?.filter((activity) => activity.active === true).length === 0}
         >
           Create Work Order
         </Button>
@@ -64,8 +66,6 @@ const work_orders = useSelector(
     </>
   );
 
-  console.log(work_orders);
-  
   const renderDetails = (data) => (
     <>
       <h2>Primary Information</h2>
@@ -143,16 +143,57 @@ const work_orders = useSelector(
           })}
         </div>
       </div>
+
+
       <div className="rw">
+        <div className="clmn activities-clmn" style={{ maxHeight: "500px" }}>
+          <Typography variant="h6">Activities:</Typography>
+          <Table size='small' sx={{ width: "100%" }} className="table">
+            <TableHead>
+              <TableRow>
+                <TableCell >
+                  <Typography noWrap>ID</Typography>
+                </TableCell>
+                <TableCell >
+                  <Typography noWrap>Description</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Status</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.activities?.length > 0 ? data?.activities?.map((activity) => {
+                return (
+                  <TableRow key={activity?.id}>
+                    <TableCell><Link to={`/work-order/detail/${activity?.id}`} type="link"> {activity?.id}</Link></TableCell>
+                    <TableCell>{activity?.description}</TableCell>
+                    <TableCell>{activity?.active ? 'Active' : 'Inactive'}</TableCell>
+                  </TableRow>
+                );
+              })
+                : <TableRow>
+                  <TableCell className='border-none!'>
+                    <Typography color='primary' className='ml-6! '>
+                      There are no activities assigned to this work order.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              }
+            </TableBody>
+          </Table>
+        </div>
+      </div>
 
-        <div className="clmn activities-clmn" style={{maxHeight:"500px"}}>
 
+      <div className="rw">
+        <div className="clmn activities-clmn" style={{ maxHeight: "500px" }}>
           <Typography variant="h6">Work Orders:</Typography>
           <Table size='small' sx={{ width: "100%" }} className="table">
             <TableHead>
               <TableRow>
                 <TableCell >
-                  <Typography noWrap>Activity Id</Typography>
+                  <Typography noWrap>ID</Typography>
                 </TableCell>
                 <TableCell >
                   <Typography noWrap>Start Date</Typography>
@@ -175,7 +216,7 @@ const work_orders = useSelector(
                     <TableCell><Link to={`/work-order/detail/${work_order?.id}`} type="link"> {work_order?.id}</Link></TableCell>
                     <TableCell>{work_order?.start_date}</TableCell>
                     <TableCell>{work_order?.end_date}</TableCell>
-                    <TableCell>{work_order?.status }</TableCell>
+                    <TableCell>{work_order?.status}</TableCell>
                     <TableCell>{work_order?.remark}</TableCell>
                   </TableRow>
                 );

@@ -13,15 +13,15 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.purchaseRequest.purchaseRequest,
     fetchDetailAction: fetchPurchaseRequest,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const handleModalOpen = () => setModalOpen(true);
+  // const handleModalClose = () => setModalOpen(false);
 
   const renderButtons = () => (
     <>
       {entityState.data.status == "APPROVED" && (
         <>
-          <Modal
+          {/* <Modal
             open={modalOpen}
             onClose={handleModalClose}
             aria-labelledby="modal-modal-title"
@@ -36,7 +36,16 @@ const Detail = () => {
             className="bg-slate-700"
           >
             Receive
-          </Button>
+          </Button> */}
+          {entityState?.data && entityState?.data?.request_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
+            size='small'
+            component={Link}
+            to={`/purchase-request/${entityState.data.id}/receive`}
+            variant="contained"
+            sx={{ mr: 1 }}
+          >
+            Receive
+          </Button>}
         </>
       )}
     </>

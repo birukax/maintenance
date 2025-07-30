@@ -73,7 +73,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={loading}>
           <Autocomplete
             size='small'
-            options={machines.data || []}
+            options={machines?.data || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
@@ -86,7 +86,7 @@ const Create = () => {
               />
             )}
             id="machine-select"
-            value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
+            value={Array.isArray(machines?.data) && machines?.data?.find((machine) => machine.id === formData.machine_id) || null}
             onChange={(event, newValue) => {
               setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
             }}

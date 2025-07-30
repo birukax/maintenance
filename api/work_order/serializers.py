@@ -58,6 +58,7 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
             "remark",
             "description",
             "work_order",
+            "work_order_id",
         ]
 
     def get_work_order(self, obj):
@@ -120,6 +121,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
         required=False,
     )
     assigned_users = UserSerializer(many=True, read_only=True)
+    work_order_activities = WorkOrderActivitySerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkOrder

@@ -5,7 +5,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from main import choices
 from main.models import BaseCreatedUpdated
 from django.contrib.auth.models import User
-from inventory.models import Item, Location, Inventory
+
+# from inventory.models import Item, Location, Inventory
 
 
 class Year(BaseCreatedUpdated):
@@ -39,7 +40,9 @@ class Request(BaseCreatedUpdated):
         blank=True,
     )
     location = models.ForeignKey(
-        Location, on_delete=models.RESTRICT, related_name="purchase_requests"
+        "inventory.Location",
+        on_delete=models.RESTRICT,
+        related_name="purchase_requests",
     )
     requested_date = models.DateField(default=datetime.date.today)
     approved_date = models.DateField(null=True, blank=True)
@@ -54,10 +57,10 @@ class Request(BaseCreatedUpdated):
         ordering = ["-created_at", "-updated_at"]
 
     def __str__(self):
-        if self.item and self.requested_by:
-            return f"{self.item.name} - {self.requested_by}"
-        elif self.item:
-            return f"{self.item.name}"
+        if self.location and self.requested_by:
+            return f"{self.id} - {self.location.name} - {self.requested_by}"
+        elif self.location:
+            return f"{self.id} - {self.location.name}"
 
 
 class PurchaseHistory(BaseCreatedUpdated):
@@ -67,10 +70,12 @@ class PurchaseHistory(BaseCreatedUpdated):
         related_name="purchase_histories",
     )
     item = models.ForeignKey(
-        Item, on_delete=models.RESTRICT, related_name="purchase_histories"
+        "inventory.Item", on_delete=models.RESTRICT, related_name="purchase_histories"
     )
     location = models.ForeignKey(
-        Location, on_delete=models.RESTRICT, related_name="purchase_histories"
+        "inventory.Location",
+        on_delete=models.RESTRICT,
+        related_name="purchase_histories",
     )
     date = models.DateField(default=datetime.date.today)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -92,7 +97,7 @@ class RequestItem(BaseCreatedUpdated):
         related_name="request_items",
     )
     item = models.ForeignKey(
-        Item, on_delete=models.RESTRICT, related_name="request_items"
+        "inventory.Item", on_delete=models.RESTRICT, related_name="request_items"
     )
     requested_quantity = models.DecimalField(
         max_digits=10,
@@ -102,17 +107,28 @@ class RequestItem(BaseCreatedUpdated):
 
     @property
     def received_quantity(self):
-        return (
-            PurchaseHistory.objects.filter(
-                request=self.request, item=self.item
-            ).aggregate(total_received=models.Sum("quantity")["total_received"])
-            or 0
-        )
+        try:
+            return (
+                PurchaseHistory.objects.filter(
+                    request=self.request, item=self.item
+                ).aggregate(total_received=models.Sum("quantity"))["total_received"]
+                or 0
+            )
+        except Exception as e:
+            print(e)
+            return 0
+
+    @property
+    def remaining_quantity(self):
+        try:
+            return self.requested_quantity - self.received_quantity
+        except Exception as e:
+            return 0
 
 
 class Schedule(BaseCreatedUpdated):
     item = models.ForeignKey(
-        Item, on_delete=models.RESTRICT, related_name="purchase_schedules"
+        "inventory.Item", on_delete=models.RESTRICT, related_name="purchase_schedules"
     )
     year = models.ForeignKey(Year, on_delete=models.CASCADE, related_name="schedules")
     january = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -147,20 +163,18 @@ class Schedule(BaseCreatedUpdated):
 
     @property
     def purchased_quantity(self):
-        purchases = Request.objects.filter(
+        purchases = PurchaseHistory.objects.filter(
             item=self.item,
             received_date__range=[
                 datetime.date(self.year.no, 1, 1),
                 datetime.date(self.year.no, 12, 31),
             ],
         )
-        return (
-            purchases.aggregate(Sum("received_quantity"))["received_quantity__sum"] or 0
-        ) or 0
+        return (purchases.aggregate(Sum("quantity"))["quantity__sum"] or 0) or 0
 
     @property
     def balance(self):
-        all_balance = Inventory.objects.filter(item=self.item)
+        all_balance = "inventory.Inventory".objects.filter(item=self.item)
         return all_balance.aggregate(Sum("balance"))["balance__sum"] or 0
 
     class Meta:

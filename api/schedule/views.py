@@ -68,7 +68,7 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
             work_order.spareparts_required.set(
                 [schedule.spareparts_required.all().values_list("id", flat=True)[0]]
             )
-            for a in activities:
+            for a in schedule.activities.all():
                 WorkOrderActivity.objects.create(
                     work_order=work_order,
                     description=a.description,

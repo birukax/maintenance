@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -22,6 +23,7 @@ class PurchaseViewSet(viewsets.ReadOnlyModelViewSet):
         purchase.status = "APPROVED"
         purchase.by = request.user
         purchase.save()
+        purchase.purchase_request.approved_date = datetime.date.today
         purchase.purchase_request.status = "APPROVED"
         purchase.purchase_request.approved_by = request.user
         purchase.purchase_request.save()
@@ -54,6 +56,7 @@ class TransferViewSet(viewsets.ReadOnlyModelViewSet):
         transfer.by = request.user
         transfer.remark = request.data.get("remark")
         transfer.save()
+        transfer.transfer.approved_date = datetime.date.today
         transfer.transfer.status = "APPROVED"
         transfer.transfer.approved_by = request.user
         transfer.transfer.save()

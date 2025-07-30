@@ -51,6 +51,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
 class RequestItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     item = ItemSerializer(read_only=True)
+    request = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = RequestItem
@@ -60,6 +61,7 @@ class RequestItemSerializer(serializers.ModelSerializer):
             "item",
             "requested_quantity",
             "received_quantity",
+            "remaining_quantity",
         ]
 
     def get_request(self, obj):
@@ -86,7 +88,7 @@ class RequestSerializer(serializers.ModelSerializer):
     location_id = serializers.PrimaryKeyRelatedField(
         write_only=True, queryset=Location.objects.all(), source="location"
     )
-    request_items = RequestItemSerializer(read_only=True)
+    request_items = RequestItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Request

@@ -42,6 +42,7 @@ const Detail = () => {
     <>
       <Button
         size='small'
+        disabled={entityState?.data?.status === 'Completed'}
         onClick={() => navigate(`/work-order/${id}/manage-activities`)}
         variant="contained"
         className="bg-slate-700"

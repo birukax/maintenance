@@ -148,7 +148,7 @@ const List: React.FC = () => {
           </Button>
           <Button
             component={Link}
-            to={`/schedule/detail/${id}`}
+            to={`/work-order/detail/${id}`}
             type='button'
             size='small'
             variant='contained'

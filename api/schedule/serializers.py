@@ -4,6 +4,7 @@ from inventory.serializers import ItemSerializer
 from asset.serializers import EquipmentSerializer, MachineSerializer
 from work_order.serializers import (
     WorkOrderTypeSerializer,
+    WorkOrderType,
     ActivityTypeSerializer,
     ActivitySerializer,
 )
@@ -25,17 +26,25 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     equipment = EquipmentSerializer(read_only=True)
     equipment_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=Equipment.objects.all(), source="equipment"
+        write_only=True,
+        queryset=Equipment.objects.all(),
+        required=False,
+        allow_null=True,
+        source="equipment",
     )
 
     work_order_type = WorkOrderTypeSerializer(read_only=True)
     work_order_type_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=WorkOrder.objects.all(), source="work_order_type"
+        write_only=True, queryset=WorkOrderType.objects.all(), source="work_order_type"
     )
 
     activity_type = ActivityTypeSerializer(read_only=True)
     activity_type_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=ActivityType.objects.all(), source="activity_type"
+        write_only=True,
+        queryset=ActivityType.objects.all(),
+        required=False,
+        allow_null=True,
+        source="activity_type",
     )
     tools_required = ItemSerializer(many=True, read_only=True)
     tools_required_id = serializers.PrimaryKeyRelatedField(

@@ -148,7 +148,7 @@ const Create = () => {
           <Autocomplete
             size='small'
             options={machines.data || []}
-            getOptionLabel={(option) => option.name || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -174,7 +174,7 @@ const Create = () => {
             options={Array.isArray(equipments.data) && equipments.data?.filter(
               (equipment) => equipment.machine.id === formData.machine_id
             ) || []}
-            getOptionLabel={(option) => option.name || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -203,10 +203,10 @@ const Create = () => {
             size='small'
             options={
               Array.isArray(workOrderTypes.data)
-                ? workOrderTypes.data.filter((workOrderType) => workOrderType.scheduled === true)
+                ? workOrderTypes.data.filter((workOrderType) => workOrderType?.scheduled === true)
                 : []
             }
-            getOptionLabel={(option) => option.name || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -221,7 +221,7 @@ const Create = () => {
             id="work-order-type-select"
             value={
               Array.isArray(workOrderTypes.data)
-                ? workOrderTypes.data.find((workOrderType) => workOrderType.id === formData.work_order_type_id) || null
+                ? workOrderTypes.data.find((workOrderType) => workOrderType?.id === formData.work_order_type_id) || null
                 : null
             }
             onChange={(event, newValue) => {
@@ -241,7 +241,7 @@ const Create = () => {
                 )
                 : []
             }
-            getOptionLabel={(option) => option.name || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
             renderInput={(params) => (
               <TextField
                 {...params}

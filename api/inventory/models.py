@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from main import choices
 from main.models import BaseCreatedUpdated
+from purchase.models import PurchaseHistory
 
 
 class Contact(BaseCreatedUpdated):
@@ -163,22 +164,22 @@ class Inventory(BaseCreatedUpdated):
         on_delete=models.RESTRICT,
         related_name="inventories",
     )
-    purchased = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    )
-    inbound_transfers = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    )
-    outbound_transfers = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    # purchased = models.DecimalField(
+    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
+    # )
+    # inbound_transfers = models.DecimalField(
+    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
+    # )
+    # outbound_transfers = models.DecimalField(
+    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
+    # )
     # consumed_quantity = models.DecimalField(
     #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
     # )
     # returned_quantity = models.DecimalField(
     #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
     # )
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    # balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         ordering = ["-item__created_at", "location__code"]
@@ -188,6 +189,59 @@ class Inventory(BaseCreatedUpdated):
         if self.item and self.location:
             return f"{self.item.name} - {self.location.name}"
         return f"{self.item.name}"
+
+    @property
+    def inbound_transfers(self):
+        try:
+            in_transfers = TransferHistory.objects.filter(
+                location=self.location, item=self.item, type="INBOUND", completed=True
+            )
+
+            return (
+                in_transfers.aggregate(total_quantity=models.Sum("quantity"))[
+                    "total_quantity"
+                ]
+                if in_transfers.exists()
+                else 0
+            )
+        except Exception as e:
+            return 0
+
+    @property
+    def outbound_transfers(self):
+        try:
+            out_transfers = TransferHistory.objects.filter(
+                location=self.location, item=self.item, type="OUTBOUND", completed=True
+            )
+
+            return (
+                out_transfers.aggregate(total_quantity=models.Sum("quantity"))[
+                    "total_quantity"
+                ]
+                if out_transfers.exists()
+                else 0
+            )
+        except Exception as e:
+            return 0
+
+    @property
+    def purchased(self):
+        try:
+            return (
+                PurchaseHistory.objects.filter(
+                    location=self.location, item=self.item
+                ).aggregate(total_received=models.Sum("quantity"))["total_received"]
+                or 0
+            )
+        except Exception as e:
+            return 0
+
+    @property
+    def balance(self):
+        try:
+            return self.purchased + self.inbound_transfers - self.outbound_transfers
+        except Exception as e:
+            return 0
 
 
 class Transfer(BaseCreatedUpdated):
@@ -263,11 +317,9 @@ class TransferItem(BaseCreatedUpdated):
     def available_balance(self):
         try:
             return (
-                Inventory.objects.filter(
+                Inventory.objects.get(
                     item=self.item, location=self.transfer.from_location
-                )
-                .first()
-                .balance
+                ).balance
                 or 0
             )
         except Exception as e:

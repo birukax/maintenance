@@ -74,38 +74,45 @@ class RequestViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["PATCH"])
     def receive(self, request, pk=None):
         instance = self.get_object()
-        received_quantity = int(request.data.get("received_quantity"))
-        received_date = request.data.get("received_date")
-        location_id = request.data.get("location_id")
+        date = request.data.get("date")
+        received_items = request.data.get("received_items")
+        if not received_items:
+            raise serializers.ValidationError({"error": "Nothing to Receive."})
+        if not date:
+            raise serializers.ValidationError({"date": "Date is required."})
+        # else:
+        #     date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         try:
-            location = Location.objects.get(id=location_id)
-        except Location.DoesNotExist:
+            received_list = []
+            for i in received_items:
+                item = Item.objects.get(id=i["item_id"])
+                request_item = RequestItem.objects.get(request=instance, item=item)
+                if (request_item.remaining_quantity) < int(i["quantity"]):
+                    raise serializers.ValidationError(
+                        {"error": "The quantity is not valid."}
+                    )
+                if int(i["quantity"]) > 0:
+                    received_list.append(
+                        PurchaseHistory(
+                            request=instance,
+                            item=item,
+                            date=date,
+                            location=instance.location,
+                            quantity=int(i["quantity"]),
+                        )
+                    )
+            if received_list:
+                PurchaseHistory.objects.bulk_create(received_list)
+        except RequestItem.DoesNotExist:
+            raise serializers.ValidationError({"error": "Item not found."})
+        except Item.DoesNotExist:
             raise serializers.ValidationError(
-                {"location_id": f"Location does not exist."}
+                {"error": "One or more items do not exist."}
             )
         except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-        if received_quantity is not None:
-            if received_quantity > instance.quantity:
-                raise serializers.ValidationError(
-                    {
-                        "received_quantity": "Received quantity cannot be greater than requested quantity."
-                    }
-                )
-            if received_quantity <= 0:
-                raise serializers.ValidationError(
-                    {"received_quantity": "Received quantity cannot be less than 1."}
-                )
+            print(e)
+            raise serializers.ValidationError({"error", "Error while receiving."})
 
-        else:
-            raise serializers.ValidationError(
-                {"received_quantity": "Received quantity is required."}
-            )
-        instance.received_quantity = received_quantity
-        instance.received_date = received_date
-        instance.status = "RECEIVED"
-        instance.location = location
-        instance.save()
         serializer = RequestSerializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

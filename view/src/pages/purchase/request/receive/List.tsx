@@ -11,6 +11,7 @@ import {
   Modal,
   TableRow,
   TableBody,
+  FormControl,
   Table,
   TableHead,
   TableCell,
@@ -19,21 +20,33 @@ import {
 } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const ShipList = () => {
+const ReceiveList = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.purchaseRequest.purchaseRequest,
     fetchDetailAction: fetchPurchaseRequest,
   });
   const [errorCount, setErrorCount] = useState([])
   const [formData, setFormData] = useState({
-    date: null,
+    date: '',
     received_items: []
   });
   const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate()
 
+
+  const handleDateChange = (value) => {
+    const formattedDate = value ? value.format("YYYY-MM-DD") : null;
+    setFormData({
+      ...formData,
+      date: formattedDate,
+    });
+  };
 
   const handleRefresh = () => {
     try {
@@ -47,7 +60,7 @@ const ShipList = () => {
     e.preventDefault()
     try {
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap()
-      navigate(`/purchase/detail/${id}`)
+      navigate(`/purchase-request/detail/${id}`)
     } catch (error) {
       return error
     }
@@ -55,16 +68,39 @@ const ShipList = () => {
   const renderButtons = () => (
     <>
       <>
-        <Button
-          size='small'
-          disabled={errorCount.find(el => el === true) ? true : false || formData.received_items.filter((e) => e.quantity > 0).length === 0}
-          variant="contained"
-          className="bg-slate-700"
-          sx={{ marginRight: ".5rem" }}
-          onClick={handleSubmit}
-        >
-          Receive
-        </Button>
+        <div className='flex gap-4 w-fit'>
+          <Button
+            size='small'
+            disabled={errorCount.find(el => el === true) ? true : false || formData.date == '' || formData.received_items.filter((e) => e.quantity > 0).length === 0}
+            variant="contained"
+            className="bg-slate-700"
+            sx={{ marginRight: ".5rem" }}
+            onClick={handleSubmit}
+          >
+            Receive
+          </Button>
+          <FormControl size='small'>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                disableFuture
+                label="Date"
+                name="date"
+                value={formData.date ? dayjs(formData.date) : null}
+                onChange={handleDateChange}
+                slotProps={{
+                  textField: {
+                    size: 'small',
+                    variant: "outlined",
+                    fullWidth: true,
+                    required: true,
+                    disabled: entityState.loading,
+                    helperText: entityState.error?.date,
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </FormControl>
+        </div>
       </>
     </>
   );
@@ -83,7 +119,6 @@ const ShipList = () => {
         }
       })
     } else {
-
       setFormData(prev => {
         return {
           ...prev,
@@ -101,11 +136,12 @@ const ShipList = () => {
 
   const renderDetails = (data) => (
     <>
+
       <Table size='small' sx={{ minWidth: 650 }} aria-label={` table`}>
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography noWrap>Item No.</Typography>
+              <Typography noWrap>ID</Typography>
             </TableCell>
 
             <TableCell>
@@ -142,7 +178,7 @@ const ShipList = () => {
               />
             })}
           {
-            data && data?.request_items?.every(el => el.remaining_quantity < 1) && <TableRow><Typography>No Shippment Left</Typography></TableRow>
+            data && data?.request_items?.every(el => el.remaining_quantity < 1) && <TableRow><Typography>No item left to receive.</Typography></TableRow>
           }
         </TableBody>
       </Table>
@@ -150,11 +186,11 @@ const ShipList = () => {
   );
 
   if (!entityState?.data) {
-    return <Typography>The work order ship is not available</Typography>;
+    return <Typography>The Purchase receipt is not available</Typography>;
   } else {
     return (
       <GenericDetailPage
-        titleBase="Transfer Ship"
+        titleBase="Purchase Request Receive"
         id={entityState.id}
         entityState={entityState}
         renderButtons={renderButtons}
@@ -165,4 +201,4 @@ const ShipList = () => {
   }
 };
 
-export default ShipList;
+export default ReceiveList;

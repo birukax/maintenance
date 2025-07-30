@@ -15,6 +15,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
+import { fetchWorkOrders } from "../../../store/slices/workOrderSlice";
 import { toast } from "react-toastify";
 
 const style = {
@@ -29,7 +30,7 @@ const style = {
   p: 4,
 };
 
-const Create = ({ entityState, setModalOpen }) => {
+const Create = ({ entityState, setModalOpen, params }) => {
   const id = entityState.data.id;
   const [formData, setFormData] = useState({
     schedule_id: id,
@@ -53,6 +54,7 @@ const Create = ({ entityState, setModalOpen }) => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createScheduledWorkOrder({ id, formData })).unwrap();
       setModalOpen(false);
+      dispatch(fetchWorkOrders(params))
       toast.success("Scheduled Work Order created successfully");
     } catch (err) {
       // console.log(scheduledWorkOrder.error.non_field_errors[0])
