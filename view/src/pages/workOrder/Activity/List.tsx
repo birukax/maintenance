@@ -154,7 +154,6 @@ const List: React.FC = () => {
             variant='contained'
             fullWidth
             disabled={entityState.loading}
-
           >
             Save
           </Button>

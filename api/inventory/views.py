@@ -1,4 +1,6 @@
 import datetime
+import csv
+from django.http import HttpResponse
 from django.db.models import Sum
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
@@ -159,6 +161,44 @@ class InventoryViewSet(viewsets.ModelViewSet):
         "balance",
     ]
     filterset_fields = []
+
+    @action(detail=False, methods=["GET"])
+    def download(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="inventory.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Item ID",
+                "Item Name",
+                "UoM",
+                "Location Code",
+                "Location Name",
+                "Minimum Stock Level",
+                "Balance",
+                "Purchased",
+                "Inbound Transfers",
+                "Outbound Transfers",
+            ]
+        )
+        for inv in queryset:
+            writer.writerow(
+                [
+                    inv.item.no,
+                    inv.item.name,
+                    inv.item.uom.code,
+                    inv.location.code,
+                    inv.location.name,
+                    inv.item.minimum_stock_level,
+                    inv.balance,
+                    inv.purchased,
+                    inv.inbound_transfers,
+                    inv.outbound_transfers,
+                ]
+            )
+        return response
 
     @action(detail=False, methods=["GET"])
     def revaluate_stock(self, request):

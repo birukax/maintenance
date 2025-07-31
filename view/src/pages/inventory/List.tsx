@@ -11,7 +11,7 @@ import {
   GenericListPage,
   ColumnDefination,
 } from "../../components/GenericListPage";
-
+import api from '../../utils/api';
 const inventoryColumns = [
   { header: "Item ID", accessor: "item.no" },
   { header: "Item", accessor: "item.name" },
@@ -48,9 +48,16 @@ const List: React.FC = () => {
       // setSearchParams(params)
     }
   }, []);
+
   const handleRefresh = () => {
     dispatch(fetchInventories(params));
   };
+  const onDownload = {
+    urlPath: '/inventory/inventories/download/',
+    fileName: 'inventory.csv'
+  }
+
+
   const handleFilter = async (field, value) => {
     setSearchParams({ ...params, page: 1 });
     setParams(prev => {
@@ -72,6 +79,7 @@ const List: React.FC = () => {
   return (
     <GenericListPage
       title="Inventory"
+      onDownload={onDownload}
       entityState={entityState}
       columns={inventoryColumns}
       hasDetail={false}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppState } from "../store/store";
-import { Link, useSearchParams } from "react-router-dom";
+import { Form, Link, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -24,6 +24,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import Pagination from "./Pagination";
+import api from '../utils/api';
 
 export interface ColumnDefination {
   header: string;
@@ -44,6 +45,7 @@ export const GenericListPage = ({
   detailRouteBase = "",
   onRefresh,
   onEdit,
+  onDownload,
   yearFilter,
   onApprove = null,
   onReject = null,
@@ -59,6 +61,26 @@ export const GenericListPage = ({
   const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)
   if (!tokens) {
     return <Typography>Unauthorized</Typography>;
+  }
+
+
+  const handleDownload = async ({ urlPath, fileName }) => {
+
+    try {
+      const response = await api.get(urlPath, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.log('Download failed', error)
+    }
   }
 
   if (entityState?.error?.data?.code === "token_not_valid") {
@@ -157,49 +179,70 @@ export const GenericListPage = ({
             </div>
           )}
           {yearFilter && (
-            <TextField
-              color='primary'
-              className='year-filter '
-              select
-              onChange={(e) => yearFilter("year__no", e.target.value)}
-              variant="outlined"
-              size="small"
-              focused
-              sx={{
-                marginRight: "8px",
-                minWidth: "130px",
-                outlineColor: "blue",
-              }}
-              value={searchParams.get("year__no") !== "null" && searchParams.get("year__no") || new Date().getFullYear()}
-            >
-              {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
-                <MenuItem key={year} value={year} >
-                  {year}
-                </MenuItem>
-              ))}
-            </TextField>
+            <div>
+              <FormControl>
+                <TextField
+                  color='primary'
+                  className='year-filter '
+                  select
+                  onChange={(e) => yearFilter("year__no", e.target.value)}
+                  variant="outlined"
+                  size="small"
+                  focused
+                  sx={{
+                    marginRight: "8px",
+                    minWidth: "130px",
+                    outlineColor: "blue",
+                  }}
+                  value={searchParams.get("year__no") !== "null" && searchParams.get("year__no") || new Date().getFullYear()}
+                >
+                  {Array.from({ length: 5 }, (_, i) => 2025 + i).map((year) => (
+                    <MenuItem key={year} value={year} >
+                      {year}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FormControl>
+            </div>
           )}
+          {onDownload && (
+            <div>
 
+              <Button
+                disabled={entityState.loading}
+                onClick={() => handleDownload(onDownload)}
+                variant="outlined"
+                size='medium'
+              >
+                Download
+              </Button>
+            </div>
+          )}
           {createRoute && (
-            <Button
-              disabled={entityState.loading}
-              component={Link}
-              to={createRoute}
-              variant="contained"
-              size='medium'
-            >
-              New
-            </Button>
+            <div>
+
+              <Button
+                disabled={entityState.loading}
+                component={Link}
+                to={createRoute}
+                variant="contained"
+                size='medium'
+              >
+                New
+              </Button>
+            </div>
           )}
           {onEdit && entityState.data?.count > 0 && (
-            <Button
-              disabled={entityState.loading}
-              size='medium'
-              variant="outlined"
-              onClick={() => onEdit(searchParams.get("year__no"))}
-            >
-              Edit
-            </Button>
+            <div>
+              <Button
+                disabled={entityState.loading}
+                size='medium'
+                variant="outlined"
+                onClick={() => onEdit(searchParams.get("year__no"))}
+              >
+                Edit
+              </Button>
+            </div>
           )}
 
         </div>

@@ -127,7 +127,7 @@ const Create = ({ entityState, setModalOpen }) => {
       toast.success("Breakdown Work Order created successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(breakdown.error?.error || "Something Went Wrong");
+      toast.error(breakdown?.error?.error || "Something Went Wrong");
       // setError(err.response?.data.detail || err.message);  
       setError(
         err.response?.data.detail || "Failed to create a breakdown work order."
@@ -146,7 +146,7 @@ const Create = ({ entityState, setModalOpen }) => {
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            minDate={dayjs(breakdown.data?.start_date)}
+            minDate={dayjs(breakdown?.data?.start_date)}
             label="Start Date"
             name="start_date"
             value={formData.start_date ? dayjs(formData.start_date) : null}
@@ -157,13 +157,13 @@ const Create = ({ entityState, setModalOpen }) => {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                disabled: breakdown.loading,
-                helperText: breakdown.error?.start_date || "",
+                disabled: breakdown?.loading,
+                helperText: breakdown?.error?.start_date || "",
               },
             }}
           />
         </LocalizationProvider>
-        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown.loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown?.loading}>
           <InputLabel id="work-order-type-select-label">
             Work Order Type
           </InputLabel>
@@ -184,7 +184,7 @@ const Create = ({ entityState, setModalOpen }) => {
               ))}
           </Select>
         </FormControl>
-        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown.loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown?.loading}>
           <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
           <Select
             size='small'
@@ -209,7 +209,7 @@ const Create = ({ entityState, setModalOpen }) => {
                 ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
+        <FormControl fullWidth variant="outlined" disabled={breakdown?.loading}>
           <Autocomplete
             multiple
             size='small'
@@ -221,7 +221,7 @@ const Create = ({ entityState, setModalOpen }) => {
                 variant="outlined"
                 label="Spareparts Required"
                 placeholder="Search spareparts..."
-                helperText={breakdown.error?.spareparts_required_id || ""}
+                helperText={breakdown?.error?.spareparts_required_id || ""}
               />
             )}
             id="sparepart-autocomplete"
@@ -231,7 +231,7 @@ const Create = ({ entityState, setModalOpen }) => {
             }
           ></Autocomplete>
         </FormControl>
-        <FormControl size='small' fullWidth variant="outlined" disabled={breakdown.loading}>
+        <FormControl size='small' fullWidth variant="outlined" disabled={breakdown?.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -243,7 +243,7 @@ const Create = ({ entityState, setModalOpen }) => {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
-                helperText={breakdown.error?.tools_required_id || ""}
+                helperText={breakdown?.error?.tools_required_id || ""}
               />
             )}
             id="tool-select"
@@ -264,8 +264,8 @@ const Create = ({ entityState, setModalOpen }) => {
           value={formData.total_time_required}
           onChange={handleChange}
           required
-          disabled={breakdown.loading}
-          helperText={breakdown.error?.total_time_required || ""}
+          disabled={breakdown?.loading}
+          helperText={breakdown?.error?.total_time_required || ""}
         />
 
         <Button
@@ -274,10 +274,10 @@ const Create = ({ entityState, setModalOpen }) => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={breakdown.loading}
+          disabled={breakdown?.loading}
           className="mt-4"
         >
-          {breakdown.loading ? (
+          {breakdown?.loading ? (
             <CircularProgress size={24} />
           ) : (
             "Create"

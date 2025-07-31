@@ -9,7 +9,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import dayjs from "dayjs";
 import AddActivityModal from "./AddActivityModal";
-import AssignUsers from "./AssignUsers";
+import AssignUsers from "./user/Assign";
 
 const Detail = () => {
   const navigate = useNavigate()
@@ -64,9 +64,9 @@ const Detail = () => {
         />
       </Modal>
       <Button
-        disabled={entityState.data.work_order_activities?.length === 0 ||
-          (entityState.data.status !== "Created" &&
-            entityState.data?.status !== "Assigned")
+        disabled={entityState?.data?.work_order_activities?.length === 0 ||
+          (entityState?.data?.status !== "Created" &&
+            entityState?.data?.status !== "Assigned")
         }
         size='small'
         onClick={handleAssignModalOpen}

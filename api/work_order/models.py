@@ -151,6 +151,13 @@ class WorkOrder(BaseCreatedUpdated):
             print(e)
         return None
 
+    @property
+    def type(self):
+        if self.schedule:
+            return "Scheduled"
+        else:
+            return "Breakdown"
+
     def __str__(self):
         if self.machine:
             return f"{self.machine.name} - {self.status}"

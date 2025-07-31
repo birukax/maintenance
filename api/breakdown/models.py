@@ -31,3 +31,16 @@ class Breakdown(BaseCreatedUpdated):
             return f"{self.machine.name} - {self.start_date}"
         else:
             return f"{self.start_date}"
+
+    @property
+    def has_active_work_order(self):
+        from work_order.models import WorkOrder
+
+        try:
+            return (
+                WorkOrder.objects.filter(breakdown=self)
+                .exclude(status="Completed")
+                .exists()
+            )
+        except Exception as e:
+            return False

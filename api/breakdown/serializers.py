@@ -12,7 +12,11 @@ class BreakdownSerializer(serializers.ModelSerializer):
     )
     equipment = EquipmentSerializer(read_only=True)
     equipment_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=Equipment.objects.all(), source="equipment"
+        write_only=True,
+        queryset=Equipment.objects.all(),
+        source="equipment",
+        allow_null=True,
+        required=False,
     )
 
     class Meta:
@@ -31,4 +35,5 @@ class BreakdownSerializer(serializers.ModelSerializer):
             "start_time",
             "end_time",
             "total_time",
+            "has_active_work_order",
         ]

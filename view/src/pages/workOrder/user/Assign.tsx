@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { fetchProfiles } from "../../store/slices/profileSlice";
-import { assignWorkOrderUsers } from "../../store/slices/workOrderSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { fetchProfiles } from "../../../store/slices/profileSlice";
+import { assignWorkOrderUsers } from "../../../store/slices/workOrderSlice";
+import { AppState, AppDispatch } from "../../../store/store";
 import {
   Button,
   Typography,
@@ -38,10 +38,8 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   const [formData, setFormData] = useState({
     user_ids: entityState.data.assigned_users.map(user => user.id) || [],
   });
-  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
   const { profiles } = useSelector((state: AppState) => state.profile);
   const [inputs, setInputs] = useState(5);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -53,8 +51,8 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   }, []);
 
   const userOptions = useMemo(() => {
-    return profiles.data
-      ? profiles.data.filter(
+    return profiles?.data
+      ? profiles?.data?.filter(
         (profile) =>
           profile.role === "ENGINEER"
       )
@@ -74,7 +72,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
 
   const handleAutocompleteChange = (fieldName, newValue) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((profile) => profile.user.id);
+    const selectedIds = newValue.map((profile) => profile?.user?.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -83,17 +81,14 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(assignWorkOrderUsers({ id, formData })).unwrap();
       toast.success("Users assigned successfully");
       setModalOpen(false);
     } catch (err) {
-      toast.error(workOrder.error?.error || "Something Went Wrong");
-      setError(
-        err.response?.data.detail || "Failed to assign Users."
-      );
+      toast.error(entityState?.error?.error || "Something Went Wrong");
+
     }
   };
 
@@ -120,7 +115,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
                 variant="outlined"
                 label="Users"
                 placeholder="Search users..."
-                helperText={workOrder.error?.user_ids || ""}
+                helperText={entityState.error?.user_ids || ""}
               />
             )}
             id="user-autocomplete"
@@ -145,9 +140,9 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
             "Save"
           )}
         </Button>
-        {error && (
+        {entityState?.error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
+            {entityState?.error?.detail}
           </Typography>
         )}
       </Box>

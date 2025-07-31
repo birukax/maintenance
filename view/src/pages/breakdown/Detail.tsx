@@ -56,7 +56,7 @@ const Detail = () => {
           >
             Create Work Order
           </Button>
-          {entityState?.data?.status === "WORK-ORDER CREATED" && (
+          {(entityState?.data?.status === "WORK-ORDER CREATED" && entityState?.data?.has_active_work_order === false) ? (
             <>
               <Modal
                 open={updateModalOpen}
@@ -77,7 +77,9 @@ const Detail = () => {
                 Update
               </Button>
             </>
-          )}
+          )
+            : <></>
+          }
         </>
       )}
     </>
