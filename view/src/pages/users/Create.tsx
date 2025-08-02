@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { createProfile } from "../../store/slices/profileSlice";
@@ -16,9 +16,9 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { AppState } from "../../store/store";
+import { AppState, AppDispatch } from "../../store/store";
 const Create = () => {
-  const [countryCode, setCountryCode] = useState("+251")
+  const countryCode = "+251"
   const [formData, setFormData] = useState({
     username: "",
     phone_no: "",
@@ -28,14 +28,14 @@ const Create = () => {
   });
   const profile = useSelector((state: AppState) => state.profile.profile)
   const [comfirmpas, setComfirmPas] = useState("")
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (comfirmpas === formData.password) {

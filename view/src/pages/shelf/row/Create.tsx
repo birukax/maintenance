@@ -24,13 +24,18 @@ const Create = () => {
     code: "",
     name: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const shelfRow = useSelector((state: AppState) => state.shelfRow.shelfRow);
   const { shelves } = useSelector((state: AppState) => state.shelf);
-  const { tokens } = useSelector((state: AppState) => state.auth);
+
+  const params = {
+    no_pagination: "true",
+  };
+
+  useEffect(() => {
+    dispatch(fetchShelves(params));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,27 +43,14 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createShelfRow(formData)).unwrap();
       toast.success("ShelfRow created successfully");
       navigate("/shelf-rows");
     } catch (err) {
       toast.error(shelfRow.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
-  useEffect(() => {
-    const params = {
-      no_pagination: "true",
-    };
-    if (tokens) {
-      dispatch(fetchShelves(params));
-    }
-  }, []);
 
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
@@ -70,7 +62,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={shelves.loading}>
           <Autocomplete size='small'
             options={Array.isArray(shelves.data) ? shelves.data : []}
             getOptionLabel={(option) => option.name || ""}
@@ -94,7 +86,7 @@ const Create = () => {
               setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={shelves.loading}
           />
         </FormControl>
         <TextField
@@ -107,7 +99,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={shelves.loading}
           helperText={shelfRow?.error?.code}
         />
 
@@ -121,7 +113,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={shelves.loading}
           helperText={shelfRow?.error?.name}
         />
         <div className='flex gap-4'>
@@ -132,10 +124,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={shelves.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {shelves.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -144,7 +136,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={shelves.loading}
 
           >
             Cancel

@@ -13,15 +13,15 @@ interface ShelfBoxestate {
 }
 
 const initialState: ShelfBoxestate = {
-    shelfBoxes: {data: [], loading: false, error: null},
-    shelfBox: {data: [], loading: false, error: null},
+    shelfBoxes: { data: [], loading: false, error: null },
+    shelfBox: { data: [], loading: false, error: null },
 };
 
-export const fetchShelfBoxes = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchShelfBoxes = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'shelfBox/fetchShelfBoxes',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/shelf-boxes/',{params});
+            const response = await api.get('/inventory/shelf-boxes/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchShelfBox = createAsyncThunk<[], number, { rejectValue: string 
     }
 )
 
-export const createShelfBox = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createShelfBox = createAsyncThunk<[], formData, { rejectValue: string }>(
     'shelfBox/createShelfBox',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const shelfBoxeslice = createSlice({
     name: 'shelfBox',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchShelfBoxes.pending, (state) => {
-            state.shelfBoxes.loading = true;
-            state.shelfBoxes.error = null;
-        })
-        .addCase(fetchShelfBoxes.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelfBoxes.loading = false;
-            state.shelfBoxes.data = action.payload;
-        })
-        .addCase(fetchShelfBoxes.rejected, (state, action) => {
-            state.shelfBoxes.loading = false;
-            state.shelfBoxes.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchShelfBox.pending, (state) => {
-                        state.shelfBox.loading = true;
-                        state.shelfBox.error = null;
-                    })
-        .addCase(fetchShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelfBox.loading = false;
-            state.shelfBox.data = action.payload;
-        })
-        .addCase(fetchShelfBox.rejected, (state, action) => {
-            state.shelfBox.loading = false;
-            state.shelfBox.error = action.payload || 'Unknown error';
-        })
-        .addCase(createShelfBox.pending, (state) => {
-            state.shelfBox.loading = true;
-            state.shelfBox.error = null;
-        })
-        .addCase(createShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelfBox.loading = false;
-            state.shelfBox.data = action.payload;
-        })
-        .addCase(createShelfBox.rejected, (state, action) => {
-            state.shelfBox.loading = false;
-            state.shelfBox.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateShelfBox.pending, (state) => {
-            state.shelfBox.loading = true;
-            state.shelfBox.error = null;
-        })
-        .addCase(updateShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelfBox.loading = false;
-            state.shelfBox.data = action.payload;
-        })
-        .addCase(updateShelfBox.rejected, (state, action) => {
-            state.shelfBox.loading = false;
-            state.shelfBox.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchShelfBoxes.pending, (state) => {
+                state.shelfBoxes.loading = true;
+                state.shelfBoxes.error = null;
+            })
+            .addCase(fetchShelfBoxes.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelfBoxes.loading = false;
+                state.shelfBoxes.data = action.payload;
+            })
+            .addCase(fetchShelfBoxes.rejected, (state, action) => {
+                state.shelfBoxes.loading = false;
+                state.shelfBoxes.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchShelfBox.pending, (state) => {
+                state.shelfBox.loading = true;
+                state.shelfBox.error = null;
+            })
+            .addCase(fetchShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelfBox.loading = false;
+                state.shelfBox.data = action.payload;
+            })
+            .addCase(fetchShelfBox.rejected, (state, action) => {
+                state.shelfBox.loading = false;
+                state.shelfBox.error = action.payload || 'Unknown error';
+            })
+            .addCase(createShelfBox.pending, (state) => {
+                state.shelfBox.loading = true;
+                state.shelfBox.error = null;
+            })
+            .addCase(createShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelfBox.loading = false;
+                state.shelfBox.data = action.payload;
+            })
+            .addCase(createShelfBox.rejected, (state, action) => {
+                state.shelfBox.loading = false;
+                state.shelfBox.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateShelfBox.pending, (state) => {
+                state.shelfBox.loading = true;
+                state.shelfBox.error = null;
+            })
+            .addCase(updateShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelfBox.loading = false;
+                state.shelfBox.data = action.payload;
+            })
+            .addCase(updateShelfBox.rejected, (state, action) => {
+                state.shelfBox.loading = false;
+                state.shelfBox.error = action.payload || 'Unknown error';
+            })
     }
 })
 

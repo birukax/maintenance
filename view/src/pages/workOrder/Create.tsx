@@ -16,9 +16,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -40,9 +37,7 @@ const Create = () => {
     total_days: 0,
     total_minutes: 0,
   });
-  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder);
   const { items } = useSelector((state: AppState) => state.item);
   const { machines } = useSelector((state: AppState) => state.machine);
   const { equipments } = useSelector((state: AppState) => state.equipment);
@@ -69,13 +64,13 @@ const Create = () => {
 
   const toolOptions = useMemo(() => {
     return Array.isArray(items.data)
-      ? items.data.filter((item) => item.category === "TOOL")
+      ? items.data?.filter((item) => item.category === "TOOL")
       : [];
   }, [items.data]);
 
   const sparepartOptions = useMemo(() => {
     return Array.isArray(items.data) && items.data
-      ? items.data.filter((item) => item.category === "SPAREPART")
+      ? items.data?.filter((item) => item.category === "SPAREPART")
       : [];
   }, [items.data]);
 
@@ -113,8 +108,6 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
 
     if (formData?.total_days > 0 || formData?.total_hours > 0 || formData?.total_minutes > 0) {
       try {
@@ -123,13 +116,9 @@ const Create = () => {
         navigate("/work-orders");
       } catch (err) {
         toast.error(workOrder.error?.error || "Something Went Wrong");
-        setError(err.response?.data.detail || err.message);
-      } finally {
-        setLoading(false);
       }
     } else {
       toast.warning("At least one field of total time required must be greater than 0 ")
-      setLoading(false);
     }
 
   };
@@ -163,7 +152,7 @@ const Create = () => {
             }}
           />
         </LocalizationProvider>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
             options={machines.data || []}
@@ -187,7 +176,7 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(equipments.data) && equipments.data?.filter(
@@ -217,7 +206,7 @@ const Create = () => {
         </FormControl>
 
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
             options={
@@ -258,7 +247,7 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
             options={
@@ -301,7 +290,7 @@ const Create = () => {
 
 
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -328,7 +317,7 @@ const Create = () => {
 
 
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -362,7 +351,7 @@ const Create = () => {
             fullWidth
             value={formData.total_days}
             onChange={handleChange}
-            disabled={loading}
+            disabled={workOrder.loading}
           />
           <TextField
             size='small'
@@ -374,7 +363,7 @@ const Create = () => {
             fullWidth
             value={formData.total_hours}
             onChange={handleChange}
-            disabled={loading}
+            disabled={workOrder.loading}
           />
           <TextField
             size='small'
@@ -386,7 +375,7 @@ const Create = () => {
             fullWidth
             value={formData.total_minutes}
             onChange={handleChange}
-            disabled={loading}
+            disabled={workOrder.loading}
           />
         </div>
 
@@ -399,10 +388,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={workOrder.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {workOrder.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -411,7 +400,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={workOrder.loading}
 
           >
             Cancel

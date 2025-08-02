@@ -19,11 +19,11 @@ const initialState: InventoryState = {
 
 export const fetchInventories = createAsyncThunk<
   [],
-  {params:null},
+  { params: null },
   { rejectValue: string }
 >("inventory/fetchInventories", async (params, { rejectWithValue }) => {
   try {
-    const response = await api.get("/inventory/inventories/",{params});
+    const response = await api.get("/inventory/inventories/", { params });
     return response.data;
   } catch (error) {
     return rejectWithValue(

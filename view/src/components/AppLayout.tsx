@@ -5,7 +5,6 @@ import {
   useNavigate,
   useLocation,
   Link,
-  useSearchParams,
 } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
 import { ToastContainer } from "react-toastify";
@@ -28,12 +27,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import ContactsIcon from "@mui/icons-material/Contacts";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Logo from "../assets/Images/logo.png";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CategoryIcon from "@mui/icons-material/Category";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import RequestPageIcon from "@mui/icons-material/RequestPage";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -43,14 +39,11 @@ import ScaleIcon from "@mui/icons-material/Scale";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import HardwareIcon from "@mui/icons-material/Hardware";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import UndoIcon from "@mui/icons-material/Undo";
 import ConstructionIcon from "@mui/icons-material/Construction";
-import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import FactoryIcon from "@mui/icons-material/Factory";
 import AreaChartIcon from "@mui/icons-material/AreaChart";
 import PersonIcon from "@mui/icons-material/Person";
-import { jwtDecode } from "jwt-decode";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import TableRowsIcon from "@mui/icons-material/TableRows";
@@ -67,7 +60,6 @@ const AppLayout = ({ children }) => {
     asset: false,
     shelf: false,
   });
-  const [searchParams, setSearchParams] = useSearchParams();
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -79,7 +71,6 @@ const AppLayout = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const user = tokens?.access ? jwtDecode(tokens.access) : null;
   useEffect(() => {
     if (!tokens) {
       navigate("/login", { replace: true });
@@ -252,18 +243,6 @@ const AppLayout = ({ children }) => {
               </ListItemIcon>
               <ListItemText primary="Transfer" />
             </ListItemButton>
-            {/* <ListItemButton selected={location.pathname ===} component={Link} to="/consumptions" sx={{ pl: 4 }} >
-                <ListItemIcon>
-                  <LocalShippingIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Consumption" />
-                </ListItemButton>
-                <ListItemButton selected={location.pathname ===} component={Link} to="/returns" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <UndoIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText primary="Return" />
-              </ListItemButton> */}
           </List>
         </Collapse>
 
@@ -366,13 +345,6 @@ const AppLayout = ({ children }) => {
             disablePadding
             sx={{ minWidth: "fit-content" }}
           >
-
-            {/* <ListItemButton selected={location.pathname ===} component={Link} to="/activities" sx={{ pl: 4 }}>
-                <ListItemIcon>
-                  <PlaylistAddCheckIcon color="primary" />
-                </ListItemIcon>
-                <ListItemText primary="Activity" />
-              </ListItemButton> */}
 
             <ListItemButton selected={location.pathname === "/activity-types"}
               component={Link}
@@ -503,20 +475,8 @@ const AppLayout = ({ children }) => {
             <MenuIcon color="primary" />
           </IconButton>
           <div
-            // style={{
-            //   color: "primary.dark",
-            //   display: "flex",
-            //   alignItems: "center",
-            //   justifyContent: "center",
-            //   gap: ".5rem",
-            // }}
             className="title-header "
           >
-            {/* <div className="navigate-back">
-              <div className="back" onClick={() => navigate(-1)}>
-                <ArrowBackIcon sx={{ fontSize: 28, fill: "secondary" }} />
-              </div>
-            </div> */}
             <Typography color='primary' component='h1' variant='h6' className='uppercase text-base! sm:text-xl!'>
               Maintenance System
             </Typography>

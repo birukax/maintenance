@@ -19,7 +19,6 @@ const transferColumns = [
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
@@ -32,16 +31,11 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchTransfers(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchTransfers(params));
   }, []);
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchTransfers(params));
-    }
+    dispatch(fetchTransfers(params));
   }
 
   const handleFilter = async (field, value) => {

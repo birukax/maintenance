@@ -19,11 +19,11 @@ const initialState: UnitOfMeasureState = {
 
 export const fetchUnitOfMeasures = createAsyncThunk<
   [],
-  {params:null},
+  { params: null },
   { rejectValue: string }
 >("unitOfMeasure/fetchUnitOfMeasures", async (params, { rejectWithValue }) => {
   try {
-    const response = await api.get("/inventory/unit-of-measures/",{params});
+    const response = await api.get("/inventory/unit-of-measures/", { params });
     return response.data;
   } catch (error) {
     return rejectWithValue(

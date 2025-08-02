@@ -22,13 +22,10 @@ const Edit = () => {
   const shelfRow = useSelector((state: AppState) => state.shelfRow.shelfRow);
 
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchShelfRow(id));
     }
     setFormData({
@@ -48,18 +45,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateShelfRow({ id, formData })).unwrap();
       toast.success("Shelf edited successfully");
-      navigate(`/shelf-row/detail/${shelfRow.data.id}`);
+      navigate(`/shelf-row/detail/${shelfRow.data?.id}`);
     } catch (err) {
       toast.error(shelfRow.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -102,7 +94,7 @@ const Edit = () => {
             disabled={shelfRow.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {shelfRow.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}

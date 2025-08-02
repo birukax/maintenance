@@ -1,7 +1,7 @@
 export const YESNO = [[true, "Yes"], [false, "No"]]
 export const YES_NO_NONE = [[true, "Yes"], [false, "No"], [null, "-"]]
-export const ITEM_TYPES = [["MECHANICAL", "MECHANICAL"], ["ELECTRICAL", "ELECTRICAL"]]
-export const ITEM_CATEGORIES = [["TOOL", "TOOL"], ["SPAREPART", "SPAREPART"]]
+export const ITEM_TYPES = ["MECHANICAL", "ELECTRICAL"] as const;
+export const ITEM_CATEGORIES = ["TOOL", "SPAREPART"] as const;
 export const MONTH_NAMES = [
     [1, "JANUARY"],
     [2, "FEBRUARY"],

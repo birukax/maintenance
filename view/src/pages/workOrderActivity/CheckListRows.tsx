@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { TableRow, TableCell, Checkbox, TextField, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import { AppState } from "../../store/store";
 
 const CheckListRows = ({ row, handleUpdateActivity }) => {
   const [remark, setRemark] = useState(row.remark || "");
   const [value, setValue] = useState(row.value || false);
-  // const workOrderActivity = useSelector((state:AppState)=>state.workOrderActivity.workOrderActivity)
-
   useEffect(() => {
     setRemark(row.remark || "");
   }, [row.remark]);

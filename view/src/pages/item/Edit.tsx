@@ -35,15 +35,12 @@ const Create = () => {
   const item = useSelector((state: AppState) => state.item.item)
 
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
   const { contacts } = useSelector((state: AppState) => state.contact);
-
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-
   const { shelves } = useSelector((state: AppState) => state.shelf);
   const { shelfRows } = useSelector((state: AppState) => state.shelfRow);
   const { shelfBoxes } = useSelector((state: AppState) => state.shelfBox);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const params = {
     no_pagination: "true",
   };
@@ -98,16 +95,13 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateItem({ id, formData })).unwrap();
       toast.success("Item updated successfully");
-      navigate(`/item/detail/${item.data.id}`);
+      navigate(`/item/detail/${item.data?.id}`);
     } catch (err) {
       toast.error(item.error?.error || "Something Went Wrong");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -144,10 +138,10 @@ const Create = () => {
             step: 1,
           }}
           required
-          disabled={loading}
+          disabled={item.loading}
           helperText={item.error?.minimum_stock_level || ""}
         />
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <InputLabel id="shelf-select-label">Shelf</InputLabel>
           <Select
             size='small'
@@ -166,7 +160,7 @@ const Create = () => {
               ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <InputLabel id="shelf-row-select-label">Shelf Row</InputLabel>
           <Select
             size='small'
@@ -187,7 +181,7 @@ const Create = () => {
                 ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <InputLabel id="shelf-box-select-label">Shelf Box</InputLabel>
           <Select
             size='small'
@@ -208,7 +202,7 @@ const Create = () => {
                 ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={item.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -238,10 +232,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={item.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {item.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -250,7 +244,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={item.loading}
 
           >
             Cancel

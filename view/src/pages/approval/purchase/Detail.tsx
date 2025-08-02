@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { fetchPurchaseApproval } from "../../../store/slices/purchaseApprovalSlice";
 import { AppState } from "../../../store/store";
 import { useEntityDetail } from "../../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
-import EditIcon from '@mui/icons-material/Edit';
 import Action from './Action';
 const Detail = () => {
   const entityState = useEntityDetail({

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchActivities } from "../../store/slices/activitySlice";
 import { createWorkOrderActivities } from "../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../store/store";
@@ -10,9 +10,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   TextField,
   Box,
   Autocomplete,
@@ -41,9 +38,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
   const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
 
   const { activities } = useSelector((state: AppState) => state.activity);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const params = {
     no_pagination: "true",
   };
@@ -55,8 +50,8 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     return activities?.data
       ? activities?.data?.filter(
         (activity) =>
-          activity.activity_type.id ===
-          entityState.data.activity_type.id
+          activity.activity_type?.id ===
+          entityState.data?.activity_type?.id
       )
       : [];
   }, [activities.data]);
@@ -67,10 +62,6 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     );
   }, [formData.activity_ids, activityOptions]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const handleAutocompleteChange = (fieldName, newValue) => {
     // Extract only the IDs from the selected objects
@@ -83,7 +74,6 @@ const AddActivity = ({ entityState, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createWorkOrderActivities({ id, formData })).unwrap();
@@ -91,9 +81,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
       setModalOpen(false);
     } catch (err) {
       toast.error(workOrder.error?.error || "Something Went Wrong");
-      setError(
-        err.response?.data.detail || "Failed to create work order activities."
-      );
+
     }
   };
 
@@ -143,9 +131,9 @@ const AddActivity = ({ entityState, setModalOpen }) => {
             "Add Activity"
           )}
         </Button>
-        {error && (
+        {workOrder.error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
+            {workOrder.error?.detail}
           </Typography>
         )}
       </Box>

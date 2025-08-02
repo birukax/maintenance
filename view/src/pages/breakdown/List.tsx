@@ -17,7 +17,6 @@ const breakdownColumns = [
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
@@ -31,16 +30,13 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchBreakdowns(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchBreakdowns(params));
+
   }, []);
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchBreakdowns(params));
-    }
+    dispatch(fetchBreakdowns(params));
+
   }
 
   const handleFilter = async (field, value) => {

@@ -22,16 +22,13 @@ const Change = () => {
     password: ""
   });
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const profile = useSelector((state: AppState) => state.profile.profile);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [comfirmpas, setComfirmPas] = useState("")
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchProfile(id));
     }
   }, []);
@@ -46,8 +43,6 @@ const Change = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     if (comfirmpas === formData.password) {
 
       try {
@@ -57,13 +52,9 @@ const Change = () => {
         navigate(`/profile/`);
       } catch (err) {
         toast.error(profile.error?.error || "Something Went Wrong");
-        setError(err.response?.data.detail || err.message);
-      } finally {
-        setLoading(false);
       }
     } else {
       toast.error("Password and Comfirm Password must be similar");
-      setLoading(false);
     }
   };
 
@@ -86,7 +77,7 @@ const Change = () => {
           fullWidth
           value={formData.old_password}
           onChange={handleChange}
-          disabled={loading}
+          disabled={profile.loading}
           type="password"
           required
           helperText={profile.error?.old_password || ""}
@@ -99,7 +90,7 @@ const Change = () => {
           fullWidth
           value={formData.password}
           onChange={handleChange}
-          disabled={loading}
+          disabled={profile.loading}
           type="password"
           required
           helperText={profile.error?.password || ""}
@@ -118,7 +109,7 @@ const Change = () => {
           fullWidth
           value={comfirmpas}
           onChange={(e) => setComfirmPas(e.target.value)}
-          disabled={loading}
+          disabled={profile.loading}
           type="password"
           required
         // helperText={profile.error?.password || ""}
@@ -133,7 +124,7 @@ const Change = () => {
             disabled={profile.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {profile.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}

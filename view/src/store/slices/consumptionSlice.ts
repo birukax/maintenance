@@ -13,15 +13,15 @@ interface ConsumptionState {
 }
 
 const initialState: ConsumptionState = {
-    consumptions: {data: [], loading: false, error: null},
-    consumption: {data: [], loading: false, error: null},
+    consumptions: { data: [], loading: false, error: null },
+    consumption: { data: [], loading: false, error: null },
 };
 
-export const fetchConsumptions = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchConsumptions = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'consumption/fetchConsumptions',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/consumptions/',{params});
+            const response = await api.get('/inventory/consumptions/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchConsumption = createAsyncThunk<[], number, { rejectValue: stri
     }
 )
 
-export const createConsumption = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createConsumption = createAsyncThunk<[], formData, { rejectValue: string }>(
     'consumption/createConsumption',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const consumptionSlice = createSlice({
     name: 'consumption',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchConsumptions.pending, (state) => {
-            state.consumptions.loading = true;
-            state.consumptions.error = null;
-        })
-        .addCase(fetchConsumptions.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.consumptions.loading = false;
-            state.consumptions.data = action.payload;
-        })
-        .addCase(fetchConsumptions.rejected, (state, action) => {
-            state.consumptions.loading = false;
-            state.consumptions.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchConsumption.pending, (state) => {
-                        state.consumption.loading = true;
-                        state.consumption.error = null;
-                    })
-                    .addCase(fetchConsumption.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.consumption.loading = false;
-                        state.consumption.data = action.payload;
-                    })
-                    .addCase(fetchConsumption.rejected, (state, action) => {
-                        state.consumption.loading = false;
-                        state.consumption.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createConsumption.pending, (state) => {
-                        state.consumption.loading = true;
-                        state.consumption.error = null;
-                    })
-                    .addCase(createConsumption.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.consumption.loading = false;
-                        state.consumption.data = action.payload;
-                    })
-                    .addCase(createConsumption.rejected, (state, action) => {
-                        state.consumption.loading = false;
-                        state.consumption.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateConsumption.pending, (state) => {
-                        state.consumption.loading = true;
-                        state.consumption.error = null;
-                    })
-                    .addCase(updateConsumption.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.consumption.loading = false;
-                        state.consumption.data = action.payload;
-                    })
-                    .addCase(updateConsumption.rejected, (state, action) => {
-                        state.consumption.loading = false;
-                        state.consumption.error = action.payload || 'Unknown error';
-                    })
+            .addCase(fetchConsumptions.pending, (state) => {
+                state.consumptions.loading = true;
+                state.consumptions.error = null;
+            })
+            .addCase(fetchConsumptions.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.consumptions.loading = false;
+                state.consumptions.data = action.payload;
+            })
+            .addCase(fetchConsumptions.rejected, (state, action) => {
+                state.consumptions.loading = false;
+                state.consumptions.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchConsumption.pending, (state) => {
+                state.consumption.loading = true;
+                state.consumption.error = null;
+            })
+            .addCase(fetchConsumption.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.consumption.loading = false;
+                state.consumption.data = action.payload;
+            })
+            .addCase(fetchConsumption.rejected, (state, action) => {
+                state.consumption.loading = false;
+                state.consumption.error = action.payload || 'Unknown error';
+            })
+            .addCase(createConsumption.pending, (state) => {
+                state.consumption.loading = true;
+                state.consumption.error = null;
+            })
+            .addCase(createConsumption.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.consumption.loading = false;
+                state.consumption.data = action.payload;
+            })
+            .addCase(createConsumption.rejected, (state, action) => {
+                state.consumption.loading = false;
+                state.consumption.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateConsumption.pending, (state) => {
+                state.consumption.loading = true;
+                state.consumption.error = null;
+            })
+            .addCase(updateConsumption.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.consumption.loading = false;
+                state.consumption.data = action.payload;
+            })
+            .addCase(updateConsumption.rejected, (state, action) => {
+                state.consumption.loading = false;
+                state.consumption.error = action.payload || 'Unknown error';
+            })
     }
 })
 

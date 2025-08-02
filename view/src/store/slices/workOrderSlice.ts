@@ -13,15 +13,15 @@ interface WorkOrderState {
 }
 
 const initialState: WorkOrderState = {
-    workOrders: {data: [], loading: false, error: null},
-    workOrder: {data: [], loading: false, error: null},
+    workOrders: { data: [], loading: false, error: null },
+    workOrder: { data: [], loading: false, error: null },
 };
 
-export const fetchWorkOrders = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchWorkOrders = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'workOrder/fetchWorkOrders',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/work-orders/',{params});
+            const response = await api.get('/work-order/work-orders/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchWorkOrder = createAsyncThunk<[], number, { rejectValue: string
     }
 )
 
-export const createWorkOrder = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createWorkOrder = createAsyncThunk<[], formData, { rejectValue: string }>(
     'workOrder/createWorkOrder',
     async (formData, { rejectWithValue }) => {
         try {
@@ -69,9 +69,9 @@ export const updateWorkOrder = createAsyncThunk<[], { id: string, formData: { [k
     }
 )
 
-export const createWorkOrderActivities = createAsyncThunk<[],{ id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const createWorkOrderActivities = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
     'workOrder/createWorkOrderActivities',
-    async ({ id, formData }, { rejectWithValue}) => {
+    async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/work-order/work-orders/${id}/create_activities/`, formData)
             return response.data;
@@ -109,93 +109,93 @@ const WorkOrderSlice = createSlice({
     name: 'workOrder',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchWorkOrders.pending, (state) => {
-            state.workOrders.loading = true;
-            state.workOrders.error = null;
-        })
-        .addCase(fetchWorkOrders.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrders.loading = false;
-            state.workOrders.data = action.payload;
-        })
-        .addCase(fetchWorkOrders.rejected, (state, action) => {
-            state.workOrders.loading = false;
-            state.workOrders.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchWorkOrder.pending, (state) => {
-            state.workOrder.loading = true;
-            state.workOrder.error = null;
-        })
-        .addCase(fetchWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrder.loading = false;
-            state.workOrder.data = action.payload;
-        })
-        .addCase(fetchWorkOrder.rejected, (state, action) => {
-            state.workOrder.loading = false;
-            state.workOrder.error = action.payload || 'Unknown error';
-        })
-        .addCase(createWorkOrder.pending, (state) => {
-            state.workOrder.loading = true;
-            state.workOrder.error = null;
-        })
-        .addCase(createWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrder.loading = false;
-            state.workOrder.data = action.payload;
-        })
-        .addCase(createWorkOrder.rejected, (state, action) => {
-            state.workOrder.loading = false;
-            state.workOrder.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateWorkOrder.pending, (state) => {
-            state.workOrder.loading = true;
-            state.workOrder.error = null;
-        })
-        .addCase(updateWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrder.loading = false;
-            state.workOrder.data = action.payload;
-        })
-        .addCase(updateWorkOrder.rejected, (state, action) => {
-            state.workOrder.loading = false;
-            state.workOrder.error = action.payload || 'Unknown error';
-        })
-        .addCase(createWorkOrderActivities.pending, (state) => {
-            state.workOrder.loading = true;
-            state.workOrder.error = null;
-        })
-        .addCase(createWorkOrderActivities.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrder.loading = false;
-            state.workOrder.data = action.payload;
-        })
-        .addCase(createWorkOrderActivities.rejected, (state, action) => {
-            state.workOrder.loading = false;
-            state.workOrder.error = action.payload || 'Unknown error';
-        })
-        .addCase(assignWorkOrderUsers.pending, (state) => {
-            state.workOrder.loading = true;
-            state.workOrder.error = null;
-        })
-        .addCase(assignWorkOrderUsers.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrder.loading = false;
-            state.workOrder.data = action.payload;
-        })
-        .addCase(assignWorkOrderUsers.rejected, (state, action) => {
-            state.workOrder.loading = false;
-            state.workOrder.error = action.payload || 'Unknown error';
-        })
-        .addCase(submitWorkOrder.pending, (state) => {
-            state.workOrder.loading = true;
-            state.workOrder.error = null;
-        })
-        .addCase(submitWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrder.loading = false;
-            state.workOrder.data = action.payload;
-        })
-        .addCase(submitWorkOrder.rejected, (state, action) => {
-            state.workOrder.loading = false;
-            state.workOrder.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchWorkOrders.pending, (state) => {
+                state.workOrders.loading = true;
+                state.workOrders.error = null;
+            })
+            .addCase(fetchWorkOrders.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrders.loading = false;
+                state.workOrders.data = action.payload;
+            })
+            .addCase(fetchWorkOrders.rejected, (state, action) => {
+                state.workOrders.loading = false;
+                state.workOrders.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchWorkOrder.pending, (state) => {
+                state.workOrder.loading = true;
+                state.workOrder.error = null;
+            })
+            .addCase(fetchWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrder.loading = false;
+                state.workOrder.data = action.payload;
+            })
+            .addCase(fetchWorkOrder.rejected, (state, action) => {
+                state.workOrder.loading = false;
+                state.workOrder.error = action.payload || 'Unknown error';
+            })
+            .addCase(createWorkOrder.pending, (state) => {
+                state.workOrder.loading = true;
+                state.workOrder.error = null;
+            })
+            .addCase(createWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrder.loading = false;
+                state.workOrder.data = action.payload;
+            })
+            .addCase(createWorkOrder.rejected, (state, action) => {
+                state.workOrder.loading = false;
+                state.workOrder.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateWorkOrder.pending, (state) => {
+                state.workOrder.loading = true;
+                state.workOrder.error = null;
+            })
+            .addCase(updateWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrder.loading = false;
+                state.workOrder.data = action.payload;
+            })
+            .addCase(updateWorkOrder.rejected, (state, action) => {
+                state.workOrder.loading = false;
+                state.workOrder.error = action.payload || 'Unknown error';
+            })
+            .addCase(createWorkOrderActivities.pending, (state) => {
+                state.workOrder.loading = true;
+                state.workOrder.error = null;
+            })
+            .addCase(createWorkOrderActivities.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrder.loading = false;
+                state.workOrder.data = action.payload;
+            })
+            .addCase(createWorkOrderActivities.rejected, (state, action) => {
+                state.workOrder.loading = false;
+                state.workOrder.error = action.payload || 'Unknown error';
+            })
+            .addCase(assignWorkOrderUsers.pending, (state) => {
+                state.workOrder.loading = true;
+                state.workOrder.error = null;
+            })
+            .addCase(assignWorkOrderUsers.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrder.loading = false;
+                state.workOrder.data = action.payload;
+            })
+            .addCase(assignWorkOrderUsers.rejected, (state, action) => {
+                state.workOrder.loading = false;
+                state.workOrder.error = action.payload || 'Unknown error';
+            })
+            .addCase(submitWorkOrder.pending, (state) => {
+                state.workOrder.loading = true;
+                state.workOrder.error = null;
+            })
+            .addCase(submitWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrder.loading = false;
+                state.workOrder.data = action.payload;
+            })
+            .addCase(submitWorkOrder.rejected, (state, action) => {
+                state.workOrder.loading = false;
+                state.workOrder.error = action.payload || 'Unknown error';
+            })
     }
 })
 

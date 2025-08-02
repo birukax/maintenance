@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -29,10 +29,8 @@ const Create = () => {
     requested_items: [],
   });
   const { transfer } = useSelector((state: AppState) => state.transfer);
-
   const { items } = useSelector((state: AppState) => state.item);
   const { locations } = useSelector((state: AppState) => state.location);
-
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const params = {
@@ -58,7 +56,7 @@ const Create = () => {
   const selectedItems =
     formData.requested_items.length > 0
       ? formData.requested_items.map((el) => {
-        return items.data.filter((item) => item.id === el.item_id);
+        return items.data?.filter((item) => item.id === el.item_id);
       })
       : [];
 

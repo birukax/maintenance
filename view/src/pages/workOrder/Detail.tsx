@@ -1,14 +1,10 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { fetchWorkOrder } from "../../store/slices/workOrderSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
-import { Typography, Button, Modal, Checkbox, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Typography, Button, Modal, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import dayjs from "dayjs";
-import AddActivityModal from "./AddActivityModal";
 import AssignUsers from "./user/Assign";
 
 const Detail = () => {
@@ -18,25 +14,9 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.workOrder.workOrder,
     fetchDetailAction: fetchWorkOrder,
   });
-  const start = () => {
-    return dayjs(
-      `${entityState.data.start_date}T${entityState.data.start_time}`
-    ).format("YYYY/MM/DD HH:mm a");
-  };
-  const end = () => {
-    return dayjs(
-      `${entityState.data.end_date}T${entityState.data.end_time}`
-    ).format("YYYY/MM/DD HH:mm a");
-  };
   const [assignmodalOpen, setAssignModalOpen] = useState(false);
   const handleAssignModalOpen = () => setAssignModalOpen(true);
   const handleAssignModalClose = () => setAssignModalOpen(false);
-
-  const [activityModalOpen, setActivityModalOpen] = useState(false);
-  const handleActivityModalOpen = () => setActivityModalOpen(true);
-  const handleActivityModalClose = () => setActivityModalOpen(false);
-
-
 
   const renderButtons = () => (
     <>
@@ -292,7 +272,7 @@ const Detail = () => {
             <TableBody>
               {data?.work_order_activities?.length > 0 ? data?.work_order_activities?.map((work_order_activity) => {
                 return (
-                  <TableRow key={work_order_activity.id}>
+                  <TableRow key={work_order_activity?.id}>
                     <TableCell>{work_order_activity?.description}</TableCell>
                     <TableCell>{work_order_activity?.value ? <Typography color='success'>Checked</Typography> : <Typography color='error'>Not Checked</Typography>}</TableCell>
                     <TableCell>{work_order_activity?.remark}</TableCell>

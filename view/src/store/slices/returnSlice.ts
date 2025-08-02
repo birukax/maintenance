@@ -13,15 +13,15 @@ interface ReturnState {
 }
 
 const initialState: ReturnState = {
-    returns: {data: [], loading: false, error: null},
-    return: {data: [], loading: false, error: null},
+    returns: { data: [], loading: false, error: null },
+    return: { data: [], loading: false, error: null },
 };
 
-export const fetchReturns = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchReturns = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'return/fetchReturns',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/returns/',{params});
+            const response = await api.get('/inventory/returns/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchReturn = createAsyncThunk<[], number, { rejectValue: string }>
     }
 )
 
-export const createReturn = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createReturn = createAsyncThunk<[], formData, { rejectValue: string }>(
     'return/createReturn',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const returnSlice = createSlice({
     name: 'return',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchReturns.pending, (state) => {
-            state.returns.loading = true;
-            state.returns.error = null;
-        })
-        .addCase(fetchReturns.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.returns.loading = false;
-            state.returns.data = action.payload;
-        })
-        .addCase(fetchReturns.rejected, (state, action) => {
-            state.returns.loading = false;
-            state.returns.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchReturn.pending, (state) => {
-                        state.return.loading = true;
-                        state.return.error = null;
-                    })
-                    .addCase(fetchReturn.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.return.loading = false;
-                        state.return.data = action.payload;
-                    })
-                    .addCase(fetchReturn.rejected, (state, action) => {
-                        state.return.loading = false;
-                        state.return.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createReturn.pending, (state) => {
-                        state.return.loading = true;
-                        state.return.error = null;
-                    })
-                    .addCase(createReturn.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.return.loading = false;
-                        state.return.data = action.payload;
-                    })
-                    .addCase(createReturn.rejected, (state, action) => {
-                        state.return.loading = false;
-                        state.return.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateReturn.pending, (state) => {
-                        state.return.loading = true;
-                        state.return.error = null;
-                    })
-                    .addCase(updateReturn.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.return.loading = false;
-                        state.return.data = action.payload;
-                    })
-                    .addCase(updateReturn.rejected, (state, action) => {
-                        state.return.loading = false;
-                        state.return.error = action.payload || 'Unknown error';
-                    })
+            .addCase(fetchReturns.pending, (state) => {
+                state.returns.loading = true;
+                state.returns.error = null;
+            })
+            .addCase(fetchReturns.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.returns.loading = false;
+                state.returns.data = action.payload;
+            })
+            .addCase(fetchReturns.rejected, (state, action) => {
+                state.returns.loading = false;
+                state.returns.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchReturn.pending, (state) => {
+                state.return.loading = true;
+                state.return.error = null;
+            })
+            .addCase(fetchReturn.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.return.loading = false;
+                state.return.data = action.payload;
+            })
+            .addCase(fetchReturn.rejected, (state, action) => {
+                state.return.loading = false;
+                state.return.error = action.payload || 'Unknown error';
+            })
+            .addCase(createReturn.pending, (state) => {
+                state.return.loading = true;
+                state.return.error = null;
+            })
+            .addCase(createReturn.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.return.loading = false;
+                state.return.data = action.payload;
+            })
+            .addCase(createReturn.rejected, (state, action) => {
+                state.return.loading = false;
+                state.return.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateReturn.pending, (state) => {
+                state.return.loading = true;
+                state.return.error = null;
+            })
+            .addCase(updateReturn.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.return.loading = false;
+                state.return.data = action.payload;
+            })
+            .addCase(updateReturn.rejected, (state, action) => {
+                state.return.loading = false;
+                state.return.error = action.payload || 'Unknown error';
+            })
     }
 })
 

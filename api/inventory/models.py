@@ -164,22 +164,6 @@ class Inventory(BaseCreatedUpdated):
         on_delete=models.RESTRICT,
         related_name="inventories",
     )
-    # purchased = models.DecimalField(
-    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    # )
-    # inbound_transfers = models.DecimalField(
-    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    # )
-    # outbound_transfers = models.DecimalField(
-    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    # )
-    # consumed_quantity = models.DecimalField(
-    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    # )
-    # returned_quantity = models.DecimalField(
-    #     default=0, max_digits=10, decimal_places=2, null=True, blank=True
-    # )
-    # balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         ordering = ["-item__created_at", "location__code"]
@@ -310,8 +294,6 @@ class TransferItem(BaseCreatedUpdated):
         Item, on_delete=models.RESTRICT, related_name="transfer_items"
     )
     requested_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    # shipped_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    # received_quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     @property
     def available_balance(self):

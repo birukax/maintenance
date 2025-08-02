@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { fetchTransfer } from "../../store/slices/transferSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
-import { Typography, Button, Modal, Checkbox, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Typography, Button, Modal, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Link } from "react-router-dom";
 import ReceiveModal from "./receive/Modal"
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -13,8 +12,6 @@ const Detail = () => {
     fetchDetailAction: fetchTransfer,
   });
   const [receivemodalOpen, setReceiveModalOpen] = useState(false)
-
-
 
   const renderButtons = () => (
     <>

@@ -22,13 +22,10 @@ const Edit = () => {
   });
   const activity = useSelector((state: AppState) => state.activity.activity)
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchActivity(id));
     }
     setFormData({
@@ -51,18 +48,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateActivity({ id, formData })).unwrap();
       toast.success("Activity edited successfully");
-      navigate(`/activity/detail/${activity.data.id}`);
+      navigate(`/activity/detail/${activity.data?.id}`);
     } catch (err) {
       toast.error(activity.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -85,7 +77,7 @@ const Edit = () => {
           value={formData?.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activity.loading}
           helperText={activity.error?.name || ""}
         />
         <TextField
@@ -98,7 +90,7 @@ const Edit = () => {
           value={formData?.description}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activity.loading}
           helperText={activity.error?.description || ""}
         />
         <Button
@@ -106,10 +98,10 @@ const Edit = () => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={loading}
+          disabled={activity.loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Edit Activity"}
+          {activity.loading ? <CircularProgress size={24} /> : "Edit Activity"}
         </Button>
 
       </Box>

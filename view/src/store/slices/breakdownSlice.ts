@@ -13,15 +13,15 @@ interface BreakdownState {
 }
 
 const initialState: BreakdownState = {
-    breakdowns: {data: [], loading: false, error: null},
-    breakdown: {data: [], loading: false, error: null},
+    breakdowns: { data: [], loading: false, error: null },
+    breakdown: { data: [], loading: false, error: null },
 };
 
-export const fetchBreakdowns = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchBreakdowns = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'breakdown/fetchBreakdowns',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/breakdown/breakdowns/',{params});
+            const response = await api.get('/breakdown/breakdowns/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchBreakdown = createAsyncThunk<[], number, { rejectValue: string
     }
 )
 
-export const createBreakdown = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createBreakdown = createAsyncThunk<[], formData, { rejectValue: string }>(
     'breakdown/createBreakdown',
     async (formData, { rejectWithValue }) => {
         try {
@@ -77,7 +77,7 @@ export const createBreakdownWorkOrder = createAsyncThunk<[], { id: string, formD
             const response = await api.post(`/breakdown/breakdowns/${id}/create_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue( error.response?.data || {message: 'Failed to create work order.'});
+            return rejectWithValue(error.response?.data || { message: 'Failed to create work order.' });
         }
     }
 )
@@ -88,69 +88,69 @@ const breakdownSlice = createSlice({
     name: 'breakdown',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchBreakdowns.pending, (state) => {
-            state.breakdowns.loading = true;
-            state.breakdowns.error = null;
-        })
-        .addCase(fetchBreakdowns.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.breakdowns.loading = false;
-            state.breakdowns.data = action.payload;
-        })
-        .addCase(fetchBreakdowns.rejected, (state, action) => {
-            state.breakdowns.loading = false;
-            state.breakdowns.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchBreakdown.pending, (state) => {
-                        state.breakdown.loading = true;
-                        state.breakdown.error = null;
-                    })
-        .addCase(fetchBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.breakdown.loading = false;
-            state.breakdown.data = action.payload;
-        })
-        .addCase(fetchBreakdown.rejected, (state, action) => {
-            state.breakdown.loading = false;
-            state.breakdown.error = action.payload || 'Unknown error';
-        })
-        .addCase(createBreakdown.pending, (state) => {
-            state.breakdown.loading = true;
-            state.breakdown.error = null;
-        })
-        .addCase(createBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.breakdown.loading = false;
-            state.breakdown.data = action.payload;
-        })
-        .addCase(createBreakdown.rejected, (state, action) => {
-            state.breakdown.loading = false;
-            state.breakdown.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateBreakdown.pending, (state) => {
-            state.breakdown.loading = true;
-            state.breakdown.error = null;
-        })
-        .addCase(updateBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.breakdown.loading = false;
-            state.breakdown.data = action.payload;
-        })
-        .addCase(updateBreakdown.rejected, (state, action) => {
-            state.breakdown.loading = false;
-            state.breakdown.error = action.payload || 'Unknown error';
-        })
-        .addCase(createBreakdownWorkOrder.pending, (state) => {
-            state.breakdown.loading = true;
-            state.breakdown.error = null;
-        })
-        .addCase(createBreakdownWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.breakdown.loading = false;
-            state.breakdown.data = action.payload;
-        })
-        .addCase(createBreakdownWorkOrder.rejected, (state, action) => {
-            state.breakdown.loading = false;
-            state.breakdown.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchBreakdowns.pending, (state) => {
+                state.breakdowns.loading = true;
+                state.breakdowns.error = null;
+            })
+            .addCase(fetchBreakdowns.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.breakdowns.loading = false;
+                state.breakdowns.data = action.payload;
+            })
+            .addCase(fetchBreakdowns.rejected, (state, action) => {
+                state.breakdowns.loading = false;
+                state.breakdowns.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchBreakdown.pending, (state) => {
+                state.breakdown.loading = true;
+                state.breakdown.error = null;
+            })
+            .addCase(fetchBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.breakdown.loading = false;
+                state.breakdown.data = action.payload;
+            })
+            .addCase(fetchBreakdown.rejected, (state, action) => {
+                state.breakdown.loading = false;
+                state.breakdown.error = action.payload || 'Unknown error';
+            })
+            .addCase(createBreakdown.pending, (state) => {
+                state.breakdown.loading = true;
+                state.breakdown.error = null;
+            })
+            .addCase(createBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.breakdown.loading = false;
+                state.breakdown.data = action.payload;
+            })
+            .addCase(createBreakdown.rejected, (state, action) => {
+                state.breakdown.loading = false;
+                state.breakdown.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateBreakdown.pending, (state) => {
+                state.breakdown.loading = true;
+                state.breakdown.error = null;
+            })
+            .addCase(updateBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.breakdown.loading = false;
+                state.breakdown.data = action.payload;
+            })
+            .addCase(updateBreakdown.rejected, (state, action) => {
+                state.breakdown.loading = false;
+                state.breakdown.error = action.payload || 'Unknown error';
+            })
+            .addCase(createBreakdownWorkOrder.pending, (state) => {
+                state.breakdown.loading = true;
+                state.breakdown.error = null;
+            })
+            .addCase(createBreakdownWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.breakdown.loading = false;
+                state.breakdown.data = action.payload;
+            })
+            .addCase(createBreakdownWorkOrder.rejected, (state, action) => {
+                state.breakdown.loading = false;
+                state.breakdown.error = action.payload || 'Unknown error';
+            })
     }
 })
 

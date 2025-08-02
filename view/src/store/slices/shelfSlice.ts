@@ -13,15 +13,15 @@ interface ShelveState {
 }
 
 const initialState: ShelveState = {
-    shelves: {data: [], loading: false, error: null},
-    shelf: {data: [], loading: false, error: null},
+    shelves: { data: [], loading: false, error: null },
+    shelf: { data: [], loading: false, error: null },
 };
 
-export const fetchShelves = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchShelves = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'shelve/fetchShelves',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/shelves/',{params});
+            const response = await api.get('/inventory/shelves/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchShelf = createAsyncThunk<[], number, { rejectValue: string }>(
     }
 )
 
-export const createShelf = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createShelf = createAsyncThunk<[], formData, { rejectValue: string }>(
     'shelve/createShelve',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const shelveSlice = createSlice({
     name: 'shelf',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchShelves.pending, (state) => {
-            state.shelves.loading = true;
-            state.shelves.error = null;
-        })
-        .addCase(fetchShelves.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelves.loading = false;
-            state.shelves.data = action.payload;
-        })
-        .addCase(fetchShelves.rejected, (state, action) => {
-            state.shelves.loading = false;
-            state.shelves.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchShelf.pending, (state) => {
-                        state.shelf.loading = true;
-                        state.shelf.error = null;
-                    })
-        .addCase(fetchShelf.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelf.loading = false;
-            state.shelf.data = action.payload;
-        })
-        .addCase(fetchShelf.rejected, (state, action) => {
-            state.shelf.loading = false;
-            state.shelf.error = action.payload || 'Unknown error';
-        })
-        .addCase(createShelf.pending, (state) => {
-            state.shelf.loading = true;
-            state.shelf.error = null;
-        })
-        .addCase(createShelf.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelf.loading = false;
-            state.shelf.data = action.payload;
-        })
-        .addCase(createShelf.rejected, (state, action) => {
-            state.shelf.loading = false;
-            state.shelf.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateShelf.pending, (state) => {
-            state.shelf.loading = true;
-            state.shelf.error = null;
-        })
-        .addCase(updateShelf.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.shelf.loading = false;
-            state.shelf.data = action.payload;
-        })
-        .addCase(updateShelf.rejected, (state, action) => {
-            state.shelf.loading = false;
-            state.shelf.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchShelves.pending, (state) => {
+                state.shelves.loading = true;
+                state.shelves.error = null;
+            })
+            .addCase(fetchShelves.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelves.loading = false;
+                state.shelves.data = action.payload;
+            })
+            .addCase(fetchShelves.rejected, (state, action) => {
+                state.shelves.loading = false;
+                state.shelves.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchShelf.pending, (state) => {
+                state.shelf.loading = true;
+                state.shelf.error = null;
+            })
+            .addCase(fetchShelf.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelf.loading = false;
+                state.shelf.data = action.payload;
+            })
+            .addCase(fetchShelf.rejected, (state, action) => {
+                state.shelf.loading = false;
+                state.shelf.error = action.payload || 'Unknown error';
+            })
+            .addCase(createShelf.pending, (state) => {
+                state.shelf.loading = true;
+                state.shelf.error = null;
+            })
+            .addCase(createShelf.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelf.loading = false;
+                state.shelf.data = action.payload;
+            })
+            .addCase(createShelf.rejected, (state, action) => {
+                state.shelf.loading = false;
+                state.shelf.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateShelf.pending, (state) => {
+                state.shelf.loading = true;
+                state.shelf.error = null;
+            })
+            .addCase(updateShelf.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.shelf.loading = false;
+                state.shelf.data = action.payload;
+            })
+            .addCase(updateShelf.rejected, (state, action) => {
+                state.shelf.loading = false;
+                state.shelf.error = action.payload || 'Unknown error';
+            })
     }
 })
 

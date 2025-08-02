@@ -35,7 +35,7 @@ const authSlice = createSlice({
 export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
     'auth/logout',
     async (_, { dispatch }) => {
-        try{
+        try {
             dispatch(clearTokens());
         }
         catch (err) {

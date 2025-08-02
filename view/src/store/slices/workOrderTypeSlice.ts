@@ -13,15 +13,15 @@ interface WorkOrderTypeState {
 }
 
 const initialState: WorkOrderTypeState = {
-    workOrderTypes: {data: [], loading: false, error: null},
-    workOrderType: {data: [], loading: false, error: null},
+    workOrderTypes: { data: [], loading: false, error: null },
+    workOrderType: { data: [], loading: false, error: null },
 };
 
-export const fetchWorkOrderTypes = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchWorkOrderTypes = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'workOrderType/fetchWorkOrderTypes',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/work-order-types/',{params});
+            const response = await api.get('/work-order/work-order-types/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchWorkOrderType = createAsyncThunk<[], number, { rejectValue: st
     }
 )
 
-export const createWorkOrderType = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createWorkOrderType = createAsyncThunk<[], formData, { rejectValue: string }>(
     'workOrderType/createWorkOrderType',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const WorkOrderTypeSlice = createSlice({
     name: 'workOrderType',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchWorkOrderTypes.pending, (state) => {
-            state.workOrderTypes.loading = true;
-            state.workOrderTypes.error = null;
-        })
-        .addCase(fetchWorkOrderTypes.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrderTypes.loading = false;
-            state.workOrderTypes.data = action.payload;
-        })
-        .addCase(fetchWorkOrderTypes.rejected, (state, action) => {
-            state.workOrderTypes.loading = false;
-            state.workOrderTypes.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchWorkOrderType.pending, (state) => {
-            state.workOrderType.loading = true;
-            state.workOrderType.error = null;
-        })
-        .addCase(fetchWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrderType.loading = false;
-            state.workOrderType.data = action.payload;
-        })
-        .addCase(fetchWorkOrderType.rejected, (state, action) => {
-            state.workOrderType.loading = false;
-            state.workOrderType.error = action.payload || 'Unknown error';
-        })
-        .addCase(createWorkOrderType.pending, (state) => {
-            state.workOrderType.loading = true;
-            state.workOrderType.error = null;
-        })
-        .addCase(createWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrderType.loading = false;
-            state.workOrderType.data = action.payload;
-        })
-        .addCase(createWorkOrderType.rejected, (state, action) => {
-            state.workOrderType.loading = false;
-            state.workOrderType.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateWorkOrderType.pending, (state) => {
-            state.workOrderType.loading = true;
-            state.workOrderType.error = null;
-        })
-        .addCase(updateWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.workOrderType.loading = false;
-            state.workOrderType.data = action.payload;
-        })
-        .addCase(updateWorkOrderType.rejected, (state, action) => {
-            state.workOrderType.loading = false;
-            state.workOrderType.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchWorkOrderTypes.pending, (state) => {
+                state.workOrderTypes.loading = true;
+                state.workOrderTypes.error = null;
+            })
+            .addCase(fetchWorkOrderTypes.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrderTypes.loading = false;
+                state.workOrderTypes.data = action.payload;
+            })
+            .addCase(fetchWorkOrderTypes.rejected, (state, action) => {
+                state.workOrderTypes.loading = false;
+                state.workOrderTypes.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchWorkOrderType.pending, (state) => {
+                state.workOrderType.loading = true;
+                state.workOrderType.error = null;
+            })
+            .addCase(fetchWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrderType.loading = false;
+                state.workOrderType.data = action.payload;
+            })
+            .addCase(fetchWorkOrderType.rejected, (state, action) => {
+                state.workOrderType.loading = false;
+                state.workOrderType.error = action.payload || 'Unknown error';
+            })
+            .addCase(createWorkOrderType.pending, (state) => {
+                state.workOrderType.loading = true;
+                state.workOrderType.error = null;
+            })
+            .addCase(createWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrderType.loading = false;
+                state.workOrderType.data = action.payload;
+            })
+            .addCase(createWorkOrderType.rejected, (state, action) => {
+                state.workOrderType.loading = false;
+                state.workOrderType.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateWorkOrderType.pending, (state) => {
+                state.workOrderType.loading = true;
+                state.workOrderType.error = null;
+            })
+            .addCase(updateWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.workOrderType.loading = false;
+                state.workOrderType.data = action.payload;
+            })
+            .addCase(updateWorkOrderType.rejected, (state, action) => {
+                state.workOrderType.loading = false;
+                state.workOrderType.error = action.payload || 'Unknown error';
+            })
     }
 })
 

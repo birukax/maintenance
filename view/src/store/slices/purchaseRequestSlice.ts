@@ -13,15 +13,15 @@ interface PurchaseRequestState {
 }
 
 const initialState: PurchaseRequestState = {
-    purchaseRequests: {data: [], loading: false, error: null},
-    purchaseRequest: {data: [], loading: false, error: null},
+    purchaseRequests: { data: [], loading: false, error: null },
+    purchaseRequest: { data: [], loading: false, error: null },
 };
 
-export const fetchPurchaseRequests = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchPurchaseRequests = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'purchaseRequest/fetchPurchaseRequests',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/purchase/requests/',{params});
+            const response = await api.get('/purchase/requests/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: 
     }
 )
 
-export const createPurchaseRequest = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createPurchaseRequest = createAsyncThunk<[], formData, { rejectValue: string }>(
     'purchaseRequest/createPurchaseRequest',
     async (formData, { rejectWithValue }) => {
         try {
@@ -87,69 +87,69 @@ const purchaseRequestSlice = createSlice({
     name: 'purchaseRequest',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchPurchaseRequests.pending, (state) => {
-            state.purchaseRequests.loading = true;
-            state.purchaseRequests.error = null;
-        })
-        .addCase(fetchPurchaseRequests.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.purchaseRequests.loading = false;
-            state.purchaseRequests.data = action.payload;
-        })
-        .addCase(fetchPurchaseRequests.rejected, (state, action) => {
-            state.purchaseRequests.loading = false;
-            state.purchaseRequests.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchPurchaseRequest.pending, (state) => {
-                        state.purchaseRequest.loading = true;
-                        state.purchaseRequest.error = null;
-                    })
-                    .addCase(fetchPurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.data = action.payload;
-                    })
-                    .addCase(fetchPurchaseRequest.rejected, (state, action) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createPurchaseRequest.pending, (state) => {
-                        state.purchaseRequest.loading = true;
-                        state.purchaseRequest.error = null;
-                    })
-                    .addCase(createPurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.data = action.payload;
-                    })
-                    .addCase(createPurchaseRequest.rejected, (state, action) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updatePurchaseRequest.pending, (state) => {
-                        state.purchaseRequest.loading = true;
-                        state.purchaseRequest.error = null;
-                    })
-                    .addCase(updatePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.data = action.payload;
-                    })
-                    .addCase(updatePurchaseRequest.rejected, (state, action) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(receivePurchaseRequest.pending, (state) => {
-                        state.purchaseRequest.loading = true;
-                        state.purchaseRequest.error = null;
-                    })
-                    .addCase(receivePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.data = action.payload;
-                    })
-                    .addCase(receivePurchaseRequest.rejected, (state, action) => {
-                        state.purchaseRequest.loading = false;
-                        state.purchaseRequest.error = action.payload || 'Unknown error';
-                    })
+            .addCase(fetchPurchaseRequests.pending, (state) => {
+                state.purchaseRequests.loading = true;
+                state.purchaseRequests.error = null;
+            })
+            .addCase(fetchPurchaseRequests.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.purchaseRequests.loading = false;
+                state.purchaseRequests.data = action.payload;
+            })
+            .addCase(fetchPurchaseRequests.rejected, (state, action) => {
+                state.purchaseRequests.loading = false;
+                state.purchaseRequests.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchPurchaseRequest.pending, (state) => {
+                state.purchaseRequest.loading = true;
+                state.purchaseRequest.error = null;
+            })
+            .addCase(fetchPurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.data = action.payload;
+            })
+            .addCase(fetchPurchaseRequest.rejected, (state, action) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.error = action.payload || 'Unknown error';
+            })
+            .addCase(createPurchaseRequest.pending, (state) => {
+                state.purchaseRequest.loading = true;
+                state.purchaseRequest.error = null;
+            })
+            .addCase(createPurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.data = action.payload;
+            })
+            .addCase(createPurchaseRequest.rejected, (state, action) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.error = action.payload || 'Unknown error';
+            })
+            .addCase(updatePurchaseRequest.pending, (state) => {
+                state.purchaseRequest.loading = true;
+                state.purchaseRequest.error = null;
+            })
+            .addCase(updatePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.data = action.payload;
+            })
+            .addCase(updatePurchaseRequest.rejected, (state, action) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.error = action.payload || 'Unknown error';
+            })
+            .addCase(receivePurchaseRequest.pending, (state) => {
+                state.purchaseRequest.loading = true;
+                state.purchaseRequest.error = null;
+            })
+            .addCase(receivePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.data = action.payload;
+            })
+            .addCase(receivePurchaseRequest.rejected, (state, action) => {
+                state.purchaseRequest.loading = false;
+                state.purchaseRequest.error = action.payload || 'Unknown error';
+            })
     }
 })
 

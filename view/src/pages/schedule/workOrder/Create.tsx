@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { createScheduledWorkOrder } from "../../../store/slices/scheduleSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,7 +11,6 @@ import {
   Typography,
   Container,
   CircularProgress,
-  TextField,
   Box,
 } from "@mui/material";
 import { fetchWorkOrders } from "../../../store/slices/workOrderSlice";
@@ -77,7 +75,7 @@ const Create = ({ entityState, setModalOpen, params }) => {
             disablePast
             label="Start Date"
             name="start_date"
-            value={formData.date ? dayjs(formData.date) : null}
+            value={formData.start_date ? dayjs(formData.start_date) : null}
             onChange={handleDateChange}
             slotProps={{
               textField: {

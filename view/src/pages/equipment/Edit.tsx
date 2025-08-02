@@ -11,10 +11,6 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   TextField,
   Box,
 } from "@mui/material";
@@ -28,10 +24,6 @@ const Edit = () => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  const params = {
-    no_pagination: "true",
-  };
   useEffect(() => {
     if (id) {
       dispatch(fetchEquipment(id));

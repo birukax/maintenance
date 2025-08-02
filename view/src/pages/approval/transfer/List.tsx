@@ -2,17 +2,11 @@
 import React, { useEffect, useState } from "react";
 import {
   fetchTransferApprovals,
-  approveTransferApproval,
-  rejectTransferApproval,
 } from "../../../store/slices/transferApprovalSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom"
-import { useEntityList } from "../../../hooks/useEntityList";
+import { useSearchParams } from "react-router-dom";
 import { GenericListPage } from "../../../components/GenericListPage";
-
-import { toast } from "react-toastify";
-
 const transferApprovalColumns = [
   { header: "Transfer ID", accessor: "transfer.id" },
   {
@@ -60,7 +54,7 @@ const List: React.FC = () => {
   }
 
   const handleRefresh = () => {
-    dispatch(fetchTransferApprovals()).unwrap();
+    dispatch(fetchTransferApprovals(params));
   };
 
 

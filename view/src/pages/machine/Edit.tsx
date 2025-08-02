@@ -15,9 +15,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   TextField,
   Box,
   Autocomplete,
@@ -27,9 +24,6 @@ const Edit = () => {
   const { areas } = useSelector((state: AppState) => state.area);
   const { plants } = useSelector((state: AppState) => state.plant);
   const [selectedPlant, setSelectedPlant] = useState("")
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -45,13 +39,12 @@ const Edit = () => {
 
   useEffect(() => {
     if (id) {
-      // handleFetchMachine()
       dispatch(fetchMachine(id)).unwrap();
       dispatch(fetchPlants(params));
       dispatch(fetchAreas(params));
 
     }
-  }, [dispatch, id]);
+  }, []);
 
   useEffect(() => {
     setSelectedPlant(machine?.data?.area?.plant?.id)
@@ -70,18 +63,12 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
-      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateMachine({ id, formData })).unwrap();
       toast.success("Machine edited successfully");
       navigate(`/machine/detail/${machine.data.id}`);
     } catch (err) {
       toast.error(machine.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -101,7 +88,7 @@ const Edit = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={machine.loading}>
           <Autocomplete
             size='small'
             options={plants.data || []}
@@ -125,7 +112,7 @@ const Edit = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={machine.loading}>
           <Autocomplete
             size='small'
             options={
@@ -170,7 +157,7 @@ const Edit = () => {
           value={formData?.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={machine.loading}
           helperText={machine.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -181,10 +168,10 @@ const Edit = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={machine.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {machine.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -193,7 +180,7 @@ const Edit = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={machine.loading}
 
           >
             Cancel

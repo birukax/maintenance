@@ -1,21 +1,16 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import {
-  fetchPurchaseSchedules,
-  clear,
-} from "../../../store/slices/purchaseScheduleSlice";
+import { fetchPurchaseSchedules } from "../../../store/slices/purchaseScheduleSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { GenericListPage } from "../../../components/GenericListPage";
-import { useSearchParams } from "react-router-dom";
-import Edit from "./Edit";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+
 const purchaseScheduleColumns = [
   { header: "Item ID", accessor: "item.no" },
   { header: "Item", accessor: "item.name" },
   { header: "UoM", accessor: "item.uom.name" },
-  { header: "Current Balance", accessor: "balance" },
+  { header: "Balance", accessor: "balance" },
   { header: "Minimum Balance", accessor: "item.minimum_stock_level" },
   { header: "Year", accessor: "year.no" },
   { header: "Quantity", accessor: "quantity" },
@@ -33,9 +28,9 @@ const purchaseScheduleColumns = [
   { header: "November", accessor: "november" },
   { header: "December", accessor: "december" },
 ];
+
 const List: React.FC = () => {
   const navigate = useNavigate();
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = useState({
     year__no: searchParams.get("year__no") && searchParams.get("year__no") !== "null" ? searchParams.get("year__no") : new Date().getFullYear(),
@@ -58,13 +53,11 @@ const List: React.FC = () => {
 
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchPurchaseSchedules(params));
-    }
+    dispatch(fetchPurchaseSchedules(params));
+
   };
 
   const handleEdit = async (year) => {
-    // await dispatch(clear()).unwrap();
     navigate(`/purchase-schedule/edit/${year}?page=1`);
   };
   const handleFilter = async (field, value) => {
@@ -81,22 +74,17 @@ const List: React.FC = () => {
           [field]: value,
         };
       }
-
       setSearchParams({ ...parameters });
       await dispatch(fetchPurchaseSchedules(parameters));
     }
   };
   const handleSearchFilter = async (field, value) => {
-    // Handle filter action here
     const parameters = {
       year__no: searchParams.get("year__no"),
       page: 1,
       [field]: value,
     };
-
-
     setSearchParams({ ...parameters });
-
     await dispatch(fetchPurchaseSchedules(parameters));
   };
 

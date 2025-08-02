@@ -12,21 +12,18 @@ import {
   CircularProgress,
   Typography,
   Button,
-  Box,
   TableRow,
   TableBody,
   Table,
   TableHead,
   TableCell,
 } from "@mui/material";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../../store/slices/purchaseScheduleSlice";
 const Edit = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)
   const { year } = useParams()
-  const [loading, setLoading] = useState(true)
   const [params, setParams] = useState({
     year__no: year || new Date().getFullYear(),
     search: searchParams.get("search") || "",
@@ -43,7 +40,6 @@ const Edit = () => {
 
   const fetch = async () => {
     await dispatch(fetchPurchaseSchedules(params)).unwrap();
-    setLoading(false)
   }
   useEffect(() => {
     fetch()
@@ -141,7 +137,7 @@ const Edit = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!loading &&
+            {!purchaseSchedules.loading &&
               purchaseSchedules?.data?.results?.map((row) => (
                 <EditRows
                   key={row.id}

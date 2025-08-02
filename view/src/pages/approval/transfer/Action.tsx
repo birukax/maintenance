@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { approveTransferApproval, rejectTransferApproval, fetchTransferApproval } from "../../../store/slices/transferApprovalSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import {

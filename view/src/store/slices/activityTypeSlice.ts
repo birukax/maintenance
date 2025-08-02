@@ -13,15 +13,15 @@ interface ActivityTypeState {
 }
 
 const initialState: ActivityTypeState = {
-    activityTypes: {data: [], loading: false, error: null},
-    activityType: {data: [], loading: false, error: null},
+    activityTypes: { data: [], loading: false, error: null },
+    activityType: { data: [], loading: false, error: null },
 };
 
-export const fetchActivityTypes = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchActivityTypes = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'activityType/fetchActivityTypes',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/activity-types/',{params:params});
+            const response = await api.get('/work-order/activity-types/', { params: params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchActivityType = createAsyncThunk<[], number, { rejectValue: str
     }
 )
 
-export const createActivityType = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createActivityType = createAsyncThunk<[], formData, { rejectValue: string }>(
     'activityType/createActivityType',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const activityTypeSlice = createSlice({
     name: 'activityType',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchActivityTypes.pending, (state) => {
-            state.activityTypes.loading = true;
-            state.activityTypes.error = null;
-        })
-        .addCase(fetchActivityTypes.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.activityTypes.loading = false;
-            state.activityTypes.data = action.payload;
-        })
-        .addCase(fetchActivityTypes.rejected, (state, action) => {
-            state.activityTypes.loading = false;
-            state.activityTypes.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchActivityType.pending, (state) => {
-                        state.activityType.loading = true;
-                        state.activityType.error = null;
-                    })
-                    .addCase(fetchActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.activityType.loading = false;
-                        state.activityType.data = action.payload;
-                    })
-                    .addCase(fetchActivityType.rejected, (state, action) => {
-                        state.activityType.loading = false;
-                        state.activityType.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createActivityType.pending, (state) => {
-                        state.activityType.loading = true;
-                        state.activityType.error = null;
-                    })
-                    .addCase(createActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.activityType.loading = false;
-                        state.activityType.data = action.payload;
-                    })
-                    .addCase(createActivityType.rejected, (state, action) => {
-                        state.activityType.loading = false;
-                        state.activityType.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateActivityType.pending, (state) => {
-                        state.activityType.loading = true;
-                        state.activityType.error = null;
-                    })
-                    .addCase(updateActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.activityType.loading = false;
-                        state.activityType.data = action.payload;
-                    })
-                    .addCase(updateActivityType.rejected, (state, action) => {
-                        state.activityType.loading = false;
-                        state.activityType.error = action.payload || 'Unknown error';
-                    })
+            .addCase(fetchActivityTypes.pending, (state) => {
+                state.activityTypes.loading = true;
+                state.activityTypes.error = null;
+            })
+            .addCase(fetchActivityTypes.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.activityTypes.loading = false;
+                state.activityTypes.data = action.payload;
+            })
+            .addCase(fetchActivityTypes.rejected, (state, action) => {
+                state.activityTypes.loading = false;
+                state.activityTypes.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchActivityType.pending, (state) => {
+                state.activityType.loading = true;
+                state.activityType.error = null;
+            })
+            .addCase(fetchActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.activityType.loading = false;
+                state.activityType.data = action.payload;
+            })
+            .addCase(fetchActivityType.rejected, (state, action) => {
+                state.activityType.loading = false;
+                state.activityType.error = action.payload || 'Unknown error';
+            })
+            .addCase(createActivityType.pending, (state) => {
+                state.activityType.loading = true;
+                state.activityType.error = null;
+            })
+            .addCase(createActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.activityType.loading = false;
+                state.activityType.data = action.payload;
+            })
+            .addCase(createActivityType.rejected, (state, action) => {
+                state.activityType.loading = false;
+                state.activityType.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateActivityType.pending, (state) => {
+                state.activityType.loading = true;
+                state.activityType.error = null;
+            })
+            .addCase(updateActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.activityType.loading = false;
+                state.activityType.data = action.payload;
+            })
+            .addCase(updateActivityType.rejected, (state, action) => {
+                state.activityType.loading = false;
+                state.activityType.error = action.payload || 'Unknown error';
+            })
     }
 })
 

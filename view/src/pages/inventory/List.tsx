@@ -2,16 +2,13 @@
 import React, { useEffect, useState } from "react";
 import {
   fetchInventories,
-  revaluateStock,
 } from "../../store/slices/inventorySlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
-  ColumnDefination,
 } from "../../components/GenericListPage";
-import api from '../../utils/api';
 const inventoryColumns = [
   { header: "Item ID", accessor: "item.no" },
   { header: "Item", accessor: "item.name" },
@@ -22,12 +19,9 @@ const inventoryColumns = [
   { header: "Purchased Quantity", accessor: "purchased" },
   { header: "Inbound Transfers", accessor: "inbound_transfers" },
   { header: "Outbound Transfers", accessor: "outbound_transfers" },
-  // { header: "Consumed Quantity", accessor: "consumed_quantity" },
-  // { header: "Returned Quantity", accessor: "returned_quantity" },
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
@@ -43,10 +37,7 @@ const List: React.FC = () => {
 
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchInventories(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchInventories(params));
   }, []);
 
   const handleRefresh = () => {

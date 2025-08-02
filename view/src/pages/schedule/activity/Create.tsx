@@ -31,11 +31,9 @@ const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
     description: ""
   });
   const activity = useSelector((state: AppState) => state.activity.activity);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // If schedule_id changes, update formData
     setFormData((prev) => ({ ...prev, schedule_id: schedule_id || "" }));
   }, [schedule_id]);
 
@@ -47,7 +45,6 @@ const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     await dispatch(createActivity(formData)); // Uncomment if needed
     if (!activity.error) {
       setModalOpen(false);

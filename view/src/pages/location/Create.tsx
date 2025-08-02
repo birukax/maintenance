@@ -16,17 +16,14 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { AppState } from "../../store/store";
+import { AppState, AppDispatch } from "../../store/store";
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     name: "",
   });
   const location = useSelector((state: AppState) => state.location.location)
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -35,17 +32,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createLocation(formData)).unwrap();
       toast.success("Location created successfully");
       navigate("/locations");
     } catch (err) {
       toast.error(location.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -68,7 +60,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={location.loading}
           helperText={location.error?.code}
 
         />
@@ -83,7 +75,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={location.loading}
           helperText={location.error?.name}
         />
         <div className='flex gap-4'>
@@ -94,10 +86,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={location.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {location.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -106,7 +98,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={location.loading}
 
           >
             Cancel

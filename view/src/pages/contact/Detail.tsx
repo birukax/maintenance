@@ -1,5 +1,3 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import { fetchContact } from "../../store/slices/contactSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";

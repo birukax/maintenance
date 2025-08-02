@@ -4,10 +4,8 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchPlant,
   updatePlant,
-  fetchPlants,
 } from "../../store/slices/plantSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -23,15 +21,11 @@ const Edit = () => {
   });
   const plant = useSelector((state: AppState) => state.plant.plant)
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
-      dispatch(fetchPlant(id));
-    }
+    dispatch(fetchPlant(id));
+
     setFormData({
       name: plant.data?.name,
     });
@@ -49,18 +43,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updatePlant({ id, formData })).unwrap();
       toast.success("Plant edited successfully");
-      navigate(`/plant/detail/${plant.data.id}`);
+      navigate(`/plant/detail/${plant.data?.id}`);
     } catch (err) {
       toast.error(plant.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -88,7 +77,7 @@ const Edit = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={plant.loading}
           helperText={plant.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -102,7 +91,7 @@ const Edit = () => {
             disabled={plant.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {plant.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}

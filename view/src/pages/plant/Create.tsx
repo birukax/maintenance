@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { createPlant } from "../../store/slices/plantSlice";
@@ -11,16 +11,14 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { AppState } from "../../store/store";
+import { AppState, AppDispatch } from "../../store/store";
 const Create = () => {
   const [formData, setFormData] = useState({
     code: "",
     name: "",
   });
   const plant = useSelector((state: AppState) => state.plant.plant)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -29,17 +27,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createPlant(formData)).unwrap();
       toast.success("Plant created successfully");
       navigate("/plants");
     } catch (err) {
       toast.error(plant.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -62,7 +55,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={plant.loading}
           helperText={plant?.error?.code}
         />
 
@@ -76,7 +69,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={plant.loading}
           helperText={plant?.error?.name}
         />
         <div className='flex gap-4'>
@@ -87,10 +80,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={plant.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {plant.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -99,7 +92,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={plant.loading}
 
           >
             Cancel

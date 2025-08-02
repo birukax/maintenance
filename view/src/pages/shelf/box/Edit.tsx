@@ -22,14 +22,11 @@ const Edit = () => {
     name: "",
   });
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const shelfBox = useSelector((state: AppState) => state.shelfBox.shelfBox)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const shelfBox = useSelector((state: AppState) => state.shelfBox.shelfBox);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchShelfBox(id));
     }
     setFormData({
@@ -49,18 +46,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateShelfBox({ id, formData })).unwrap();
       toast.success("Shelf edited successfully");
-      navigate(`/shelf-box/detail/${shelfBox.data.id}`);
+      navigate(`/shelf-box/detail/${shelfBox.data?.id}`);
     } catch (err) {
       toast.error(shelfBox.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -89,7 +81,7 @@ const Edit = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={shelfBox.loading}
           helperText={shelfBox.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -100,10 +92,10 @@ const Edit = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={shelfBox.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {shelfBox.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -112,7 +104,7 @@ const Edit = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={shelfBox.loading}
 
           >
             Cancel

@@ -12,9 +12,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -25,10 +22,7 @@ const Create = () => {
     machine_id: "",
     code: "",
   });
-  const equipment = useSelector((state: AppState) => state.equipment.equipment)
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const equipment = useSelector((state: AppState) => state.equipment.equipment);
   const { machines } = useSelector((state: AppState) => state.machine);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -36,9 +30,7 @@ const Create = () => {
     no_pagination: "true",
   };
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchMachines(params));
-    }
+    dispatch(fetchMachines(params));
   }, []);
 
   const handleChange = (e) => {
@@ -47,17 +39,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createEquipment(formData)).unwrap();
       toast.success("Equipment created successfully");
       navigate("/equipments");
     } catch (err) {
       toast.error(equipment.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -70,7 +57,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={equipment.loading}>
           <Autocomplete
             size='small'
             options={machines?.data || []}
@@ -104,7 +91,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={equipment.loading}
           helperText={equipment.error?.code || ""}
         />
         <TextField
@@ -118,7 +105,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={equipment.loading}
           helperText={equipment.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -129,10 +116,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={equipment.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {equipment.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -141,7 +128,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={equipment.loading}
 
           >
             Cancel

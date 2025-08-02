@@ -13,9 +13,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -26,11 +23,8 @@ const Create = () => {
     area_id: "",
     code: "",
   });
-  const machine = useSelector((state: AppState) => state.machine.machine)
-  const [selectedPlant, setSelectedPlant] = useState("")
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const machine = useSelector((state: AppState) => state.machine.machine);
+  const [selectedPlant, setSelectedPlant] = useState("");
   const { plants } = useSelector((state: AppState) => state.plant);
   const { areas } = useSelector((state: AppState) => state.area);
   const dispatch = useDispatch<AppDispatch>();
@@ -39,10 +33,9 @@ const Create = () => {
     no_pagination: "true",
   };
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchPlants(params));
-      dispatch(fetchAreas(params));
-    }
+    dispatch(fetchPlants(params));
+    dispatch(fetchAreas(params));
+
   }, []);
 
 
@@ -53,18 +46,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createMachine(formData)).unwrap();
       toast.success("Machine created successfully");
       navigate("/machines");
     } catch (err) {
       toast.error(machine.error?.error || "Something Went Wrong");
-
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -79,7 +66,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={machine.loading}>
           <Autocomplete
             size='small'
             options={plants.data || []}
@@ -102,7 +89,7 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={machine.loading}>
           <Autocomplete
             size='small'
             options={
@@ -145,7 +132,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={machine.loading}
           helperText={machine.error?.code}
         />
         <TextField
@@ -159,7 +146,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={machine.loading}
           helperText={machine.error?.name}
         />
         <div className='flex gap-4'>
@@ -170,10 +157,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={machine.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {machine.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -182,7 +169,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={machine.loading}
 
           >
             Cancel

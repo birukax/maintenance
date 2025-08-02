@@ -2,17 +2,11 @@
 import React, { useEffect, useState } from "react";
 import {
   fetchPurchaseApprovals,
-  approvePurchaseApproval,
-  rejectPurchaseApproval,
 } from "../../../store/slices/purchaseApprovalSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom"
-import { useEntityList } from "../../../hooks/useEntityList";
+import { useSearchParams } from "react-router-dom";
 import { GenericListPage } from "../../../components/GenericListPage";
-
-import { toast } from "react-toastify";
-
 const purchaseApprovalColumns = [
   { header: "Purchase ID", accessor: "id" },
   {
@@ -62,7 +56,7 @@ const List: React.FC = () => {
   }
 
   const handleRefresh = () => {
-    dispatch(fetchPurchaseApprovals()).unwrap();
+    dispatch(fetchPurchaseApprovals(params));
   };
 
 

@@ -8,7 +8,7 @@ from .models import (
     RequestItem,
     PurchaseHistory,
 )
-from inventory.models import Item, Location
+from inventory.models import Location
 
 
 class YearSerializer(serializers.ModelSerializer):

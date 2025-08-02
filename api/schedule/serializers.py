@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from account.serializers import UserSerializer
 from inventory.serializers import ItemSerializer
 from asset.serializers import EquipmentSerializer, MachineSerializer
 from work_order.serializers import (

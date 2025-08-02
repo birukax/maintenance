@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
-  ColumnDefination,
 } from "../../components/GenericListPage";
 
 const areaColumns = [

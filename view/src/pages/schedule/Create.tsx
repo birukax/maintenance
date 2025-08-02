@@ -15,9 +15,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -38,8 +35,6 @@ const Create = () => {
     planned_minutes: 0,
   });
   const schedule = useSelector((state: AppState) => state.schedule.schedule)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
   const { machines } = useSelector((state: AppState) => state.machine);
   const { equipments } = useSelector((state: AppState) => state.equipment);
@@ -67,17 +62,9 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleDateChange = (value) => {
-    const formattedDate = value ? value.format("YYYY-MM-DD") : null;
-    setFormData({
-      ...formData,
-      date: formattedDate,
-    });
-  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
 
     if (formData.planned_days > 0 || formData.planned_hours > 0 || formData.planned_minutes > 0) {
       try {
@@ -86,13 +73,8 @@ const Create = () => {
         navigate("/schedules");
       } catch (err) {
         toast.error(schedule.error?.error || "Something Went Wrong");
-        // setError(err.response?.data.detail || err.message);
-        setError(err.response?.data.detail || err.message);
-      } finally {
-        setLoading(false);
       }
     } else {
-      setLoading(false)
       toast.warning("At least one field of planned time must be greater than 0")
     }
   };
@@ -106,7 +88,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             options={SCHEDULE_TYPES}
@@ -140,11 +122,11 @@ const Create = () => {
           value={formData.description}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={schedule.loading}
           helperText={schedule.error?.description}
 
         />
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             options={machines.data || []}
@@ -168,7 +150,7 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(equipments.data) && equipments.data?.filter(
@@ -198,7 +180,7 @@ const Create = () => {
           />
         </FormControl>
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             options={
@@ -230,7 +212,7 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             options={
@@ -267,7 +249,7 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -297,10 +279,10 @@ const Create = () => {
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={schedule.loading}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -330,7 +312,7 @@ const Create = () => {
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={schedule.loading}
           />
         </FormControl>
         <div className="planned-time-group">
@@ -344,7 +326,7 @@ const Create = () => {
             fullWidth
             value={formData.planned_days}
             onChange={handleChange}
-            disabled={loading}
+            disabled={schedule.loading}
 
           />
           <TextField
@@ -357,7 +339,7 @@ const Create = () => {
             fullWidth
             value={formData.planned_hours}
             onChange={handleChange}
-            disabled={loading}
+            disabled={schedule.loading}
           />
           <TextField
             size='small'
@@ -369,7 +351,7 @@ const Create = () => {
             fullWidth
             value={formData.planned_minutes}
             onChange={handleChange}
-            disabled={loading}
+            disabled={schedule.loading}
           />
         </div>
         <div className='flex gap-4'>
@@ -380,10 +362,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={schedule.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {schedule.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -392,7 +374,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={schedule.loading}
 
           >
             Cancel

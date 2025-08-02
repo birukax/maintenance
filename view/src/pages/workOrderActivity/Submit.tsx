@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   submitWorkOrder,
   fetchWorkOrder,
 } from "../../store/slices/workOrderSlice";
-import { AppState, AppDispatch } from "../../store/store";
+import { AppDispatch } from "../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -42,8 +42,6 @@ const Submit = ({ entityState, setModalOpen }) => {
     end_date: dayjs(entityState?.data?.start_date).format("YYYY-MM-DD") || null,
     end_time: "",
   });
-  const { workOrder } = useSelector((state: AppState) => state.workOrder);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -74,7 +72,6 @@ const Submit = ({ entityState, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(submitWorkOrder({ id, formData })).unwrap();
@@ -83,7 +80,6 @@ const Submit = ({ entityState, setModalOpen }) => {
       navigate(`/work-order/detail/${id}`);
     } catch (err) {
       toast.error("Error submitting Work Order");
-      setError(err.response?.data.detail || "Failed to submit Work Order.");
     }
   };
 
@@ -112,7 +108,7 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: entityState.error?.end_date,
               },
             }}
           />
@@ -135,7 +131,7 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: entityState.error?.start_time,
               },
             }}
           />
@@ -161,7 +157,7 @@ const Submit = ({ entityState, setModalOpen }) => {
                 fullWidth: true,
                 required: true,
                 disabled: entityState.loading,
-                helperText: error,
+                helperText: entityState.error?.end_time,
               },
             }}
           />
@@ -195,9 +191,9 @@ const Submit = ({ entityState, setModalOpen }) => {
             "Submit"
           )}
         </Button>
-        {error && (
+        {entityState.error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
+            {entityState.error?.detail}
           </Typography>
         )}
       </Box>

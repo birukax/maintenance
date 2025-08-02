@@ -5,10 +5,8 @@ import { Link } from "react-router-dom";
 import {
   fetchContact,
   updateContact,
-  fetchContacts,
 } from "../../store/slices/contactSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -26,13 +24,10 @@ const Edit = () => {
   });
   const contact = useSelector((state: AppState) => state.contact.contact)
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchContact(id));
     }
     setFormData({
@@ -56,8 +51,6 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateContact({ id, formData })).unwrap();
@@ -65,9 +58,6 @@ const Edit = () => {
       navigate(`/contact/detail/${contact.data.id}`);
     } catch (err) {
       toast.error(contact.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -98,7 +88,7 @@ const Edit = () => {
           value={formData?.email}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact.error?.email || ""}
         />
 
@@ -112,7 +102,7 @@ const Edit = () => {
           value={formData?.address}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact.error?.address || ""}
         />
 
@@ -126,7 +116,7 @@ const Edit = () => {
           value={formData?.phone_no}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact.error?.phone_no || ""}
         />
 
@@ -138,9 +128,9 @@ const Edit = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={contact.loading}
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {contact.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -149,7 +139,7 @@ const Edit = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={contact.loading}
 
           >
             Cancel

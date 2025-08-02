@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  updateBreakdown,
-} from "../../store/slices/breakdownSlice";
+import { updateBreakdown } from "../../store/slices/breakdownSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -42,7 +40,6 @@ const Update = ({ entityState, setModalOpen }) => {
     status: "FIXED",
   });
   const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const handleDateChange = (value) => {
@@ -68,16 +65,13 @@ const Update = ({ entityState, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
-      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateBreakdown({ id, formData })).unwrap();
       setModalOpen(false);
       toast.success("Breakdown updated successfully");
       navigate(`/breakdown/detail/${id}`);
     } catch (err) {
       toast.error(breakdown.error?.error || "Something Went Wrong");
-      setError(err.response?.data?.detail || "Failed to update Breakdown.");
     }
   };
 

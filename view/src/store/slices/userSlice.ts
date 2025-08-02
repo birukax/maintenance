@@ -13,15 +13,15 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    users: {data: [], loading: false, error: null},
-    user: {data: [], loading: false, error: null},
+    users: { data: [], loading: false, error: null },
+    user: { data: [], loading: false, error: null },
 };
 
-export const fetchUsers = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchUsers = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'user/fetchUsers',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/inventory/users/',{params});
+            const response = await api.get('/inventory/users/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchUser = createAsyncThunk<[], number, { rejectValue: string }>(
     }
 )
 
-export const createUser = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createUser = createAsyncThunk<[], formData, { rejectValue: string }>(
     'user/createUser',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchUsers.pending, (state) => {
-            state.users.loading = true;
-            state.users.error = null;
-        })
-        .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.users.loading = false;
-            state.users.data = action.payload;
-        })
-        .addCase(fetchUsers.rejected, (state, action) => {
-            state.users.loading = false;
-            state.users.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchUser.pending, (state) => {
-                        state.user.loading = true;
-                        state.user.error = null;
-                    })
-                    .addCase(fetchUser.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.user.loading = false;
-                        state.user.data = action.payload;
-                    })
-                    .addCase(fetchUser.rejected, (state, action) => {
-                        state.user.loading = false;
-                        state.user.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createUser.pending, (state) => {
-                        state.user.loading = true;
-                        state.user.error = null;
-                    })
-                    .addCase(createUser.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.user.loading = false;
-                        state.user.data = action.payload;
-                    })
-                    .addCase(createUser.rejected, (state, action) => {
-                        state.user.loading = false;
-                        state.user.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateUser.pending, (state) => {
-                        state.user.loading = true;
-                        state.user.error = null;
-                    })
-                    .addCase(updateUser.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.user.loading = false;
-                        state.user.data = action.payload;
-                    })
-                    .addCase(updateUser.rejected, (state, action) => {
-                        state.user.loading = false;
-                        state.user.error = action.payload || 'Unknown error';
-                    })
+            .addCase(fetchUsers.pending, (state) => {
+                state.users.loading = true;
+                state.users.error = null;
+            })
+            .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.users.loading = false;
+                state.users.data = action.payload;
+            })
+            .addCase(fetchUsers.rejected, (state, action) => {
+                state.users.loading = false;
+                state.users.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchUser.pending, (state) => {
+                state.user.loading = true;
+                state.user.error = null;
+            })
+            .addCase(fetchUser.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.user.loading = false;
+                state.user.data = action.payload;
+            })
+            .addCase(fetchUser.rejected, (state, action) => {
+                state.user.loading = false;
+                state.user.error = action.payload || 'Unknown error';
+            })
+            .addCase(createUser.pending, (state) => {
+                state.user.loading = true;
+                state.user.error = null;
+            })
+            .addCase(createUser.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.user.loading = false;
+                state.user.data = action.payload;
+            })
+            .addCase(createUser.rejected, (state, action) => {
+                state.user.loading = false;
+                state.user.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateUser.pending, (state) => {
+                state.user.loading = true;
+                state.user.error = null;
+            })
+            .addCase(updateUser.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.user.loading = false;
+                state.user.data = action.payload;
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.user.loading = false;
+                state.user.error = action.payload || 'Unknown error';
+            })
     }
 })
 

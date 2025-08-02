@@ -31,31 +31,25 @@ const Create = ({ entityState, setModalOpen, handleRefresh }) => {
     description: "",
   });
   const activity = useSelector((state: AppState) => state.activity.activity);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // If work_order_id changes, update formData
     setFormData((prev) => ({ ...prev, work_order_id: work_order_id || "" }));
   }, [work_order_id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    await dispatch(createWorkOrderActivity(formData)); // Uncomment if needed
+    await dispatch(createWorkOrderActivity(formData));
     if (!activity.error) {
       setModalOpen(false);
     }
     handleRefresh()
   };
-
-
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">

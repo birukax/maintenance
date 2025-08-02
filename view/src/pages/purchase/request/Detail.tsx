@@ -1,46 +1,23 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import { fetchPurchaseRequest } from "../../../store/slices/purchaseRequestSlice";
 import { AppState } from "../../../store/store";
 import { useEntityDetail } from "../../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../../components/GenericDetailPage";
-import { Typography, Button, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Typography, Button, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
-import Receive from "./Receive";
 
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.purchaseRequest.purchaseRequest,
     fetchDetailAction: fetchPurchaseRequest,
   });
-  // const [modalOpen, setModalOpen] = useState(false);
-  // const handleModalOpen = () => setModalOpen(true);
-  // const handleModalClose = () => setModalOpen(false);
-
   const renderButtons = () => (
     <>
-      {entityState.data.status == "APPROVED" && (
+      {entityState.data?.status == "APPROVED" && (
         <>
-          {/* <Modal
-            open={modalOpen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Receive id={entityState.data.id} setModalOpen={setModalOpen} />
-          </Modal>
-          <Button
-            size='small'
-            onClick={handleModalOpen}
-            variant="contained"
-            className="bg-slate-700"
-          >
-            Receive
-          </Button> */}
           {entityState?.data && entityState?.data?.request_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
             size='small'
             component={Link}
-            to={`/purchase-request/${entityState.data.id}/receive`}
+            to={`/purchase-request/${entityState.data?.id}/receive`}
             variant="contained"
             sx={{ mr: 1 }}
           >

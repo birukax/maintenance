@@ -4,7 +4,6 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchArea,
   updateArea,
-  fetchAreas,
 } from "../../store/slices/areaSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
@@ -24,8 +23,6 @@ const Edit = () => {
 
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
@@ -50,18 +47,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateArea({ id, formData })).unwrap();
       toast.success("Area edited successfully");
-      navigate(`/area/detail/${area.data.id}`);
+      navigate(`/area/detail/${area.data?.id}`);
     } catch (err) {
       toast.error(area.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -91,7 +83,7 @@ const Edit = () => {
           value={formData?.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={area.loading}
           helperText={area.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -105,7 +97,7 @@ const Edit = () => {
             disabled={area.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {area.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}

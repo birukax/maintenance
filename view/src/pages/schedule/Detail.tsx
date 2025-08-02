@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSchedule } from "../../store/slices/scheduleSlice";
 import { fetchWorkOrders } from "../../store/slices/workOrderSlice";
-import { AppState } from "../../store/store";
+import { AppState, AppDispatch } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
@@ -15,7 +15,7 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.schedule.schedule,
     fetchDetailAction: fetchSchedule,
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const work_orders = useSelector(
     (state: AppState) => state.workOrder.workOrders
   );

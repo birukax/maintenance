@@ -13,15 +13,15 @@ interface EquipmentState {
 }
 
 const initialState: EquipmentState = {
-    equipments: {data: [], loading: false, error: null},
-    equipment: {data: [], loading: false, error: null},
+    equipments: { data: [], loading: false, error: null },
+    equipment: { data: [], loading: false, error: null },
 };
 
-export const fetchEquipments = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchEquipments = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'equipment/fetchEquipments',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/asset/equipments/',{params});
+            const response = await api.get('/asset/equipments/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchEquipment = createAsyncThunk<[], number, { rejectValue: string
     }
 )
 
-export const createEquipment = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createEquipment = createAsyncThunk<[], formData, { rejectValue: string }>(
     'equipment/createEquipment',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const equipmentSlice = createSlice({
     name: 'equipment',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchEquipments.pending, (state) => {
-            state.equipments.loading = true;
-            state.equipments.error = null;
-        })
-        .addCase(fetchEquipments.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.equipments.loading = false;
-            state.equipments.data = action.payload;
-        })
-        .addCase(fetchEquipments.rejected, (state, action) => {
-            state.equipments.loading = false;
-            state.equipments.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchEquipment.pending, (state) => {
-                        state.equipment.loading = true;
-                        state.equipment.error = null;
-                    })
-        .addCase(fetchEquipment.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.equipment.loading = false;
-            state.equipment.data = action.payload;
-        })
-        .addCase(fetchEquipment.rejected, (state, action) => {
-            state.equipment.loading = false;
-            state.equipment.error = action.payload || 'Unknown error';
-        })
-        .addCase(createEquipment.pending, (state) => {
-            state.equipment.loading = true;
-            state.equipment.error = null;
-        })
-        .addCase(createEquipment.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.equipment.loading = false;
-            state.equipment.data = action.payload;
-        })
-        .addCase(createEquipment.rejected, (state, action) => {
-            state.equipment.loading = false;
-            state.equipment.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateEquipment.pending, (state) => {
-            state.equipment.loading = true;
-            state.equipment.error = null;
-        })
-        .addCase(updateEquipment.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.equipment.loading = false;
-            state.equipment.data = action.payload;
-        })
-        .addCase(updateEquipment.rejected, (state, action) => {
-            state.equipment.loading = false;
-            state.equipment.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchEquipments.pending, (state) => {
+                state.equipments.loading = true;
+                state.equipments.error = null;
+            })
+            .addCase(fetchEquipments.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.equipments.loading = false;
+                state.equipments.data = action.payload;
+            })
+            .addCase(fetchEquipments.rejected, (state, action) => {
+                state.equipments.loading = false;
+                state.equipments.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchEquipment.pending, (state) => {
+                state.equipment.loading = true;
+                state.equipment.error = null;
+            })
+            .addCase(fetchEquipment.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.equipment.loading = false;
+                state.equipment.data = action.payload;
+            })
+            .addCase(fetchEquipment.rejected, (state, action) => {
+                state.equipment.loading = false;
+                state.equipment.error = action.payload || 'Unknown error';
+            })
+            .addCase(createEquipment.pending, (state) => {
+                state.equipment.loading = true;
+                state.equipment.error = null;
+            })
+            .addCase(createEquipment.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.equipment.loading = false;
+                state.equipment.data = action.payload;
+            })
+            .addCase(createEquipment.rejected, (state, action) => {
+                state.equipment.loading = false;
+                state.equipment.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateEquipment.pending, (state) => {
+                state.equipment.loading = true;
+                state.equipment.error = null;
+            })
+            .addCase(updateEquipment.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.equipment.loading = false;
+                state.equipment.data = action.payload;
+            })
+            .addCase(updateEquipment.rejected, (state, action) => {
+                state.equipment.loading = false;
+                state.equipment.error = action.payload || 'Unknown error';
+            })
     }
 })
 

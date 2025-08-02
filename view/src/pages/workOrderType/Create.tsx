@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createWorkOrderType } from "../../store/slices/workOrderTypeSlice";
@@ -10,15 +10,11 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   FormControlLabel,
   Switch,
   Box,
 } from "@mui/material";
-import { AppState } from "../../store/store";
+import { AppState, AppDispatch } from "../../store/store";
 
 const Create = () => {
   const [formData, setFormData] = useState({
@@ -28,28 +24,22 @@ const Create = () => {
     breakdown: false,
   });
   const workOrderType = useSelector((state: AppState) => state.workOrderType.workOrderType)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createWorkOrderType(formData)).unwrap();
       toast.success("Work Order Type created successfully");
       navigate("/work-order-types");
     } catch (err) {
       toast.error(workOrderType.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -82,7 +72,7 @@ const Create = () => {
                 }
 
                 }
-                disabled={loading}
+                disabled={workOrderType.loading}
               />
             }
           />
@@ -103,7 +93,7 @@ const Create = () => {
                   }
                 }
                 }
-                disabled={loading}
+                disabled={workOrderType.loading}
               />
             }
           />
@@ -118,7 +108,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={workOrderType.loading}
           helperText={workOrderType.error?.code}
         />
         <TextField
@@ -131,7 +121,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={workOrderType.loading}
           helperText={workOrderType.error?.name}
 
         />
@@ -143,10 +133,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={workOrderType.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {workOrderType.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -155,7 +145,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={workOrderType.loading}
 
           >
             Cancel

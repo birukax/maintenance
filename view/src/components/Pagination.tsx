@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';

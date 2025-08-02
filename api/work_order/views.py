@@ -4,9 +4,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Activity, ActivityType, WorkOrderActivity, WorkOrder, WorkOrderType
 from django.contrib.auth.models import User
-from asset.models import Machine, Equipment
-from inventory.models import Item
-from schedule.models import Schedule
 from .serializers import (
     ActivitySerializer,
     WorkOrderSerializer,

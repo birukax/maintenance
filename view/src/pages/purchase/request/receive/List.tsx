@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { fetchPurchaseRequest, receivePurchaseRequest } from "../../../../store/slices/purchaseRequestSlice";
 import { AppState, AppDispatch } from "../../../../store/store";
 import { useEntityDetail } from "../../../../hooks/useEntityDetail";
@@ -8,18 +8,14 @@ import Rows from "./Rows";
 import {
   Typography,
   Button,
-  Modal,
   TableRow,
   TableBody,
   FormControl,
   Table,
   TableHead,
   TableCell,
-  TextField,
-  Checkbox,
 } from "@mui/material";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate, useParams } from "react-router-dom";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -48,14 +44,6 @@ const ReceiveList = () => {
     });
   };
 
-  const handleRefresh = () => {
-    try {
-      dispatch(fetchPurchaseRequest(id))
-    } catch (error) {
-      return error
-
-    }
-  }
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -65,13 +53,41 @@ const ReceiveList = () => {
       return error
     }
   }
+
+  const handleFormChange = async (data) => {
+
+    let item = formData?.received_items?.find(el => el.item_id === data.item_id)
+    if (!item) {
+
+      setFormData(prev => {
+        return {
+          ...prev,
+          received_items: [...prev?.received_items, data]
+        }
+      })
+    } else {
+      setFormData(prev => {
+        return {
+          ...prev,
+          received_items: [...prev?.received_items?.filter(el => {
+            if (el.item_id === data.item_id) {
+              el.quantity = data.quantity
+            }
+            return el
+          })]
+        }
+      })
+    }
+
+  };
+
   const renderButtons = () => (
     <>
       <>
         <div className='flex gap-4 w-fit'>
           <Button
             size='small'
-            disabled={errorCount.find(el => el === true) ? true : false || formData.date == '' || formData.received_items.filter((e) => e.quantity > 0).length === 0}
+            disabled={errorCount.find(el => el === true) && true || formData.date == '' || formData.received_items.filter((e) => e.quantity > 0).length === 0}
             variant="contained"
             className="bg-slate-700"
             sx={{ marginRight: ".5rem" }}
@@ -104,35 +120,6 @@ const ReceiveList = () => {
       </>
     </>
   );
-
-
-
-  const handleFormChange = async (data) => {
-
-    let item = formData?.received_items?.find(el => el.item_id === data.item_id)
-    if (!item) {
-
-      setFormData(prev => {
-        return {
-          ...prev,
-          received_items: [...prev?.received_items, data]
-        }
-      })
-    } else {
-      setFormData(prev => {
-        return {
-          ...prev,
-          received_items: [...prev?.received_items?.filter(el => {
-            if (el.item_id === data.item_id) {
-              el.quantity = data.quantity
-            }
-            return el
-          })]
-        }
-      })
-    }
-
-  };
 
   const renderDetails = (data) => (
     <>

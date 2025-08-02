@@ -2,16 +2,8 @@ import datetime
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
 from .models import Schedule
-from inventory.models import Item
-from asset.models import Machine, Equipment
-from work_order.models import (
-    WorkOrderType,
-    ActivityType,
-    WorkOrderActivity,
-    WorkOrder,
-)
+from work_order.models import WorkOrderActivity, WorkOrder
 from .serializers import ScheduleSerializer, CreateWorkOrderSerializer
 
 

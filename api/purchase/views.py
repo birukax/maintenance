@@ -1,10 +1,8 @@
-import datetime
-from django.db.models import Sum
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from approval.models import Purchase
-from inventory.models import Item, Location
+from inventory.models import Item
 from .models import Schedule, Request, Year, RequestItem, PurchaseHistory
 from .serializers import (
     ScheduleSerializer,
@@ -80,8 +78,8 @@ class RequestViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError({"error": "Nothing to Receive."})
         if not date:
             raise serializers.ValidationError({"date": "Date is required."})
-        # else:
-        #     date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        else:
+            date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         try:
             received_list = []
             for i in received_items:

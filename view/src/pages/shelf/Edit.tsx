@@ -22,13 +22,10 @@ const Edit = () => {
   });
   const shelf = useSelector((state: AppState) => state.shelf.shelf)
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchShelf(id));
     }
     setFormData({
@@ -48,18 +45,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateShelf({ id, formData })).unwrap();
       toast.success("Shelf edited successfully");
-      navigate(`/shelf/detail/${shelf.data.id}`);
+      navigate(`/shelf/detail/${shelf.data?.id}`);
     } catch (err) {
       toast.error(shelf.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -87,7 +79,7 @@ const Edit = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={shelf.loading}
           helperText={shelf.error?.name || ""}
         />
 
@@ -98,10 +90,10 @@ const Edit = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={shelf.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {shelf.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -110,7 +102,7 @@ const Edit = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={shelf.loading}
 
           >
             Cancel

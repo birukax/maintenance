@@ -1,5 +1,3 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import { fetchActivity } from "../../../store/slices/activitySlice";
 import { AppState } from "../../../store/store";
 import { useEntityDetail } from "../../../hooks/useEntityDetail";
@@ -27,39 +25,39 @@ const Detail = () => {
 
   const renderDetails = (data) => (
     <>
-    <div className="rw">
-      <div className="clmn">
-      <Typography variant="h6">Code:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data?.code}
-      </Typography>
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Code:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data?.code}
+          </Typography>
+        </div>
+
+        <div className="clmn">
+
+          <Typography variant="h6">Name:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
+            {data?.name}
+          </Typography>
+        </div>
       </div>
 
-      <div className="clmn">
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Activity Type:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.activity_type?.code} - {data?.activity_type?.name}
+          </Typography>
 
-      <Typography variant="h6">Name:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
-        {data?.name}
-      </Typography>
+        </div>
+        <div className="clmn">
+
+          <Typography variant="h6">Description:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.description}
+          </Typography>
+        </div>
       </div>
-    </div>
-
-    <div className="rw">
-      <div className="clmn">
-      <Typography variant="h6">Activity Type:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data?.activity_type?.code} - {data?.activity_type?.name}
-      </Typography>
-
-      </div>
-      <div className="clmn">
-
-      <Typography variant="h6">Description:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data?.description}
-      </Typography>
-      </div>
-    </div>
     </>
   );
   return (

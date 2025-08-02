@@ -4,7 +4,6 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   fetchProfile,
   updateProfile,
-  fetchProfiles,
 } from "../../store/slices/profileSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
@@ -20,7 +19,6 @@ import {
   MenuItem,
   FormControlLabel,
   Switch,
-  FormHelperText,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { Roles } from "../../utils/choices";
@@ -28,23 +26,19 @@ import { Roles } from "../../utils/choices";
 const Edit = () => {
   const [formData, setFormData] = useState({
     role: "",
-    email:"",
-    phone_no:"",
+    email: "",
+    phone_no: "",
     is_active: false,
   });
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const profile = useSelector((state: AppState) => state.profile.profile)
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const profile = useSelector((state: AppState) => state.profile.profile);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchProfile(id));
     }
-    
+
   }, []);
 
   useEffect(() => {
@@ -63,22 +57,17 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateProfile({ id, formData })).unwrap();
       toast.success("Profile edited successfully");
-      navigate(`/user/detail/${profile.data.id}`);
+      navigate(`/user/detail/${profile.data?.id}`);
     } catch (err) {
       toast.error(profile.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
-  
+
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
       <div className='flex gap-4 '>
@@ -112,15 +101,15 @@ const Edit = () => {
               }
 
               }
-              disabled={loading}
+              disabled={profile.loading}
 
             />
           }
         />
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={profile.loading}>
           <InputLabel id="role">Role</InputLabel>
           <Select
-          size="small"
+            size="small"
             labelId="role"
             id="role"
             name="role"
@@ -146,7 +135,7 @@ const Edit = () => {
           value={formData.email}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={profile.loading}
           helperText={profile?.error?.email}
           type="email"
         />
@@ -160,22 +149,20 @@ const Edit = () => {
           value={formData.phone_no}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={profile.loading}
           helperText={profile?.error?.phone_no}
         />
-        
-<div className='flex gap-4'>
-
+        <div className='flex gap-4'>
           <Button
             size='small'
             type="submit"
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={profile.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {profile.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -184,8 +171,7 @@ const Edit = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
-
+            disabled={profile.loading}
           >
             Cancel
           </Button>

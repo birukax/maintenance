@@ -1,5 +1,3 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import { fetchEquipment } from "../../store/slices/equipmentSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";

@@ -1,10 +1,7 @@
 // src/components/GenericDetailPage.tsx
-import React from "react";
-import { Link } from "react-router-dom";
 import { Container, Typography, CircularProgress, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../store/store";
-import { toast } from "react-toastify";
 
 export function GenericDetailPage({
   titleBase,

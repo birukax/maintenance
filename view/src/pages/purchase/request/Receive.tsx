@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { receivePurchaseRequest } from "../../../store/slices/purchaseRequestSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -38,20 +37,16 @@ const Receive = ({ id, setModalOpen }) => {
     received_date: "",
   });
   const purchaseRequest = useSelector((state: AppState) => state.purchaseRequest.purchaseRequest)
-
-  const [loading, setLoading] = useState(false);
-
   const { locations } = useSelector((state: AppState) => state.location);
-
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const params = {
+    no_pagination: "true",
+  };
   const handleDateChange = (value) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
 
@@ -63,7 +58,6 @@ const Receive = ({ id, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap();
@@ -71,18 +65,12 @@ const Receive = ({ id, setModalOpen }) => {
       setModalOpen(false);
     } catch (err) {
       toast.error(purchaseRequest.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || "Failed to receive the item.");
     }
   };
   useEffect(() => {
-    const params = {
-      no_pagination: "true",
-    };
-    if (purchaseRequest.error) {
-      setError(purchaseRequest.error);
-    }
+
     dispatch(fetchLocations(params))
-  }, [purchaseRequest.error]);
+  }, []);
 
 
   return (
@@ -95,7 +83,7 @@ const Receive = ({ id, setModalOpen }) => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={purchaseRequest.loading}>
           <Autocomplete
             size='small'
             options={locations.data || []}
@@ -178,11 +166,7 @@ const Receive = ({ id, setModalOpen }) => {
             "Receive Item"
           )}
         </Button>
-        {error && (
-          <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
-          </Typography>
-        )}
+
       </Box>
     </Container>
   );

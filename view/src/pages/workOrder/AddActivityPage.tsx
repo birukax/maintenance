@@ -24,13 +24,10 @@ const AddActivityPage = () => {
   const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
   const navigate = useNavigate()
   const { id } = useParams()
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createWorkOrderActivities({ id, formData })).unwrap();
@@ -38,9 +35,6 @@ const AddActivityPage = () => {
       navigate(`/work-order/detail/${id}`)
     } catch (err) {
       toast.error(workOrder.error?.error || "Something Went Wrong");
-      setError(
-        err.response?.data.detail || "Failed to create work order activities."
-      );
     }
   };
 
@@ -94,7 +88,7 @@ const AddActivityPage = () => {
           size='small'
           type="button"
           color="primary"
-          disabled={loading}
+          disabled={workOrder.loading}
           onClick={() => setFormData(prev => {
             return {
               ...prev,
@@ -102,7 +96,7 @@ const AddActivityPage = () => {
             }
           })}
         >
-          {loading ? <CircularProgress size={24} /> : <AddIcon sx={{ fontSize: 30 }} />}
+          {workOrder.loading ? <CircularProgress size={24} /> : <AddIcon sx={{ fontSize: 30 }} />}
         </IconButton>
 
         <div className='flex gap-4'>
@@ -116,7 +110,7 @@ const AddActivityPage = () => {
             disabled={workOrder.loading || formData.description_list?.length <= 0 || formData.description_list.some(el => el === "")}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {workOrder.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}

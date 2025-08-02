@@ -1,16 +1,13 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
 import { fetchWorkOrderActivities, deleteWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
-
 import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useSearchParams, Link } from "react-router-dom"
-import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import BlockIcon from '@mui/icons-material/Block';
+import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import CreateActivity from "./Create";
 import DeleteActivity from "./Delete";
 import DeleteIcon from '@mui/icons-material/Delete';
-import LayersClearIcon from '@mui/icons-material/LayersClear';
 import EditIcon from '@mui/icons-material/Edit';
 import EditActivity from "./Edit";
 const headers = [
@@ -22,15 +19,10 @@ const headers = [
 const List: React.FC = () => {
 
   const { id } = useParams()
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
     (state: AppState) => state.workOrderActivity.workOrderActivities
   );
-  const formDate = useState({
-    active: ""
-  })
+
   const [params, setParams] = useState({
     // search:searchParams.get("search") ||"",
     no_pagination: true,
@@ -39,15 +31,13 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchWorkOrderActivities(params));
-    }
+    dispatch(fetchWorkOrderActivities(params));
+
   }, []);
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchWorkOrderActivities(params));
-    }
+    dispatch(fetchWorkOrderActivities(params));
+
   }
 
   const handleDeleteActivity = async (id) => {
@@ -76,7 +66,7 @@ const List: React.FC = () => {
     }
 
     await dispatch(updateActivity({ id, formData }));
-    if (!activity.error) {
+    if (!entityState.error) {
       handleRefresh()
     }
   }
@@ -226,11 +216,6 @@ const List: React.FC = () => {
                       size="small"
                       sx={{ display: "flex", gap: 1, boxShadow: 0 }}
                     >
-                      {/* <IconButton aria-label="disable" title="Disable" onClick={() => {
-                        disableActivity(row.id, row.active)
-                      }}>
-                        <BlockIcon color='action' />
-                      </IconButton> */}
                       <IconButton aria-label="edit" title="Edit" onClick={() => {
                         setEditId(row.id)
                         handleeditModalOpen()
@@ -258,14 +243,7 @@ const List: React.FC = () => {
           </TableBody>
         </Table>
       </div>
-      {/* <Pagination
-        cur={currentPage}
-        setCur={setCurrentPage}
-        next={entityState?.data?.next}
-        prev={entityState?.data?.previous}
-        count={entityState?.data?.count}
-        searchByPage={searchFilter}
-      /> */}
+
     </>
   );
 };

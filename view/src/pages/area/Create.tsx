@@ -26,8 +26,6 @@ const Create = () => {
   const area = useSelector((state: AppState) => state.area.area);
   const { plants } = useSelector((state: AppState) => state.plant);
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const params = {
@@ -46,8 +44,6 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createArea(formData)).unwrap();
       toast.success("Area created successfully");
@@ -55,9 +51,6 @@ const Create = () => {
     } catch (err) {
       toast.error(area.error?.error || "Something Went Wrong");
 
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -70,7 +63,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={area.loading}>
           <Autocomplete
             size='small'
             options={plants.data || []}
@@ -103,7 +96,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={area.loading}
           helperText={area?.error?.code}
 
         />
@@ -118,7 +111,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={area.loading}
           helperText={area?.error?.name}
 
         />
@@ -130,10 +123,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={area.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {area.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -142,7 +135,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={area.loading}
 
           >
             Cancel

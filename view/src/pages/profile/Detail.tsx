@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchUserProfile } from "../../store/slices/profileSlice";
+import { fetchUserProfile } from "../../store/slices/profileSlice";
 import { AppDispatch, AppState } from "../../store/store";
 import { Typography, Button, Container, Box, CircularProgress } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Detail = () => {
   // const { id } = useParams()
@@ -12,9 +12,7 @@ const Detail = () => {
 
 
   useEffect(() => {
-
     dispatch(fetchUserProfile())
-
   }, [])
 
   const renderButtons = () => (
@@ -60,7 +58,7 @@ const Detail = () => {
             {data?.role}
           </Typography>
         </div>
-        
+
       </div>
 
 

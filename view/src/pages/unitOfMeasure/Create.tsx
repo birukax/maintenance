@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
@@ -12,7 +12,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-import { AppState } from "../../store/store";
+import { AppState, AppDispatch } from "../../store/store";
 
 const Create = () => {
   const [formData, setFormData] = useState({
@@ -21,28 +21,22 @@ const Create = () => {
   });
   const uom = useSelector((state: AppState) => state.unitOfMeasure.unitOfMeasure)
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createUnitOfMeasure(formData)).unwrap();
       toast.success("Unit of Measure created successfully");
       navigate("/unit-of-measures");
     } catch (err) {
       toast.error(uom.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -65,7 +59,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={uom.loading}
           helperText={uom.error?.code}
 
         />
@@ -80,7 +74,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={uom.loading}
           helperText={uom.error?.name}
 
         />
@@ -92,10 +86,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={uom.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {uom.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -104,7 +98,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={uom.loading}
 
           >
             Cancel

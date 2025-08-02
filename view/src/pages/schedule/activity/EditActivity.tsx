@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { AppState, AppDispatch } from "../../../store/store";
 import {
   TextField,
@@ -26,7 +25,6 @@ const style = {
 const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
 
   const activity = useSelector((state: AppState) => state.activity.activity);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({
     description: activity.data?.description || ""
@@ -37,7 +35,6 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
     dispatch(fetchActivity(Number(editId)))
   }
   useEffect(() => {
-    // Ifactivity_id changes, update formData
     getActivity()
   }, [editId]);
 
@@ -53,7 +50,6 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     const id = editId.toString()
     await dispatch(updateActivity({ id, formData })); // Uncomment if needed
     if (!activity.error) {

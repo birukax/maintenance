@@ -11,9 +11,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -30,10 +27,6 @@ const Create = () => {
     date: ""
   });
   const consumption = useSelector((state: AppState) => state.consumption.consumption)
-
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -57,17 +50,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createConsumption(formData)).unwrap();
       toast.success("Consumption created successfully");
       navigate("/consumptions");
     } catch (err) {
       toast.error(consumption.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -76,7 +64,7 @@ const Create = () => {
         Create Consumption
       </Typography>
       <Box component="form" onSubmit={handleSubmit} className="form-gap w-full">
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={consumption.loading}>
           <Autocomplete
             options={Array.isArray(items.data) && items.data || []}
             getOptionLabel={(option) => option.name || ""}
@@ -112,7 +100,7 @@ const Create = () => {
           value={formData.quantity}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={consumption.loading}
           helperText={consumption.error?.quantity}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -142,7 +130,7 @@ const Create = () => {
           value={formData.reason}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={consumption.loading}
           helperText={consumption.error?.reason}
         />
 
@@ -151,10 +139,10 @@ const Create = () => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={loading}
+          disabled={consumption.loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Consumption"}
+          {consumption.loading ? <CircularProgress size={24} /> : "Create Consumption"}
         </Button>
 
       </Box>

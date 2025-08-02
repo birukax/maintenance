@@ -25,13 +25,10 @@ const Create = () => {
     code: "",
     name: "",
   });
-  const shelf = useSelector((state: AppState) => state.shelf.shelf)
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+  const shelf = useSelector((state: AppState) => state.shelf.shelf);
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { locations } = useSelector((state: AppState) => state.location);
-  const { tokens } = useSelector((state: AppState) => state.auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,26 +36,20 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createShelf(formData)).unwrap();
       toast.success("Shelf created successfully");
       navigate("/shelves");
     } catch (err) {
       toast.error(shelf.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   useEffect(() => {
     const params = {
       no_pagination: "true",
     };
-    if (tokens) {
-      dispatch(fetchLocations(params));
-    }
+    dispatch(fetchLocations(params));
+
   }, []);
 
   return (
@@ -71,7 +62,7 @@ const Create = () => {
         onSubmit={handleSubmit}
         className="form-gap w-full"
       >
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={locations.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(locations.data) ? locations.data : []}
@@ -96,7 +87,7 @@ const Create = () => {
               setFormData({ ...formData, location_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={locations.loading}
           />
         </FormControl>
         <TextField
@@ -109,7 +100,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={locations.loading}
           helperText={shelf?.error?.code}
         />
 
@@ -123,7 +114,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={locations.loading}
           helperText={shelf?.error?.name}
         />
         <div className='flex gap-4'>
@@ -134,10 +125,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={locations.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {locations.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -146,7 +137,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={locations.loading}
 
           >
             Cancel

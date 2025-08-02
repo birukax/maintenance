@@ -20,22 +20,19 @@ const Edit = () => {
     name: "",
   });
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const schedule = useSelector((state: AppState) => state.schedule.schedule)
-
   const { workOrderType } = useSelector(
     (state: AppState) => state.workOrderType
   );
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (id) {
       dispatch(fetchWorkOrderType(id));
     }
     setFormData({
-      name: workOrderType.data.name,
+      name: workOrderType?.data?.name,
     });
   }, []);
 
@@ -46,18 +43,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateWorkOrderType({ id, formData })).unwrap();
       toast.success("Work Order Type edited successfully");
-      navigate(`/work-order-type/detail/${workOrderType.data.id}`);
+      navigate(`/work-order-type/detail/${workOrderType.data?.id}`);
     } catch (err) {
       toast.error(schedule.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -79,7 +71,7 @@ const Edit = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={schedule.loading}
           helperText={schedule.error?.name || ""}
         />
 
@@ -88,10 +80,10 @@ const Edit = () => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={loading}
+          disabled={schedule.loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Edit Work Order Type"}
+          {schedule.loading ? <CircularProgress size={24} /> : "Edit Work Order Type"}
         </Button>
 
       </Box>

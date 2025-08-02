@@ -2,8 +2,6 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from main.models import BaseCreatedUpdated
-
-# from schedule.models import Schedule
 from breakdown.models import Breakdown
 from main import choices
 

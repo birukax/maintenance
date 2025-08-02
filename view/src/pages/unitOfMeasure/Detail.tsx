@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
 import { fetchUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
-import { Typography, Button, Modal } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 const Detail = () => {
@@ -12,9 +10,6 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.unitOfMeasure.unitOfMeasure,
     fetchDetailAction: fetchUnitOfMeasure,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
 
   const renderButtons = () => (
     <>

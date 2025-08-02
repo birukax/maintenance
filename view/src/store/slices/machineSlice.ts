@@ -13,15 +13,15 @@ interface MachineState {
 }
 
 const initialState: MachineState = {
-    machines: {data: [], loading: false, error: null},
-    machine: {data: [], loading: false, error: null},
+    machines: { data: [], loading: false, error: null },
+    machine: { data: [], loading: false, error: null },
 };
 
-export const fetchMachines = createAsyncThunk<[], {params:null}, {rejectValue: string}>(
+export const fetchMachines = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'machine/fetchMachines',
-    async(params, {rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/asset/machines/',{params});
+            const response = await api.get('/asset/machines/', { params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchMachine = createAsyncThunk<[], number, { rejectValue: string }
     }
 )
 
-export const createMachine = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createMachine = createAsyncThunk<[], formData, { rejectValue: string }>(
     'machine/createMachine',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const machineSlice = createSlice({
     name: 'machine',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchMachines.pending, (state) => {
-            state.machines.loading = true;
-            state.machines.error = null;
-        })
-        .addCase(fetchMachines.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.machines.loading = false;
-            state.machines.data = action.payload;
-        })
-        .addCase(fetchMachines.rejected, (state, action) => {
-            state.machines.loading = false;
-            state.machines.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchMachine.pending, (state) => {
-                        state.machine.loading = true;
-                        state.machine.error = null;
-                    })
-        .addCase(fetchMachine.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.machine.loading = false;
-            state.machine.data = action.payload;
-        })
-        .addCase(fetchMachine.rejected, (state, action) => {
-            state.machine.loading = false;
-            state.machine.error = action.payload || 'Unknown error';
-        })
-        .addCase(createMachine.pending, (state) => {
-            state.machine.loading = true;
-            state.machine.error = null;
-        })
-        .addCase(createMachine.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.machine.loading = false;
-            state.machine.data = action.payload;
-        })
-        .addCase(createMachine.rejected, (state, action) => {
-            state.machine.loading = false;
-            state.machine.error = action.payload || 'Unknown error';
-        })
-        .addCase(updateMachine.pending, (state) => {
-            state.machine.loading = true;
-            state.machine.error = null;
-        })
-        .addCase(updateMachine.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.machine.loading = false;
-            state.machine.data = action.payload;
-        })
-        .addCase(updateMachine.rejected, (state, action) => {
-            state.machine.loading = false;
-            state.machine.error = action.payload || 'Unknown error';
-        })
+            .addCase(fetchMachines.pending, (state) => {
+                state.machines.loading = true;
+                state.machines.error = null;
+            })
+            .addCase(fetchMachines.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.machines.loading = false;
+                state.machines.data = action.payload;
+            })
+            .addCase(fetchMachines.rejected, (state, action) => {
+                state.machines.loading = false;
+                state.machines.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchMachine.pending, (state) => {
+                state.machine.loading = true;
+                state.machine.error = null;
+            })
+            .addCase(fetchMachine.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.machine.loading = false;
+                state.machine.data = action.payload;
+            })
+            .addCase(fetchMachine.rejected, (state, action) => {
+                state.machine.loading = false;
+                state.machine.error = action.payload || 'Unknown error';
+            })
+            .addCase(createMachine.pending, (state) => {
+                state.machine.loading = true;
+                state.machine.error = null;
+            })
+            .addCase(createMachine.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.machine.loading = false;
+                state.machine.data = action.payload;
+            })
+            .addCase(createMachine.rejected, (state, action) => {
+                state.machine.loading = false;
+                state.machine.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateMachine.pending, (state) => {
+                state.machine.loading = true;
+                state.machine.error = null;
+            })
+            .addCase(updateMachine.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.machine.loading = false;
+                state.machine.data = action.payload;
+            })
+            .addCase(updateMachine.rejected, (state, action) => {
+                state.machine.loading = false;
+                state.machine.error = action.payload || 'Unknown error';
+            })
     }
 })
 

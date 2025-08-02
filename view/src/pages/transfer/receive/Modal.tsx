@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
 import { receiveTransfer } from "../../../store/slices/transferSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import {
@@ -8,13 +7,7 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
   Box,
-  Autocomplete,
   TableCell,
   TableBody,
   TableHead,
@@ -22,8 +15,6 @@ import {
   Table,
 
 } from "@mui/material";
-import { toast } from "react-toastify";
-import { useEntityDetail } from "../../../hooks/useEntityDetail";
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -42,11 +33,6 @@ const style = {
 };
 
 const AddActivity = ({ entityState, setReceiveModalOpen }) => {
-  const [formData, setFormData] = useState({
-    activity_ids: [],
-  });
-  const { activities } = useSelector((state: AppState) => state.activity);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
 
 
@@ -120,9 +106,9 @@ const AddActivity = ({ entityState, setReceiveModalOpen }) => {
             "Receive All"
           )}
         </Button>
-        {error && (
+        {entityState.error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
+            {entityState.error?.detail}
           </Typography>
         )}
       </Box>

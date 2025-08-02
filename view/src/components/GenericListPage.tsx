@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AppState } from "../store/store";
-import { Form, Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -247,11 +247,6 @@ export const GenericListPage = ({
 
         </div>
       </div>
-      {/* {entityState.error && (
-        <Typography variant="body2" color="error" className="mb-2">
-          <ToastContainer/>
-        </Typography>
-      )} */}
 
       <div className="table-container flex-1">
         <Table stickyHeader size='small'

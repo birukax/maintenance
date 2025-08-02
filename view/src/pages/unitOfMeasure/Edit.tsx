@@ -22,18 +22,15 @@ const Edit = () => {
     name: "",
   });
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const { unitOfMeasure } = useSelector(
     (state: AppState) => state.unitOfMeasure
   );
   const uom = useSelector((state: AppState) => state.unitOfMeasure.unitOfMeasure)
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchUnitOfMeasure(id));
     }
     setFormData({
@@ -54,20 +51,13 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateUnitOfMeasure({ id, formData })).unwrap();
       toast.success("Unit of Measure edited successfully");
-      navigate(`/unit-of-measure/detail/${unitOfMeasure.data.id}`);
+      navigate(`/unit-of-measure/detail/${unitOfMeasure.data?.id}`);
     } catch (err) {
       toast.error(uom.error?.error || "Something Went Wrong");
-
-      // setError(err.response?.data.detail || err.message);
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -96,7 +86,7 @@ const Edit = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={uom.loading}
           helperText={uom.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -107,10 +97,10 @@ const Edit = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={uom.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {uom.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
@@ -119,7 +109,7 @@ const Edit = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={uom.loading}
 
           >
             Cancel

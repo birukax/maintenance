@@ -12,9 +12,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -26,11 +23,9 @@ const Create = () => {
     work_order_type_id: "",
   });
   const activityType = useSelector((state: AppState) => state.activityType.activityType)
-  const [loading, setLoading] = useState(false);
   const { workOrderTypes } = useSelector(
     (state: AppState) => state.workOrderType
   );
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const params = {
@@ -47,8 +42,6 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createActivityType(formData)).unwrap();
       toast.success("Activity Type created successfully");
@@ -56,10 +49,8 @@ const Create = () => {
     } catch (err) {
       toast.error(activityType.error?.error || "Something Went Wrong");
 
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
+
   };
   return (
     <Container className="flex flex-col items-center justify-center min-h-full ">
@@ -72,7 +63,7 @@ const Create = () => {
         className="form-gap w-full"
       >
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={activityType.loading}>
           <Autocomplete
             size='small'
             options={workOrderTypes?.data || []}
@@ -114,7 +105,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activityType.loading}
           helperText={activityType.error?.code}
         />
         <TextField
@@ -127,7 +118,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activityType.loading}
           helperText={activityType.error?.name}
         />
         <div className='flex gap-4'>
@@ -138,10 +129,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={activityType.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {activityType.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -150,7 +141,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={activityType.loading}
 
           >
             Cancel

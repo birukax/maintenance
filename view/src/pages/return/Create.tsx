@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { createReturn } from "../../store/slices/returnSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
-import api from "../../utils/api";
 import {
   TextField,
   Button,
@@ -13,9 +12,6 @@ import {
   CircularProgress,
   FormControl,
   FormControlLabel,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Switch,
   Autocomplete,
@@ -32,12 +28,10 @@ const Create = () => {
     reason: "",
     used: true,
     quantity: "",
+    date: '',
   });
   const retur = useSelector((state: AppState) => state.return.return)
 
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -45,9 +39,8 @@ const Create = () => {
     no_pagination: "true",
   };
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchItems(params));
-    }
+    dispatch(fetchItems(params));
+
   }, []);
 
   const handleChange = (e) => {
@@ -65,17 +58,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createReturn(formData)).unwrap();
       toast.success("Return created successfully");
       navigate("/returns");
     } catch (err) {
       toast.error(retur.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -89,11 +77,11 @@ const Create = () => {
           label="Used"
           onChange={handleChange}
           checked={formData.used}
-          disabled={loading}
+          disabled={retur.loading}
           required
           control={<Switch name="used" />}
         />
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={retur.loading}>
           <Autocomplete
             options={items.data || []}
             getOptionLabel={(option) => option.name || ""}
@@ -130,7 +118,7 @@ const Create = () => {
           value={formData.quantity}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={retur.loading}
           helperText={retur.error?.quantity}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -160,7 +148,7 @@ const Create = () => {
           value={formData.reason}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={retur.loading}
           helperText={retur.error?.reason}
         />
         <Button
@@ -168,10 +156,10 @@ const Create = () => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={loading}
+          disabled={retur.loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Return"}
+          {retur.loading ? <CircularProgress size={24} /> : "Create Return"}
         </Button>
 
       </Box>

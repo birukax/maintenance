@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from .models import Breakdown
 from work_order.models import WorkOrder, WorkOrderType, ActivityType
 from inventory.models import Item
-from asset.models import Machine, Equipment
 
 from .serializers import BreakdownSerializer
 

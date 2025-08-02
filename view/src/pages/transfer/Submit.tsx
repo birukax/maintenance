@@ -43,7 +43,6 @@ const Submit = ({ entityState, setModalOpen }) => {
     end_time: "",
   });
   const transfer = useSelector((state: AppState) => state.transfer.transfer)
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -74,7 +73,6 @@ const Submit = ({ entityState, setModalOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(submitWorkOrder({ id, formData })).unwrap();
@@ -83,7 +81,6 @@ const Submit = ({ entityState, setModalOpen }) => {
       navigate(`/work-order/detail/${id}`);
     } catch (err) {
       toast.error(transfer.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || "Failed to submit Work Order.");
     }
   };
 
@@ -193,9 +190,9 @@ const Submit = ({ entityState, setModalOpen }) => {
             "Submit Check-List"
           )}
         </Button>
-        {error && (
+        {transfer.error && (
           <Typography variant="body2" className="mt-4 text-red-500">
-            {error.detail}
+            {transfer.error?.detail}
           </Typography>
         )}
       </Box>

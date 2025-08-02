@@ -6,8 +6,6 @@ from main import choices
 from main.models import BaseCreatedUpdated
 from django.contrib.auth.models import User
 
-# from inventory.models import Item, Location, Inventory
-
 
 class Year(BaseCreatedUpdated):
     no = models.IntegerField(
@@ -165,7 +163,7 @@ class Schedule(BaseCreatedUpdated):
     def purchased_quantity(self):
         purchases = PurchaseHistory.objects.filter(
             item=self.item,
-            received_date__range=[
+            date__range=[
                 datetime.date(self.year.no, 1, 1),
                 datetime.date(self.year.no, 12, 31),
             ],
@@ -174,8 +172,16 @@ class Schedule(BaseCreatedUpdated):
 
     @property
     def balance(self):
-        all_balance = "inventory.Inventory".objects.filter(item=self.item)
-        return all_balance.aggregate(Sum("balance"))["balance__sum"] or 0
+        from inventory.models import Inventory
+
+        item_inventories = Inventory.objects.filter(item=self.item)
+        try:
+            if item_inventories.exists():
+                return sum(inv.balance for inv in item_inventories)
+            else:
+                return 0
+        except Exception as e:
+            return 0
 
     class Meta:
         ordering = ["-year__no", "item__name"]

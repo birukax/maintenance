@@ -11,9 +11,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
@@ -26,14 +23,12 @@ const Create = () => {
     name: "",
   });
   const activity = useSelector((state: AppState) => state.activity.activity)
-  const [loading, setLoading] = useState(false);
   const { activityTypes } = useSelector(
     (state: AppState) => state.activityType
   );
   const params = {
     no_pagination: "true",
   };
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -47,17 +42,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createActivity(formData)).unwrap();
       toast.success("Activity created successfully");
       navigate("/activities");
     } catch (err) {
       toast.error(activity.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -79,7 +69,7 @@ const Create = () => {
           value={formData.code}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activity.loading}
           helperText={activity.error?.code}
         />
         <TextField
@@ -91,11 +81,11 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activity.loading}
           helperText={activity.error?.name}
         />
 
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={activity.loading}>
           <Autocomplete
             options={activityTypes.data || []}
             getOptionLabel={(option) => (option.code ? `${option.code} - ${option.name}` : option.name || "")}
@@ -134,7 +124,7 @@ const Create = () => {
           value={formData.description}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activity.loading}
           helperText={activity.error?.decription}
         />
 
@@ -143,10 +133,10 @@ const Create = () => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={loading}
+          disabled={activity.loading}
           className="mt-4"
         >
-          {loading ? <CircularProgress size={24} /> : "Create Activity"}
+          {activity.loading ? <CircularProgress size={24} /> : "Create Activity"}
         </Button>
 
       </Box>

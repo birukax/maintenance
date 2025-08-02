@@ -20,8 +20,6 @@ import {
   Box,
   Autocomplete,
 } from "@mui/material";
-// import { BREAKDOWN_TYPES } from "../../utils/choices";
-
 import { toast } from "react-toastify";
 const Create = () => {
   const [formData, setFormData] = useState({
@@ -31,8 +29,6 @@ const Create = () => {
     reason: "",
     start_time: ""
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
   const { machines } = useSelector((state: AppState) => state.machine);
   const { equipments } = useSelector((state: AppState) => state.equipment);
@@ -70,18 +66,12 @@ const Create = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createBreakdown(formData)).unwrap();
       toast.success("Breakdown created successfully");
       navigate("/breakdowns");
     } catch (err) {
       toast.error(breakdown?.error?.error || "Something Went Wrong");
-      // setError(err.response?.data.detail || err.message);
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -134,7 +124,7 @@ const Create = () => {
             }}
           />
         </LocalizationProvider>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
           <Autocomplete
             size='small'
             options={machines.data || []}
@@ -158,11 +148,11 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={breakdown.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(equipments.data) && equipments.data?.filter(
-              (equipment) => equipment.machine.id === formData.machine_id
+              (equipment) => equipment?.machine?.id === formData.machine_id
             ) || []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
@@ -198,7 +188,7 @@ const Create = () => {
           value={formData.reason}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={breakdown.loading}
           helperText={breakdown?.error?.reason}
         />
         <div className='flex gap-4'>
@@ -209,10 +199,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={breakdown.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {breakdown.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -221,7 +211,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={breakdown.loading}
 
           >
             Cancel

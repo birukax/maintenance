@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
-  ColumnDefination,
 } from "../../components/GenericListPage";
 
 const shelfColumns = [
@@ -16,7 +15,6 @@ const shelfColumns = [
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
@@ -29,18 +27,12 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchShelves(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchShelves(params));
   }, []);
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchShelves(params));
-    }
+    dispatch(fetchShelves(params));
   }
-
   const handleFilter = async (field, value) => {
     setParams(prev => {
       return {

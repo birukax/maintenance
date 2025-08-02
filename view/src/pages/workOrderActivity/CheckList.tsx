@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { fetchWorkOrder } from "../../store/slices/workOrderSlice";
 import { updateWorkOrderActivity } from "../../store/slices/workOrderActivitySlice";
 import { AppState, AppDispatch } from "../../store/store";
@@ -16,12 +16,8 @@ import {
   Table,
   TableHead,
   TableCell,
-  TextField,
-  Checkbox,
-  TableContainer,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const CheckList = () => {
   const entityState = useEntityDetail({
@@ -65,21 +61,6 @@ const CheckList = () => {
         </Button>
       </>
 
-      {/* <Modal
-        open={assignmodalOpen}
-        onClose={handleAssignModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <AssignUsers entityState={entityState} setModalOpen={setAssignModalOpen} />
-      </Modal>
-      <Button
-        onClick={handleAssignModalOpen}
-        variant="contained"
-        className="bg-slate-700"
-      >
-        Assign User
-      </Button> */}
     </>
   );
 

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createContact } from "../../store/slices/contactSlice";
+import { AppState, AppDispatch } from "../../store/store";
 import { Link } from "react-router-dom";
 import {
   TextField,
@@ -9,14 +10,9 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { AppState } from "../../store/store";
 const Create = () => {
   const contact = useSelector((state: AppState) => state.contact.contact)
   const [formData, setFormData] = useState({
@@ -25,8 +21,7 @@ const Create = () => {
     phone_no: "",
     address: "",
   });
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,15 +31,12 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       await dispatch(createContact(formData)).unwrap();
       toast.success("Contact created successfully");
       navigate("/contacts");
     } catch (err) {
       toast.error(contact.error?.error || "Something Went Wrong");
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -67,7 +59,7 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact?.error?.name || ""}
 
         />
@@ -83,7 +75,7 @@ const Create = () => {
           value={formData.email}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact?.error?.email || ""}
 
         />
@@ -97,7 +89,7 @@ const Create = () => {
           value={formData.address}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact?.error?.address || ""}
 
         />
@@ -112,7 +104,7 @@ const Create = () => {
           value={formData.phone_no}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={contact.loading}
           helperText={contact?.error?.phone_no || ""}
         />
         <div className='flex gap-4'>
@@ -123,10 +115,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={contact.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {contact.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -135,7 +127,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={contact.loading}
 
           >
             Cancel

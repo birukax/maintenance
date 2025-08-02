@@ -24,8 +24,6 @@ const Edit = () => {
 
   const { id } = useParams();
   const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
@@ -49,8 +47,6 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateActivityType({ id, formData })).unwrap();
@@ -58,9 +54,6 @@ const Edit = () => {
       navigate(`/activity-type/detail/${activityType.data.id}`);
     } catch (err) {
       toast.error(activityType.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -89,7 +82,7 @@ const Edit = () => {
           value={formData?.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={activityType.loading}
           helperText={activityType.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -103,7 +96,7 @@ const Edit = () => {
             disabled={activityType.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {activityType.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}

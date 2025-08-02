@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { fetchTransfer } from "../../../store/slices/transferSlice";
-import { updateWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { useEntityDetail } from "../../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../../components/GenericDetailPage";
@@ -10,17 +9,13 @@ import { shipTransfer } from "../../../store/slices/transferSlice";
 import {
   Typography,
   Button,
-  Modal,
   TableRow,
   TableBody,
   Table,
   TableHead,
   TableCell,
-  TextField,
-  Checkbox,
 } from "@mui/material";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ShipList = () => {
   const entityState = useEntityDetail({
@@ -35,15 +30,6 @@ const ShipList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate()
 
-
-  const handleRefresh = () => {
-    try {
-      dispatch(fetchTransfer(id))
-    } catch (error) {
-      return error
-
-    }
-  }
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -58,7 +44,7 @@ const ShipList = () => {
       <>
         <Button
           size='small'
-          disabled={errorCount.find(el => el === true) ? true : false || formData.shipped_items.filter((e) => e.quantity > 0).length === 0}
+          disabled={errorCount.find(el => el === true) || formData.shipped_items.filter((e) => e.quantity > 0).length === 0}
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}

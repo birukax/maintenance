@@ -14,9 +14,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Autocomplete,
   Box,
 } from "@mui/material";
@@ -36,9 +33,6 @@ const Create = () => {
     minimum_stock_level: 0,
     suppliers_id: []
   });
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { contacts } = useSelector((state: AppState) => state.contact);
 
   const { unitOfMeasures } = useSelector(
@@ -52,14 +46,6 @@ const Create = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const item_types = Object.keys(ITEM_TYPES).map((key) => ({
-    value: ITEM_TYPES[key][0],
-    label: ITEM_TYPES[key][1],
-  }));
-  const item_categories = Object.keys(ITEM_CATEGORIES).map((key) => ({
-    value: ITEM_CATEGORIES[key][0],
-    label: ITEM_CATEGORIES[key][1],
-  }));
 
   useEffect(() => {
     let isMounted = true;
@@ -93,17 +79,12 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await dispatch(createItem(formData)).unwrap();
       toast.success("Item created successfully");
       navigate("/items");
     } catch (err) {
       toast.error(item.error?.error || "Something Went Wrong");
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   const supplierOptions = useMemo(() => {
@@ -141,10 +122,10 @@ const Create = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={item.loading}
           helperText={item.error?.name}
         />
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(unitOfMeasures.data) ? unitOfMeasures.data : []}
@@ -163,7 +144,7 @@ const Create = () => {
             id="uom-select"
             value={
               Array.isArray(unitOfMeasures.data)
-                ? unitOfMeasures.data.find((uom) => uom.id === formData.uom_id)
+                ? unitOfMeasures.data.find((uom) => uom.id === formData.uom_id || null)
                 : null
             }
             onChange={(event, newValue) => {
@@ -172,11 +153,11 @@ const Create = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={item.loading}>
           <Autocomplete
             size='small'
-            options={item_types}
-            getOptionLabel={(option) => option.label || ""}
+            options={ITEM_TYPES}
+            getOptionLabel={(option) => option || ""}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -189,19 +170,19 @@ const Create = () => {
             )}
             id="item-type-select"
             value={
-              item_types.find((item_type) => item_type.value === formData.type) || null
+              ITEM_TYPES.find((item_type) => item_type === formData.type) || null
             }
             onChange={(event, newValue) => {
-              setFormData({ ...formData, type: newValue ? newValue.value : "" });
+              setFormData({ ...formData, type: newValue ? newValue : "" });
             }}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
+            isOptionEqualToValue={(option, value) => option === value}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={item.loading}>
           <Autocomplete
             size='small'
-            options={item_categories}
-            getOptionLabel={(option) => option.label || ""}
+            options={ITEM_CATEGORIES}
+            getOptionLabel={(option) => option || ""}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -215,15 +196,15 @@ const Create = () => {
             )}
             id="item-category-select"
             value={
-              item_categories.find((item_category) => item_category.value === formData.category) || null
+              ITEM_CATEGORIES.find((item_category) => item_category === formData.category) || null
             }
             onChange={(event, newValue) => {
-              setFormData({ ...formData, category: newValue ? newValue.value : "" });
+              setFormData({ ...formData, category: newValue ? newValue : "" });
             }}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
+            isOptionEqualToValue={(option, value) => option === value}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(shelves.data) ? shelves.data : []}
@@ -242,17 +223,17 @@ const Create = () => {
             id="shelf-select"
             value={
               Array.isArray(shelves.data)
-                ? shelves.data.find((shelf) => shelf.id === formData.shelf_id)
+                ? shelves.data.find((shelf) => shelf.id === formData.shelf_id || null)
                 : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={item.loading}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(shelfRows.data) && shelfRows.data?.filter(
@@ -273,17 +254,17 @@ const Create = () => {
             id="shelf-row-select"
             value={
               Array.isArray(shelfRows.data)
-                ? shelfRows.data.find((row) => row.id === formData.row_id)
+                ? shelfRows.data.find((row) => row.id === formData.row_id || null)
                 : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={item.loading}
           />
         </FormControl>
-        <FormControl fullWidth variant="outlined" required disabled={loading}>
+        <FormControl fullWidth variant="outlined" required disabled={item.loading}>
           <Autocomplete
             size='small'
             options={Array.isArray(shelfBoxes.data) && shelfBoxes.data?.filter(
@@ -304,14 +285,14 @@ const Create = () => {
             id="shelf-box-select"
             value={
               Array.isArray(shelfBoxes.data)
-                ? shelfBoxes.data.find((box) => box.id === formData.box_id)
+                ? shelfBoxes.data.find((box) => box.id === formData.box_id || null)
                 : null
             }
             onChange={(event, newValue) => {
               setFormData({ ...formData, box_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            disabled={loading}
+            disabled={item.loading}
           />
         </FormControl>
         <TextField
@@ -329,11 +310,11 @@ const Create = () => {
             step: 1,
           }}
           required
-          disabled={loading}
+          disabled={item.loading}
           helperText={item.error?.minimum_stock_level}
 
         />
-        <FormControl fullWidth variant="outlined" disabled={loading}>
+        <FormControl fullWidth variant="outlined" disabled={item.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -350,7 +331,7 @@ const Create = () => {
               />
             )}
             id="supplier-autocomplete"
-            value={selectedSuppliers}
+            value={Array.isArray(selectedSuppliers) ? selectedSuppliers : []}
             onChange={(event, newValue) =>
               handleAutocompleteChange("suppliers_id", newValue)
             }
@@ -364,10 +345,10 @@ const Create = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={loading}
+            disabled={item.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Create"}
+            {item.loading ? <CircularProgress size={24} /> : "Create"}
           </Button>
           <Button
             component={Link}
@@ -376,7 +357,7 @@ const Create = () => {
             size='small'
             variant='outlined'
             fullWidth
-            disabled={loading}
+            disabled={item.loading}
 
           >
             Cancel

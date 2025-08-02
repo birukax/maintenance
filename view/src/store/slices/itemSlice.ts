@@ -17,12 +17,12 @@ const initialState: ItemState = {
     item: { data: [], loading: false, error: null },
 };
 
-export const fetchItems = createAsyncThunk<[], {params:null}, { rejectValue: string }>(
+export const fetchItems = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
     'item/fetchItems',
     async (params, { rejectWithValue }) => {
         try {
 
-            const response = await api.get('/inventory/items/', {params: params});
+            const response = await api.get('/inventory/items/', { params: params });
             return response.data;
         }
         catch (error) {
@@ -44,7 +44,7 @@ export const fetchItem = createAsyncThunk<[], number, { rejectValue: string }>(
     }
 )
 
-export const createItem = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createItem = createAsyncThunk<[], formData, { rejectValue: string }>(
     'item/createItem',
     async (formData, { rejectWithValue }) => {
         try {

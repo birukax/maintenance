@@ -5,7 +5,7 @@ from django.db.models import Sum
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from purchase.models import Request, Schedule, Year, PurchaseHistory
+from purchase.models import Schedule, Year, PurchaseHistory
 from .models import (
     Contact,
     Location,

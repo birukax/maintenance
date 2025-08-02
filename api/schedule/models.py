@@ -1,7 +1,5 @@
-import datetime
 from django.db import models
 from main.choices import SCHEDULE_TYPES
-from django.contrib.auth.models import User
 from main.models import BaseCreatedUpdated
 from inventory.models import Item
 from asset.models import Machine, Equipment

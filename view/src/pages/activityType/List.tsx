@@ -1,14 +1,12 @@
 // src/pages/List.tsx
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchActivityTypes } from "../../store/slices/activityTypeSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../../store/store";
-import { useEntityList } from "../../hooks/useEntityList";
 import { useSearchParams } from "react-router-dom";
 
 import {
   GenericListPage,
-  ColumnDefination,
 } from "../../components/GenericListPage";
 
 const activityTypeColumns = [
@@ -18,49 +16,47 @@ const activityTypeColumns = [
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [keyWord,setKeyWord]=useState("")  
-    const entityState = useSelector(
-      (state: AppState) => state.activityType.activityTypes
-    );
-    
-    const [params,setParams]=useState({
-        search:searchParams.get("search") ||"",
-        page:searchParams.get("page") ||1
-      })
-    const dispatch = useDispatch<AppDispatch>();
+  const [keyWord, setKeyWord] = useState("")
+  const entityState = useSelector(
+    (state: AppState) => state.activityType.activityTypes
+  );
 
-     useEffect(() => {
-          if (tokens) {
-            dispatch(fetchActivityTypes(params));
-            // setSearchParams(params)
-          }
-        },[]);
+  const [params, setParams] = useState({
+    search: searchParams.get("search") || "",
+    page: searchParams.get("page") || 1
+  })
+  const dispatch = useDispatch<AppDispatch>();
 
-         const handleRefresh = () => {
-             if (tokens) {
-               dispatch(fetchActivityTypes(params));
-           }}
-        
-          const handleFilter=async (field,value)=>{
-       setSearchParams({ ...params, page: 1 });
+  useEffect(() => {
+    dispatch(fetchActivityTypes(params));
+    // setSearchParams(params)
 
-             setParams(prev=>{
-              return{
-                ...prev,
-                [field]:value
-              }
-            })
-            const parameters={
-              ...params,
-              page:1,
-              [field]:value
-            }
-             setSearchParams({ ...parameters, [field]: value });
-            await dispatch(fetchActivityTypes(parameters));
-          
-          }
+  }, []);
+
+  const handleRefresh = () => {
+    dispatch(fetchActivityTypes(params));
+
+  }
+
+  const handleFilter = async (field, value) => {
+    setSearchParams({ ...params, page: 1 });
+
+    setParams(prev => {
+      return {
+        ...prev,
+        [field]: value
+      }
+    })
+    const parameters = {
+      ...params,
+      page: 1,
+      [field]: value
+    }
+    setSearchParams({ ...parameters, [field]: value });
+    await dispatch(fetchActivityTypes(parameters));
+
+  }
 
   return (
     <GenericListPage

@@ -1,4 +1,3 @@
-import React from "react";
 import { fetchArea } from "../../store/slices/areaSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";

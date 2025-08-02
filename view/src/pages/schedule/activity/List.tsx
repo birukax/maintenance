@@ -23,16 +23,11 @@ const headers = [
 const List: React.FC = () => {
 
   const { id } = useParams()
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
     (state: AppState) => state.activity.activities
   );
   const activity = useSelector((state: AppState) => state.activity.activity);
-  const formDate = useState({
-    active: ""
-  })
+
   const [params, setParams] = useState({
     // search:searchParams.get("search") ||"",
     no_pagination: true,
@@ -41,15 +36,13 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchActivities(params));
-    }
+    dispatch(fetchActivities(params));
+
   }, []);
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchActivities(params));
-    }
+    dispatch(fetchActivities(params));
+
   }
 
   const handleDeleteActivity = async (id) => {

@@ -1,12 +1,11 @@
 // src/pages/List.tsx
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchReturns } from "../../store/slices/returnSlice";
-import { AppState,AppDispatch } from "../../store/store";
-import {useSelector, useDispatch } from "react-redux";
-import {useSearchParams} from "react-router-dom"
+import { AppState, AppDispatch } from "../../store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
-  ColumnDefination,
 } from "../../components/GenericListPage";
 
 const returnColumns = [
@@ -17,46 +16,43 @@ const returnColumns = [
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
-      const [searchParams, setSearchParams] = useSearchParams();
-      const [keyWord,setKeyWord]=useState("")
-      const entityState = useSelector(
-          (state: AppState) => state.return.returns
-        );
-      const [params,setParams]=useState({
-        search:searchParams.get("search") ||"",
- page:searchParams.get("page")||1       
-      })
-      const dispatch = useDispatch<AppDispatch>();
-      
-      useEffect(() => {
-          if (tokens) {
-            dispatch(fetchReturns(params));
-            // setSearchParams(params)
-          }
-        },[]);
-    
-        const handleRefresh = () => {
-         if (tokens) {
-           dispatch(fetchReturns(params));
-       }}
-    
-      const handleFilter=async (field,value)=>{
-         setParams(prev=>{
-          return{
-            ...prev,
-            [field]:value
-          }
-        })
-        const parameters={
-          ...params,page:1,
-          [field]:value
-        }
-         setSearchParams({ ...parameters, [field]: value });
-        await dispatch(fetchReturns(parameters));
-      
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyWord, setKeyWord] = useState("")
+  const entityState = useSelector(
+    (state: AppState) => state.return.returns
+  );
+  const [params, setParams] = useState({
+    search: searchParams.get("search") || "",
+    page: searchParams.get("page") || 1
+  })
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchReturns(params));
+
+  }, []);
+
+  const handleRefresh = () => {
+    dispatch(fetchReturns(params));
+  }
+
+
+  const handleFilter = async (field, value) => {
+    setParams(prev => {
+      return {
+        ...prev,
+        [field]: value
       }
-  
+    })
+    const parameters = {
+      ...params, page: 1,
+      [field]: value
+    }
+    setSearchParams({ ...parameters, [field]: value });
+    await dispatch(fetchReturns(parameters));
+
+  }
+
   return (
     <GenericListPage
       title="Returns"

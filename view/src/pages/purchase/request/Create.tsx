@@ -65,7 +65,7 @@ const Create = () => {
 
   const selectedItems = formData.requested_items.length > 0
     ? formData.requested_items.map((el) => {
-      return items.data.filter((item) => item.id === el.item_id)
+      return items.data?.filter((item) => item.id === el.item_id)
     }) : [];
 
   return (

@@ -4,10 +4,7 @@ import { fetchWorkOrders } from "../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
-import {
-  GenericListPage,
-  ColumnDefination,
-} from "../../components/GenericListPage";
+import { GenericListPage } from "../../components/GenericListPage";
 
 const workOrderColumns = [
   { header: 'ID', accessor: 'id' },
@@ -20,7 +17,6 @@ const workOrderColumns = [
 ];
 
 const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyWord, setKeyWord] = useState("")
   const entityState = useSelector(
@@ -33,16 +29,12 @@ const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchWorkOrders(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchWorkOrders(params));
   }, []);
 
   const handleRefresh = () => {
-    if (tokens) {
-      dispatch(fetchWorkOrders(params));
-    }
+    dispatch(fetchWorkOrders(params));
+
   }
 
   const handleFilter = async (field, value) => {

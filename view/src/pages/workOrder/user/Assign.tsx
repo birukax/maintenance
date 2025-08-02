@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
 import { fetchProfiles } from "../../../store/slices/profileSlice";
 import { assignWorkOrderUsers } from "../../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -10,9 +9,6 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   TextField,
   Box,
   Autocomplete,
@@ -39,13 +35,11 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
     user_ids: entityState.data.assigned_users.map(user => user.id) || [],
   });
   const { profiles } = useSelector((state: AppState) => state.profile);
-  const [inputs, setInputs] = useState(5);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-
   const params = {
     no_pagination: "true",
   };
+
   useEffect(() => {
     dispatch(fetchProfiles(params));
   }, []);
@@ -61,17 +55,12 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
 
   const selectedUsers = useMemo(() => {
     return userOptions.filter((option) =>
-      formData.user_ids.includes(option.user.id)
+      formData.user_ids.includes(option.user?.id)
     );
   }, [formData.user_ids, userOptions]);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
 
   const handleAutocompleteChange = (fieldName, newValue) => {
-    // Extract only the IDs from the selected objects
     const selectedIds = newValue.map((profile) => profile?.user?.id);
     setFormData((prevData) => ({
       ...prevData,
@@ -82,7 +71,6 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(assignWorkOrderUsers({ id, formData })).unwrap();
       toast.success("Users assigned successfully");
       setModalOpen(false);
@@ -108,7 +96,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
             size='small'
             multiple
             options={userOptions}
-            getOptionLabel={(option) => option.user.username}
+            getOptionLabel={(option) => option.user?.username}
             renderInput={(params) => (
               <TextField
                 {...params}

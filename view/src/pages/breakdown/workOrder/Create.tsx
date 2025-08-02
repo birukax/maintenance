@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
 import { createBreakdownWorkOrder } from "../../../store/slices/breakdownSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,7 +9,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { fetchItems } from "../../../store/slices/itemSlice";
 import { fetchActivityTypes } from "../../../store/slices/activityTypeSlice";
 import { fetchWorkOrderTypes } from "../../../store/slices/workOrderTypeSlice";
-
 import {
   TextField,
   Button,
@@ -48,7 +46,6 @@ const Create = ({ entityState, setModalOpen }) => {
     spareparts_required_id: []
   });
   const { breakdown } = useSelector((state: AppState) => state.breakdown);
-  const [error, setError] = useState(null);
   const { items } = useSelector((state: AppState) => state.item);
   const { activityTypes } = useSelector(
     (state: AppState) => state.activityType
@@ -62,7 +59,6 @@ const Create = ({ entityState, setModalOpen }) => {
 
 
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchWorkOrderTypes(params));
@@ -120,7 +116,6 @@ const Create = ({ entityState, setModalOpen }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setModalOpen(true);
-    setError(null);
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createBreakdownWorkOrder({ id, formData })).unwrap();
@@ -128,10 +123,6 @@ const Create = ({ entityState, setModalOpen }) => {
       setModalOpen(false);
     } catch (err) {
       toast.error(breakdown?.error?.error || "Something Went Wrong");
-      // setError(err.response?.data.detail || err.message);  
-      setError(
-        err.response?.data.detail || "Failed to create a breakdown work order."
-      );
     }
   };
   return (

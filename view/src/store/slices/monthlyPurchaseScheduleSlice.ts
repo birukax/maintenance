@@ -13,13 +13,13 @@ interface MonthlyPurchaseScheduleState {
 }
 
 const initialState: MonthlyPurchaseScheduleState = {
-    monthlyPurchaseSchedules: {data: [], loading: false, error: null},
-    monthlyPurchaseSchedule: {data: [], loading: false, error: null},
+    monthlyPurchaseSchedules: { data: [], loading: false, error: null },
+    monthlyPurchaseSchedule: { data: [], loading: false, error: null },
 };
 
-export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, {rejectValue: string}>(
+export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, { rejectValue: string }>(
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedules',
-    async(_, {rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const response = await api.get('/purchase/monthly-schedules/');
             return response.data;
@@ -44,7 +44,7 @@ export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejec
     }
 )
 
-export const createMonthlyPurchaseSchedule = createAsyncThunk<[],  formData  , { rejectValue: string }>(
+export const createMonthlyPurchaseSchedule = createAsyncThunk<[], formData, { rejectValue: string }>(
     'monthlyPurchaseSchedule/createMonthlyPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -74,57 +74,57 @@ const monthlyPurchaseScheduleSlice = createSlice({
     name: 'monthlyPurchaseSchedule',
     initialState,
     reducers: {},
-    
+
     extraReducers: (builder) => {
         builder
-        .addCase(fetchMonthlyPurchaseSchedules.pending, (state) => {
-            state.monthlyPurchaseSchedules.loading = true;
-            state.monthlyPurchaseSchedules.error = null;
-        })
-        .addCase(fetchMonthlyPurchaseSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
-            state.monthlyPurchaseSchedules.loading = false;
-            state.monthlyPurchaseSchedules.data = action.payload;
-        })
-        .addCase(fetchMonthlyPurchaseSchedules.rejected, (state, action) => {
-            state.monthlyPurchaseSchedules.loading = false;
-            state.monthlyPurchaseSchedules.error = action.payload || 'Unknown error';
-        })
-        .addCase(fetchMonthlyPurchaseSchedule.pending, (state) => {
-                        state.monthlyPurchaseSchedule.loading = true;
-                        state.monthlyPurchaseSchedule.error = null;
-                    })
-                    .addCase(fetchMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.monthlyPurchaseSchedule.loading = false;
-                        state.monthlyPurchaseSchedule.data = action.payload;
-                    })
-                    .addCase(fetchMonthlyPurchaseSchedule.rejected, (state, action) => {
-                        state.monthlyPurchaseSchedule.loading = false;
-                        state.monthlyPurchaseSchedule.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(createMonthlyPurchaseSchedule.pending, (state) => {
-                        state.monthlyPurchaseSchedule.loading = true;
-                        state.monthlyPurchaseSchedule.error = null;
-                    })
-                    .addCase(createMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.monthlyPurchaseSchedule.loading = false;
-                        state.monthlyPurchaseSchedule.data = action.payload;
-                    })
-                    .addCase(createMonthlyPurchaseSchedule.rejected, (state, action) => {
-                        state.monthlyPurchaseSchedule.loading = false;
-                        state.monthlyPurchaseSchedule.error = action.payload || 'Unknown error';
-                    })
-                    .addCase(updateMonthlyPurchaseSchedule.pending, (state) => {
-                        state.monthlyPurchaseSchedule.loading = true;
-                        state.monthlyPurchaseSchedule.error = null;
-                    })
-                    .addCase(updateMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
-                        state.monthlyPurchaseSchedule.loading = false;
-                        state.monthlyPurchaseSchedule.data = action.payload;
-                    })
-                    .addCase(updateMonthlyPurchaseSchedule.rejected, (state, action) => {
-                        state.monthlyPurchaseSchedule.loading = false;
-                        state.monthlyPurchaseSchedule.error = action.payload || 'Unknown error';
-                    })
+            .addCase(fetchMonthlyPurchaseSchedules.pending, (state) => {
+                state.monthlyPurchaseSchedules.loading = true;
+                state.monthlyPurchaseSchedules.error = null;
+            })
+            .addCase(fetchMonthlyPurchaseSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.monthlyPurchaseSchedules.loading = false;
+                state.monthlyPurchaseSchedules.data = action.payload;
+            })
+            .addCase(fetchMonthlyPurchaseSchedules.rejected, (state, action) => {
+                state.monthlyPurchaseSchedules.loading = false;
+                state.monthlyPurchaseSchedules.error = action.payload || 'Unknown error';
+            })
+            .addCase(fetchMonthlyPurchaseSchedule.pending, (state) => {
+                state.monthlyPurchaseSchedule.loading = true;
+                state.monthlyPurchaseSchedule.error = null;
+            })
+            .addCase(fetchMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.monthlyPurchaseSchedule.loading = false;
+                state.monthlyPurchaseSchedule.data = action.payload;
+            })
+            .addCase(fetchMonthlyPurchaseSchedule.rejected, (state, action) => {
+                state.monthlyPurchaseSchedule.loading = false;
+                state.monthlyPurchaseSchedule.error = action.payload || 'Unknown error';
+            })
+            .addCase(createMonthlyPurchaseSchedule.pending, (state) => {
+                state.monthlyPurchaseSchedule.loading = true;
+                state.monthlyPurchaseSchedule.error = null;
+            })
+            .addCase(createMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.monthlyPurchaseSchedule.loading = false;
+                state.monthlyPurchaseSchedule.data = action.payload;
+            })
+            .addCase(createMonthlyPurchaseSchedule.rejected, (state, action) => {
+                state.monthlyPurchaseSchedule.loading = false;
+                state.monthlyPurchaseSchedule.error = action.payload || 'Unknown error';
+            })
+            .addCase(updateMonthlyPurchaseSchedule.pending, (state) => {
+                state.monthlyPurchaseSchedule.loading = true;
+                state.monthlyPurchaseSchedule.error = null;
+            })
+            .addCase(updateMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+                state.monthlyPurchaseSchedule.loading = false;
+                state.monthlyPurchaseSchedule.data = action.payload;
+            })
+            .addCase(updateMonthlyPurchaseSchedule.rejected, (state, action) => {
+                state.monthlyPurchaseSchedule.loading = false;
+                state.monthlyPurchaseSchedule.error = action.payload || 'Unknown error';
+            })
     }
 })
 

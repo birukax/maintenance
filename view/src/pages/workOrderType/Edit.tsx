@@ -26,13 +26,10 @@ const Edit = () => {
     breakdown: false,
   });
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
-  const workOrderType = useSelector((state: AppState) => state.workOrderType.workOrderType)
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const workOrderType = useSelector((state: AppState) => state.workOrderType.workOrderType);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (id) {
       dispatch(fetchWorkOrderType(id)).unwrap();
@@ -59,19 +56,12 @@ const Edit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
-      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateWorkOrderType({ id, formData })).unwrap();
       toast.success("Work Order Type edited successfully");
-      navigate(`/work-order-type/detail/${workOrderType.data.id}`);
+      navigate(`/work-order-type/detail/${workOrderType.data?.id}`);
     } catch (err) {
       toast.error(workOrderType.error?.error || "Something Went Wrong");
-      // setError(err.response?.data.detail || err.message);
-      setError(err.response?.data.detail || err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -107,7 +97,7 @@ const Edit = () => {
                 }
 
                 }
-                disabled={loading}
+                disabled={workOrderType.loading}
               />
             }
           />
@@ -126,7 +116,7 @@ const Edit = () => {
                   }
                 }
                 }
-                disabled={loading}
+                disabled={workOrderType.loading}
               />
             }
           />
@@ -141,7 +131,7 @@ const Edit = () => {
           value={formData.name}
           onChange={handleChange}
           required
-          disabled={loading}
+          disabled={workOrderType.loading}
           helperText={workOrderType.error?.name || ""}
         />
         <div className='flex gap-4'>
@@ -155,7 +145,7 @@ const Edit = () => {
             disabled={workOrderType.loading}
             className="mt-4"
           >
-            {loading ? <CircularProgress size={24} /> : "Save"}
+            {workOrderType.loading ? <CircularProgress size={24} /> : "Save"}
           </Button>
           <Button
             component={Link}
