@@ -1,14 +1,16 @@
 
 import { Typography, Container } from "@mui/material";
+import WorkOrderChart from '../charts/WorkOrder';
 const Dashboard = () => {
   return (
     <Container className="flex flex-col items-center mt-8">
 
-      <Typography variant="h4" className="mb-4">
+      <Typography variant="h4" className="mb-4" mb={4}>
         Dashboard
       </Typography>
-      <p>dashboard</p>
-
+      <div>
+        <WorkOrderChart />
+      </div>
     </Container>
   )
 }

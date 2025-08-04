@@ -64,7 +64,11 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
         "schedule__id",
         "breakdown__id",
     ]
-    filterset_fields = ["status"]
+    filterset_fields = {
+        "status": ["exact"],
+        "start_date": ["exact", "gte", "lte"],
+        "end_date": ["exact", "gte", "lte"],
+    }
 
     def perform_create(self, serializer):
         start_date = self.request.data.get("start_date")

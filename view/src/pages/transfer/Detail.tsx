@@ -66,7 +66,7 @@ const Detail = () => {
         <div className="clmn">
           <Typography variant="h6">Requested Date:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {entityState?.data?.requested_date}
+            {data?.requested_date}
           </Typography>
         </div>
         <div className="clmn">
@@ -119,15 +119,13 @@ const Detail = () => {
 
       <h2>Timeline</h2>
       <div className="rw timeline">
-
-
         {
-          entityState?.data?.shipment_date ?
+          data?.shipment_date ?
             <div className="clmn">
 
               <Typography variant="h6">Shipment Date:</Typography>
               <Typography variant="body1" className="text-slate-500 mb-2">
-                {entityState?.data?.shipment_date}
+                {data?.shipment_date}
               </Typography>
             </div> :
             ""}
@@ -140,13 +138,9 @@ const Detail = () => {
               {data?.total_time_taken}
             </Typography>
           </div> : ""}
-
-
       </div>
       <div className="rw">
-
         <div className="clmn activities-clmn">
-
           <Typography variant="h6">Transfer Requested Items:</Typography>
           <Table size='small' sx={{ width: "100%" }} className="table">
             <TableHead>
