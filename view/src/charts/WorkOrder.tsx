@@ -86,6 +86,7 @@ const WorkOrderChart = () => {
                 </div>
                 <div>
                     <Button
+                        size='small'
                         variant='outlined'
                         onClick={() => {
                             setDateFilter({

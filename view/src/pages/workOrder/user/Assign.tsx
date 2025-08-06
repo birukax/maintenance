@@ -48,7 +48,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
     return profiles?.data
       ? profiles?.data?.filter(
         (profile) =>
-          profile.role === "ENGINEER"
+          profile?.role === "ENGINEER"
       )
       : [];
   }, [profiles.data]);
