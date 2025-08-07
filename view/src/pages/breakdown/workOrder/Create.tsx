@@ -41,7 +41,9 @@ const Create = ({ entityState, setModalOpen }) => {
     start_date: "",
     work_order_type_id: "",
     activity_type_id: "",
-    total_time_required: null,
+    total_hours: 0,
+    total_days: 0,
+    total_minutes: 0,
     tools_required_id: [],
     spareparts_required_id: []
   });
@@ -91,8 +93,17 @@ const Create = ({ entityState, setModalOpen }) => {
   }, [formData.tools_required_id, toolOptions]);
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
+    // setFormData({ ...formData, [name]: value });
+    if (['total_days', 'total_hours', 'total_minutes'].includes(name)) {
+      const num = Number(value);
+      if (value === '' || isNaN(num)) {
+        setFormData({ ...formData, [name]: 0 });
+      } else {
+        setFormData({ ...formData, [name]: num });
+      }
+      return;
+    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -244,20 +255,45 @@ const Create = ({ entityState, setModalOpen }) => {
             }
           ></Autocomplete>
         </FormControl>
-        <TextField
-          size='small'
-          label="Total Time Required (In minutes)"
-          name="total_time_required"
-          type="number"
-          className="mb-8"
-          variant="outlined"
-          fullWidth
-          value={formData.total_time_required}
-          onChange={handleChange}
-          required
-          disabled={breakdown?.loading}
-          helperText={breakdown?.error?.total_time_required || ""}
-        />
+
+        <div className="total-time-group">
+          <TextField
+            size='small'
+            label="Total Days"
+            name="total_days"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.total_days}
+            onChange={handleChange}
+            disabled={breakdown.loading}
+          />
+          <TextField
+            size='small'
+            label="Total Hours"
+            name="total_hours"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.total_hours}
+            onChange={handleChange}
+            disabled={breakdown.loading}
+          />
+          <TextField
+            size='small'
+            label="Total Minutes"
+            name="total_minutes"
+            type="number"
+            className="mb-8"
+            variant="outlined"
+            fullWidth
+            value={formData.total_minutes}
+            onChange={handleChange}
+            disabled={breakdown.loading}
+          />
+        </div>
 
         <Button
           size='small'

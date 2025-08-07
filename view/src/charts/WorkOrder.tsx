@@ -30,9 +30,11 @@ const WorkOrderChart = () => {
         dispatch(fetchWorkOrders(params));
     }, [dispatch, dateFilter]);
 
+    const dataArray = Array.isArray(workOrders.data) ? workOrders.data : [];
+
     const typeSet = new Set<string>();
     const statusSet = new Set<string>();
-    (workOrders.data || []).forEach((wo) => {
+    dataArray.forEach((wo) => {
         typeSet.add(wo.work_order_type?.code || 'Unknown');
         statusSet.add(wo.status || 'Unknown');
 
@@ -47,7 +49,7 @@ const WorkOrderChart = () => {
             result[type][status] = 0;
         });
     });
-    (workOrders.data || []).forEach((wo) => {
+    dataArray.forEach((wo) => {
         const type = `${wo.work_order_type?.code}` || 'Unknown';
         const status = wo.status || 'Unknown';
         result[type][status] = (result[type][status] || 0) + 1;

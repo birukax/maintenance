@@ -32,8 +32,14 @@ class BreakdownViewSet(viewsets.ModelViewSet):
         tools_required_id = request.data.get("tools_required_id")
         work_order_type_id = request.data.get("work_order_type_id")
         activity_type_id = request.data.get("activity_type_id")
-        total_time_required = request.data.get("total_time_required")
-        total_time_required = datetime.timedelta(minutes=int(total_time_required))
+        total_days = self.request.data.get("total_days", 0)
+        total_hours = self.request.data.get("total_hours", 0)
+        total_minutes = self.request.data.get("total_minutes", 0)
+        total_time_required = datetime.timedelta(
+            days=int(total_days) or 0,
+            hours=int(total_hours) or 0,
+            minutes=int(total_minutes) or 0,
+        )
         try:
             if spareparts_required_id:
                 spareparts_required = Item.objects.filter(id__in=spareparts_required_id)

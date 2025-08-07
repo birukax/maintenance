@@ -33,8 +33,8 @@ const Create = () => {
     work_order_type_id: "",
     spareparts_required_id: [],
     tools_required_id: [],
-    total_hours: 0,
     total_days: 0,
+    total_hours: 0,
     total_minutes: 0,
   });
   const workOrder = useSelector((state: AppState) => state.workOrder.workOrder);
@@ -88,6 +88,16 @@ const Create = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // setFormData({ ...formData, [name]: value });
+    if (['total_days', 'total_hours', 'total_minutes'].includes(name)) {
+      const num = Number(value);
+      if (value === '' || isNaN(num)) {
+        setFormData({ ...formData, [name]: 0 });
+      } else {
+        setFormData({ ...formData, [name]: num });
+      }
+      return;
+    }
     setFormData({ ...formData, [name]: value });
   };
   const handleDateChange = (value) => {
