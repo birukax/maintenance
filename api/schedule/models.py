@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from django.db import models
 from main.choices import SCHEDULE_TYPES
 from main.models import BaseCreatedUpdated
@@ -57,3 +58,22 @@ class Schedule(BaseCreatedUpdated):
             return WorkOrder.objects.filter(schedule=self).count()
         except:
             return 0
+
+    @property
+    def is_complete(self):
+        today = date.today()
+        qs = WorkOrder.objects.filter(schedule=self)
+        if self.type == "DAILY":
+            return qs.filter(start_date=today).exists()
+        elif self.type == "WEEKLY":
+            start_of_week = today - timedelta(days=today.weekday())
+            end_of_week = start_of_week + timedelta(days=6)
+            return qs.filter(
+                start_date__gte=start_of_week, start_date__lte=end_of_week
+            ).exists()
+        elif self.type == "MONTHLY":
+            return qs.filter(
+                start_date__year=today.year, start_date__month=today.month
+            ).exists()
+        elif self.type == "YEARLY":
+            return qs.filter(start_date__year=today.year).exists()

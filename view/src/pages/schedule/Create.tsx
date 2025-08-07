@@ -60,6 +60,16 @@ const Create = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // setFormData({ ...formData, [name]: value });
+    if (['planned_days', 'planned_hours', 'planned_minutes'].includes(name)) {
+      const num = Number(value);
+      if (value === '' || isNaN(num)) {
+        setFormData({ ...formData, [name]: 0 });
+      } else {
+        setFormData({ ...formData, [name]: num });
+      }
+      return;
+    }
     setFormData({ ...formData, [name]: value });
   };
 

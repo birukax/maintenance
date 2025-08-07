@@ -11,9 +11,11 @@ const scheduleColumns = [
   { header: "Type", accessor: "type" },
   { header: "Machine", accessor: "machine.name" },
   { header: "Equipment", accessor: "equipment.name" },
+  { header: 'Is Complete', accessor: 'is_complete' },
   { header: "Work Order Type", accessor: "work_order_type.name" },
   { header: 'Total Work Orders', accessor: 'total_work_orders' },
   { header: "Activity Type", accessor: "activity_type.name" },
+
   { header: "Planned Time (h:m:s)", accessor: "planned_time" },
 ];
 

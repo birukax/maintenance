@@ -24,9 +24,9 @@ class ScheduleVeiwSet(viewsets.ModelViewSet):
     filterset_fields = []
 
     def perform_create(self, serializer):
-        planned_days = self.request.data.get("planned_days")
-        planned_hours = self.request.data.get("planned_hours")
-        planned_minutes = self.request.data.get("planned_minutes")
+        planned_days = self.request.data.get("planned_days", 0)
+        planned_hours = self.request.data.get("planned_hours", 0)
+        planned_minutes = self.request.data.get("planned_minutes", 0)
         planned_time = datetime.timedelta(
             days=int(planned_days) or 0,
             hours=int(planned_hours) or 0,

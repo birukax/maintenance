@@ -68,6 +68,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "type",
+            "is_complete",
             "description",
             "machine",
             "machine_id",
