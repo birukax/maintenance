@@ -47,13 +47,6 @@ class Activity(BaseCreatedUpdated):
         blank=True,
         related_name="activities",
     )
-    # activity_type = models.ForeignKey(
-    #     ActivityType,
-    #     on_delete=models.CASCADE,
-    #     null=True,
-    #     blank=True,
-    #     related_name="activities",
-    # )
 
     class Meta:
         ordering = ["description"]
@@ -61,6 +54,18 @@ class Activity(BaseCreatedUpdated):
 
     def __str__(self):
         return f"{self.description}"
+
+
+class Clearance(BaseCreatedUpdated):
+    description = models.TextField(max_length=250)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["created_at", "description"]
+
+    def __str__(self):
+        if self.description:
+            return f"{self.description}"
 
 
 class WorkOrder(BaseCreatedUpdated):
@@ -126,6 +131,13 @@ class WorkOrder(BaseCreatedUpdated):
         blank=True,
         related_name="completed_work_orders",
     )
+    checked_by = models.ForeignKey(
+        User,
+        on_delete=models.RESTRICT,
+        null=True,
+        blank=True,
+        related_name="checked_work_orders",
+    )
     status = models.CharField(
         choices=choices.WORK_ORDER_STATUS,
         max_length=25,
@@ -166,7 +178,6 @@ class WorkOrder(BaseCreatedUpdated):
 
 
 class WorkOrderActivity(BaseCreatedUpdated):
-    # description = models.TextField(max_length=250)
     work_order = models.ForeignKey(
         WorkOrder,
         on_delete=models.CASCADE,
@@ -174,12 +185,30 @@ class WorkOrderActivity(BaseCreatedUpdated):
     )
     description = models.TextField(max_length=300)
     value = models.BooleanField(choices=choices.YES_NO_NONE, default=False)
-    # extra = models.BooleanField(choices=choices.YESNO, default=False)
     remark = models.TextField(max_length=250, null=True, blank=True)
 
     class Meta:
-        ordering = ["created_at", "updated_at", "description"]
+        ordering = ["created_at", "description"]
         verbose_name_plural = "Work Order Activities"
+
+    def __str__(self):
+        if self.description:
+            return f"{self.description} - {self.value}"
+        return f"{self.value}"
+
+
+class WorkOrderClearance(BaseCreatedUpdated):
+    work_order = models.ForeignKey(
+        WorkOrder,
+        on_delete=models.CASCADE,
+        related_name="work_order_clearances",
+    )
+    description = models.TextField(max_length=250)
+    value = models.BooleanField(choices=choices.YES_NO_NONE, default=False)
+    remark = models.TextField(max_length=250, null=True, blank=True)
+
+    class Meta:
+        ordering = ["created_at", "description"]
 
     def __str__(self):
         if self.description:

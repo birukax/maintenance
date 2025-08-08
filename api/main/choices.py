@@ -63,6 +63,7 @@ WORK_ORDER_STATUS = (
     ("Accepted", "Accepted"),
     ("Created", "Created"),
     ("Assigned", "Assigned"),
+    ("Checked", "Checked"),
     ("Incomplete", "Incomplete"),
     ("Completed", "Completed"),
 )

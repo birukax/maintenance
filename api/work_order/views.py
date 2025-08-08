@@ -137,7 +137,7 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
     def submit_work_order(self, request, pk=None):
         work_order = self.get_object()
         remark = request.data.get("remark")
-        completed_by = request.user
+        checked_by = request.user
         try:
             start_time = datetime.time(
                 *map(int, request.data.get("start_time").split(":"))
@@ -160,8 +160,8 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
             work_order.end_date = end_date
             work_order.end_time = end_time
             work_order.remark = remark
-            work_order.completed_by = completed_by
-            work_order.status = "Completed"
+            work_order.checked_by = checked_by
+            work_order.status = "Checked"
             work_order.save()
         except Exception as e:
             raise serializers.ValidationError(str(e))
