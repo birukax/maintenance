@@ -1,34 +1,51 @@
 from django.urls import path, include
 from rest_framework import routers
-from . import views
+from .views import (
+    ActivityViewSet,
+    ClearanceViewSet,
+    WorkOrderViewSet,
+    ActivityTypeViewSet,
+    WorkOrderTypeViewSet,
+    WorkOrderActivityViewSet,
+    WorkOrderClearanceViewSet,
+)
 
 router = routers.DefaultRouter()
 
 router.register(
+    r"clearances",
+    ClearanceViewSet,
+    basename="clearance",
+)
+router.register(
+    r"work-order-types",
+    WorkOrderTypeViewSet,
+    basename="work-order-type",
+)
+router.register(
     r"activity-types",
-    views.ActivityTypeViewSet,
+    ActivityTypeViewSet,
     basename="activity-type",
 )
 router.register(
     r"activities",
-    views.ActivityViewSet,
+    ActivityViewSet,
     basename="activity",
 )
 router.register(
     r"work-orders",
-    views.WorkOrderViewSet,
+    WorkOrderViewSet,
     basename="work-order",
 )
 router.register(
     r"work-order-activities",
-    views.WorkOrderActivityViewSet,
+    WorkOrderActivityViewSet,
     basename="work-order-activity",
 )
-
 router.register(
-    r"work-order-types",
-    views.WorkOrderTypeViewSet,
-    basename="work-order-type",
+    r"work-order-clearances",
+    WorkOrderClearanceViewSet,
+    basename="work-order-clearance",
 )
 
 urlpatterns = [

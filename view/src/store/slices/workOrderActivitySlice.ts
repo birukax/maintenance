@@ -44,7 +44,7 @@ export const fetchWorkOrderActivity = createAsyncThunk<[], number, { rejectValue
     }
 )
 export const deleteWorkOrderActivity = createAsyncThunk<[], number, { rejectValue: string }>(
-    'workOrderActivity/fetchWorkOrderActivity',
+    'workOrderActivity/deleteWorkOrderActivity',
     async (id, { rejectWithValue }) => {
         try {
             const response = await api.delete(`/work-order/work-order-activities/${id}/`)

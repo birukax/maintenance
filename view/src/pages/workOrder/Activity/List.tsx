@@ -222,12 +222,12 @@ const List: React.FC = () => {
                       }}>
                         <EditIcon color='primary' />
                       </IconButton>
-                      <IconButton aria-label="delete" title="Delete" onClick={() => {
+                      {/* <IconButton aria-label="delete" title="Delete" onClick={() => {
                         setDeleteId(row.id)
                         handledeleteModalOpen()
                       }}>
                         <DeleteIcon color='warning' />
-                      </IconButton>
+                      </IconButton> */}
                     </ButtonGroup>
                   </TableCell>
 

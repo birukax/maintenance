@@ -5,7 +5,7 @@ import WorkOrderList from "../pages/workOrder/List";
 import WorkOrderDetail from "../pages/workOrder/Detail";
 import ProtectedRoute from "../components/ProtectedRoute";
 import CheckList from "../pages/workOrderActivity/CheckList";
-import ManageActivityPage from "../pages/workOrder/Activity/List";
+import ManageActivityPage from "../pages/workOrder/activity/List";
 const WorkOrderRoutes = [
   <Route
     key="work-order-list"

@@ -115,12 +115,9 @@ class WorkOrderActivitySerializer(serializers.ModelSerializer):
 
 
 class WorkOrderClearanceSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
+    id = serializers.IntegerField()
 
     work_order = serializers.SerializerMethodField(read_only=True)
-    work_order_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=WorkOrder.objects.all(), source="work_order"
-    )
 
     class Meta:
         model = WorkOrderClearance
@@ -130,9 +127,8 @@ class WorkOrderClearanceSerializer(serializers.ModelSerializer):
             "value",
             "remark",
             "work_order",
-            "work_order_id",
         ]
-        read_only_fields = ["id", "description", "work_order"]
+        read_only_fields = ["description", "work_order"]
 
     def get_work_order(self, obj):
         try:
@@ -205,7 +201,9 @@ class CompleteWorkOrderSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
+        print(validated_data)
         clearances_data = validated_data.pop("work_order_clearances", [])
+        print(clearances_data)
         for clearance_data in clearances_data:
             clearance_id = clearance_data.get("id")
             if clearance_id:
@@ -213,10 +211,14 @@ class CompleteWorkOrderSerializer(serializers.ModelSerializer):
                     clearance = WorkOrderClearance.objects.get(
                         id=clearance_id, work_order=instance
                     )
-                    for attr, value in clearance_data.items():
-                        setattr(clearance, attr, value)
+                    clearance.value = clearance_data.get("value", clearance.value)
+                    clearance.remark = clearance_data.get("remark", clearance.remark)
                     clearance.save()
                 except WorkOrderClearance.DoesNotExist:
+                    print("work order clearance does not exist.")
+                    continue
+                except Exception as e:
+                    print(e)
                     continue
         return instance
 
@@ -268,6 +270,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
     )
     assigned_users = UserSerializer(many=True, read_only=True)
     work_order_activities = WorkOrderActivitySerializer(many=True, read_only=True)
+    work_order_clearances = WorkOrderClearanceSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkOrder
@@ -297,6 +300,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             "spareparts_required",
             "spareparts_required_id",
             "work_order_activities",
+            "work_order_clearances",
             "assigned_users",
         ]
 

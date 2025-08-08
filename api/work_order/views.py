@@ -130,9 +130,11 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
                     description=d,
                 )
         except Exception as e:
-            raise serializers.ValidationError({"error", str(e)})
-        serializer = self.serializer_class(self.queryset)
+            raise serializers.ValidationError(
+                {"error", "Error while creating activities."}
+            )
 
+        serializer = self.serializer_class(self.queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST"])
@@ -149,7 +151,7 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             work_order.status = "Created"
         work_order.assigned_users.set(users)
         work_order.save()
-        serializer = WorkOrderSerializer(work_order)
+        serializer = self.serializer_class(self.queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST"])
@@ -200,7 +202,7 @@ class WorkOrderActivityViewSet(viewsets.ModelViewSet):
     filterset_fields = ["value", "work_order__id"]
 
 
-class WorkOrderClearanceView(viewsets.ModelViewSet):
+class WorkOrderClearanceViewSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderClearanceSerializer
     queryset = WorkOrderClearance.objects.all()
     search_fields = ["description", "remark"]

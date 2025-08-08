@@ -6,7 +6,7 @@ import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AssignUsers from "./user/Assign";
-
+import CompleteClearance from './clearance/Complete';
 const Detail = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -14,59 +14,106 @@ const Detail = () => {
     detailSelector: (state: AppState) => state.workOrder.workOrder,
     fetchDetailAction: fetchWorkOrder,
   });
-  const [assignmodalOpen, setAssignModalOpen] = useState(false);
+  const [assignModalOpen, setAssignModalOpen] = useState(false);
   const handleAssignModalOpen = () => setAssignModalOpen(true);
   const handleAssignModalClose = () => setAssignModalOpen(false);
 
+  const [clearanceModalOpen, setClearanceModalOpen] = useState(false);
+  const handleClearanceModalOpen = () => setClearanceModalOpen(true);
+  const handleClearanceModalClose = () => setClearanceModalOpen(false);
   const renderButtons = () => (
     <>
-      <Button
-        size='small'
-        disabled={entityState?.data?.status === 'Completed'}
-        onClick={() => navigate(`/work-order/${id}/manage-activities`)}
-        variant="contained"
-        className="bg-slate-700"
-        sx={{ mr: 1 }}
-      >
-        Manage Activities
-      </Button>
+
+      {
+        (entityState?.data && !['Completed', 'Checked', ''].includes(entityState.data?.status)) &&
+        <>
+          <Button
+            size='small'
+            disabled={['Completed', 'Checked', ''].includes(entityState?.data?.status)}
+            onClick={() => navigate(`/work-order/${id}/manage-activities`)}
+            variant="contained"
+            className="bg-slate-700"
+            sx={{ mr: 1 }}
+          >
+            Manage Activities
+          </Button>
+
+        </>
+
+      }
+
+      {
+        (entityState?.data && ['Assigned', 'Created'].includes(entityState.data?.status)) &&
+        <>
+          <Modal
+            open={assignModalOpen}
+            onClose={handleAssignModalClose}
+            aria-labelledby="assign-user-modal-title"
+            aria-describedby="assign-user-modal-description"
+          >
+            <AssignUsers
+              entityState={entityState}
+              setModalOpen={setAssignModalOpen}
+            />
+          </Modal>
+          <Button
+            disabled={entityState?.data?.work_order_activities?.length === 0 ||
+              !(['Assigned', 'Created'].includes(entityState?.data?.status))
+            }
+            size='small'
+            onClick={handleAssignModalOpen}
+            variant="contained"
+            className="bg-slate-700"
+            sx={{ mr: 1 }}
+          >
+            Assign User
+          </Button>
+
+        </>
+      }
+      {
+        (entityState?.data && entityState.data?.status === 'Checked') &&
+        <>
+          <Modal
+            open={clearanceModalOpen}
+            onClose={handleClearanceModalClose}
+            aria-labelledby="clearance-modal-title"
+            aria-describedby="clearance-modal-description"
+          >
+            <CompleteClearance
+              entityState={entityState}
+              setModalOpen={setClearanceModalOpen}
+            />
+          </Modal>
+          <Button
+            disabled={!(entityState.data?.status === 'Checked')}
+            size='small'
+            onClick={handleClearanceModalOpen}
+            variant="contained"
+            className="bg-slate-700"
+            sx={{ mr: 1 }}
+          >
+            WO Clearance
+          </Button>
+
+        </>
+      }
 
 
-      <Modal
-        open={assignmodalOpen}
-        onClose={handleAssignModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <AssignUsers
-          entityState={entityState}
-          setModalOpen={setAssignModalOpen}
-        />
-      </Modal>
-      <Button
-        disabled={entityState?.data?.work_order_activities?.length === 0 ||
-          (entityState?.data?.status !== "Created" &&
-            entityState?.data?.status !== "Assigned")
-        }
-        size='small'
-        onClick={handleAssignModalOpen}
-        variant="contained"
-        className="bg-slate-700"
-        sx={{ mr: 1 }}
-      >
-        Assign User
-      </Button>
-
-      <Button
-        disabled={entityState.data?.status !== "Assigned"}
-        size='small'
-        component={Link}
-        to={`/work-order/check-list/${entityState.id}`}
-        variant="contained"
-        sx={{ mr: 1 }}
-      >
-        Checklist
-      </Button>
+      {(entityState.data && entityState.data?.status === 'Assigned') &&
+        <>
+          <Button
+            disabled={entityState.data?.status !== "Assigned"}
+            size='small'
+            component={Link}
+            to={`/work-order/check-list/${entityState.id}`}
+            variant="contained"
+            sx={{ mr: 1 }}
+          >
+            Checklist
+          </Button>
+        </>
+      }
 
     </>
   );

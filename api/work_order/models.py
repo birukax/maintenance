@@ -171,7 +171,7 @@ class WorkOrder(BaseCreatedUpdated):
 
     def __str__(self):
         if self.machine:
-            return f"{self.machine.name} - {self.status}"
+            return f"{self.machine.name} - {self.status} ({self.id})"
         return f"{self.status}"
 
     class Meta:

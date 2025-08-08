@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { AppDispatch, AppState } from "../../store/store";
-import { createWorkOrderActivities } from "../../store/slices/workOrderSlice";
+import { AppDispatch, AppState } from "../../../store/store";
+import { createWorkOrderActivities } from "../../../store/slices/workOrderSlice";
 import IconButton from '@mui/material/IconButton';
 import {
   TextField,
