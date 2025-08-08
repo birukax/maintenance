@@ -6,28 +6,28 @@ router = routers.DefaultRouter()
 
 router.register(
     r"activity-types",
-    views.ActivityTypeVeiwSet,
+    views.ActivityTypeViewSet,
     basename="activity-type",
 )
 router.register(
     r"activities",
-    views.ActivityVeiwSet,
+    views.ActivityViewSet,
     basename="activity",
 )
 router.register(
     r"work-orders",
-    views.WorkOrderVeiwSet,
+    views.WorkOrderViewSet,
     basename="work-order",
 )
 router.register(
     r"work-order-activities",
-    views.WorkOrderActivityVeiwSet,
+    views.WorkOrderActivityViewSet,
     basename="work-order-activity",
 )
 
 router.register(
     r"work-order-types",
-    views.WorkOrderTypeVeiwSet,
+    views.WorkOrderTypeViewSet,
     basename="work-order-type",
 )
 

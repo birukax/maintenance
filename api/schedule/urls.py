@@ -6,7 +6,7 @@ router = routers.DefaultRouter()
 
 router.register(
     r"schedules",
-    views.ScheduleVeiwSet,
+    views.ScheduleViewSet,
     basename="schedule",
 )
 

@@ -7,7 +7,7 @@ from work_order.models import WorkOrderActivity, WorkOrder
 from .serializers import ScheduleSerializer, CreateWorkOrderSerializer
 
 
-class ScheduleVeiwSet(viewsets.ModelViewSet):
+class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     queryset = Schedule.objects.all()
     search_fields = [

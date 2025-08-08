@@ -6,6 +6,19 @@ from breakdown.models import Breakdown
 from main import choices
 
 
+class Clearance(BaseCreatedUpdated):
+    description = models.TextField(max_length=250)
+    active = models.BooleanField(default=True)
+    type = models.CharField(choices=choices.CLEARANCE_TYPES, default="None")
+
+    class Meta:
+        ordering = ["created_at", "description"]
+
+    def __str__(self):
+        if self.description:
+            return f"{self.description}"
+
+
 class WorkOrderType(BaseCreatedUpdated):
     code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100)
@@ -54,18 +67,6 @@ class Activity(BaseCreatedUpdated):
 
     def __str__(self):
         return f"{self.description}"
-
-
-class Clearance(BaseCreatedUpdated):
-    description = models.TextField(max_length=250)
-    active = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ["created_at", "description"]
-
-    def __str__(self):
-        if self.description:
-            return f"{self.description}"
 
 
 class WorkOrder(BaseCreatedUpdated):

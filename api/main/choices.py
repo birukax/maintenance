@@ -17,6 +17,13 @@ MONTH_NAMES = (
     (12, "DECEMBER"),
 )
 
+CLEARANCE_TYPES = (
+    ("Breakdown", "Breakdown"),
+    ("Scheduled", "Scheduled"),
+    ("Both", "Both"),
+    ("None", "None"),
+)
+
 APPROVAL_STATUS = (
     ("PENDING", "PENDING"),
     ("REJECTED", "REJECTED"),

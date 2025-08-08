@@ -2,7 +2,15 @@ import datetime
 from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Activity, ActivityType, WorkOrderActivity, WorkOrder, WorkOrderType
+from .models import (
+    Activity,
+    ActivityType,
+    WorkOrderActivity,
+    WorkOrder,
+    WorkOrderType,
+    Clearance,
+    WorkOrderClearance,
+)
 from django.contrib.auth.models import User
 from .serializers import (
     ActivitySerializer,
@@ -10,17 +18,28 @@ from .serializers import (
     ActivityTypeSerializer,
     WorkOrderTypeSerializer,
     WorkOrderActivitySerializer,
+    ClearanceSerializer,
+    WorkOrderClearanceSerializer,
+    SubmitWorkOrderSerializer,
+    CompleteWorkOrderSerializer,
 )
 
 
-class WorkOrderTypeVeiwSet(viewsets.ModelViewSet):
+class ClearanceViewSet(viewsets.ModelViewSet):
+    serializer_class = ClearanceSerializer
+    queryset = Clearance.objects.all()
+    search_fields = ["description", "type"]
+    filterset_fields = ["active", "type"]
+
+
+class WorkOrderTypeViewSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderTypeSerializer
     queryset = WorkOrderType.objects.all()
     search_fields = ["name", "code"]
     filterset_fields = ["scheduled", "breakdown"]
 
 
-class ActivityTypeVeiwSet(viewsets.ModelViewSet):
+class ActivityTypeViewSet(viewsets.ModelViewSet):
     serializer_class = ActivityTypeSerializer
     queryset = ActivityType.objects.all()
     search_fields = [
@@ -32,7 +51,7 @@ class ActivityTypeVeiwSet(viewsets.ModelViewSet):
     filterset_fields = []
 
 
-class ActivityVeiwSet(viewsets.ModelViewSet):
+class ActivityViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
     queryset = Activity.objects.all()
     search_fields = [
@@ -43,7 +62,7 @@ class ActivityVeiwSet(viewsets.ModelViewSet):
     ]
 
 
-class WorkOrderVeiwSet(viewsets.ModelViewSet):
+class WorkOrderViewSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderSerializer
     queryset = WorkOrder.objects.all()
     search_fields = [
@@ -136,41 +155,53 @@ class WorkOrderVeiwSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     def submit_work_order(self, request, pk=None):
         work_order = self.get_object()
-        remark = request.data.get("remark")
         checked_by = request.user
         try:
-            start_time = datetime.time(
-                *map(int, request.data.get("start_time").split(":"))
+            submission_serializer = SubmitWorkOrderSerializer(
+                work_order, data=request.data
             )
-            end_date = datetime.date(*map(int, request.data.get("end_date").split("-")))
-            end_time = datetime.time(*map(int, request.data.get("end_time").split(":")))
-        except Exception as e:
-            raise serializers.ValidationError(str(e))
-        try:
-            start = datetime.datetime.combine(work_order.start_date, start_time)
-            end = datetime.datetime.combine(end_date, end_time)
-            if end < start:
-                raise serializers.ValidationError(
-                    {"end_time": "End time cannot be before start time."}
-                )
-        except Exception as e:
-            raise serializers.ValidationError(str(e))
-        try:
-            work_order.start_time = start_time
-            work_order.end_date = end_date
-            work_order.end_time = end_time
-            work_order.remark = remark
+            submission_serializer.is_valid(raise_exception=True)
+            submission_serializer.save()
             work_order.checked_by = checked_by
             work_order.status = "Checked"
             work_order.save()
         except Exception as e:
-            raise serializers.ValidationError(str(e))
-        serializer = WorkOrderSerializer(work_order)
+            raise serializers.ValidationError(
+                {"error": "Error while submitting Work Order"}
+            )
+        serializer = self.serializer_class(self.queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["POST"])
+    def complete_work_order(self, request, pk=None):
+        work_order = self.get_object()
+        completed_by = request.user
+        try:
+            completion_serializer = CompleteWorkOrderSerializer(
+                work_order, data=request.data
+            )
+            completion_serializer.is_valid(raise_exception=True)
+            completion_serializer.save()
+            work_order.completed_by = completed_by
+            work_order.status = "Completed"
+            work_order.save()
+        except Exception as e:
+            raise serializers.ValidationError(
+                {"error": "Error while completing Work Order."}
+            )
+        serializer = self.serializer_class(self.queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class WorkOrderActivityVeiwSet(viewsets.ModelViewSet):
+class WorkOrderActivityViewSet(viewsets.ModelViewSet):
     serializer_class = WorkOrderActivitySerializer
     queryset = WorkOrderActivity.objects.all()
-    search_fields = ["activity__name", "activity__code"]
+    search_fields = ["description", "remark"]
+    filterset_fields = ["value", "work_order__id"]
+
+
+class WorkOrderClearanceView(viewsets.ModelViewSet):
+    serializer_class = WorkOrderClearanceSerializer
+    queryset = WorkOrderClearance.objects.all()
+    search_fields = ["description", "remark"]
     filterset_fields = ["value", "work_order__id"]
