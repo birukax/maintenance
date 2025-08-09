@@ -95,7 +95,6 @@ const Detail = () => {
           >
             WO Clearance
           </Button>
-
         </>
       }
 
@@ -306,7 +305,7 @@ const Detail = () => {
             <TableHead>
               <TableRow>
                 <TableCell >
-                  <Typography noWrap>Activity Description</Typography>
+                  <Typography noWrap>Activity</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography noWrap>Value</Typography>
@@ -338,7 +337,47 @@ const Detail = () => {
           </Table>
         </div>
       </div>
+      <div className="rw">
 
+        <div className="clmn activities-clmn">
+
+          <Typography variant="h6">Work Order Clearance:</Typography>
+          <Table size='small' sx={{ width: "100%" }} className="table">
+            <TableHead>
+              <TableRow>
+                <TableCell >
+                  <Typography noWrap>Clearance</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Value</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography noWrap>Remark</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.work_order_clearances?.length > 0 ? data?.work_order_clearances?.map((work_order_activity) => {
+                return (
+                  <TableRow key={work_order_activity?.id}>
+                    <TableCell>{work_order_activity?.description}</TableCell>
+                    <TableCell>{work_order_activity?.value ? <Typography color='success'>Checked</Typography> : <Typography color='error'>Not Checked</Typography>}</TableCell>
+                    <TableCell>{work_order_activity?.remark}</TableCell>
+                  </TableRow>
+                );
+              })
+                : <TableRow>
+                  <TableCell className='border-none!'>
+                    <Typography color='primary' className='ml-6! '>
+                      There are no activities assigned to this work order.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              }
+            </TableBody>
+          </Table>
+        </div>
+      </div>
 
 
     </>

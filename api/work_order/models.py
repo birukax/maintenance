@@ -9,7 +9,8 @@ from main import choices
 class Clearance(BaseCreatedUpdated):
     description = models.TextField(max_length=250)
     active = models.BooleanField(default=True)
-    type = models.CharField(choices=choices.CLEARANCE_TYPES, default="None")
+    scheduled = models.BooleanField(default=False)
+    breakdown = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["created_at", "description"]

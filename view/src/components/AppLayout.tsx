@@ -48,6 +48,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import PlaceIcon from "@mui/icons-material/Place";
+import ChecklistIcon from '@mui/icons-material/Checklist';
 const drawerWidth = 260;
 
 const AppLayout = ({ children }) => {
@@ -103,6 +104,7 @@ const AppLayout = ({ children }) => {
         "/work-orders",
         "/schedules",
         "/breakdowns",
+        '/clearances',
       ],
       asset: ["/plants",
         "/areas",
@@ -388,6 +390,12 @@ const AppLayout = ({ children }) => {
                 <HardwareIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="Breakdown" />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/clearances"} component={Link} to="/clearances" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <ChecklistIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Clearance" />
             </ListItemButton>
           </List>
         </Collapse>

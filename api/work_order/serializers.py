@@ -27,7 +27,8 @@ class ClearanceSerializer(serializers.ModelSerializer):
             "id",
             "description",
             "active",
-            "type",
+            "breakdown",
+            "scheduled",
         ]
 
 

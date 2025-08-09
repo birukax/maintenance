@@ -28,8 +28,8 @@ from .serializers import (
 class ClearanceViewSet(viewsets.ModelViewSet):
     serializer_class = ClearanceSerializer
     queryset = Clearance.objects.all()
-    search_fields = ["description", "type"]
-    filterset_fields = ["active", "type"]
+    search_fields = ["description"]
+    filterset_fields = ["active", "breakdown", "scheduled"]
 
 
 class WorkOrderTypeViewSet(viewsets.ModelViewSet):
