@@ -1,12 +1,12 @@
-import { BarChart } from '@mui/x-charts/BarChart';
-import { fetchWorkOrders } from "../store/slices/workOrderSlice";
+import { PieChart } from '@mui/x-charts/PieChart';
+import { fetchBreakdowns } from "../store/slices/breakdownSlice";
 import { useEffect, useState } from "react";
 import { AppState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { TextField, Box, Button } from '@mui/material';
 
-const WorkOrderChart = () => {
-    const { workOrders } = useSelector((state: AppState) => state.workOrder);
+const BreakdownChart = () => {
+    const { breakdowns } = useSelector((state: AppState) => state.breakdown);
 
     const dispatch = useDispatch<AppDispatch>();
     const [dateFilter, setDateFilter] = useState(
@@ -27,42 +27,12 @@ const WorkOrderChart = () => {
     useEffect(() => {
         if (dateFilter.dateStart) params.start_date__gte = dateFilter.dateStart;
         if (dateFilter.dateEnd) params.start_date__lte = dateFilter.dateEnd;
-        dispatch(fetchWorkOrders(params));
+        dispatch(fetchBreakdowns(params));
     }, [dispatch, dateFilter]);
 
-    const dataArray = Array.isArray(workOrders.data) ? workOrders.data : [];
-
-    const typeSet = new Set<string>();
-    const statusSet = new Set<string>();
-    dataArray.forEach((wo) => {
-        typeSet.add(wo.work_order_type?.code || 'Unknown');
-        statusSet.add(wo.status || 'Unknown');
-
-    });
-    const woTypeLabels = Array.from(typeSet);
-    const statusLabels = Array.from(statusSet);
-
-    const result: Record<string, Record<string, number>> = {};
-    woTypeLabels.forEach(type => {
-        result[type] = {};
-        statusLabels.forEach(status => {
-            result[type][status] = 0;
-        });
-    });
-    dataArray.forEach((wo) => {
-        const type = `${wo.work_order_type?.code}` || 'Unknown';
-        const status = wo.status || 'Unknown';
-        result[type][status] = (result[type][status] || 0) + 1;
-    })
-
-    const series = statusLabels.map(status => ({
-        label: status,
-        data: woTypeLabels.map(type => result[type][status] || 0),
-        stack: 'true'
-    }))
-
     
-
+    console.log(breakdowns);
+    
 
     return (
         <>
@@ -102,18 +72,20 @@ const WorkOrderChart = () => {
                 </div>
 
             </Box>
-            <BarChart
-                xAxis={[
-                    {
-                        id: 'woType',
-                        data: woTypeLabels,
-                        label: 'Work Orders'
-                    },
-                ]}
-                series={series}
-                height={300}
-            />
+             <PieChart
+      series={[
+        {
+          data: [
+            { id: 0, value: 10, label: 'series A' },
+            { id: 1, value: 15, label: 'series B' },
+            { id: 2, value: 20, label: 'series C' },
+          ],
+        },
+      ]}
+      width={200}
+      height={200}
+    />
         </>
     )
 }
-export default WorkOrderChart;
+export default BreakdownChart;

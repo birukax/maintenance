@@ -1,6 +1,7 @@
 
 import { Typography, Container } from "@mui/material";
 import WorkOrderChart from '../charts/WorkOrder';
+import BreakdownChart from "../charts/BreakDown";
 const Dashboard = () => {
   return (
     <Container className="flex flex-col items-center mt-8">
@@ -10,6 +11,7 @@ const Dashboard = () => {
       </Typography>
       <div>
         <WorkOrderChart />
+        <BreakdownChart/>
       </div>
     </Container>
   )

@@ -5,10 +5,11 @@ import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import { fetchClearance } from "../../store/slices/clearanceSlice";
 const Detail = () => {
   const entityState = useEntityDetail({
-    detailSelector: (state: AppState) => state.contact.contact,
-    fetchDetailAction: fetchContact,
+    detailSelector: (state: AppState) => state.clearance.clearance,
+    fetchDetailAction: fetchClearance,
   });
   const renderButtons = () => (
     <>
@@ -17,27 +18,30 @@ const Detail = () => {
         variant="contained"
         component={Link}
         startIcon={<EditIcon />}
-        to={`/contact/edit/${entityState.id}`}
+        to={`/clearance/edit/${entityState.id}`}
       >
         Edit
       </Button>
     </>
   );
 
+
+  console.log(entityState);
+  
   const renderDetails = (data) => (
     <>
       <div className="rw">
         <div className="clmn">
-          <Typography variant="h6">Name:</Typography>
+          <Typography variant="h6">Active:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
-            {data?.name}
+            {data?.active?"True":"False"}
           </Typography>
 
         </div>
         <div className="clmn">
-          <Typography variant="h6">Phone No:</Typography>
+          <Typography variant="h6">Break Down:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data?.phone_no}
+            {data?.breakdown?"True":"False"}
           </Typography>
 
         </div>
@@ -45,15 +49,15 @@ const Detail = () => {
 
       <div className="rw">
         <div className="clmn">
-          <Typography variant="h6">Email:</Typography>
+          <Typography variant="h6">Scheduled:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data?.email}
+            {data?.scheduled?"True":"False"}
           </Typography>
         </div>
         <div className="clmn">
-          <Typography variant="h6">address:</Typography>
+          <Typography variant="h6">Description:</Typography>
           <Typography variant="body1" className="text-slate-500">
-            {data?.address}
+            {data?.description}
           </Typography>
         </div>
       </div>
@@ -62,7 +66,7 @@ const Detail = () => {
   );
   return (
     <GenericDetailPage
-      titleBase="Contact"
+      titleBase="Clerance"
       id={entityState.id}
       entityState={entityState}
       renderButtons={renderButtons}
