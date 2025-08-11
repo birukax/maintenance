@@ -3,8 +3,8 @@ from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Schedule
-from work_order.models import WorkOrderActivity, WorkOrder
-from .serializers import ScheduleSerializer, CreateWorkOrderSerializer
+from work_order.serializers import CreateWorkOrderSerializer
+from .serializers import ScheduleSerializer
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
@@ -35,40 +35,18 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(planned_time=planned_time)
 
-    @action(detail=True, methods=["POST"], serializer_class=CreateWorkOrderSerializer)
+    @action(detail=True, methods=["POST"])
     def create_work_order(self, request, pk=None):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        schedule_id = serializer.validated_data.pop("schedule_id")
-        start_date = serializer.validated_data.pop("start_date")
-
+        schedule = self.get_object()
         try:
-            schedule = Schedule.objects.get(id=schedule_id)
-            work_order = WorkOrder(
-                schedule=schedule,
-                start_date=start_date,
-                machine=schedule.machine,
-                equipment=schedule.equipment,
-                work_order_type=schedule.work_order_type,
-                activity_type=schedule.activity_type,
-                total_time_required=schedule.planned_time,
-            )
-            work_order.save()
-            work_order.tools_required.set(
-                [schedule.tools_required.all().values_list("id", flat=True)[0]]
-            )
-            work_order.spareparts_required.set(
-                [schedule.spareparts_required.all().values_list("id", flat=True)[0]]
-            )
-            for a in schedule.activities.all():
-                WorkOrderActivity.objects.create(
-                    work_order=work_order,
-                    description=a.description,
-                )
+            request_data = request.data.copy()
+            request_data["schedule_id"] = schedule.id
+            create_wo_serializer = CreateWorkOrderSerializer(data=request_data)
+            create_wo_serializer.is_valid(raise_exception=True)
+            create_wo_serializer.save()
         except Exception as e:
             print(e)
             raise serializers.ValidationError(
-                "error while creating scheduled work order."
+                {"error", "Error while creating scheduled work order."}
             )
-
         return Response(status=status.HTTP_200_OK)

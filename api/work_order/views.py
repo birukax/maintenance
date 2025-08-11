@@ -134,8 +134,8 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
                 {"error", "Error while creating activities."}
             )
 
-        serializer = self.serializer_class(self.queryset)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # serializer = self.serializer_class(self.queryset)
+        return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST"])
     def assign_users(self, request, pk=None):
@@ -151,7 +151,7 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             work_order.status = "Created"
         work_order.assigned_users.set(users)
         work_order.save()
-        serializer = self.serializer_class(self.queryset)
+        serializer = self.serializer_class(work_order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST"])
@@ -171,7 +171,7 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {"error": "Error while submitting Work Order"}
             )
-        serializer = self.serializer_class(self.queryset)
+        serializer = self.serializer_class(work_order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["POST"])
@@ -191,7 +191,7 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {"error": "Error while completing Work Order."}
             )
-        serializer = self.serializer_class(self.queryset)
+        serializer = self.serializer_class(work_order)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
