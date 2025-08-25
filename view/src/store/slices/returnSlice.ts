@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface ReturnState {
-    returns: DataState;
-    return: DataState;
+    returns: DataState<Data[]>;
+    return: DataState<Data | null>;
 }
 
 const initialState: ReturnState = {
     returns: { data: [], loading: false, error: null },
-    return: { data: [], loading: false, error: null },
+    return: { data: null, loading: false, error: null },
 };
 
-export const fetchReturns = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchReturns = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'return/fetchReturns',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchReturns = createAsyncThunk<[], { params: null }, { rejectValue
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch returns');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to fetch returns');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchReturn = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchReturn = createAsyncThunk<Data, number, { rejectValue: any }>(
     'return/fetchReturn',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchReturn = createAsyncThunk<[], number, { rejectValue: string }>
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to fetch return.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createReturn = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createReturn = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'return/createReturn',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,25 @@ export const createReturn = createAsyncThunk<[], formData, { rejectValue: string
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to create return.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateReturn = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateReturn = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'return/updateReturn',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/returns/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to update return.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +90,7 @@ const returnSlice = createSlice({
                 state.returns.loading = true;
                 state.returns.error = null;
             })
-            .addCase(fetchReturns.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchReturns.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.returns.loading = false;
                 state.returns.data = action.payload;
             })
@@ -93,7 +102,7 @@ const returnSlice = createSlice({
                 state.return.loading = true;
                 state.return.error = null;
             })
-            .addCase(fetchReturn.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchReturn.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.return.loading = false;
                 state.return.data = action.payload;
             })
@@ -105,7 +114,7 @@ const returnSlice = createSlice({
                 state.return.loading = true;
                 state.return.error = null;
             })
-            .addCase(createReturn.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createReturn.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.return.loading = false;
                 state.return.data = action.payload;
             })
@@ -117,7 +126,7 @@ const returnSlice = createSlice({
                 state.return.loading = true;
                 state.return.error = null;
             })
-            .addCase(updateReturn.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateReturn.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.return.loading = false;
                 state.return.data = action.payload;
             })

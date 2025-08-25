@@ -17,7 +17,7 @@ const initialState: ConsumptionState = {
     consumption: { data: [], loading: false, error: null },
 };
 
-export const fetchConsumptions = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchConsumptions = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'consumption/fetchConsumptions',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchConsumptions = createAsyncThunk<[], { params: null }, { reject
 )
 
 
-export const fetchConsumption = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchConsumption = createAsyncThunk<[], number, { rejectValue: any }>(
     'consumption/fetchConsumption',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchConsumption = createAsyncThunk<[], number, { rejectValue: stri
     }
 )
 
-export const createConsumption = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createConsumption = createAsyncThunk<[], formData, { rejectValue: any }>(
     'consumption/createConsumption',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createConsumption = createAsyncThunk<[], formData, { rejectValue: s
     }
 )
 
-export const updateConsumption = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateConsumption = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'consumption/updateConsumption',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

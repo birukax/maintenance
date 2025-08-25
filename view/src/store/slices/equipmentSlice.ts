@@ -17,7 +17,7 @@ const initialState: EquipmentState = {
     equipment: { data: [], loading: false, error: null },
 };
 
-export const fetchEquipments = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchEquipments = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'equipment/fetchEquipments',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchEquipments = createAsyncThunk<[], { params: null }, { rejectVa
 )
 
 
-export const fetchEquipment = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchEquipment = createAsyncThunk<[], number, { rejectValue: any }>(
     'equipment/fetchEquipment',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchEquipment = createAsyncThunk<[], number, { rejectValue: string
     }
 )
 
-export const createEquipment = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createEquipment = createAsyncThunk<[], formData, { rejectValue: any }>(
     'equipment/createEquipment',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createEquipment = createAsyncThunk<[], formData, { rejectValue: str
     }
 )
 
-export const updateEquipment = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateEquipment = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'equipment/updateEquipment',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

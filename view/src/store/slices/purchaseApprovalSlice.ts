@@ -17,7 +17,7 @@ const initialState: PurchaseApprovalState = {
     purchaseApproval: { data: [], loading: false, error: null },
 };
 
-export const fetchPurchaseApprovals = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchPurchaseApprovals = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'purchaseApproval/fetchPurchaseApprovals',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchPurchaseApprovals = createAsyncThunk<[], { params: null }, { r
 )
 
 
-export const fetchPurchaseApproval = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchPurchaseApproval = createAsyncThunk<[], number, { rejectValue: any }>(
     'purchaseApproval/fetchPurchaseApproval',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchPurchaseApproval = createAsyncThunk<[], number, { rejectValue:
     }
 )
 
-export const approvePurchaseApproval = createAsyncThunk<[], { id, formData }, { rejectValue: string }>(
+export const approvePurchaseApproval = createAsyncThunk<[], { id, formData }, { rejectValue: any }>(
     'purchaseApproval/approvePurchaseApproval',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const approvePurchaseApproval = createAsyncThunk<[], { id, formData }, { 
     }
 )
 
-export const rejectPurchaseApproval = createAsyncThunk<[], { id, formData }, { rejectValue: string }>(
+export const rejectPurchaseApproval = createAsyncThunk<[], { id, formData }, { rejectValue: any }>(
     'purchaseApproval/rejectPurchaseApproval',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

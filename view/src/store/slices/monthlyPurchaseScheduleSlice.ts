@@ -17,7 +17,7 @@ const initialState: MonthlyPurchaseScheduleState = {
     monthlyPurchaseSchedule: { data: [], loading: false, error: null },
 };
 
-export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, { rejectValue: string }>(
+export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, { rejectValue: any }>(
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedules',
     async (_, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, { reject
 )
 
 
-export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: any }>(
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedule',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejec
     }
 )
 
-export const createMonthlyPurchaseSchedule = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createMonthlyPurchaseSchedule = createAsyncThunk<[], formData, { rejectValue: any }>(
     'monthlyPurchaseSchedule/createMonthlyPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createMonthlyPurchaseSchedule = createAsyncThunk<[], formData, { re
     }
 )
 
-export const updateMonthlyPurchaseSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateMonthlyPurchaseSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'monthlyPurchaseSchedule/updateMonthlyPurchaseSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

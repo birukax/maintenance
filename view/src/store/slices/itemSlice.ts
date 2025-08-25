@@ -17,7 +17,7 @@ const initialState: ItemState = {
     item: { data: [], loading: false, error: null },
 };
 
-export const fetchItems = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchItems = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'item/fetchItems',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchItems = createAsyncThunk<[], { params: null }, { rejectValue: 
     }
 )
 
-export const fetchItem = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchItem = createAsyncThunk<[], number, { rejectValue: any }>(
     'item/fetchItem',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchItem = createAsyncThunk<[], number, { rejectValue: string }>(
     }
 )
 
-export const createItem = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createItem = createAsyncThunk<[], formData, { rejectValue: any }>(
     'item/createItem',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createItem = createAsyncThunk<[], formData, { rejectValue: string }
     }
 )
 
-export const updateItem = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateItem = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'item/updateItem',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

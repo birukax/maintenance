@@ -1,20 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface Schedule {
-    id: number;
-    [key: string]: any;
-}
-
-interface DataState<T> {
-    data: T;
-    loading: boolean;
-    error: any;
-}
 
 interface ScheduleState {
-    schedules: DataState<Schedule[]>;
-    schedule: DataState<Schedule | null>;
+    schedules: DataState<Data[]>;
+    schedule: DataState<Data | null>;
     scheduledWorkOrder: { loading: boolean; error: any };
 }
 
@@ -24,7 +16,7 @@ const initialState: ScheduleState = {
     scheduledWorkOrder: { loading: false, error: null },
 };
 
-export const fetchSchedules = createAsyncThunk<Schedule[], { params: null | undefined }, { rejectValue: any }>(
+export const fetchSchedules = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'schedule/fetchSchedules',
     async (params, { rejectWithValue }) => {
         try {
@@ -32,13 +24,16 @@ export const fetchSchedules = createAsyncThunk<Schedule[], { params: null | unde
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch schedules');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch schedules');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchSchedule = createAsyncThunk<Schedule, number, { rejectValue: any }>(
+export const fetchSchedule = createAsyncThunk<Data, number, { rejectValue: any }>(
     'schedule/fetchSchedule',
     async (id, { rejectWithValue }) => {
         try {
@@ -46,12 +41,15 @@ export const fetchSchedule = createAsyncThunk<Schedule, number, { rejectValue: a
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch schedule.');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch schedule.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createSchedule = createAsyncThunk<Schedule, { [key: string]: any }, { rejectValue: any }>(
+export const createSchedule = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'schedule/createSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -59,32 +57,41 @@ export const createSchedule = createAsyncThunk<Schedule, { [key: string]: any },
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || "Failed to create schedule.");
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to create schedule.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateSchedule = createAsyncThunk<Schedule, { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateSchedule = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'schedule/updateSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/schedule/schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || "Failed to update schedule.");
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to update schedule.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const createScheduledWorkOrder = createAsyncThunk<any, { id: string | number, formData: { [key: string]: any } }, { rejectValue: any }>(
+export const createScheduledWorkOrder = createAsyncThunk<any, UpdateFormData, { rejectValue: any }>(
     'schedule/createScheduledWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/schedule/schedules/${id}/create_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || "Failed to create work order.");
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to create work order.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -102,7 +109,7 @@ const scheduleSlice = createSlice({
                 state.schedules.loading = true;
                 state.schedules.error = null;
             })
-            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<Schedule[]>) => {
+            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.schedules.loading = false;
                 state.schedules.data = action.payload;
             })
@@ -114,7 +121,7 @@ const scheduleSlice = createSlice({
                 state.schedule.loading = true;
                 state.schedule.error = null;
             })
-            .addCase(fetchSchedule.fulfilled, (state, action: PayloadAction<Schedule>) => {
+            .addCase(fetchSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.schedule.loading = false;
                 state.schedule.data = action.payload;
             })
@@ -126,7 +133,7 @@ const scheduleSlice = createSlice({
                 state.schedule.loading = true;
                 state.schedule.error = null;
             })
-            .addCase(createSchedule.fulfilled, (state, action: PayloadAction<Schedule>) => {
+            .addCase(createSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.schedule.loading = false;
                 state.schedule.data = action.payload;
             })
@@ -138,7 +145,7 @@ const scheduleSlice = createSlice({
                 state.schedule.loading = true;
                 state.schedule.error = null;
             })
-            .addCase(updateSchedule.fulfilled, (state, action: PayloadAction<Schedule>) => {
+            .addCase(updateSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.schedule.loading = false;
                 state.schedule.data = action.payload;
             })
@@ -150,7 +157,7 @@ const scheduleSlice = createSlice({
                 state.scheduledWorkOrder.loading = true;
                 state.scheduledWorkOrder.error = null;
             })
-            .addCase(createScheduledWorkOrder.fulfilled, (state, action: PayloadAction<any>) => {
+            .addCase(createScheduledWorkOrder.fulfilled, (state) => {
                 state.scheduledWorkOrder.loading = false;
                 // state.scheduledWorkOrder.data = action.payload;
             })

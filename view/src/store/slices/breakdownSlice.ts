@@ -17,7 +17,7 @@ const initialState: BreakdownState = {
     breakdown: { data: [], loading: false, error: null },
 };
 
-export const fetchBreakdowns = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchBreakdowns = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'breakdown/fetchBreakdowns',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchBreakdowns = createAsyncThunk<[], { params: null }, { rejectVa
 )
 
 
-export const fetchBreakdown = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchBreakdown = createAsyncThunk<[], number, { rejectValue: any }>(
     'breakdown/fetchBreakdown',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchBreakdown = createAsyncThunk<[], number, { rejectValue: string
     }
 )
 
-export const createBreakdown = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createBreakdown = createAsyncThunk<[], formData, { rejectValue: any }>(
     'breakdown/createBreakdown',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createBreakdown = createAsyncThunk<[], formData, { rejectValue: str
     }
 )
 
-export const updateBreakdown = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateBreakdown = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'breakdown/updateBreakdown',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -70,7 +70,7 @@ export const updateBreakdown = createAsyncThunk<[], { id: string, formData: { [k
 )
 
 
-export const createBreakdownWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const createBreakdownWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'breakdown/createBreakdownWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

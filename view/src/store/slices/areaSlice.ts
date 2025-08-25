@@ -17,7 +17,7 @@ const initialState: AreaState = {
     area: { data: [], loading: false, error: null },
 };
 
-export const fetchAreas = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchAreas = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'area/fetchAreas',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchAreas = createAsyncThunk<[], { params: null }, { rejectValue: 
 )
 
 
-export const fetchArea = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchArea = createAsyncThunk<[], number, { rejectValue: any }>(
     'area/fetchArea',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchArea = createAsyncThunk<[], number, { rejectValue: string }>(
     }
 )
 
-export const createArea = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createArea = createAsyncThunk<[], formData, { rejectValue: any }>(
     'area/createArea',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createArea = createAsyncThunk<[], formData, { rejectValue: string }
     }
 )
 
-export const updateArea = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateArea = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'area/updateArea',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

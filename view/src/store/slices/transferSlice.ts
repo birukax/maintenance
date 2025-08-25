@@ -1,25 +1,22 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface TransferState {
-    transfers: DataState;
-    transfer: DataState;
-    transferHistories: DataState;
+    transfers: DataState<Data[]>;
+    transfer: DataState<Data | null>;
+    transferHistories: DataState<Data[]>;
 }
 
 const initialState: TransferState = {
     transfers: { data: [], loading: false, error: null },
-    transfer: { data: [], loading: false, error: null },
+    transfer: { data: null, loading: false, error: null },
     transferHistories: { data: [], loading: false, error: null },
 };
 
-export const fetchTransfers = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchTransfers = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'transfer/fetchTransfers',
     async (params, { rejectWithValue }) => {
         try {
@@ -27,13 +24,16 @@ export const fetchTransfers = createAsyncThunk<[], { params: null }, { rejectVal
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Transfers');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Transfers');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchTransfer = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchTransfer = createAsyncThunk<Data, number, { rejectValue: any }>(
     'transfer/fetchTransfer',
     async (id, { rejectWithValue }) => {
         try {
@@ -41,12 +41,15 @@ export const fetchTransfer = createAsyncThunk<[], number, { rejectValue: string 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Transfer');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Transfer');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createTransfer = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createTransfer = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'transfer/createTransfer',
     async (formData, { rejectWithValue }) => {
         try {
@@ -54,34 +57,43 @@ export const createTransfer = createAsyncThunk<[], formData, { rejectValue: stri
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create Transfer');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create Transfer');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateTransfer = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateTransfer = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'transfer/updateTransfer',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/transfers/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update Transfer');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update Transfer');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
-export const receiveTransfer = createAsyncThunk<[], { id: string }, { rejectValue: string }>(
+export const receiveTransfer = createAsyncThunk<Data, number, { rejectValue: any }>(
     'transfer/receive',
-    async ({ id }, { rejectWithValue }) => {
+    async (id, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/transfers/${id}/receive/`);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to Receive Transfer');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to Receive Transfer');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
-export const shipTransfer = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const shipTransfer = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
 
     'transfer/ship',
     async ({ id, formData }, { rejectWithValue }) => {
@@ -89,12 +101,15 @@ export const shipTransfer = createAsyncThunk<[], { id: string, formData: { [key:
             const response = await api.patch(`/inventory/transfers/${id}/ship/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to ship Transfer');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to ship Transfer');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const fetchTransferHistories = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchTransferHistories = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'transfer/fetchTransferHistories',
     async (params, { rejectWithValue }) => {
         try {
@@ -102,7 +117,10 @@ export const fetchTransferHistories = createAsyncThunk<[], { params: null }, { r
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Transfer histories');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Transfer histories');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -121,7 +139,7 @@ const TransferSlice = createSlice({
                 state.transfers.loading = true;
                 state.transfers.error = null;
             })
-            .addCase(fetchTransfers.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchTransfers.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.transfers.loading = false;
                 state.transfers.data = action.payload;
             })
@@ -133,7 +151,7 @@ const TransferSlice = createSlice({
                 state.transfer.loading = true;
                 state.transfer.error = null;
             })
-            .addCase(fetchTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchTransfer.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transfer.loading = false;
                 state.transfer.data = action.payload;
             })
@@ -145,7 +163,7 @@ const TransferSlice = createSlice({
                 state.transfer.loading = true;
                 state.transfer.error = null;
             })
-            .addCase(createTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createTransfer.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transfer.loading = false;
                 state.transfer.data = action.payload;
             })
@@ -157,7 +175,7 @@ const TransferSlice = createSlice({
                 state.transfer.loading = true;
                 state.transfer.error = null;
             })
-            .addCase(updateTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateTransfer.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transfer.loading = false;
                 state.transfer.data = action.payload;
             })
@@ -169,7 +187,7 @@ const TransferSlice = createSlice({
                 state.transfer.loading = true;
                 state.transfer.error = null;
             })
-            .addCase(receiveTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(receiveTransfer.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transfer.loading = false;
                 state.transfer.data = action.payload;
             })
@@ -181,7 +199,7 @@ const TransferSlice = createSlice({
                 state.transfer.loading = true;
                 state.transfer.error = null;
             })
-            .addCase(shipTransfer.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(shipTransfer.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transfer.loading = false;
                 state.transfer.data = action.payload;
             })
@@ -193,7 +211,7 @@ const TransferSlice = createSlice({
                 state.transferHistories.loading = true;
                 state.transferHistories.error = null;
             })
-            .addCase(fetchTransferHistories.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchTransferHistories.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.transferHistories.loading = false;
                 state.transferHistories.data = action.payload;
             })

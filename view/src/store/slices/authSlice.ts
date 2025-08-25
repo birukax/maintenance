@@ -32,7 +32,7 @@ const authSlice = createSlice({
 })
 
 
-export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
+export const logout = createAsyncThunk<void, void, { rejectValue: any }>(
     'auth/logout',
     async (_, { dispatch }) => {
         try {

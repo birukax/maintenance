@@ -1,3 +1,4 @@
+import storage from 'redux-persist/lib/storage';
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, PersistConfig, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import areaReducer from './slices/areaSlice';
@@ -6,7 +7,6 @@ import itemReducer from './slices/itemSlice';
 import yearReducer from './slices/yearSlice';
 import shelfReducer from './slices/shelfSlice';
 import plantReducer from './slices/plantSlice';
-import storage from 'redux-persist/lib/storage';
 import returnReducer from './slices/returnSlice';
 import contactReducer from './slices/contactSlice';
 import profileReducer from './slices/profileSlice';

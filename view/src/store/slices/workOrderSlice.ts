@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface WorkOrderState {
-    workOrders: DataState;
-    workOrder: DataState;
+    workOrders: DataState<Data[]>;
+    workOrder: DataState<Data | null>;
 }
 
 const initialState: WorkOrderState = {
     workOrders: { data: [], loading: false, error: null },
-    workOrder: { data: [], loading: false, error: null },
+    workOrder: { data: null, loading: false, error: null },
 };
 
-export const fetchWorkOrders = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchWorkOrders = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'workOrder/fetchWorkOrders',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,17 @@ export const fetchWorkOrders = createAsyncThunk<[], { params: null }, { rejectVa
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work orders');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to fetch work orders');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
 
-export const fetchWorkOrder = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchWorkOrder = createAsyncThunk<Data, number, { rejectValue: any }>(
     'workOrder/fetchWorkOrder',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +40,16 @@ export const fetchWorkOrder = createAsyncThunk<[], number, { rejectValue: string
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to fetch work order');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const createWorkOrder = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createWorkOrder = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'workOrder/createWorkOrder',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,68 +57,92 @@ export const createWorkOrder = createAsyncThunk<[], formData, { rejectValue: str
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create work order');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to create work order');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const updateWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateWorkOrder = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrder/updateWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/work-order/work-orders/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update work order');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to update work order');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const createWorkOrderActivities = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const createWorkOrderActivities = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrder/createWorkOrderActivities',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/work-order/work-orders/${id}/create_activities/`, formData)
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create work order activities');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to create work order activities');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const assignWorkOrderUsers = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const assignWorkOrderUsers = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrder/assignWorkOrderUsers',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/work-order/work-orders/${id}/assign_users/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to assign users to work order.');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const submitWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const submitWorkOrder = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrder/submitWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/work-order/work-orders/${id}/submit_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to submit work order.');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
 
-export const completeWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const completeWorkOrder = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrder/completeWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/work-order/work-orders/${id}/complete_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to complete work order.');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
@@ -129,7 +158,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrders.loading = true;
                 state.workOrders.error = null;
             })
-            .addCase(fetchWorkOrders.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchWorkOrders.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.workOrders.loading = false;
                 state.workOrders.data = action.payload;
             })
@@ -141,7 +170,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(fetchWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })
@@ -153,7 +182,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(createWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })
@@ -165,7 +194,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(updateWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })
@@ -177,7 +206,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(createWorkOrderActivities.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createWorkOrderActivities.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })
@@ -189,7 +218,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(assignWorkOrderUsers.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(assignWorkOrderUsers.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })
@@ -201,7 +230,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(submitWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(submitWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })
@@ -213,7 +242,7 @@ const WorkOrderSlice = createSlice({
                 state.workOrder.loading = true;
                 state.workOrder.error = null;
             })
-            .addCase(completeWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(completeWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrder.loading = false;
                 state.workOrder.data = action.payload;
             })

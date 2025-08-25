@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface WorkOrderTypeState {
-    workOrderTypes: DataState;
-    workOrderType: DataState;
+    workOrderTypes: DataState<Data[]>;
+    workOrderType: DataState<Data | null>;
 }
 
 const initialState: WorkOrderTypeState = {
     workOrderTypes: { data: [], loading: false, error: null },
-    workOrderType: { data: [], loading: false, error: null },
+    workOrderType: { data: null, loading: false, error: null },
 };
 
-export const fetchWorkOrderTypes = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchWorkOrderTypes = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'workOrderType/fetchWorkOrderTypes',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchWorkOrderTypes = createAsyncThunk<[], { params: null }, { reje
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order types');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch work order types');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchWorkOrderType = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchWorkOrderType = createAsyncThunk<Data, number, { rejectValue: any }>(
     'workOrderType/fetchWorkOrderType',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchWorkOrderType = createAsyncThunk<[], number, { rejectValue: st
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order type');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch work order type');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const createWorkOrderType = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createWorkOrderType = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'workOrderType/createWorkOrderType',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,27 @@ export const createWorkOrderType = createAsyncThunk<[], formData, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create work order type');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create work order type');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const updateWorkOrderType = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateWorkOrderType = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrderType/updateWorkOrderType',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/work-order/work-order-types/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update work order type');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update work order type');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
@@ -81,7 +92,7 @@ const WorkOrderTypeSlice = createSlice({
                 state.workOrderTypes.loading = true;
                 state.workOrderTypes.error = null;
             })
-            .addCase(fetchWorkOrderTypes.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchWorkOrderTypes.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.workOrderTypes.loading = false;
                 state.workOrderTypes.data = action.payload;
             })
@@ -93,7 +104,7 @@ const WorkOrderTypeSlice = createSlice({
                 state.workOrderType.loading = true;
                 state.workOrderType.error = null;
             })
-            .addCase(fetchWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchWorkOrderType.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrderType.loading = false;
                 state.workOrderType.data = action.payload;
             })
@@ -105,7 +116,7 @@ const WorkOrderTypeSlice = createSlice({
                 state.workOrderType.loading = true;
                 state.workOrderType.error = null;
             })
-            .addCase(createWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createWorkOrderType.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrderType.loading = false;
                 state.workOrderType.data = action.payload;
             })
@@ -117,7 +128,7 @@ const WorkOrderTypeSlice = createSlice({
                 state.workOrderType.loading = true;
                 state.workOrderType.error = null;
             })
-            .addCase(updateWorkOrderType.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateWorkOrderType.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrderType.loading = false;
                 state.workOrderType.data = action.payload;
             })

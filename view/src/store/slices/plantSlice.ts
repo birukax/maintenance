@@ -17,7 +17,7 @@ const initialState: PlantState = {
     plant: { data: [], loading: false, error: null },
 };
 
-export const fetchPlants = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchPlants = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'plant/fetchPlants',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchPlants = createAsyncThunk<[], { params: null }, { rejectValue:
 )
 
 
-export const fetchPlant = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchPlant = createAsyncThunk<[], number, { rejectValue: any }>(
     'plant/fetchPlant',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchPlant = createAsyncThunk<[], number, { rejectValue: string }>(
     }
 )
 
-export const createPlant = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createPlant = createAsyncThunk<[], formData, { rejectValue: any }>(
     'plant/createPlant',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createPlant = createAsyncThunk<[], formData, { rejectValue: string 
     }
 )
 
-export const updatePlant = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updatePlant = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'plant/updatePlant',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

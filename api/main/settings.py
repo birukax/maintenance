@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-zvxa1u_c(%5z+9gqw=tx%#q8x*4cc*ryyo))+6oj-h@^!qz&v%"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG") or True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -56,9 +56,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -136,6 +136,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "static/"
 STATIC_URL = "static/"
 
 # Default primary key field type
@@ -168,6 +169,8 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://172.16.19.10:5173",
+    "http://localhost:8008",
+    "http://172.16.18.22:8008",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

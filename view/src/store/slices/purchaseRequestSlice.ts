@@ -17,7 +17,7 @@ const initialState: PurchaseRequestState = {
     purchaseRequest: { data: [], loading: false, error: null },
 };
 
-export const fetchPurchaseRequests = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchPurchaseRequests = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'purchaseRequest/fetchPurchaseRequests',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchPurchaseRequests = createAsyncThunk<[], { params: null }, { re
 )
 
 
-export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: any }>(
     'purchaseRequest/fetchPurchaseRequest',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: 
     }
 )
 
-export const createPurchaseRequest = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createPurchaseRequest = createAsyncThunk<[], formData, { rejectValue: any }>(
     'purchaseRequest/createPurchaseRequest',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createPurchaseRequest = createAsyncThunk<[], formData, { rejectValu
     }
 )
 
-export const updatePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updatePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'purchaseRequest/updatePurchaseRequest',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -69,7 +69,7 @@ export const updatePurchaseRequest = createAsyncThunk<[], { id: string, formData
     }
 )
 
-export const receivePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const receivePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'purchaseRequest/receivePurchaseRequest',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

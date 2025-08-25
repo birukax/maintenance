@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import axios, { type AxiosInstance, AxiosResponse, AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { store } from '../store/store';
 import { setTokens, logout } from '../store/slices/authSlice';
 interface Tokens {
@@ -6,8 +6,13 @@ interface Tokens {
   refresh: string;
 }
 
+interface OriginalRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 const api: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: '/api'
+  // baseURL: 'http://localhost:8009',
+  // baseURL: 'http://localhost:8000',
 });
 
 let isLoggingOut = false;
@@ -26,9 +31,9 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status == 401 && !originalRequest._retry && !isLoggingOut) {
+  async (error: AxiosError) => {
+    const originalRequest = error?.config as OriginalRequestConfig;
+    if (error?.response?.status == 401 && !originalRequest._retry && !isLoggingOut) {
       originalRequest._retry = true;
       isLoggingOut = true;
 

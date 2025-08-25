@@ -20,7 +20,7 @@ const initialState: InventoryState = {
 export const fetchInventories = createAsyncThunk<
   [],
   { params: null },
-  { rejectValue: string }
+  { rejectValue: any }
 >("inventory/fetchInventories", async (params, { rejectWithValue }) => {
   try {
     const response = await api.get("/inventory/inventories/", { params });
@@ -35,7 +35,7 @@ export const fetchInventories = createAsyncThunk<
 export const revaluateStock = createAsyncThunk<
   [],
   void,
-  { rejectValue: string }
+  { rejectValue: any }
 >("inventory/revaluateStock", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get("/inventory/inventories/revaluate_stock/");
@@ -50,7 +50,7 @@ export const revaluateStock = createAsyncThunk<
 export const fetchInventory = createAsyncThunk<
   [],
   number,
-  { rejectValue: string }
+  { rejectValue: any }
 >("inventory/fetchInventory", async (id, { rejectWithValue }) => {
   try {
     const response = await api.get(`/inventory/inventories/${id}/`);
@@ -63,7 +63,7 @@ export const fetchInventory = createAsyncThunk<
 export const createInventory = createAsyncThunk<
   [],
   formData,
-  { rejectValue: string }
+  { rejectValue: any }
 >("inventory/createInventory", async (formData, { rejectWithValue }) => {
   try {
     const response = await api.post("/inventory/inventories/", formData);
@@ -76,7 +76,7 @@ export const createInventory = createAsyncThunk<
 export const updateInventory = createAsyncThunk<
   [],
   { id: string; formData: { [key: string] } },
-  { rejectValue: string }
+  { rejectValue: any }
 >(
   "inventory/updateInventory",
   async ({ id, formData }, { rejectWithValue }) => {

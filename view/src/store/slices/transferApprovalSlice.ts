@@ -1,37 +1,36 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface TransferApprovalState {
-    transferApprovals: DataState;
-    transferApproval: DataState;
+    transferApprovals: DataState<Data[]>;
+    transferApproval: DataState<Data | null>;
 }
 
 const initialState: TransferApprovalState = {
     transferApprovals: { data: [], loading: false, error: null },
-    transferApproval: { data: [], loading: false, error: null },
+    transferApproval: { data: null, loading: false, error: null },
 };
 
-export const fetchTransferApprovals = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchTransferApprovals = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'transferApproval/fetchTransferApprovals',
     async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/approval/transfer-approvals/', { params: params });
+            const response = await api.get('/approval/transfer-approvals/', { params });
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Approvals');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch transfer approvals.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchTransferApproval = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchTransferApproval = createAsyncThunk<Data, number, { rejectValue: any }>(
     'transferApproval/fetchTransferApproval',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchTransferApproval = createAsyncThunk<[], number, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch transfer approval.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const approveTransferApproval = createAsyncThunk<[], { id, formData }, { rejectValue: string }>(
+export const approveTransferApproval = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'transferApproval/approveTransferApproval',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -52,12 +54,15 @@ export const approveTransferApproval = createAsyncThunk<[], { id, formData }, { 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to approve transfer approval.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const rejectTransferApproval = createAsyncThunk<[], { id, formData }, { rejectValue: string }>(
+export const rejectTransferApproval = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'transferApproval/rejectTransferApproval',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -65,7 +70,10 @@ export const rejectTransferApproval = createAsyncThunk<[], { id, formData }, { r
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to reject transfer approval.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -82,7 +90,7 @@ const transferApprovalSlice = createSlice({
                 state.transferApprovals.loading = true;
                 state.transferApprovals.error = null;
             })
-            .addCase(fetchTransferApprovals.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchTransferApprovals.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.transferApprovals.loading = false;
                 state.transferApprovals.data = action.payload;
             })
@@ -94,7 +102,7 @@ const transferApprovalSlice = createSlice({
                 state.transferApproval.loading = true;
                 state.transferApproval.error = null;
             })
-            .addCase(fetchTransferApproval.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchTransferApproval.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transferApproval.loading = false;
                 state.transferApproval.data = action.payload;
             })
@@ -106,7 +114,7 @@ const transferApprovalSlice = createSlice({
                 state.transferApproval.loading = true;
                 state.transferApproval.error = null;
             })
-            .addCase(approveTransferApproval.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(approveTransferApproval.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transferApproval.loading = false;
                 state.transferApproval.data = action.payload;
             })
@@ -118,7 +126,7 @@ const transferApprovalSlice = createSlice({
                 state.transferApproval.loading = true;
                 state.transferApproval.error = null;
             })
-            .addCase(rejectTransferApproval.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(rejectTransferApproval.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.transferApproval.loading = false;
                 state.transferApproval.data = action.payload;
             })
@@ -129,5 +137,5 @@ const transferApprovalSlice = createSlice({
     }
 })
 
-// export const { approveTransferApproval, rejectTransferApproval, deletePurchaseApproval } = transferApprovalSlice.actions;
+// export const { approveTransferApproval, rejectTransferApproval, deleteTransferApproval } = transferApprovalSlice.actions;
 export default transferApprovalSlice.reducer;

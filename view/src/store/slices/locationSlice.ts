@@ -17,7 +17,7 @@ const initialState: LocationState = {
     location: { data: [], loading: false, error: null },
 };
 
-export const fetchLocations = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchLocations = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'location/fetchLocations',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchLocations = createAsyncThunk<[], { params: null }, { rejectVal
 )
 
 
-export const fetchLocation = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchLocation = createAsyncThunk<[], number, { rejectValue: any }>(
     'location/fetchLocation',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchLocation = createAsyncThunk<[], number, { rejectValue: string 
     }
 )
 
-export const createLocation = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createLocation = createAsyncThunk<[], formData, { rejectValue: any }>(
     'location/createLocation',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createLocation = createAsyncThunk<[], formData, { rejectValue: stri
     }
 )
 
-export const updateLocation = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateLocation = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'location/updateLocation',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

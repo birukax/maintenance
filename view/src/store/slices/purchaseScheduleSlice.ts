@@ -1,42 +1,38 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface PurchaseScheduleState {
-    purchaseSchedules: DataState;
-    purchaseSchedule: DataState;
-    years: DataState;
+    purchaseSchedules: DataState<Data[]>;
+    purchaseSchedule: DataState<Data | null>;
 }
 
 const initialState: PurchaseScheduleState = {
     purchaseSchedules: { data: [], loading: false, error: null },
-    purchaseSchedule: { data: [], loading: false, error: null },
-    years: { data: [], loading: false, error: null },
+    purchaseSchedule: { data: null, loading: false, error: null },
 };
 
 
-export const fetchPurchaseSchedules = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchPurchaseSchedules = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'purchaseSchedule/fetchPurchaseSchedules',
     async (params, { rejectWithValue }) => {
         try {
             const response = await api.get('/purchase/schedules/', { params });
             return response.data;
-
-
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Schedules');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Purchase Schedules');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchPurchaseSchedule = createAsyncThunk<Data, number, { rejectValue: any }>(
     'purchaseSchedule/fetchPurchaseSchedule',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,12 +40,15 @@ export const fetchPurchaseSchedule = createAsyncThunk<[], number, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Purchase Schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createPurchaseSchedule = createAsyncThunk<[], { formData, monthFormData }, { rejectValue: string }>(
+export const createPurchaseSchedule = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'purchaseSchedule/createPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,73 +56,58 @@ export const createPurchaseSchedule = createAsyncThunk<[], { formData, monthForm
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to crete Purchase Schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create Purchase Schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updatePurchaseSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updatePurchaseSchedule = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'purchaseSchedule/updatePurchaseSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/purchase/schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update Purchase Schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update Purchase Schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const createAnnualSchedule = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: string }>(
+export const createAnnualSchedule = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'purchaseSchedule/createAnnualSchedule',
     async ({ formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/purchase/schedules/create_annual_schedule/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create annual schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create annual schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-
-export const fetchYears = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
-    'purchaseSchedule/fetchYears',
-    async (params, { rejectWithValue }) => {
-        try {
-            const response = await api.get('/purchase/years/', { params });
-            return response.data;
-
-
-        }
-        catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Years');
-        }
-    }
-)
 
 const purchaseScheduleSlice = createSlice({
     name: 'purchaseSchedule',
     initialState,
-    reducers: {
-        clearPurchaseSchedules: (state) => {
-            state.purchaseSchedules = {
-                data: [],
-                loading: false,
-                error: null,
-            };
-        },
-    },
-
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchPurchaseSchedules.pending, (state) => {
                 state.purchaseSchedules.loading = true;
                 state.purchaseSchedules.error = null;
             })
-            .addCase(fetchPurchaseSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPurchaseSchedules.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.purchaseSchedules.loading = false;
                 state.purchaseSchedules.data = action.payload;
             })
@@ -135,7 +119,7 @@ const purchaseScheduleSlice = createSlice({
                 state.purchaseSchedule.loading = true;
                 state.purchaseSchedule.error = null;
             })
-            .addCase(fetchPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPurchaseSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseSchedule.loading = false;
                 state.purchaseSchedule.data = action.payload;
             })
@@ -147,7 +131,7 @@ const purchaseScheduleSlice = createSlice({
                 state.purchaseSchedule.loading = true;
                 state.purchaseSchedule.error = null;
             })
-            .addCase(createPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createPurchaseSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseSchedule.loading = false;
                 state.purchaseSchedule.data = action.payload;
             })
@@ -159,7 +143,7 @@ const purchaseScheduleSlice = createSlice({
                 state.purchaseSchedule.loading = true;
                 state.purchaseSchedule.error = null;
             })
-            .addCase(updatePurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updatePurchaseSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseSchedule.loading = false;
                 state.purchaseSchedule.data = action.payload;
             })
@@ -171,7 +155,7 @@ const purchaseScheduleSlice = createSlice({
                 state.purchaseSchedule.loading = true;
                 state.purchaseSchedule.error = null;
             })
-            .addCase(createAnnualSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createAnnualSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseSchedule.loading = false;
                 state.purchaseSchedule.data = action.payload;
             })
@@ -179,35 +163,10 @@ const purchaseScheduleSlice = createSlice({
                 state.purchaseSchedule.loading = false;
                 state.purchaseSchedule.error = action.payload || 'Unknown error';
             })
-            .addCase(fetchYears.pending, (state) => {
-                state.years.loading = true;
-                state.years.error = null;
-            })
-            .addCase(fetchYears.fulfilled, (state, action: PayloadAction<[]>) => {
-                state.years.loading = false;
-                state.years.data = action.payload;
-            })
-            .addCase(fetchYears.rejected, (state, action) => {
-                state.years.loading = false;
-                state.years.error = action.payload || 'Unknown error';
-            })
     }
 })
 
-export const clear = createAsyncThunk<void, void, { rejectValue: string }>(
-    'purchaseSchedule/clear',
-    async (_, { dispatch }) => {
-        try {
-            dispatch(clearPurchaseSchedules())
-        }
-        catch (err) {
-            throw new Error(err.message || "Logout failed");
-
-        }
-    }
-)
-
 
 // export const { createPurchaseSchedule, updatePurchaseSchedule, deletePurchaseSchedule } = purchaseScheduleSlice.actions;
-export const { clearPurchaseSchedules } = purchaseScheduleSlice.actions
+// export const { clearPurchaseSchedules } = purchaseScheduleSlice.actions
 export default purchaseScheduleSlice.reducer;

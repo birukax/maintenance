@@ -17,7 +17,7 @@ const initialState: ContactState = {
     contact: { data: [], loading: false, error: null },
 };
 
-export const fetchContacts = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchContacts = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'contact/fetchContacts',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchContacts = createAsyncThunk<[], { params: null }, { rejectValu
 )
 
 
-export const fetchContact = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchContact = createAsyncThunk<[], number, { rejectValue: any }>(
     'contact/fetchContact',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchContact = createAsyncThunk<[], number, { rejectValue: string }
     }
 )
 
-export const createContact = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createContact = createAsyncThunk<[], formData, { rejectValue: any }>(
     'contact/createContact',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createContact = createAsyncThunk<[], formData, { rejectValue: strin
     }
 )
 
-export const updateContact = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateContact = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'contact/updateContact',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

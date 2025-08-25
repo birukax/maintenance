@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface ShelfRowState {
-    shelfRows: DataState;
-    shelfRow: DataState;
+    shelfRows: DataState<Data[]>;
+    shelfRow: DataState<Data | null>;
 }
 
 const initialState: ShelfRowState = {
     shelfRows: { data: [], loading: false, error: null },
-    shelfRow: { data: [], loading: false, error: null },
+    shelfRow: { data: null, loading: false, error: null },
 };
 
-export const fetchShelfRows = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchShelfRows = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'shelfRow/fetchShelfRows',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchShelfRows = createAsyncThunk<[], { params: null }, { rejectVal
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch shelfRows');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || 'Failed to fetch shelf rows');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchShelfRow = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchShelfRow = createAsyncThunk<Data, number, { rejectValue: any }>(
     'shelfRow/fetchShelfRow',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchShelfRow = createAsyncThunk<[], number, { rejectValue: string 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || "Failed to fetch shelf row.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createShelfRow = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createShelfRow = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'shelfRow/createShelfRow',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,25 @@ export const createShelfRow = createAsyncThunk<[], formData, { rejectValue: stri
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || "Failed to create shelf row.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateShelfRow = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateShelfRow = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'shelfRow/updateShelfRow',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/shelf-rows/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error.response?.data || "Failed to update shelf row.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +90,7 @@ const shelfRowSlice = createSlice({
                 state.shelfRows.loading = true;
                 state.shelfRows.error = null;
             })
-            .addCase(fetchShelfRows.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchShelfRows.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.shelfRows.loading = false;
                 state.shelfRows.data = action.payload;
             })
@@ -93,7 +102,7 @@ const shelfRowSlice = createSlice({
                 state.shelfRow.loading = true;
                 state.shelfRow.error = null;
             })
-            .addCase(fetchShelfRow.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchShelfRow.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.shelfRow.loading = false;
                 state.shelfRow.data = action.payload;
             })
@@ -105,7 +114,7 @@ const shelfRowSlice = createSlice({
                 state.shelfRow.loading = true;
                 state.shelfRow.error = null;
             })
-            .addCase(createShelfRow.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createShelfRow.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.shelfRow.loading = false;
                 state.shelfRow.data = action.payload;
             })
@@ -117,7 +126,7 @@ const shelfRowSlice = createSlice({
                 state.shelfRow.loading = true;
                 state.shelfRow.error = null;
             })
-            .addCase(updateShelfRow.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateShelfRow.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.shelfRow.loading = false;
                 state.shelfRow.data = action.payload;
             })

@@ -17,7 +17,7 @@ const initialState: ProfileState = {
     profile: { data: [], loading: false, error: null },
 };
 
-export const fetchProfiles = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchProfiles = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'profile/fetchProfiles',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchProfiles = createAsyncThunk<[], { params: null }, { rejectValu
 )
 
 
-export const fetchProfile = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchProfile = createAsyncThunk<[], number, { rejectValue: any }>(
     'profile/fetchProfile',
     async (id, { rejectWithValue }) => {
         try {
@@ -43,7 +43,7 @@ export const fetchProfile = createAsyncThunk<[], number, { rejectValue: string }
         }
     }
 )
-export const fetchUserProfile = createAsyncThunk<[], { rejectValue: string }>(
+export const fetchUserProfile = createAsyncThunk<[], { rejectValue: any }>(
     'profile/fetchUserProfile',
     async (_, { rejectWithValue }) => {
         try {
@@ -56,7 +56,7 @@ export const fetchUserProfile = createAsyncThunk<[], { rejectValue: string }>(
     }
 )
 
-export const createProfile = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createProfile = createAsyncThunk<[], formData, { rejectValue: any }>(
     'profile/createProfile',
     async (formData, { rejectWithValue }) => {
         try {
@@ -69,7 +69,7 @@ export const createProfile = createAsyncThunk<[], formData, { rejectValue: strin
     }
 )
 
-export const updateProfile = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateProfile = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'profile/updateProfile',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -80,7 +80,7 @@ export const updateProfile = createAsyncThunk<[], { id: string, formData: { [key
         }
     }
 )
-export const resetPassword = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: string }>(
+export const resetPassword = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: any }>(
     'profile/resetPassword',
     async ({ formData }, { rejectWithValue }) => {
         try {

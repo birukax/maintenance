@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
+
+interface ShelfBoxeState {
+    shelfBoxes: DataState<Data[]>;
+    shelfBox: DataState<Data | null>;
 }
 
-interface ShelfBoxestate {
-    shelfBoxes: DataState;
-    shelfBox: DataState;
-}
-
-const initialState: ShelfBoxestate = {
+const initialState: ShelfBoxeState = {
     shelfBoxes: { data: [], loading: false, error: null },
-    shelfBox: { data: [], loading: false, error: null },
+    shelfBox: { data: null, loading: false, error: null },
 };
 
-export const fetchShelfBoxes = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchShelfBoxes = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'shelfBox/fetchShelfBoxes',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchShelfBoxes = createAsyncThunk<[], { params: null }, { rejectVa
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch shelfBoxes');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch shelf boxes.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchShelfBox = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchShelfBox = createAsyncThunk<Data, number, { rejectValue: any }>(
     'shelfBox/fetchShelfBox',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchShelfBox = createAsyncThunk<[], number, { rejectValue: string 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch shelf box.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createShelfBox = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createShelfBox = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'shelfBox/createShelfBox',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,25 @@ export const createShelfBox = createAsyncThunk<[], formData, { rejectValue: stri
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create shelf box.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateShelfBox = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateShelfBox = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'shelfBox/updateShelfBox',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/shelf-boxes/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update shelf box.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +90,7 @@ const shelfBoxeslice = createSlice({
                 state.shelfBoxes.loading = true;
                 state.shelfBoxes.error = null;
             })
-            .addCase(fetchShelfBoxes.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchShelfBoxes.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.shelfBoxes.loading = false;
                 state.shelfBoxes.data = action.payload;
             })
@@ -93,7 +102,7 @@ const shelfBoxeslice = createSlice({
                 state.shelfBox.loading = true;
                 state.shelfBox.error = null;
             })
-            .addCase(fetchShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchShelfBox.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.shelfBox.loading = false;
                 state.shelfBox.data = action.payload;
             })
@@ -105,7 +114,7 @@ const shelfBoxeslice = createSlice({
                 state.shelfBox.loading = true;
                 state.shelfBox.error = null;
             })
-            .addCase(createShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createShelfBox.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.shelfBox.loading = false;
                 state.shelfBox.data = action.payload;
             })
@@ -117,7 +126,7 @@ const shelfBoxeslice = createSlice({
                 state.shelfBox.loading = true;
                 state.shelfBox.error = null;
             })
-            .addCase(updateShelfBox.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateShelfBox.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.shelfBox.loading = false;
                 state.shelfBox.data = action.payload;
             })

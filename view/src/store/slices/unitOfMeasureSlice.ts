@@ -1,81 +1,75 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from "../../utils/api";
-
-interface DataState {
-  data: [] | null;
-  loading: boolean;
-  error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface UnitOfMeasureState {
-  unitOfMeasures: DataState;
-  unitOfMeasure: DataState;
+  unitOfMeasures: DataState<Data[]>;
+  unitOfMeasure: DataState<Data | null>;
 }
 
 const initialState: UnitOfMeasureState = {
   unitOfMeasures: { data: [], loading: false, error: null },
-  unitOfMeasure: { data: [], loading: false, error: null },
+  unitOfMeasure: { data: null, loading: false, error: null },
 };
 
-export const fetchUnitOfMeasures = createAsyncThunk<
-  [],
-  { params: null },
-  { rejectValue: string }
->("unitOfMeasure/fetchUnitOfMeasures", async (params, { rejectWithValue }) => {
-  try {
-    const response = await api.get("/inventory/unit-of-measures/", { params });
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(
-      error.response?.data || "Failed to fetch unitOfMeasures"
-    );
-  }
-});
+export const fetchUnitOfMeasures = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+  "unitOfMeasure/fetchUnitOfMeasures",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/inventory/unit-of-measures/", { params });
+      return response.data;
+    } catch (error) {
 
-export const fetchUnitOfMeasure = createAsyncThunk<
-  [],
-  number,
-  { rejectValue: string }
->("unitOfMeasure/fetchUnitOfMeasure", async (id, { rejectWithValue }) => {
-  try {
-    const response = await api.get(`/inventory/unit-of-measures/${id}/`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
-});
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data || "Failed to fetch unit Of Measures.");
+      }
+      return rejectWithValue('An error occured')
+    }
+  });
 
-export const createUnitOfMeasure = createAsyncThunk<
-  [],
-  formData,
-  { rejectValue: string }
->(
+export const fetchUnitOfMeasure = createAsyncThunk<Data, number, { rejectValue: any }>(
+  "unitOfMeasure/fetchUnitOfMeasure",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/inventory/unit-of-measures/${id}/`);
+      return response.data;
+    } catch (error) {
+
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data || 'Failed to fetch unit of measure.');
+      }
+      return rejectWithValue('An error occured')
+    }
+  });
+
+export const createUnitOfMeasure = createAsyncThunk<Data, FormData, { rejectValue: any }>(
   "unitOfMeasure/createUnitOfMeasure",
   async (formData, { rejectWithValue }) => {
     try {
       const response = await api.post("/inventory/unit-of-measures/", formData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data || 'Failed to create unit of measure.');
+      }
+      return rejectWithValue('An error occured')
     }
   }
 );
 
-export const updateUnitOfMeasure = createAsyncThunk<
-  [],
-  { id: string; formData: { [key: string] } },
-  { rejectValue: string }
->(
+export const updateUnitOfMeasure = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
   "unitOfMeasure/updateUnitOfMeasure",
   async ({ id, formData }, { rejectWithValue }) => {
     try {
-      const response = await api.patch(
-        `/inventory/unit-of-measures/${id}/`,
-        formData
-      );
+      const response = await api.patch(`/inventory/unit-of-measures/${id}/`, formData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data || 'Failed to update unit of measure.');
+      }
+      return rejectWithValue('An error occured')
     }
   }
 );
@@ -91,12 +85,10 @@ const unitOfMeasureSlice = createSlice({
         state.unitOfMeasures.loading = true;
         state.unitOfMeasures.error = null;
       })
-      .addCase(
-        fetchUnitOfMeasures.fulfilled,
-        (state, action: PayloadAction<[]>) => {
-          state.unitOfMeasures.loading = false;
-          state.unitOfMeasures.data = action.payload;
-        }
+      .addCase(fetchUnitOfMeasures.fulfilled, (state, action: PayloadAction<Data[]>) => {
+        state.unitOfMeasures.loading = false;
+        state.unitOfMeasures.data = action.payload;
+      }
       )
       .addCase(fetchUnitOfMeasures.rejected, (state, action) => {
         state.unitOfMeasures.loading = false;
@@ -106,12 +98,10 @@ const unitOfMeasureSlice = createSlice({
         state.unitOfMeasure.loading = true;
         state.unitOfMeasure.error = null;
       })
-      .addCase(
-        fetchUnitOfMeasure.fulfilled,
-        (state, action: PayloadAction<[]>) => {
-          state.unitOfMeasure.loading = false;
-          state.unitOfMeasure.data = action.payload;
-        }
+      .addCase(fetchUnitOfMeasure.fulfilled, (state, action: PayloadAction<Data>) => {
+        state.unitOfMeasure.loading = false;
+        state.unitOfMeasure.data = action.payload;
+      }
       )
       .addCase(fetchUnitOfMeasure.rejected, (state, action) => {
         state.unitOfMeasure.loading = false;
@@ -121,12 +111,10 @@ const unitOfMeasureSlice = createSlice({
         state.unitOfMeasure.loading = true;
         state.unitOfMeasure.error = null;
       })
-      .addCase(
-        createUnitOfMeasure.fulfilled,
-        (state, action: PayloadAction<[]>) => {
-          state.unitOfMeasure.loading = false;
-          state.unitOfMeasure.data = action.payload;
-        }
+      .addCase(createUnitOfMeasure.fulfilled, (state, action: PayloadAction<Data>) => {
+        state.unitOfMeasure.loading = false;
+        state.unitOfMeasure.data = action.payload;
+      }
       )
       .addCase(createUnitOfMeasure.rejected, (state, action) => {
         state.unitOfMeasure.loading = false;
@@ -136,12 +124,10 @@ const unitOfMeasureSlice = createSlice({
         state.unitOfMeasure.loading = true;
         state.unitOfMeasure.error = null;
       })
-      .addCase(
-        updateUnitOfMeasure.fulfilled,
-        (state, action: PayloadAction<[]>) => {
-          state.unitOfMeasure.loading = false;
-          state.unitOfMeasure.data = action.payload;
-        }
+      .addCase(updateUnitOfMeasure.fulfilled, (state, action: PayloadAction<Data>) => {
+        state.unitOfMeasure.loading = false;
+        state.unitOfMeasure.data = action.payload;
+      }
       )
       .addCase(updateUnitOfMeasure.rejected, (state, action) => {
         state.unitOfMeasure.loading = false;

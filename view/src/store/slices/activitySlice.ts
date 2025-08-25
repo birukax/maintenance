@@ -17,7 +17,7 @@ const initialState: ActivityState = {
     activity: { data: [], loading: false, error: null },
 };
 
-export const fetchActivities = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchActivities = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'activity/fetchActivities',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchActivities = createAsyncThunk<[], { params: null }, { rejectVa
 )
 
 
-export const fetchActivity = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchActivity = createAsyncThunk<[], number, { rejectValue: any }>(
     'activity/fetchActivity',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchActivity = createAsyncThunk<[], number, { rejectValue: string 
     }
 )
 
-export const createActivity = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createActivity = createAsyncThunk<[], formData, { rejectValue: any }>(
     'activity/createActivity',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createActivity = createAsyncThunk<[], formData, { rejectValue: stri
     }
 )
 
-export const updateActivity = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateActivity = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'activity/updateActivity',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -68,7 +68,7 @@ export const updateActivity = createAsyncThunk<[], { id: string, formData: { [ke
         }
     }
 )
-export const deleteActivity = createAsyncThunk<[], { rejectValue: string }>(
+export const deleteActivity = createAsyncThunk<[], { rejectValue: any }>(
     'activity/deleteActivity',
     async (id, { rejectWithValue }) => {
         try {

@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface WorkOrderClearanceState {
-    workOrderClearances: DataState;
-    workOrderClearance: DataState;
+    workOrderClearances: DataState<Data[]>;
+    workOrderClearance: DataState<Data | null>;
 }
 
 const initialState: WorkOrderClearanceState = {
     workOrderClearances: { data: [], loading: false, error: null },
-    workOrderClearance: { data: [], loading: false, error: null },
+    workOrderClearance: { data: null, loading: false, error: null },
 };
 
-export const fetchWorkOrderClearances = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchWorkOrderClearances = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'workOrderClearance/fetchWorkOrderClearances',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +21,16 @@ export const fetchWorkOrderClearances = createAsyncThunk<[], { params: null }, {
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order clearances');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch work order clearances');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
 
-export const fetchWorkOrderClearance = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchWorkOrderClearance = createAsyncThunk<Data, number, { rejectValue: any }>(
     'workOrderClearance/fetchWorkOrderClearance',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,24 +38,15 @@ export const fetchWorkOrderClearance = createAsyncThunk<[], number, { rejectValu
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order clearance');
-        }
-    }
-)
-export const deleteWorkOrderClearance = createAsyncThunk<[], number, { rejectValue: string }>(
-    'workOrderClearance/deleteWorkOrderClearance',
-    async (id, { rejectWithValue }) => {
-        try {
-            const response = await api.delete(`/work-order/work-order-clearances/${id}/`)
-            return response.data;
-        }
-        catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch work order clearance');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch work order clearance');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const createWorkOrderClearance = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createWorkOrderClearance = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'workOrderClearance/createWorkOrderClearance',
     async (formData, { rejectWithValue }) => {
         try {
@@ -64,19 +54,27 @@ export const createWorkOrderClearance = createAsyncThunk<[], formData, { rejectV
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create work order clearance');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create work order clearance');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
 
-export const updateWorkOrderClearance = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateWorkOrderClearance = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'workOrderClearance/updateWorkOrderClearance',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/work-order/work-order-clearances/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update work order clearance');
+
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update work order clearance');
+            }
+            return rejectWithValue('An error occured')
         }
     }
 )
@@ -95,7 +93,7 @@ const WorkOrderClearanceSlice = createSlice({
                 state.workOrderClearances.loading = true;
                 state.workOrderClearances.error = null;
             })
-            .addCase(fetchWorkOrderClearances.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchWorkOrderClearances.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.workOrderClearances.loading = false;
                 state.workOrderClearances.data = action.payload;
             })
@@ -107,7 +105,7 @@ const WorkOrderClearanceSlice = createSlice({
                 state.workOrderClearance.loading = true;
                 state.workOrderClearance.error = null;
             })
-            .addCase(fetchWorkOrderClearance.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchWorkOrderClearance.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrderClearance.loading = false;
                 state.workOrderClearance.data = action.payload;
             })
@@ -119,7 +117,7 @@ const WorkOrderClearanceSlice = createSlice({
                 state.workOrderClearance.loading = true;
                 state.workOrderClearance.error = null;
             })
-            .addCase(createWorkOrderClearance.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createWorkOrderClearance.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrderClearance.loading = false;
                 state.workOrderClearance.data = action.payload;
             })
@@ -131,7 +129,7 @@ const WorkOrderClearanceSlice = createSlice({
                 state.workOrderClearance.loading = true;
                 state.workOrderClearance.error = null;
             })
-            .addCase(updateWorkOrderClearance.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateWorkOrderClearance.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.workOrderClearance.loading = false;
                 state.workOrderClearance.data = action.payload;
             })

@@ -17,7 +17,7 @@ const initialState: MachineState = {
     machine: { data: [], loading: false, error: null },
 };
 
-export const fetchMachines = createAsyncThunk<[], { params: null }, { rejectValue: string }>(
+export const fetchMachines = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
     'machine/fetchMachines',
     async (params, { rejectWithValue }) => {
         try {
@@ -31,7 +31,7 @@ export const fetchMachines = createAsyncThunk<[], { params: null }, { rejectValu
 )
 
 
-export const fetchMachine = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchMachine = createAsyncThunk<[], number, { rejectValue: any }>(
     'machine/fetchMachine',
     async (id, { rejectWithValue }) => {
         try {
@@ -44,7 +44,7 @@ export const fetchMachine = createAsyncThunk<[], number, { rejectValue: string }
     }
 )
 
-export const createMachine = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createMachine = createAsyncThunk<[], formData, { rejectValue: any }>(
     'machine/createMachine',
     async (formData, { rejectWithValue }) => {
         try {
@@ -57,7 +57,7 @@ export const createMachine = createAsyncThunk<[], formData, { rejectValue: strin
     }
 )
 
-export const updateMachine = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateMachine = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
     'machine/updateMachine',
     async ({ id, formData }, { rejectWithValue }) => {
         try {

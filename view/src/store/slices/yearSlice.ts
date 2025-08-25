@@ -1,37 +1,40 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
+
+if (error instanceof AxiosError) {
 }
-
+return rejectWithValue('An error occured');
 interface YearState {
-    years: DataState;
-    year: DataState;
+    years: DataState<Data[]>;
+    year: DataState<Data | null>;
 }
 
 const initialState: YearState = {
     years: { data: [], loading: false, error: null },
-    year: { data: [], loading: false, error: null },
+    year: { data: null, loading: false, error: null },
 };
 
-export const fetchYears = createAsyncThunk<[], void, { rejectValue: string }>(
+export const fetchYears = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'year/fetchYears',
-    async (_, { rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/purchase/years/');
+            const response = await api.get('/purchase/years/', { params });
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch years');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch years');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchYear = createAsyncThunk<[], number, { rejectValue: string }>(
+export const fetchYear = createAsyncThunk<Data, number, { rejectValue: any }>(
     'year/fetchYear',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +42,16 @@ export const fetchYear = createAsyncThunk<[], number, { rejectValue: string }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch year');
+
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createYear = createAsyncThunk<[], formData, { rejectValue: string }>(
+export const createYear = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'year/createYear',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +59,25 @@ export const createYear = createAsyncThunk<[], formData, { rejectValue: string }
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create year');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateYear = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: string }>(
+export const updateYear = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'year/updateYear',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/purchase/years/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update year');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +94,7 @@ const yearSlice = createSlice({
                 state.years.loading = true;
                 state.years.error = null;
             })
-            .addCase(fetchYears.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchYears.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.years.loading = false;
                 state.years.data = action.payload;
             })
@@ -93,7 +106,7 @@ const yearSlice = createSlice({
                 state.year.loading = true;
                 state.year.error = null;
             })
-            .addCase(fetchYear.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchYear.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.year.loading = false;
                 state.year.data = action.payload;
             })
@@ -105,7 +118,7 @@ const yearSlice = createSlice({
                 state.year.loading = true;
                 state.year.error = null;
             })
-            .addCase(createYear.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createYear.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.year.loading = false;
                 state.year.data = action.payload;
             })
@@ -117,7 +130,7 @@ const yearSlice = createSlice({
                 state.year.loading = true;
                 state.year.error = null;
             })
-            .addCase(updateYear.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateYear.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.year.loading = false;
                 state.year.data = action.payload;
             })
