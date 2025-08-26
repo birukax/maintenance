@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -56,19 +56,19 @@ const Edit = () => {
     });
   }, [machine])
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(updateMachine({ id, formData })).unwrap();
       toast.success("Machine edited successfully");
-      navigate(`/machine/detail/${machine.data.id}`);
-    } catch (err) {
-      toast.error(machine.error?.error || "Something Went Wrong");
+      navigate(`/machine/detail/${machine?.data?.id}`);
+    } catch (error) {
+      toast.error(machine.error?.error || error || "Something Went Wrong");
     }
   };
 
@@ -106,7 +106,7 @@ const Edit = () => {
             )}
             id="plant-select"
             value={plants.data?.find((plant) => plant.id === selectedPlant) || null}
-            onChange={(event, newValue) => {
+            onChange={(event, newValue: any) => {
               setSelectedPlant(newValue ? newValue.id : "");
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -134,12 +134,12 @@ const Edit = () => {
             )}
             id="area-select"
             value={
-              areas.data?.find((area) => area.id === formData.area_id) || null
+              areas.data?.find((area: any) => area.id === formData.area_id) || null
             }
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,
-                area_id: newValue ? newValue.id : "",
+                area_id: newValue ? String(newValue.id) : "",
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}

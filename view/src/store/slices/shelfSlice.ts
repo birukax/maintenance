@@ -31,7 +31,7 @@ export const fetchShelves = createAsyncThunk<Data[], FetchParams, { rejectValue:
 )
 
 
-export const fetchShelf = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchShelf = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'shelve/fetchShelve',
     async (id, { rejectWithValue }) => {
         try {

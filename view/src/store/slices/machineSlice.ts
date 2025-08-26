@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface MachineState {
-    machines: DataState;
-    machine: DataState;
+    machines: DataState<Data[]>;
+    machine: DataState<Data | null>;
 }
 
 const initialState: MachineState = {
     machines: { data: [], loading: false, error: null },
-    machine: { data: [], loading: false, error: null },
+    machine: { data: null, loading: false, error: null },
 };
 
-export const fetchMachines = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchMachines = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'machine/fetchMachines',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchMachines = createAsyncThunk<[], { params: null }, { rejectValu
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch machines');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch machines');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchMachine = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchMachine = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'machine/fetchMachine',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchMachine = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch machine.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createMachine = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createMachine = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'machine/createMachine',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,25 @@ export const createMachine = createAsyncThunk<[], formData, { rejectValue: any }
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create machine.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateMachine = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateMachine = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'machine/updateMachine',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/asset/machines/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update machine.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +90,7 @@ const machineSlice = createSlice({
                 state.machines.loading = true;
                 state.machines.error = null;
             })
-            .addCase(fetchMachines.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchMachines.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.machines.loading = false;
                 state.machines.data = action.payload;
             })
@@ -93,7 +102,7 @@ const machineSlice = createSlice({
                 state.machine.loading = true;
                 state.machine.error = null;
             })
-            .addCase(fetchMachine.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchMachine.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.machine.loading = false;
                 state.machine.data = action.payload;
             })
@@ -105,7 +114,7 @@ const machineSlice = createSlice({
                 state.machine.loading = true;
                 state.machine.error = null;
             })
-            .addCase(createMachine.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createMachine.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.machine.loading = false;
                 state.machine.data = action.payload;
             })
@@ -117,7 +126,7 @@ const machineSlice = createSlice({
                 state.machine.loading = true;
                 state.machine.error = null;
             })
-            .addCase(updateMachine.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateMachine.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.machine.loading = false;
                 state.machine.data = action.payload;
             })

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { AppState, AppDispatch } from "../store/store";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,21 +14,21 @@ const Login = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
+  const previousRoute: string | null = sessionStorage.getItem("previousRoute")
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
       const response = await api.post('/api/token/', { username, password });
       dispatch(setTokens(response.data));
       setError('');
-      if (sessionStorage.getItem("previousRoute")) {
-        navigate(sessionStorage.getItem("previousRoute"));
+      if (previousRoute) {
+        navigate(previousRoute);
       } else {
         navigate("/dashboard/");
       }
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Login Failed');
+    } catch (error: any) {
+      setError(error?.response?.data?.detail || 'Login Failed');
     } finally {
       setLoading(false);
     }
@@ -36,8 +36,8 @@ const Login = () => {
 
   useEffect(() => {
     if (tokens) {
-      if (sessionStorage.getItem("previousRoute")) {
-        navigate(sessionStorage.getItem("previousRoute"));
+      if (previousRoute) {
+        navigate(previousRoute);
       } else {
         navigate("/dashboard/");
       }

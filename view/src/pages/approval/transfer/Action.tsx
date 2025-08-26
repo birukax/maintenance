@@ -33,7 +33,7 @@ const Action = ({ entityState, setModalOpen }) => {
   const transferApproval = useSelector((state: AppState) => state.transferApproval.transferApproval);
 
   const dispatch = useDispatch<AppDispatch>();
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       if (action === 'approve') {

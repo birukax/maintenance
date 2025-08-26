@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { AppDispatch, AppState } from "../../store/store";
@@ -26,15 +26,15 @@ const AddActivityPage = () => {
   const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(createWorkOrderActivities({ id, formData })).unwrap();
       toast.success("Work Order Activities created successfully");
       navigate(`/work-order/detail/${id}`)
-    } catch (err) {
-      toast.error(workOrder.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(workOrder.error?.error || error || "Something Went Wrong");
     }
   };
 

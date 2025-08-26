@@ -42,13 +42,13 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
 
     setFormData((prev) => ({ ...prev, description: activity.data?.description || "" }));
   }, [activity])
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const id = editId.toString()
     await dispatch(updateActivity({ id, formData })); // Uncomment if needed

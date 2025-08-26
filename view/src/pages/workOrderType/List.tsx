@@ -4,6 +4,7 @@ import { fetchWorkOrderTypes } from "../../store/slices/workOrderTypeSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
+import { type Data, type FetchParams } from '../../store/types';
 import {
   GenericListPage,
 } from "../../components/GenericListPage";
@@ -35,14 +36,14 @@ const List: React.FC = () => {
     dispatch(fetchWorkOrderTypes(params));
   }
 
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     setParams(prev => {
       return {
         ...prev,
         [field]: value
       }
     })
-    const parameters = {
+    const parameters: FetchParams = {
       ...params, page: 1,
       [field]: value
     }
@@ -53,13 +54,16 @@ const List: React.FC = () => {
 
   return (
     <GenericListPage
+      onEdit=''
+      onDownload=''
+      yearFilter=''
       title="Work Order Types"
       entityState={entityState}
       columns={workOrderTypeColumns}
       createRoute="/work-order-type/create"
       detailRouteBase="/work-order-type/detail"
       onRefresh={handleRefresh}
-      getKey={(workOrderType) => workOrderType.id}
+      getKey={(workOrderType: Data) => workOrderType.id}
       searchFilter={handleFilter}
       keyWord={keyWord}
       setKeyWord={setKeyWord}

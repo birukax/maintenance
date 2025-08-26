@@ -1,23 +1,21 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface ContactState {
-    contacts: DataState;
-    contact: DataState;
+    contacts: DataState<Data[]>;
+    contact: DataState<Data | null>;
 }
 
 const initialState: ContactState = {
     contacts: { data: [], loading: false, error: null },
-    contact: { data: [], loading: false, error: null },
+    contact: { data: null, loading: false, error: null },
 };
 
-export const fetchContacts = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchContacts = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+
     'contact/fetchContacts',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +23,16 @@ export const fetchContacts = createAsyncThunk<[], { params: null }, { rejectValu
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch contacts');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch contacts');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchContact = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchContact = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'contact/fetchContact',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +40,15 @@ export const fetchContact = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch contact.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createContact = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createContact = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'contact/createContact',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +56,25 @@ export const createContact = createAsyncThunk<[], formData, { rejectValue: any }
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create contact.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateContact = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateContact = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'contact/updateContact',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/contacts/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update contact.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +91,7 @@ const contactSlice = createSlice({
                 state.contacts.loading = true;
                 state.contacts.error = null;
             })
-            .addCase(fetchContacts.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchContacts.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.contacts.loading = false;
                 state.contacts.data = action.payload;
             })
@@ -93,7 +103,7 @@ const contactSlice = createSlice({
                 state.contact.loading = true;
                 state.contact.error = null;
             })
-            .addCase(fetchContact.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchContact.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.contact.loading = false;
                 state.contact.data = action.payload;
             })
@@ -105,7 +115,7 @@ const contactSlice = createSlice({
                 state.contact.loading = true;
                 state.contact.error = null;
             })
-            .addCase(createContact.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createContact.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.contact.loading = false;
                 state.contact.data = action.payload;
             })
@@ -117,7 +127,7 @@ const contactSlice = createSlice({
                 state.contact.loading = true;
                 state.contact.error = null;
             })
-            .addCase(updateContact.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateContact.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.contact.loading = false;
                 state.contact.data = action.payload;
             })

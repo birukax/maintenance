@@ -22,13 +22,13 @@ export const fetchUnitOfMeasures = createAsyncThunk<Data[], FetchParams, { rejec
     } catch (error) {
 
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data || "Failed to fetch unit Of Measures.");
+        return rejectWithValue(error?.response?.data || "Failed to fetch unit Of Measures.");
       }
       return rejectWithValue('An error occured')
     }
   });
 
-export const fetchUnitOfMeasure = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchUnitOfMeasure = createAsyncThunk<Data, number | string, { rejectValue: any }>(
   "unitOfMeasure/fetchUnitOfMeasure",
   async (id, { rejectWithValue }) => {
     try {
@@ -37,7 +37,7 @@ export const fetchUnitOfMeasure = createAsyncThunk<Data, number, { rejectValue: 
     } catch (error) {
 
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data || 'Failed to fetch unit of measure.');
+        return rejectWithValue(error?.response?.data || 'Failed to fetch unit of measure.');
       }
       return rejectWithValue('An error occured')
     }
@@ -52,7 +52,7 @@ export const createUnitOfMeasure = createAsyncThunk<Data, FormData, { rejectValu
     } catch (error) {
 
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data || 'Failed to create unit of measure.');
+        return rejectWithValue(error?.response?.data || 'Failed to create unit of measure.');
       }
       return rejectWithValue('An error occured')
     }
@@ -67,7 +67,7 @@ export const updateUnitOfMeasure = createAsyncThunk<Data, UpdateFormData, { reje
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data || 'Failed to update unit of measure.');
+        return rejectWithValue(error?.response?.data || 'Failed to update unit of measure.');
       }
       return rejectWithValue('An error occured')
     }

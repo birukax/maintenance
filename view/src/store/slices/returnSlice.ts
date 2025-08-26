@@ -23,7 +23,7 @@ export const fetchReturns = createAsyncThunk<Data[], FetchParams, { rejectValue:
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to fetch returns');
+                return rejectWithValue(error?.response?.data || 'Failed to fetch returns');
             }
             return rejectWithValue('An error occured');
         }
@@ -31,7 +31,7 @@ export const fetchReturns = createAsyncThunk<Data[], FetchParams, { rejectValue:
 )
 
 
-export const fetchReturn = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchReturn = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'return/fetchReturn',
     async (id, { rejectWithValue }) => {
         try {
@@ -40,7 +40,7 @@ export const fetchReturn = createAsyncThunk<Data, number, { rejectValue: any }>(
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to fetch return.');
+                return rejectWithValue(error?.response?.data || 'Failed to fetch return.');
             }
             return rejectWithValue('An error occured');
         }
@@ -56,7 +56,7 @@ export const createReturn = createAsyncThunk<Data, FormData, { rejectValue: any 
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to create return.');
+                return rejectWithValue(error?.response?.data || 'Failed to create return.');
             }
             return rejectWithValue('An error occured');
         }
@@ -71,7 +71,7 @@ export const updateReturn = createAsyncThunk<Data, UpdateFormData, { rejectValue
             return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to update return.');
+                return rejectWithValue(error?.response?.data || 'Failed to update return.');
             }
             return rejectWithValue('An error occured');
         }

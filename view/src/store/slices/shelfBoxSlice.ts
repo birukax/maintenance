@@ -31,7 +31,7 @@ export const fetchShelfBoxes = createAsyncThunk<Data[], FetchParams, { rejectVal
 )
 
 
-export const fetchShelfBox = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchShelfBox = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'shelfBox/fetchShelfBox',
     async (id, { rejectWithValue }) => {
         try {

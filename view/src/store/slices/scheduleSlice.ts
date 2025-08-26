@@ -33,7 +33,7 @@ export const fetchSchedules = createAsyncThunk<Data[], FetchParams, { rejectValu
 )
 
 
-export const fetchSchedule = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchSchedule = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'schedule/fetchSchedule',
     async (id, { rejectWithValue }) => {
         try {

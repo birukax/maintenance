@@ -86,7 +86,7 @@ const Create = () => {
     );
   }, [formData.tools_required_id, toolOptions]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     // setFormData({ ...formData, [name]: value });
     if (['total_days', 'total_hours', 'total_minutes'].includes(name)) {
@@ -116,7 +116,7 @@ const Create = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData?.total_days > 0 || formData?.total_hours > 0 || formData?.total_minutes > 0) {

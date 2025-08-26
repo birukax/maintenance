@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface AreaState {
-    areas: DataState;
-    area: DataState;
+    areas: DataState<Data[]>;
+    area: DataState<Data | null>;
 }
 
 const initialState: AreaState = {
     areas: { data: [], loading: false, error: null },
-    area: { data: [], loading: false, error: null },
+    area: { data: null, loading: false, error: null },
 };
 
-export const fetchAreas = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchAreas = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'area/fetchAreas',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +21,16 @@ export const fetchAreas = createAsyncThunk<[], { params: null }, { rejectValue: 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch areas');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch areas');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchArea = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchArea = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'area/fetchArea',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchArea = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch area.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createArea = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createArea = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'area/createArea',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +54,25 @@ export const createArea = createAsyncThunk<[], formData, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create area.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateArea = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateArea = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'area/updateArea',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/asset/areas/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update area.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +89,7 @@ const areaSlice = createSlice({
                 state.areas.loading = true;
                 state.areas.error = null;
             })
-            .addCase(fetchAreas.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchAreas.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.areas.loading = false;
                 state.areas.data = action.payload;
             })
@@ -93,7 +101,7 @@ const areaSlice = createSlice({
                 state.area.loading = true;
                 state.area.error = null;
             })
-            .addCase(fetchArea.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchArea.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.area.loading = false;
                 state.area.data = action.payload;
             })
@@ -105,7 +113,7 @@ const areaSlice = createSlice({
                 state.area.loading = true;
                 state.area.error = null;
             })
-            .addCase(createArea.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createArea.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.area.loading = false;
                 state.area.data = action.payload;
             })
@@ -117,7 +125,7 @@ const areaSlice = createSlice({
                 state.area.loading = true;
                 state.area.error = null;
             })
-            .addCase(updateArea.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateArea.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.area.loading = false;
                 state.area.data = action.payload;
             })

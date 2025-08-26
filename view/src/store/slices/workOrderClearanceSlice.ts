@@ -30,7 +30,7 @@ export const fetchWorkOrderClearances = createAsyncThunk<Data[], FetchParams, { 
 )
 
 
-export const fetchWorkOrderClearance = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchWorkOrderClearance = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'workOrderClearance/fetchWorkOrderClearance',
     async (id, { rejectWithValue }) => {
         try {

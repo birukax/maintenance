@@ -39,7 +39,7 @@ const Receive = ({ id, setModalOpen }) => {
   const purchaseRequest = useSelector((state: AppState) => state.purchaseRequest.purchaseRequest)
   const { locations } = useSelector((state: AppState) => state.location);
   const dispatch = useDispatch<AppDispatch>();
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -56,7 +56,7 @@ const Receive = ({ id, setModalOpen }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);

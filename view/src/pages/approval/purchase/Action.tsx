@@ -33,7 +33,7 @@ const Action = ({ entityState, setModalOpen }) => {
   const { purchaseApproval } = useSelector((state: AppState) => state.purchaseApproval);
 
   const dispatch = useDispatch<AppDispatch>();
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       if (action === 'approve') {

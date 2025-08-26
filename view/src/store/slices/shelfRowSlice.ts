@@ -23,7 +23,7 @@ export const fetchShelfRows = createAsyncThunk<Data[], FetchParams, { rejectValu
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to fetch shelf rows');
+                return rejectWithValue(error?.response?.data || 'Failed to fetch shelf rows');
             }
             return rejectWithValue('An error occured');
         }
@@ -31,7 +31,7 @@ export const fetchShelfRows = createAsyncThunk<Data[], FetchParams, { rejectValu
 )
 
 
-export const fetchShelfRow = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchShelfRow = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'shelfRow/fetchShelfRow',
     async (id, { rejectWithValue }) => {
         try {
@@ -40,7 +40,7 @@ export const fetchShelfRow = createAsyncThunk<Data, number, { rejectValue: any }
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || "Failed to fetch shelf row.");
+                return rejectWithValue(error?.response?.data || "Failed to fetch shelf row.");
             }
             return rejectWithValue('An error occured');
         }
@@ -56,7 +56,7 @@ export const createShelfRow = createAsyncThunk<Data, FormData, { rejectValue: an
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || "Failed to create shelf row.");
+                return rejectWithValue(error?.response?.data || "Failed to create shelf row.");
             }
             return rejectWithValue('An error occured');
         }
@@ -71,7 +71,7 @@ export const updateShelfRow = createAsyncThunk<Data, UpdateFormData, { rejectVal
             return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || "Failed to update shelf row.");
+                return rejectWithValue(error?.response?.data || "Failed to update shelf row.");
             }
             return rejectWithValue('An error occured');
         }

@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface LocationState {
-    locations: DataState;
-    location: DataState;
+    locations: DataState<Data[]>;
+    location: DataState<Data | null>;
 }
 
 const initialState: LocationState = {
     locations: { data: [], loading: false, error: null },
-    location: { data: [], loading: false, error: null },
+    location: { data: null, loading: false, error: null },
 };
 
-export const fetchLocations = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchLocations = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'location/fetchLocations',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +21,16 @@ export const fetchLocations = createAsyncThunk<[], { params: null }, { rejectVal
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch locations');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch locations');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchLocation = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchLocation = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'location/fetchLocation',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchLocation = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to fetch location.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createLocation = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createLocation = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'location/createLocation',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +54,25 @@ export const createLocation = createAsyncThunk<[], formData, { rejectValue: any 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to create location.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateLocation = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateLocation = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'location/updateLocation',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/locations/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to update location.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +89,7 @@ const locationSlice = createSlice({
                 state.locations.loading = true;
                 state.locations.error = null;
             })
-            .addCase(fetchLocations.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchLocations.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.locations.loading = false;
                 state.locations.data = action.payload;
             })
@@ -93,7 +101,7 @@ const locationSlice = createSlice({
                 state.location.loading = true;
                 state.location.error = null;
             })
-            .addCase(fetchLocation.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchLocation.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.location.loading = false;
                 state.location.data = action.payload;
             })
@@ -105,7 +113,7 @@ const locationSlice = createSlice({
                 state.location.loading = true;
                 state.location.error = null;
             })
-            .addCase(createLocation.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createLocation.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.location.loading = false;
                 state.location.data = action.payload;
             })
@@ -117,7 +125,7 @@ const locationSlice = createSlice({
                 state.location.loading = true;
                 state.location.error = null;
             })
-            .addCase(updateLocation.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateLocation.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.location.loading = false;
                 state.location.data = action.payload;
             })

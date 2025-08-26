@@ -30,7 +30,7 @@ export const fetchTransferApprovals = createAsyncThunk<Data[], FetchParams, { re
 )
 
 
-export const fetchTransferApproval = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchTransferApproval = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'transferApproval/fetchTransferApproval',
     async (id, { rejectWithValue }) => {
         try {

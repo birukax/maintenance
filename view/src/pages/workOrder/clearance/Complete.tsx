@@ -64,7 +64,7 @@ const CompleteClearance = ({ entityState, setModalOpen }) => {
     }));
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     console.log(formData)
     e.preventDefault();
     try {

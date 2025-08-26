@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchItem, updateItem } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { fetchContacts } from "../../store/slices/contactSlice";
 import { Link } from "react-router-dom";
+import { type Data, type FormData } from '../../store/types';
 
 import {
   Button,
@@ -25,7 +26,7 @@ import { fetchShelves } from "../../store/slices/shelfSlice";
 import { fetchShelfRows } from "../../store/slices/shelfRowSlice";
 import { fetchShelfBoxes } from "../../store/slices/shelfBoxSlice";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     minimum_stock_level: 0,
     suppliers_id: [],
     shelf_id: "",
@@ -59,7 +60,7 @@ const Create = () => {
   useEffect(() => {
     setFormData({
       minimum_stock_level: item.data?.minimum_stock_level || 0,
-      suppliers_id: item.data?.suppliers?.map((supplier) => supplier.id) || [],
+      suppliers_id: item.data?.suppliers?.map((supplier: Data) => supplier.id) || [],
       shelf_id: item.data?.shelf?.id,
       row_id: item.data?.row?.id,
       box_id: item.data?.box?.id
@@ -73,13 +74,13 @@ const Create = () => {
   }, [contacts.data]);
 
   const selectedSuppliers = useMemo(() => {
-    return supplierOptions ? supplierOptions.filter((option) =>
-      formData.suppliers_id?.includes(option.id)
+    return supplierOptions ? supplierOptions.filter((option: Data) =>
+      formData.suppliers_id?.includes(option?.id)
     ) : [];
   }, [formData.suppliers_id, supplierOptions]);
 
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -93,15 +94,15 @@ const Create = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateItem({ id, formData })).unwrap();
       toast.success("Item updated successfully");
       navigate(`/item/detail/${item.data?.id}`);
-    } catch (err) {
-      toast.error(item.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(item.error?.error || error || "Something Went Wrong");
     }
   };
 

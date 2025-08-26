@@ -37,13 +37,13 @@ const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
     setFormData((prev) => ({ ...prev, schedule_id: schedule_id || "" }));
   }, [schedule_id]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await dispatch(createActivity(formData)); // Uncomment if needed
     if (!activity.error) {

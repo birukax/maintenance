@@ -43,7 +43,7 @@ const Create = () => {
 
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
     if (name === "used") {
       setFormData({ ...formData, [name]: checked });
@@ -56,7 +56,7 @@ const Create = () => {
       date: formattedDate,
     });
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(createReturn(formData)).unwrap();

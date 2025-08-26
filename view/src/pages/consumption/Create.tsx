@@ -37,7 +37,7 @@ const Create = () => {
     dispatch(fetchItems(params));
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -48,7 +48,7 @@ const Create = () => {
       date: formattedDate,
     });
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(createConsumption(formData)).unwrap();

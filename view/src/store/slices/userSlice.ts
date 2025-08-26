@@ -23,7 +23,7 @@ export const fetchUsers = createAsyncThunk<Data[], FetchParams, { rejectValue: a
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to fetch users');
+                return rejectWithValue(error?.response?.data || 'Failed to fetch users');
             }
             return rejectWithValue('An error occured')
         }
@@ -31,7 +31,7 @@ export const fetchUsers = createAsyncThunk<Data[], FetchParams, { rejectValue: a
 )
 
 
-export const fetchUser = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchUser = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'user/fetchUser',
     async (id, { rejectWithValue }) => {
         try {
@@ -40,7 +40,7 @@ export const fetchUser = createAsyncThunk<Data, number, { rejectValue: any }>(
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || "Failed to fetch user.");
+                return rejectWithValue(error?.response?.data || "Failed to fetch user.");
             }
             return rejectWithValue('An error occured')
         }
@@ -56,7 +56,7 @@ export const createUser = createAsyncThunk<Data, FormData, { rejectValue: any }>
         }
         catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || "Failed to create user.");
+                return rejectWithValue(error?.response?.data || "Failed to create user.");
             }
             return rejectWithValue('An error occured')
         }
@@ -71,7 +71,7 @@ export const updateUser = createAsyncThunk<Data, UpdateFormData, { rejectValue: 
             return response.data;
         } catch (error) {
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || "Failed to update user.");
+                return rejectWithValue(error?.response?.data || "Failed to update user.");
             }
             return rejectWithValue('An error occured')
         }

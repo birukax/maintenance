@@ -31,7 +31,7 @@ export const fetchWorkOrderTypes = createAsyncThunk<Data[], FetchParams, { rejec
 )
 
 
-export const fetchWorkOrderType = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchWorkOrderType = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'workOrderType/fetchWorkOrderType',
     async (id, { rejectWithValue }) => {
         try {

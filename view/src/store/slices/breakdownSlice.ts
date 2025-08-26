@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface BreakdownState {
-    breakdowns: DataState;
-    breakdown: DataState;
+    breakdowns: DataState<Data[]>;
+    breakdown: DataState<Data | null>;
 }
 
 const initialState: BreakdownState = {
     breakdowns: { data: [], loading: false, error: null },
-    breakdown: { data: [], loading: false, error: null },
+    breakdown: { data: null, loading: false, error: null },
 };
 
-export const fetchBreakdowns = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchBreakdowns = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'breakdown/fetchBreakdowns',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +21,16 @@ export const fetchBreakdowns = createAsyncThunk<[], { params: null }, { rejectVa
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch breakdowns');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch breakdowns');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchBreakdown = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchBreakdown = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'breakdown/fetchBreakdown',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchBreakdown = createAsyncThunk<[], number, { rejectValue: any }>
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch breakdown.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createBreakdown = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createBreakdown = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'breakdown/createBreakdown',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,32 +54,41 @@ export const createBreakdown = createAsyncThunk<[], formData, { rejectValue: any
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create breakdown.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateBreakdown = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateBreakdown = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'breakdown/updateBreakdown',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/breakdown/breakdowns/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update breakdown.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const createBreakdownWorkOrder = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const createBreakdownWorkOrder = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'breakdown/createBreakdownWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.post(`/breakdown/breakdowns/${id}/create_work_order/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || { message: 'Failed to create work order.' });
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || { message: 'Failed to create breakdown work order.' });
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -95,7 +106,7 @@ const breakdownSlice = createSlice({
                 state.breakdowns.loading = true;
                 state.breakdowns.error = null;
             })
-            .addCase(fetchBreakdowns.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchBreakdowns.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.breakdowns.loading = false;
                 state.breakdowns.data = action.payload;
             })
@@ -107,7 +118,7 @@ const breakdownSlice = createSlice({
                 state.breakdown.loading = true;
                 state.breakdown.error = null;
             })
-            .addCase(fetchBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchBreakdown.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.breakdown.loading = false;
                 state.breakdown.data = action.payload;
             })
@@ -119,7 +130,7 @@ const breakdownSlice = createSlice({
                 state.breakdown.loading = true;
                 state.breakdown.error = null;
             })
-            .addCase(createBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createBreakdown.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.breakdown.loading = false;
                 state.breakdown.data = action.payload;
             })
@@ -131,7 +142,7 @@ const breakdownSlice = createSlice({
                 state.breakdown.loading = true;
                 state.breakdown.error = null;
             })
-            .addCase(updateBreakdown.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateBreakdown.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.breakdown.loading = false;
                 state.breakdown.data = action.payload;
             })
@@ -143,7 +154,7 @@ const breakdownSlice = createSlice({
                 state.breakdown.loading = true;
                 state.breakdown.error = null;
             })
-            .addCase(createBreakdownWorkOrder.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createBreakdownWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.breakdown.loading = false;
                 state.breakdown.data = action.payload;
             })

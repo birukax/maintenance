@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState, AppDispatch } from "../../../store/store";
 import {
@@ -43,13 +43,13 @@ const Edit = ({ entityState, setModalOpen, handleRefresh, editId }) => {
 
     setFormData((prev) => ({ ...prev, description: activity.data?.description || "" }));
   }, [activity])
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const id = editId.toString()
     await dispatch(updateWorkOrderActivity({ id, formData })); // Uncomment if needed

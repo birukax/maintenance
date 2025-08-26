@@ -1,37 +1,37 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface ActivityTypeState {
-    activityTypes: DataState;
-    activityType: DataState;
+    activityTypes: DataState<Data[]>;
+    activityType: DataState<Data | null>;
 }
 
 const initialState: ActivityTypeState = {
     activityTypes: { data: [], loading: false, error: null },
-    activityType: { data: [], loading: false, error: null },
+    activityType: { data: null, loading: false, error: null },
 };
 
-export const fetchActivityTypes = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchActivityTypes = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'activityType/fetchActivityTypes',
     async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/work-order/activity-types/', { params: params });
+            const response = await api.get('/work-order/activity-types/', { params });
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch activity types');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch activity types');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchActivityType = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchActivityType = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'activityType/fetchActivityType',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchActivityType = createAsyncThunk<[], number, { rejectValue: any
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch activity type.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createActivityType = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createActivityType = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'activityType/createActivityType',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,25 @@ export const createActivityType = createAsyncThunk<[], formData, { rejectValue: 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create activity type.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateActivityType = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateActivityType = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'activityType/updateActivityType',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/work-order/activity-types/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update activity type.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +90,7 @@ const activityTypeSlice = createSlice({
                 state.activityTypes.loading = true;
                 state.activityTypes.error = null;
             })
-            .addCase(fetchActivityTypes.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchActivityTypes.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.activityTypes.loading = false;
                 state.activityTypes.data = action.payload;
             })
@@ -93,7 +102,7 @@ const activityTypeSlice = createSlice({
                 state.activityType.loading = true;
                 state.activityType.error = null;
             })
-            .addCase(fetchActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchActivityType.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.activityType.loading = false;
                 state.activityType.data = action.payload;
             })
@@ -105,7 +114,7 @@ const activityTypeSlice = createSlice({
                 state.activityType.loading = true;
                 state.activityType.error = null;
             })
-            .addCase(createActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createActivityType.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.activityType.loading = false;
                 state.activityType.data = action.payload;
             })
@@ -117,7 +126,7 @@ const activityTypeSlice = createSlice({
                 state.activityType.loading = true;
                 state.activityType.error = null;
             })
-            .addCase(updateActivityType.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateActivityType.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.activityType.loading = false;
                 state.activityType.data = action.payload;
             })

@@ -4,9 +4,6 @@ import { AxiosError } from "axios";
 import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 
-if (error instanceof AxiosError) {
-}
-return rejectWithValue('An error occured');
 interface YearState {
     years: DataState<Data[]>;
     year: DataState<Data | null>;
@@ -34,7 +31,7 @@ export const fetchYears = createAsyncThunk<Data[], FetchParams, { rejectValue: a
 )
 
 
-export const fetchYear = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchYear = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'year/fetchYear',
     async (id, { rejectWithValue }) => {
         try {

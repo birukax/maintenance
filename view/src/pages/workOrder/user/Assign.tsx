@@ -68,7 +68,7 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(assignWorkOrderUsers({ id, formData })).unwrap();

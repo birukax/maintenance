@@ -41,7 +41,7 @@ const Create = () => {
     dispatch(fetchItems(params));
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {

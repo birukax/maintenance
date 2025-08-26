@@ -41,14 +41,14 @@ const Edit = () => {
       active: clearance?.data?.active
     });
   }, [clearance])
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log("changing", typeof (e.target.value), e.target.value);
 
     const { name, checked } = e.target;
     setFormData({ active: checked });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -90,9 +90,9 @@ const Edit = () => {
               name="active"
               checked={formData.active}
               onChange={handleChange}
-                      disabled={clearance.loading}
-                    />
-                  }
+              disabled={clearance.loading}
+            />
+          }
         />
         <div className='flex gap-4'>
 

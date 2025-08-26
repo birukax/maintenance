@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-
 const Edit = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -49,19 +48,19 @@ const Edit = () => {
     });
   }, [workOrderType])
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(updateWorkOrderType({ id, formData })).unwrap();
       toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data?.id}`);
-    } catch (err) {
-      toast.error(workOrderType.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(workOrderType.error?.error || error || "Something Went Wrong");
     }
   };
   return (

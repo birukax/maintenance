@@ -72,7 +72,7 @@ const AddActivity = ({ entityState, setModalOpen }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);

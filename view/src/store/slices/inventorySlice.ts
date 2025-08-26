@@ -1,93 +1,85 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from "../../utils/api";
-
-interface DataState {
-  data: [] | null;
-  loading: boolean;
-  error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface InventoryState {
-  inventories: DataState;
-  inventory: DataState;
+  inventories: DataState<Data[]>;
+  inventory: DataState<Data | null>;
 }
 
 const initialState: InventoryState = {
   inventories: { data: [], loading: false, error: null },
-  inventory: { data: [], loading: false, error: null },
+  inventory: { data: null, loading: false, error: null },
 };
 
-export const fetchInventories = createAsyncThunk<
-  [],
-  { params: null },
-  { rejectValue: any }
->("inventory/fetchInventories", async (params, { rejectWithValue }) => {
-  try {
-    const response = await api.get("/inventory/inventories/", { params });
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(
-      error.response?.data || "Failed to fetch inventories"
-    );
-  }
-});
+export const fetchInventories = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+  "inventory/fetchInventories",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/inventory/inventories/", { params });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error?.response?.data || "Failed to fetch inventories");
+      }
+      return rejectWithValue('An error occured');
+    }
+  });
 
-export const revaluateStock = createAsyncThunk<
-  [],
-  void,
-  { rejectValue: any }
->("inventory/revaluateStock", async (_, { rejectWithValue }) => {
-  try {
-    const response = await api.get("/inventory/inventories/revaluate_stock/");
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(
-      error.response?.data || "Failed to reavaluate stock"
-    );
-  }
-});
+export const revaluateStock = createAsyncThunk<Data[], void, { rejectValue: any }>(
+  "inventory/revaluateStock",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/inventory/inventories/revaluate_stock/");
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error?.response?.data || "Failed to reavaluate stock");
+      }
+      return rejectWithValue('An error occured');
+    }
+  });
 
-export const fetchInventory = createAsyncThunk<
-  [],
-  number,
-  { rejectValue: any }
->("inventory/fetchInventory", async (id, { rejectWithValue }) => {
-  try {
-    const response = await api.get(`/inventory/inventories/${id}/`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
-});
+export const fetchInventory = createAsyncThunk<Data, number | string, { rejectValue: any }>(
+  "inventory/fetchInventory",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/inventory/inventories/${id}/`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error?.response?.data || 'Failed to fetch inventory.');
+      }
+      return rejectWithValue('An error occured');
+    }
+  });
 
-export const createInventory = createAsyncThunk<
-  [],
-  formData,
-  { rejectValue: any }
->("inventory/createInventory", async (formData, { rejectWithValue }) => {
-  try {
-    const response = await api.post("/inventory/inventories/", formData);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
-  }
-});
+export const createInventory = createAsyncThunk<Data, FormData, { rejectValue: any }>(
+  "inventory/createInventory",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/inventory/inventories/", formData);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error?.response?.data || 'Failed to create inventory.');
+      }
+      return rejectWithValue('An error occured');
+    }
+  });
 
-export const updateInventory = createAsyncThunk<
-  [],
-  { id: string; formData: { [key: string] } },
-  { rejectValue: any }
->(
+export const updateInventory = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
   "inventory/updateInventory",
   async ({ id, formData }, { rejectWithValue }) => {
     try {
-      const response = await api.patch(
-        `/inventory/inventories/${id}/`,
-        formData
-      );
+      const response = await api.patch(`/inventory/inventories/${id}/`, formData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error?.response?.data || 'Failed to update inventory.');
+      }
+      return rejectWithValue('An error occured');
     }
   }
 );
@@ -105,7 +97,7 @@ const inventorySlice = createSlice({
       })
       .addCase(
         fetchInventories.fulfilled,
-        (state, action: PayloadAction<[]>) => {
+        (state, action: PayloadAction<Data[]>) => {
           state.inventories.loading = false;
           state.inventories.data = action.payload;
         }
@@ -118,12 +110,10 @@ const inventorySlice = createSlice({
         state.inventories.loading = true;
         state.inventories.error = null;
       })
-      .addCase(
-        revaluateStock.fulfilled,
-        (state, action: PayloadAction<[]>) => {
-          state.inventories.loading = false;
-          state.inventories.data = action.payload;
-        }
+      .addCase(revaluateStock.fulfilled, (state, action: PayloadAction<Data[]>) => {
+        state.inventories.loading = false;
+        state.inventories.data = action.payload;
+      }
       )
       .addCase(revaluateStock.rejected, (state, action) => {
         state.inventories.loading = false;
@@ -133,7 +123,7 @@ const inventorySlice = createSlice({
         state.inventory.loading = true;
         state.inventory.error = null;
       })
-      .addCase(fetchInventory.fulfilled, (state, action: PayloadAction<[]>) => {
+      .addCase(fetchInventory.fulfilled, (state, action: PayloadAction<Data>) => {
         state.inventory.loading = false;
         state.inventory.data = action.payload;
       })
@@ -147,7 +137,7 @@ const inventorySlice = createSlice({
       })
       .addCase(
         createInventory.fulfilled,
-        (state, action: PayloadAction<[]>) => {
+        (state, action: PayloadAction<Data>) => {
           state.inventory.loading = false;
           state.inventory.data = action.payload;
         }
@@ -162,7 +152,7 @@ const inventorySlice = createSlice({
       })
       .addCase(
         updateInventory.fulfilled,
-        (state, action: PayloadAction<[]>) => {
+        (state, action: PayloadAction<Data>) => {
           state.inventory.loading = false;
           state.inventory.data = action.payload;
         }

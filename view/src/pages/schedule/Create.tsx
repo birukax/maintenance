@@ -58,7 +58,7 @@ const Create = () => {
     dispatch(fetchItems(params));
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     // setFormData({ ...formData, [name]: value });
     if (['planned_days', 'planned_hours', 'planned_minutes'].includes(name)) {
@@ -73,7 +73,7 @@ const Create = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.planned_days > 0 || formData.planned_hours > 0 || formData.planned_minutes > 0) {

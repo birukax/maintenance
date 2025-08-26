@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface PlantState {
-    plants: DataState;
-    plant: DataState;
+    plants: DataState<Data[]>;
+    plant: DataState<Data | null>;
 }
 
 const initialState: PlantState = {
     plants: { data: [], loading: false, error: null },
-    plant: { data: [], loading: false, error: null },
+    plant: { data: null, loading: false, error: null },
 };
 
-export const fetchPlants = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchPlants = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'plant/fetchPlants',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +21,16 @@ export const fetchPlants = createAsyncThunk<[], { params: null }, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch plants');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch plants');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchPlant = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchPlant = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'plant/fetchPlant',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchPlant = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to fetch plant.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createPlant = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createPlant = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'plant/createPlant',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +54,25 @@ export const createPlant = createAsyncThunk<[], formData, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to create plant.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updatePlant = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updatePlant = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'plant/updatePlant',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/asset/plants/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || "Failed to update plant.");
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +89,7 @@ const plantSlice = createSlice({
                 state.plants.loading = true;
                 state.plants.error = null;
             })
-            .addCase(fetchPlants.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPlants.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.plants.loading = false;
                 state.plants.data = action.payload;
             })
@@ -93,7 +101,7 @@ const plantSlice = createSlice({
                 state.plant.loading = true;
                 state.plant.error = null;
             })
-            .addCase(fetchPlant.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPlant.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.plant.loading = false;
                 state.plant.data = action.payload;
             })
@@ -105,7 +113,7 @@ const plantSlice = createSlice({
                 state.plant.loading = true;
                 state.plant.error = null;
             })
-            .addCase(createPlant.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createPlant.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.plant.loading = false;
                 state.plant.data = action.payload;
             })
@@ -117,7 +125,7 @@ const plantSlice = createSlice({
                 state.plant.loading = true;
                 state.plant.error = null;
             })
-            .addCase(updatePlant.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updatePlant.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.plant.loading = false;
                 state.plant.data = action.payload;
             })

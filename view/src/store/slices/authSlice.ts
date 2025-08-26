@@ -1,15 +1,14 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import api from '../../utils/api';
+import { AxiosError } from "axios";
 
 interface Tokens {
     access: string;
     refresh: string;
 }
 
-
-
 interface AuthState {
     tokens: Tokens | null;
+    last_route: string | null;
 }
 
 const initialState: AuthState = {
@@ -38,8 +37,12 @@ export const logout = createAsyncThunk<void, void, { rejectValue: any }>(
         try {
             dispatch(clearTokens());
         }
-        catch (err) {
-            throw new Error(err.message || "Logout failed");
+        catch (error) {
+
+            if (error instanceof AxiosError) {
+                throw new Error(error?.response?.data || "Logout failed");
+            }
+            throw new Error('An error occured');
         }
     }
 )

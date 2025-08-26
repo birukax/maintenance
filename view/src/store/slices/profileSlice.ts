@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface ProfileState {
-    profiles: DataState;
-    profile: DataState;
+    profiles: DataState<Data[]>;
+    profile: DataState<Data | null>;
 }
 
 const initialState: ProfileState = {
     profiles: { data: [], loading: false, error: null },
-    profile: { data: [], loading: false, error: null },
+    profile: { data: null, loading: false, error: null },
 };
 
-export const fetchProfiles = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchProfiles = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'profile/fetchProfiles',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchProfiles = createAsyncThunk<[], { params: null }, { rejectValu
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch profiles');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch profiles');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchProfile = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchProfile = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'profile/fetchProfile',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,11 +39,14 @@ export const fetchProfile = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch profile');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
-export const fetchUserProfile = createAsyncThunk<[], { rejectValue: any }>(
+export const fetchUserProfile = createAsyncThunk<Data, { rejectValue: any }>(
     'profile/fetchUserProfile',
     async (_, { rejectWithValue }) => {
         try {
@@ -51,12 +54,15 @@ export const fetchUserProfile = createAsyncThunk<[], { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch user profile');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createProfile = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createProfile = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'profile/createProfile',
     async (formData, { rejectWithValue }) => {
         try {
@@ -64,30 +70,39 @@ export const createProfile = createAsyncThunk<[], formData, { rejectValue: any }
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create profile');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateProfile = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateProfile = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'profile/updateProfile',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/account/profiles/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update profile');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
-export const resetPassword = createAsyncThunk<[], { formData: { [key: string] } }, { rejectValue: any }>(
+export const resetPassword = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'profile/resetPassword',
     async ({ formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/account/profiles/change_password/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to reset password');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -106,7 +121,7 @@ const profileSlice = createSlice({
                 state.profiles.loading = true;
                 state.profiles.error = null;
             })
-            .addCase(fetchProfiles.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchProfiles.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.profiles.loading = false;
                 state.profiles.data = action.payload;
             })
@@ -118,7 +133,7 @@ const profileSlice = createSlice({
                 state.profile.loading = true;
                 state.profile.error = null;
             })
-            .addCase(fetchProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchProfile.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.profile.loading = false;
                 state.profile.data = action.payload;
             })
@@ -130,7 +145,7 @@ const profileSlice = createSlice({
                 state.profile.loading = true;
                 state.profile.error = null;
             })
-            .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchUserProfile.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.profile.loading = false;
                 state.profile.data = action.payload;
             })
@@ -142,7 +157,7 @@ const profileSlice = createSlice({
                 state.profile.loading = true;
                 state.profile.error = null;
             })
-            .addCase(createProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createProfile.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.profile.loading = false;
                 state.profile.data = action.payload;
             })
@@ -154,7 +169,7 @@ const profileSlice = createSlice({
                 state.profile.loading = true;
                 state.profile.error = null;
             })
-            .addCase(updateProfile.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateProfile.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.profile.loading = false;
                 state.profile.data = action.payload;
             })
@@ -166,7 +181,7 @@ const profileSlice = createSlice({
                 state.profile.loading = true;
                 state.profile.error = null;
             })
-            .addCase(resetPassword.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(resetPassword.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.profile.loading = false;
                 state.profile.data = action.payload;
             })

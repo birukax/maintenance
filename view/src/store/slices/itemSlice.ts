@@ -1,37 +1,36 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface ItemState {
-    items: DataState;
-    item: DataState;
+    items: DataState<Data[]>;
+    item: DataState<Data | null>;
 }
 
 const initialState: ItemState = {
     items: { data: [], loading: false, error: null },
-    item: { data: [], loading: false, error: null },
+    item: { data: null, loading: false, error: null },
 };
 
-export const fetchItems = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchItems = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'item/fetchItems',
     async (params, { rejectWithValue }) => {
         try {
 
-            const response = await api.get('/inventory/items/', { params: params });
+            const response = await api.get('/inventory/items/', { params });
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch items.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const fetchItem = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchItem = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'item/fetchItem',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchItem = createAsyncThunk<[], number, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch item.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createItem = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createItem = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'item/createItem',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +54,25 @@ export const createItem = createAsyncThunk<[], formData, { rejectValue: any }>(
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create item.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateItem = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateItem = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'item/updateItem',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/inventory/items/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update item.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -80,7 +88,7 @@ const itemSlice = createSlice({
                 state.items.loading = true;
                 state.items.error = null;
             })
-            .addCase(fetchItems.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchItems.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.items.loading = false;
                 state.items.data = action.payload;
             })
@@ -92,7 +100,7 @@ const itemSlice = createSlice({
                 state.item.loading = true;
                 state.item.error = null;
             })
-            .addCase(fetchItem.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchItem.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.item.loading = false;
                 state.item.data = action.payload;
             })
@@ -104,7 +112,7 @@ const itemSlice = createSlice({
                 state.item.loading = true;
                 state.item.error = null;
             })
-            .addCase(createItem.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createItem.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.item.loading = false;
                 state.item.data = action.payload;
             })
@@ -116,7 +124,7 @@ const itemSlice = createSlice({
                 state.item.loading = true;
                 state.item.error = null;
             })
-            .addCase(updateItem.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateItem.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.item.loading = false;
                 state.item.data = action.payload;
             })

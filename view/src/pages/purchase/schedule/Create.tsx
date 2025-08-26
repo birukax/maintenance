@@ -42,7 +42,7 @@ const Create = () => {
   }, [years?.data])
 
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(createAnnualSchedule({ formData })).unwrap();

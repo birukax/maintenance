@@ -33,7 +33,7 @@ export const fetchTransfers = createAsyncThunk<Data[], FetchParams, { rejectValu
 )
 
 
-export const fetchTransfer = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchTransfer = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'transfer/fetchTransfer',
     async (id, { rejectWithValue }) => {
         try {
@@ -79,7 +79,7 @@ export const updateTransfer = createAsyncThunk<Data, UpdateFormData, { rejectVal
         }
     }
 )
-export const receiveTransfer = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const receiveTransfer = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'transfer/receive',
     async (id, { rejectWithValue }) => {
         try {

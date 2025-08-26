@@ -1,23 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FormData, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface MonthlyPurchaseScheduleState {
-    monthlyPurchaseSchedules: DataState;
-    monthlyPurchaseSchedule: DataState;
+    monthlyPurchaseSchedules: DataState<Data[]>;
+    monthlyPurchaseSchedule: DataState<Data | null>;
 }
 
 const initialState: MonthlyPurchaseScheduleState = {
     monthlyPurchaseSchedules: { data: [], loading: false, error: null },
-    monthlyPurchaseSchedule: { data: [], loading: false, error: null },
+    monthlyPurchaseSchedule: { data: null, loading: false, error: null },
 };
 
-export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, { rejectValue: any }>(
+export const fetchMonthlyPurchaseSchedules = createAsyncThunk<Data[], void, { rejectValue: any }>(
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedules',
     async (_, { rejectWithValue }) => {
         try {
@@ -25,13 +22,16 @@ export const fetchMonthlyPurchaseSchedules = createAsyncThunk<[], void, { reject
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Monthly Purchase Schedules');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Monthly Purchase Schedules');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchMonthlyPurchaseSchedule = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedule',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchMonthlyPurchaseSchedule = createAsyncThunk<[], number, { rejec
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Monthly Purchase Schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Monthly Purchase Schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createMonthlyPurchaseSchedule = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createMonthlyPurchaseSchedule = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'monthlyPurchaseSchedule/createMonthlyPurchaseSchedule',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,19 +55,25 @@ export const createMonthlyPurchaseSchedule = createAsyncThunk<[], formData, { re
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create Monthly Purchase Schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create Monthly Purchase Schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updateMonthlyPurchaseSchedule = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updateMonthlyPurchaseSchedule = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'monthlyPurchaseSchedule/updateMonthlyPurchaseSchedule',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/purchase/monthly-schedules/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update Monthly Purchase Schedule');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update Monthly Purchase Schedule');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -81,7 +90,7 @@ const monthlyPurchaseScheduleSlice = createSlice({
                 state.monthlyPurchaseSchedules.loading = true;
                 state.monthlyPurchaseSchedules.error = null;
             })
-            .addCase(fetchMonthlyPurchaseSchedules.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchMonthlyPurchaseSchedules.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.monthlyPurchaseSchedules.loading = false;
                 state.monthlyPurchaseSchedules.data = action.payload;
             })
@@ -93,7 +102,7 @@ const monthlyPurchaseScheduleSlice = createSlice({
                 state.monthlyPurchaseSchedule.loading = true;
                 state.monthlyPurchaseSchedule.error = null;
             })
-            .addCase(fetchMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.monthlyPurchaseSchedule.loading = false;
                 state.monthlyPurchaseSchedule.data = action.payload;
             })
@@ -105,7 +114,7 @@ const monthlyPurchaseScheduleSlice = createSlice({
                 state.monthlyPurchaseSchedule.loading = true;
                 state.monthlyPurchaseSchedule.error = null;
             })
-            .addCase(createMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.monthlyPurchaseSchedule.loading = false;
                 state.monthlyPurchaseSchedule.data = action.payload;
             })
@@ -117,7 +126,7 @@ const monthlyPurchaseScheduleSlice = createSlice({
                 state.monthlyPurchaseSchedule.loading = true;
                 state.monthlyPurchaseSchedule.error = null;
             })
-            .addCase(updateMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updateMonthlyPurchaseSchedule.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.monthlyPurchaseSchedule.loading = false;
                 state.monthlyPurchaseSchedule.data = action.payload;
             })

@@ -24,7 +24,7 @@ export const fetchWorkOrders = createAsyncThunk<Data[], FetchParams, { rejectVal
         catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to fetch work orders');
+                return rejectWithValue(error?.response?.data || 'Failed to fetch work orders');
             }
             return rejectWithValue('An error occured')
         }
@@ -32,7 +32,7 @@ export const fetchWorkOrders = createAsyncThunk<Data[], FetchParams, { rejectVal
 )
 
 
-export const fetchWorkOrder = createAsyncThunk<Data, number, { rejectValue: any }>(
+export const fetchWorkOrder = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'workOrder/fetchWorkOrder',
     async (id, { rejectWithValue }) => {
         try {
@@ -42,7 +42,7 @@ export const fetchWorkOrder = createAsyncThunk<Data, number, { rejectValue: any 
         catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to fetch work order');
+                return rejectWithValue(error?.response?.data || 'Failed to fetch work order');
             }
             return rejectWithValue('An error occured')
         }
@@ -59,7 +59,7 @@ export const createWorkOrder = createAsyncThunk<Data, FormData, { rejectValue: a
         catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to create work order');
+                return rejectWithValue(error?.response?.data || 'Failed to create work order');
             }
             return rejectWithValue('An error occured')
         }
@@ -75,7 +75,7 @@ export const updateWorkOrder = createAsyncThunk<Data, UpdateFormData, { rejectVa
         } catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to update work order');
+                return rejectWithValue(error?.response?.data || 'Failed to update work order');
             }
             return rejectWithValue('An error occured')
         }
@@ -91,7 +91,7 @@ export const createWorkOrderActivities = createAsyncThunk<Data, UpdateFormData, 
         } catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to create work order activities');
+                return rejectWithValue(error?.response?.data || 'Failed to create work order activities');
             }
             return rejectWithValue('An error occured')
         }
@@ -107,7 +107,7 @@ export const assignWorkOrderUsers = createAsyncThunk<Data, UpdateFormData, { rej
         } catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to assign users to work order.');
+                return rejectWithValue(error?.response?.data || 'Failed to assign users to work order.');
             }
             return rejectWithValue('An error occured')
         }
@@ -123,7 +123,7 @@ export const submitWorkOrder = createAsyncThunk<Data, UpdateFormData, { rejectVa
         } catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to submit work order.');
+                return rejectWithValue(error?.response?.data || 'Failed to submit work order.');
             }
             return rejectWithValue('An error occured')
         }
@@ -140,7 +140,7 @@ export const completeWorkOrder = createAsyncThunk<Data, UpdateFormData, { reject
         } catch (error) {
 
             if (error instanceof AxiosError) {
-                return rejectWithValue(error.response?.data || 'Failed to complete work order.');
+                return rejectWithValue(error?.response?.data || 'Failed to complete work order.');
             }
             return rejectWithValue('An error occured')
         }

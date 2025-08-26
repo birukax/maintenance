@@ -44,7 +44,7 @@ const ReceiveList = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap()

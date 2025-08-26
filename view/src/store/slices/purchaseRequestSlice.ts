@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
-
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
+import { AxiosError } from "axios";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
 interface PurchaseRequestState {
-    purchaseRequests: DataState;
-    purchaseRequest: DataState;
+    purchaseRequests: DataState<Data[]>;
+    purchaseRequest: DataState<Data | null>;
 }
 
 const initialState: PurchaseRequestState = {
     purchaseRequests: { data: [], loading: false, error: null },
-    purchaseRequest: { data: [], loading: false, error: null },
+    purchaseRequest: { data: null, loading: false, error: null },
 };
 
-export const fetchPurchaseRequests = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchPurchaseRequests = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'purchaseRequest/fetchPurchaseRequests',
     async (params, { rejectWithValue }) => {
         try {
@@ -25,13 +21,16 @@ export const fetchPurchaseRequests = createAsyncThunk<[], { params: null }, { re
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Requests');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Purchase Requests');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchPurchaseRequest = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'purchaseRequest/fetchPurchaseRequest',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +38,15 @@ export const fetchPurchaseRequest = createAsyncThunk<[], number, { rejectValue: 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Request');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Purchase Request');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const createPurchaseRequest = createAsyncThunk<[], formData, { rejectValue: any }>(
+export const createPurchaseRequest = createAsyncThunk<Data, FormData, { rejectValue: any }>(
     'purchaseRequest/createPurchaseRequest',
     async (formData, { rejectWithValue }) => {
         try {
@@ -52,31 +54,40 @@ export const createPurchaseRequest = createAsyncThunk<[], formData, { rejectValu
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to create Purchase Request');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to create Purchase Request');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const updatePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const updatePurchaseRequest = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'purchaseRequest/updatePurchaseRequest',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/purchase/requests/${id}/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to update Purchase Request');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to update Purchase Request');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const receivePurchaseRequest = createAsyncThunk<[], { id: string, formData: { [key: string] } }, { rejectValue: any }>(
+export const receivePurchaseRequest = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'purchaseRequest/receivePurchaseRequest',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
             const response = await api.patch(`/purchase/requests/${id}/receive/`, formData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to receive Purchase Request');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to receive Purchase Request');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -94,7 +105,7 @@ const purchaseRequestSlice = createSlice({
                 state.purchaseRequests.loading = true;
                 state.purchaseRequests.error = null;
             })
-            .addCase(fetchPurchaseRequests.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPurchaseRequests.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.purchaseRequests.loading = false;
                 state.purchaseRequests.data = action.payload;
             })
@@ -106,7 +117,7 @@ const purchaseRequestSlice = createSlice({
                 state.purchaseRequest.loading = true;
                 state.purchaseRequest.error = null;
             })
-            .addCase(fetchPurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPurchaseRequest.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseRequest.loading = false;
                 state.purchaseRequest.data = action.payload;
             })
@@ -118,7 +129,7 @@ const purchaseRequestSlice = createSlice({
                 state.purchaseRequest.loading = true;
                 state.purchaseRequest.error = null;
             })
-            .addCase(createPurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(createPurchaseRequest.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseRequest.loading = false;
                 state.purchaseRequest.data = action.payload;
             })
@@ -130,7 +141,7 @@ const purchaseRequestSlice = createSlice({
                 state.purchaseRequest.loading = true;
                 state.purchaseRequest.error = null;
             })
-            .addCase(updatePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(updatePurchaseRequest.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseRequest.loading = false;
                 state.purchaseRequest.data = action.payload;
             })
@@ -142,7 +153,7 @@ const purchaseRequestSlice = createSlice({
                 state.purchaseRequest.loading = true;
                 state.purchaseRequest.error = null;
             })
-            .addCase(receivePurchaseRequest.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(receivePurchaseRequest.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseRequest.loading = false;
                 state.purchaseRequest.data = action.payload;
             })

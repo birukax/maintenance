@@ -10,11 +10,11 @@ export interface FetchOneParams {
 }
 
 export interface UpdateFormData {
-    id: number,
+    id: number | string | undefined,
     formData: FormData,
 }
 export interface Data {
-    id: number;
+    id: number | string | undefined;
     [key: string]: any;
 }
 

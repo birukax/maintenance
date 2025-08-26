@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom';
 import CreateConsumption from '../pages/consumption/Create';
 import ConsumptionList from '../pages/consumption/List';
 import ConsumptionDetail from '../pages/consumption/Detail';
-import ConsumptionEdit from '../pages/consumption/Edit';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 const ConsumptionRoutes = [
@@ -34,7 +33,6 @@ const ConsumptionRoutes = [
       </ProtectedRoute>
     }
   />,
-  
 ];
 
 export default ConsumptionRoutes;

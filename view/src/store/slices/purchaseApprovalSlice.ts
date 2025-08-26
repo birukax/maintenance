@@ -1,37 +1,37 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
+import { AxiosError } from "axios";
+import { type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
 
-interface DataState {
-    data: [] | null;
-    loading: boolean;
-    error: string | null;
-}
 
 interface PurchaseApprovalState {
-    purchaseApprovals: DataState;
-    purchaseApproval: DataState;
+    purchaseApprovals: DataState<Data[]>;
+    purchaseApproval: DataState<Data | null>;
 }
 
 const initialState: PurchaseApprovalState = {
     purchaseApprovals: { data: [], loading: false, error: null },
-    purchaseApproval: { data: [], loading: false, error: null },
+    purchaseApproval: { data: null, loading: false, error: null },
 };
 
-export const fetchPurchaseApprovals = createAsyncThunk<[], { params: null }, { rejectValue: any }>(
+export const fetchPurchaseApprovals = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
     'purchaseApproval/fetchPurchaseApprovals',
     async (params, { rejectWithValue }) => {
         try {
-            const response = await api.get('/approval/purchase-approvals/', { params: params });
+            const response = await api.get('/approval/purchase-approvals/', { params });
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || 'Failed to fetch Purchase Approvals');
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch Purchase Approvals');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
 
-export const fetchPurchaseApproval = createAsyncThunk<[], number, { rejectValue: any }>(
+export const fetchPurchaseApproval = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'purchaseApproval/fetchPurchaseApproval',
     async (id, { rejectWithValue }) => {
         try {
@@ -39,12 +39,15 @@ export const fetchPurchaseApproval = createAsyncThunk<[], number, { rejectValue:
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to fetch purchase approval.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const approvePurchaseApproval = createAsyncThunk<[], { id, formData }, { rejectValue: any }>(
+export const approvePurchaseApproval = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'purchaseApproval/approvePurchaseApproval',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -52,12 +55,15 @@ export const approvePurchaseApproval = createAsyncThunk<[], { id, formData }, { 
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to approve purchase approval.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
 
-export const rejectPurchaseApproval = createAsyncThunk<[], { id, formData }, { rejectValue: any }>(
+export const rejectPurchaseApproval = createAsyncThunk<Data, UpdateFormData, { rejectValue: any }>(
     'purchaseApproval/rejectPurchaseApproval',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
@@ -65,7 +71,10 @@ export const rejectPurchaseApproval = createAsyncThunk<[], { id, formData }, { r
             return response.data;
         }
         catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to reject purchase approval.');
+            }
+            return rejectWithValue('An error occured');
         }
     }
 )
@@ -82,7 +91,7 @@ const purchaseApprovalSlice = createSlice({
                 state.purchaseApprovals.loading = true;
                 state.purchaseApprovals.error = null;
             })
-            .addCase(fetchPurchaseApprovals.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPurchaseApprovals.fulfilled, (state, action: PayloadAction<Data[]>) => {
                 state.purchaseApprovals.loading = false;
                 state.purchaseApprovals.data = action.payload;
             })
@@ -94,7 +103,7 @@ const purchaseApprovalSlice = createSlice({
                 state.purchaseApproval.loading = true;
                 state.purchaseApproval.error = null;
             })
-            .addCase(fetchPurchaseApproval.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(fetchPurchaseApproval.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseApproval.loading = false;
                 state.purchaseApproval.data = action.payload;
             })
@@ -106,7 +115,7 @@ const purchaseApprovalSlice = createSlice({
                 state.purchaseApproval.loading = true;
                 state.purchaseApproval.error = null;
             })
-            .addCase(approvePurchaseApproval.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(approvePurchaseApproval.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseApproval.loading = false;
                 state.purchaseApproval.data = action.payload;
             })
@@ -118,7 +127,7 @@ const purchaseApprovalSlice = createSlice({
                 state.purchaseApproval.loading = true;
                 state.purchaseApproval.error = null;
             })
-            .addCase(rejectPurchaseApproval.fulfilled, (state, action: PayloadAction<[]>) => {
+            .addCase(rejectPurchaseApproval.fulfilled, (state, action: PayloadAction<Data>) => {
                 state.purchaseApproval.loading = false;
                 state.purchaseApproval.data = action.payload;
             })

@@ -30,7 +30,7 @@ const ShipList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       await dispatch(shipTransfer({ id, formData })).unwrap()
