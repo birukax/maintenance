@@ -6,7 +6,7 @@ import { AppState, AppDispatch } from "../../store/store";
 import { fetchContacts } from "../../store/slices/contactSlice";
 import { Link } from "react-router-dom";
 import { type Data, type FormData } from '../../store/types';
-
+import { SelectChangeEvent } from '../../components/types';
 import {
   Button,
   Typography,
@@ -33,7 +33,7 @@ const Create = () => {
     row_id: "",
     box_id: ""
   });
-  const item = useSelector((state: AppState) => state.item.item)
+  const item = useSelector((state: AppState) => state.item.item);
 
   const { id } = useParams();
   const { contacts } = useSelector((state: AppState) => state.contact);
@@ -85,9 +85,15 @@ const Create = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAutocompleteChange = (fieldName, newValue) => {
+  const handleSelectChange = (e: SelectChangeEvent<string | number>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+
+  const handleAutocompleteChange = (fieldName: any, newValue: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item) => item.id);
+    const selectedIds = newValue.map((item: any) => item.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -150,7 +156,7 @@ const Create = () => {
             id="shelf-select"
             name="shelf_id"
             value={formData.shelf_id}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Shelf"
           >
             {Array.isArray(shelves.data) &&
@@ -169,7 +175,7 @@ const Create = () => {
             id="shelf-row-select"
             name="row_id"
             value={formData.row_id}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Shelf Row"
           >
             {Array.isArray(shelfRows.data) &&
@@ -190,7 +196,7 @@ const Create = () => {
             id="shelf-box-select"
             name="box_id"
             value={formData.box_id}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Shelf Box"
           >
             {Array.isArray(shelfBoxes.data) &&

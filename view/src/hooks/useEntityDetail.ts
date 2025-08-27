@@ -5,16 +5,18 @@ import { useParams } from 'react-router-dom';
 import { AppState, AppDispatch } from '../store/store';
 import { SerializedError } from '@reduxjs/toolkit';
 import { AsyncThunk } from '@reduxjs/toolkit';
+import { type Data } from '../store/types';
 
-interface EntityDetailState {
-  data: [];
+
+export interface EntityDetailState {
+  data: Data | null;
   loading: boolean;
   error: string | SerializedError | null;
 }
 
-interface UseEntityDetailOptions {
+export interface UseEntityDetailOptions {
   detailSelector: (state: AppState) => EntityDetailState;
-  fetchDetailAction: AsyncThunk<any, string, {}>; // Thunk takes string ID
+  fetchDetailAction: AsyncThunk<Data, string | number, {}>; // Thunk takes string ID
 }
 
 

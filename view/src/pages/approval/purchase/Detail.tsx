@@ -6,6 +6,9 @@ import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
 import Action from './Action';
+import { type Data } from '../../../store/types';
+
+
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.purchaseApproval.purchaseApproval,
@@ -46,7 +49,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <div className="rw">
         <div className="clmn">
@@ -117,7 +120,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.purchase_request?.request_items?.length > 0 ? data?.purchase_request?.request_items?.map((request_item) => {
+              {data?.purchase_request?.request_items?.length > 0 ? data?.purchase_request?.request_items?.map((request_item: Data) => {
                 return (
                   <TableRow key={request_item?.id}>
                     <TableCell><Link to={`/work-order/detail/${request_item?.id}`} type="link"> {request_item?.item?.no}</Link></TableCell>

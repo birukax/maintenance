@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState, AppDispatch } from "../../../store/store";
 import {
@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import { fetchWorkOrderActivity, updateWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
+import { type FormData } from '../../../store/types';
 
 const style = {
   position: "absolute",
@@ -22,11 +23,11 @@ const style = {
   p: 4,
 };
 
-const Edit = ({ entityState, setModalOpen, handleRefresh, editId }) => {
+const Edit = ({ setModalOpen, handleRefresh, editId }: any) => {
 
   const activity = useSelector((state: AppState) => state.workOrderActivity.workOrderActivity);
   const dispatch = useDispatch<AppDispatch>();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     description: activity.data?.description || ""
   });
 
@@ -68,7 +69,7 @@ const Edit = ({ entityState, setModalOpen, handleRefresh, editId }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        onChange={handleChange}
+        // onChange={handleChange}
         className="form-gap w-full"
       >
         <TextField

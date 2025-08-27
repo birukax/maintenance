@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createConsumption } from "../../store/slices/consumptionSlice";
 import { fetchItems } from "../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
 import {
   TextField,
   Button,
@@ -20,7 +21,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { toast } from "react-toastify";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     item_id: "",
     reason: "",
     quantity: "",
@@ -41,7 +42,7 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: any) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
@@ -54,8 +55,8 @@ const Create = () => {
       await dispatch(createConsumption(formData)).unwrap();
       toast.success("Consumption created successfully");
       navigate("/consumptions");
-    } catch (err) {
-      toast.error(consumption.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(consumption.error?.error || error || "Something Went Wrong");
     }
   };
   return (
@@ -115,7 +116,7 @@ const Create = () => {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                helperText: error?.date,
+                helperText: consumption.error?.date,
               },
             }}
           />

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { createArea } from "../../store/slices/areaSlice";
 import { fetchPlants } from "../../store/slices/plantSlice";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
 import {
   TextField,
   Button,
@@ -17,7 +18,7 @@ import {
 import { toast } from "react-toastify";
 const Create = () => {
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
     plant_id: ""
@@ -25,7 +26,6 @@ const Create = () => {
 
   const area = useSelector((state: AppState) => state.area.area);
   const { plants } = useSelector((state: AppState) => state.plant);
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const params = {
@@ -33,9 +33,8 @@ const Create = () => {
   };
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchPlants(params));
-    }
+    dispatch(fetchPlants(params));
+
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,8 +47,8 @@ const Create = () => {
       await dispatch(createArea(formData)).unwrap();
       toast.success("Area created successfully");
       navigate("/areas");
-    } catch (err) {
-      toast.error(area.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(area.error?.error || error || "Something Went Wrong");
 
     }
   };

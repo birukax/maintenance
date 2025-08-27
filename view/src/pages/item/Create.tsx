@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createItem } from "../../store/slices/itemSlice";
@@ -21,8 +21,9 @@ import { toast } from "react-toastify";
 import { fetchContacts } from "../../store/slices/contactSlice";
 import { fetchShelfRows } from "../../store/slices/shelfRowSlice";
 import { fetchShelfBoxes } from "../../store/slices/shelfBoxSlice";
+import { type Data, type FormData } from '../../store/types';
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     uom_id: "",
     type: "",
@@ -48,8 +49,6 @@ const Create = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let isMounted = true;
-    let controller = new AbortController();
     const params = {
       no_pagination: "true",
     };
@@ -68,9 +67,10 @@ const Create = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAutocompleteChange = (fieldName, newValue) => {
+
+  const handleAutocompleteChange = (fieldName: any, newValue: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item) => item.id);
+    const selectedIds = newValue.map((item: any) => item.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -83,8 +83,8 @@ const Create = () => {
       await dispatch(createItem(formData)).unwrap();
       toast.success("Item created successfully");
       navigate("/items");
-    } catch (err) {
-      toast.error(item.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(item.error?.error || error || "Something Went Wrong");
     }
   };
   const supplierOptions = useMemo(() => {
@@ -94,7 +94,7 @@ const Create = () => {
 
   const selectedSuppliers = useMemo(() => {
     return Array.isArray(supplierOptions)
-      ? supplierOptions?.filter((option) =>
+      ? supplierOptions?.filter((option: Data) =>
         formData.suppliers_id.includes(option.id)
       )
       : [];

@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createEquipment } from "../../store/slices/equipmentSlice";
 import { fetchMachines } from "../../store/slices/machineSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { Link } from "react-router-dom";
+import { type FormData } from '../../store/types';
 import {
   TextField,
   Button,
@@ -17,7 +18,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     machine_id: "",
     code: "",
@@ -43,8 +44,8 @@ const Create = () => {
       await dispatch(createEquipment(formData)).unwrap();
       toast.success("Equipment created successfully");
       navigate("/equipments");
-    } catch (err) {
-      toast.error(equipment.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(equipment.error?.error || error || "Something Went Wrong");
     }
   };
   return (

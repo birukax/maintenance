@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -51,9 +51,9 @@ const Edit = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateActivityType({ id, formData })).unwrap();
       toast.success("Activity Type edited successfully");
-      navigate(`/activity-type/detail/${activityType.data.id}`);
-    } catch (err) {
-      toast.error(activityType.error?.error || "Something Went Wrong");
+      navigate(`/activity-type/detail/${activityType.data?.id}`);
+    } catch (error) {
+      toast.error(activityType.error?.error || error || "Something Went Wrong");
     }
   };
   return (

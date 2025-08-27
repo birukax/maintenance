@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createClearance } from "../../store/slices/clearanceSlice";
@@ -36,8 +36,8 @@ const Create = () => {
       await dispatch(createClearance(formData)).unwrap();
       toast.success("Clearance created successfully");
       navigate("/clearances");
-    } catch (err) {
-      toast.error(clearance.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(clearance.error?.error || error || "Something Went Wrong");
     }
   };
   return (

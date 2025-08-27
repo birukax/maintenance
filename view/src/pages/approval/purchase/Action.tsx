@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState, FormEvent, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { approvePurchaseApproval, rejectPurchaseApproval, fetchPurchaseApproval } from "../../../store/slices/purchaseApprovalSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -11,7 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-
+import { type Data, type FormData } from '../../../store/types';
 const style = {
   position: "absolute",
   top: "50%",
@@ -24,10 +24,15 @@ const style = {
   p: 4,
 };
 
-const Action = ({ entityState, setModalOpen }) => {
+interface ActionProps {
+  entityState: Data,
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+}
+
+const Action: FC<ActionProps> = ({ entityState, setModalOpen }) => {
   const id = entityState.data.id;
   const [action, setAction] = useState('');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     remark: ''
   });
   const { purchaseApproval } = useSelector((state: AppState) => state.purchaseApproval);
@@ -46,8 +51,9 @@ const Action = ({ entityState, setModalOpen }) => {
       await dispatch(fetchPurchaseApproval(id)).unwrap();
       setModalOpen(false);
       toast.success("Action completed successfully.");
-    } catch (err) {
-      toast.error(err);
+    } catch (error) {
+      toast.error(purchaseApproval.error?.error || error || "Something Went Wrong");
+
     }
   };
   return (

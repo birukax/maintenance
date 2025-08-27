@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
@@ -22,17 +22,16 @@ const Edit = () => {
   const area = useSelector((state: AppState) => state.area.area);
 
   const { id } = useParams();
-  const { tokens } = useSelector((state: AppState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (tokens && id) {
+    if (id) {
       dispatch(fetchArea(id));
     }
     setFormData({
       name: area.data?.name,
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     setFormData({
@@ -52,8 +51,8 @@ const Edit = () => {
       await dispatch(updateArea({ id, formData })).unwrap();
       toast.success("Area edited successfully");
       navigate(`/area/detail/${area.data?.id}`);
-    } catch (err) {
-      toast.error(area.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(area.error?.error || error || "Something Went Wrong");
     }
   };
   return (

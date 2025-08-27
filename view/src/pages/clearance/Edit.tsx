@@ -1,14 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import {
-  fetchContact,
-  updateContact,
-} from "../../store/slices/contactSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import {
-  TextField,
   Button,
   Typography,
   Container,
@@ -17,13 +12,14 @@ import {
   Switch,
   FormControlLabel,
 } from "@mui/material";
+import { type Data, type FormData } from '../../store/types.ts';
 import { toast } from "react-toastify";
 import { fetchClearance, updateClearance } from "../../store/slices/clearanceSlice";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     active: Boolean
   });
-  const clearance = useSelector((state: AppState) => state.clearance.clearance)
+  const { clearance } = useSelector((state: AppState) => state.clearance)
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -41,14 +37,14 @@ const Edit = () => {
       active: clearance?.data?.active
     });
   }, [clearance])
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLButtonElement>) => {
     console.log("changing", typeof (e.target.value), e.target.value);
 
     const { name, checked } = e.target;
     setFormData({ active: checked });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -56,7 +52,7 @@ const Edit = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateClearance({ id, formData })).unwrap();
       toast.success("Clearance edited successfully");
-      navigate(`/clearance/detail/${clearance.data.id}`);
+      navigate(`/clearance/detail/${clearance.data?.id}`);
     } catch (err) {
       toast.error(clearance.error?.error || "Something Went Wrong");
     }

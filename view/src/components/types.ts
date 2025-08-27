@@ -1,6 +1,8 @@
-export interface SelectChangeEvent<T> = {
+import React from "react";
+
+export type SelectChangeEvent<T> = {
     target: {
         value: T;
-        name ?: string;
+        name?: any;
     }
 }

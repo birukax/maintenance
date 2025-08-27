@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -6,6 +6,7 @@ import {
   updateEquipment,
 } from "../../store/slices/equipmentSlice";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
 import {
   Button,
   Typography,
@@ -17,7 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const equipment = useSelector((state: AppState) => state.equipment.equipment)
@@ -52,8 +53,8 @@ const Edit = () => {
       await dispatch(updateEquipment({ id, formData })).unwrap();
       toast.success("Equipment edited successfully");
       navigate(`/equipment/detail/${id}`);
-    } catch (err) {
-      toast.error(equipment?.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(equipment?.error?.error || error || "Something Went Wrong");
     }
   };
   return (
