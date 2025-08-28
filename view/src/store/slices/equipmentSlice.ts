@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface EquipmentState {
-    equipments: DataState<Data[]>;
+    equipments: DataState<PaginatedData<Data[]> | Data[] | []>;
     equipment: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: EquipmentState = {
     equipment: { data: null, loading: false, error: null },
 };
 
-export const fetchEquipments = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchEquipments = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'equipment/fetchEquipments',
     async (params, { rejectWithValue }) => {
         try {
@@ -89,7 +89,7 @@ const equipmentSlice = createSlice({
                 state.equipments.loading = true;
                 state.equipments.error = null;
             })
-            .addCase(fetchEquipments.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchEquipments.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.equipments.loading = false;
                 state.equipments.data = action.payload;
             })

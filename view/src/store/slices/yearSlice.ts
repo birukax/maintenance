@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface YearState {
-    years: DataState<Data[]>;
+    years: DataState<PaginatedData<Data[]> | Data[] | []>;
     year: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: YearState = {
     year: { data: null, loading: false, error: null },
 };
 
-export const fetchYears = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchYears = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'year/fetchYears',
     async (params, { rejectWithValue }) => {
         try {
@@ -91,7 +91,7 @@ const yearSlice = createSlice({
                 state.years.loading = true;
                 state.years.error = null;
             })
-            .addCase(fetchYears.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchYears.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.years.loading = false;
                 state.years.data = action.payload;
             })

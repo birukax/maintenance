@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from '../types';
 
 
 interface ShelfBoxeState {
-    shelfBoxes: DataState<Data[]>;
+    shelfBoxes: DataState<PaginatedData<Data[]> | Data[] | []>;
     shelfBox: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: ShelfBoxeState = {
     shelfBox: { data: null, loading: false, error: null },
 };
 
-export const fetchShelfBoxes = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchShelfBoxes = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'shelfBox/fetchShelfBoxes',
     async (params, { rejectWithValue }) => {
         try {
@@ -90,7 +90,7 @@ const shelfBoxeslice = createSlice({
                 state.shelfBoxes.loading = true;
                 state.shelfBoxes.error = null;
             })
-            .addCase(fetchShelfBoxes.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchShelfBoxes.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.shelfBoxes.loading = false;
                 state.shelfBoxes.data = action.payload;
             })

@@ -53,7 +53,7 @@ const AddActivity: FC<AddActivityProps> = ({ entityState, setModalOpen }) => {
   }, []);
 
   const activityOptions = useMemo(() => {
-    return activities?.data
+    return Array.isArray(activities?.data)
       ? activities?.data?.filter(
         (activity) =>
           activity.activity_type?.id ===

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface TransferApprovalState {
-    transferApprovals: DataState<Data[]>;
+    transferApprovals: DataState<PaginatedData<Data[]> | Data[] | []>;
     transferApproval: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: TransferApprovalState = {
     transferApproval: { data: null, loading: false, error: null },
 };
 
-export const fetchTransferApprovals = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchTransferApprovals = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'transferApproval/fetchTransferApprovals',
     async (params, { rejectWithValue }) => {
         try {
@@ -90,7 +90,7 @@ const transferApprovalSlice = createSlice({
                 state.transferApprovals.loading = true;
                 state.transferApprovals.error = null;
             })
-            .addCase(fetchTransferApprovals.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchTransferApprovals.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.transferApprovals.loading = false;
                 state.transferApprovals.data = action.payload;
             })

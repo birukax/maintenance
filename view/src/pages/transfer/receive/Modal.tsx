@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC } from "react";
+import { useDispatch } from "react-redux";
 import { receiveTransfer } from "../../../store/slices/transferSlice";
-import { AppState, AppDispatch } from "../../../store/store";
+import { AppDispatch } from "../../../store/store";
 import {
   Button,
   Typography,
@@ -15,6 +15,7 @@ import {
   Table,
 
 } from "@mui/material";
+import { Data } from "../../../store/types";
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -32,14 +33,18 @@ const style = {
 
 };
 
-const AddActivity = ({ entityState, setReceiveModalOpen }) => {
+interface ReceiveProps {
+  entityState: Data;
+  setReceiveModalOpen: (value: boolean) => void;
+}
+
+const Receive: FC<ReceiveProps> = ({ entityState, setReceiveModalOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
 
 
 
-  const handlereceiveTransfer = async (id) => {
-
-    await dispatch(receiveTransfer({ id })).unwrap()
+  const handlereceiveTransfer = async (id: string | number) => {
+    await dispatch(receiveTransfer(id)).unwrap()
     setReceiveModalOpen(false)
   }
   return (
@@ -71,7 +76,7 @@ const AddActivity = ({ entityState, setReceiveModalOpen }) => {
           </TableHead>
           <TableBody>
             {entityState &&
-              entityState.data.transfer_items.filter(el => el.shipped_quantity > 0).map((row, index) => (
+              entityState.data.transfer_items.filter((el: Data) => el.shipped_quantity > 0).map((row: Data, index: number) => (
                 <TableRow key={index}>
                   <TableCell>
                     <Typography noWrap>{row.item.name}</Typography>
@@ -116,4 +121,4 @@ const AddActivity = ({ entityState, setReceiveModalOpen }) => {
   );
 };
 
-export default AddActivity;
+export default Receive;

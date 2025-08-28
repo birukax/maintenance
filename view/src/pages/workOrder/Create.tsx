@@ -163,7 +163,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={workOrder.loading}>
           <Autocomplete
             size='small'
-            options={machines.data || []}
+            options={Array.isArray(machines.data) ? machines.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField

@@ -175,7 +175,7 @@ const List: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {entityState?.data && entityState?.data.length > 0
+            {Array.isArray(entityState?.data) && entityState?.data.length > 0
               ? entityState?.data?.map((row: Data, index: number) => (
                 <TableRow
                   key={index}

@@ -4,6 +4,7 @@ import { fetchUnitOfMeasures } from "../../store/slices/unitOfMeasureSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
+import { type FetchParams } from '../../store/types';
 import {
   GenericListPage,
 } from "../../components/GenericListPage";
@@ -33,14 +34,14 @@ const List: React.FC = () => {
     dispatch(fetchUnitOfMeasures(params));
   }
 
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     setParams(prev => {
       return {
         ...prev,
         [field]: value
       }
     })
-    const parameters = {
+    const parameters: FetchParams = {
       ...params, page: 1,
       [field]: value
     }

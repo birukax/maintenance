@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { TableRow, TableCell, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../../../store/store";
+import { Data } from "../../../store/types";
 
-const CheckListRows = ({ row, handleFormChange, index, errorCount, setErrorCount }) => {
+interface FormChangeProps {
+  item_id: string | number, quantity: string | number | null
+}
+
+interface CheckListRowsProps {
+  row: Data;
+  handleFormChange: ({ item_id, quantity }: FormChangeProps) => void;
+  index: number;
+  errorCount: any;
+  setErrorCount: Dispatch<SetStateAction<any>>
+}
+
+const CheckListRows: FC<CheckListRowsProps> = ({ row, handleFormChange, index, errorCount, setErrorCount }) => {
 
   const [error, setError] = useState(false);
   const errorList = errorCount
@@ -13,7 +26,7 @@ const CheckListRows = ({ row, handleFormChange, index, errorCount, setErrorCount
 
   return (
     <TableRow key={row.id}>
-      <TableCell align="left" title={row.id}>
+      <TableCell align="left" key={row.id}>
         {row?.item?.no}
       </TableCell>
       <TableCell align="left">

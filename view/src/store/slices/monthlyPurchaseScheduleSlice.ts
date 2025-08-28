@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface MonthlyPurchaseScheduleState {
-    monthlyPurchaseSchedules: DataState<Data[]>;
+    monthlyPurchaseSchedules: DataState<PaginatedData<Data[]> | Data[] | []>;
     monthlyPurchaseSchedule: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: MonthlyPurchaseScheduleState = {
     monthlyPurchaseSchedule: { data: null, loading: false, error: null },
 };
 
-export const fetchMonthlyPurchaseSchedules = createAsyncThunk<Data[], void, { rejectValue: any }>(
+export const fetchMonthlyPurchaseSchedules = createAsyncThunk<PaginatedData<Data[]>, void, { rejectValue: any }>(
     'monthlyPurchaseSchedule/fetchMonthlyPurchaseSchedules',
     async (_, { rejectWithValue }) => {
         try {
@@ -90,7 +90,7 @@ const monthlyPurchaseScheduleSlice = createSlice({
                 state.monthlyPurchaseSchedules.loading = true;
                 state.monthlyPurchaseSchedules.error = null;
             })
-            .addCase(fetchMonthlyPurchaseSchedules.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchMonthlyPurchaseSchedules.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.monthlyPurchaseSchedules.loading = false;
                 state.monthlyPurchaseSchedules.data = action.payload;
             })

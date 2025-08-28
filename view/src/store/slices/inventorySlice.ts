@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface InventoryState {
-  inventories: DataState<Data[]>;
+  inventories: DataState<PaginatedData<Data[]> | Data[] | []>;
   inventory: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: InventoryState = {
   inventory: { data: null, loading: false, error: null },
 };
 
-export const fetchInventories = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchInventories = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
   "inventory/fetchInventories",
   async (params, { rejectWithValue }) => {
     try {
@@ -27,7 +27,7 @@ export const fetchInventories = createAsyncThunk<Data[], FetchParams, { rejectVa
     }
   });
 
-export const revaluateStock = createAsyncThunk<Data[], void, { rejectValue: any }>(
+export const revaluateStock = createAsyncThunk<PaginatedData<Data[]>, void, { rejectValue: any }>(
   "inventory/revaluateStock",
   async (_, { rejectWithValue }) => {
     try {
@@ -95,12 +95,10 @@ const inventorySlice = createSlice({
         state.inventories.loading = true;
         state.inventories.error = null;
       })
-      .addCase(
-        fetchInventories.fulfilled,
-        (state, action: PayloadAction<Data[]>) => {
-          state.inventories.loading = false;
-          state.inventories.data = action.payload;
-        }
+      .addCase(fetchInventories.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
+        state.inventories.loading = false;
+        state.inventories.data = action.payload;
+      }
       )
       .addCase(fetchInventories.rejected, (state, action) => {
         state.inventories.loading = false;
@@ -110,7 +108,7 @@ const inventorySlice = createSlice({
         state.inventories.loading = true;
         state.inventories.error = null;
       })
-      .addCase(revaluateStock.fulfilled, (state, action: PayloadAction<Data[]>) => {
+      .addCase(revaluateStock.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
         state.inventories.loading = false;
         state.inventories.data = action.payload;
       }

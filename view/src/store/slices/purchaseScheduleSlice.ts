@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface PurchaseScheduleState {
-    purchaseSchedules: DataState<Data[]>;
+    purchaseSchedules: DataState<PaginatedData<Data[]> | Data[] | []>;
     purchaseSchedule: DataState<Data | null>;
 }
 
@@ -15,7 +15,7 @@ const initialState: PurchaseScheduleState = {
 };
 
 
-export const fetchPurchaseSchedules = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchPurchaseSchedules = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'purchaseSchedule/fetchPurchaseSchedules',
     async (params, { rejectWithValue }) => {
         try {
@@ -107,7 +107,7 @@ const purchaseScheduleSlice = createSlice({
                 state.purchaseSchedules.loading = true;
                 state.purchaseSchedules.error = null;
             })
-            .addCase(fetchPurchaseSchedules.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchPurchaseSchedules.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.purchaseSchedules.loading = false;
                 state.purchaseSchedules.data = action.payload;
             })

@@ -371,14 +371,17 @@ export const GenericListPage: FC<GenericListPageProps> = ({
           </TableBody>
         </Table>
       </div>
-      <Pagination
-        cur={currentPage}
-        setCur={setCurrentPage}
-        next={entityState?.data?.next}
-        prev={entityState?.data?.previous}
-        count={entityState?.data?.count}
-        searchByPage={searchFilter}
-      />
+      {
+        entityState?.data?.results &&
+        <Pagination
+          cur={currentPage}
+          setCur={setCurrentPage}
+          next={entityState?.data?.next}
+          prev={entityState?.data?.previous}
+          count={entityState?.data?.count}
+          searchByPage={searchFilter}
+        />
+      }
     </div>
   );
 };

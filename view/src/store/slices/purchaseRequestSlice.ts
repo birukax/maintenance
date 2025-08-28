@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface PurchaseRequestState {
-    purchaseRequests: DataState<Data[]>;
+    purchaseRequests: DataState<PaginatedData<Data[]> | Data[] | []>;
     purchaseRequest: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: PurchaseRequestState = {
     purchaseRequest: { data: null, loading: false, error: null },
 };
 
-export const fetchPurchaseRequests = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchPurchaseRequests = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'purchaseRequest/fetchPurchaseRequests',
     async (params, { rejectWithValue }) => {
         try {
@@ -105,7 +105,7 @@ const purchaseRequestSlice = createSlice({
                 state.purchaseRequests.loading = true;
                 state.purchaseRequests.error = null;
             })
-            .addCase(fetchPurchaseRequests.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchPurchaseRequests.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.purchaseRequests.loading = false;
                 state.purchaseRequests.data = action.payload;
             })

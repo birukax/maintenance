@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface ScheduleState {
-    schedules: DataState<Data[]>;
+    schedules: DataState<PaginatedData<Data[]> | Data[] | []>;
     schedule: DataState<Data | null>;
     scheduledWorkOrder: { loading: boolean; error: any };
 }
@@ -16,7 +16,7 @@ const initialState: ScheduleState = {
     scheduledWorkOrder: { loading: false, error: null },
 };
 
-export const fetchSchedules = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchSchedules = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'schedule/fetchSchedules',
     async (params, { rejectWithValue }) => {
         try {
@@ -109,7 +109,7 @@ const scheduleSlice = createSlice({
                 state.schedules.loading = true;
                 state.schedules.error = null;
             })
-            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchSchedules.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.schedules.loading = false;
                 state.schedules.data = action.payload;
             })

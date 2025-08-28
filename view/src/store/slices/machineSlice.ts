@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface MachineState {
-    machines: DataState<Data[]>;
+    machines: DataState<PaginatedData<Data[]> | Data[] | []>;
     machine: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: MachineState = {
     machine: { data: null, loading: false, error: null },
 };
 
-export const fetchMachines = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchMachines = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'machine/fetchMachines',
     async (params, { rejectWithValue }) => {
         try {
@@ -90,7 +90,7 @@ const machineSlice = createSlice({
                 state.machines.loading = true;
                 state.machines.error = null;
             })
-            .addCase(fetchMachines.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchMachines.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.machines.loading = false;
                 state.machines.data = action.payload;
             })

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface UnitOfMeasureState {
-  unitOfMeasures: DataState<Data[]>;
+  unitOfMeasures: DataState<PaginatedData<Data[]> | Data[] | []>;
   unitOfMeasure: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: UnitOfMeasureState = {
   unitOfMeasure: { data: null, loading: false, error: null },
 };
 
-export const fetchUnitOfMeasures = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchUnitOfMeasures = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
   "unitOfMeasure/fetchUnitOfMeasures",
   async (params, { rejectWithValue }) => {
     try {
@@ -85,7 +85,7 @@ const unitOfMeasureSlice = createSlice({
         state.unitOfMeasures.loading = true;
         state.unitOfMeasures.error = null;
       })
-      .addCase(fetchUnitOfMeasures.fulfilled, (state, action: PayloadAction<Data[]>) => {
+      .addCase(fetchUnitOfMeasures.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
         state.unitOfMeasures.loading = false;
         state.unitOfMeasures.data = action.payload;
       }

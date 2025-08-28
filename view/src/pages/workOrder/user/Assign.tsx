@@ -52,16 +52,16 @@ const AssignUsers: FC<AssignUserProps> = ({ entityState, setModalOpen }) => {
   }, []);
 
   const userOptions = useMemo(() => {
-    return profiles?.data
+    return Array.isArray(profiles?.data)
       ? profiles?.data?.filter(
-        (profile) =>
+        (profile: Data) =>
           profile?.role === "ENGINEER"
       )
       : [];
   }, [profiles.data]);
 
   const selectedUsers = useMemo(() => {
-    return userOptions.filter((option) =>
+    return userOptions.filter((option: Data) =>
       formData.user_ids.includes(option.user?.id)
     );
   }, [formData.user_ids, userOptions]);

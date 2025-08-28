@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface LocationState {
-    locations: DataState<Data[]>;
+    locations: DataState<PaginatedData<Data[]> | Data[] | []>;
     location: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: LocationState = {
     location: { data: null, loading: false, error: null },
 };
 
-export const fetchLocations = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchLocations = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'location/fetchLocations',
     async (params, { rejectWithValue }) => {
         try {
@@ -89,7 +89,7 @@ const locationSlice = createSlice({
                 state.locations.loading = true;
                 state.locations.error = null;
             })
-            .addCase(fetchLocations.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchLocations.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.locations.loading = false;
                 state.locations.data = action.payload;
             })

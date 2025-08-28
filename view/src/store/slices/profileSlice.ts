@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface ProfileState {
-    profiles: DataState<Data[]>;
+    profiles: DataState<PaginatedData<Data[]> | Data[] | []>;
     profile: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: ProfileState = {
     profile: { data: null, loading: false, error: null },
 };
 
-export const fetchProfiles = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchProfiles = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'profile/fetchProfiles',
     async (params, { rejectWithValue }) => {
         try {
@@ -121,7 +121,7 @@ const profileSlice = createSlice({
                 state.profiles.loading = true;
                 state.profiles.error = null;
             })
-            .addCase(fetchProfiles.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchProfiles.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.profiles.loading = false;
                 state.profiles.data = action.payload;
             })

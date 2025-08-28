@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface PurchaseApprovalState {
-    purchaseApprovals: DataState<Data[]>;
+    purchaseApprovals: DataState<PaginatedData<Data[]> | Data[] | []>;
     purchaseApproval: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: PurchaseApprovalState = {
     purchaseApproval: { data: null, loading: false, error: null },
 };
 
-export const fetchPurchaseApprovals = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchPurchaseApprovals = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'purchaseApproval/fetchPurchaseApprovals',
     async (params, { rejectWithValue }) => {
         try {
@@ -91,7 +91,7 @@ const purchaseApprovalSlice = createSlice({
                 state.purchaseApprovals.loading = true;
                 state.purchaseApprovals.error = null;
             })
-            .addCase(fetchPurchaseApprovals.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchPurchaseApprovals.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.purchaseApprovals.loading = false;
                 state.purchaseApprovals.data = action.payload;
             })

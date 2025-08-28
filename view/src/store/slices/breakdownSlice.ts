@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface BreakdownState {
-    breakdowns: DataState<Data[]>;
+    breakdowns: DataState<PaginatedData<Data[]> | Data[] | []>;
     breakdown: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: BreakdownState = {
     breakdown: { data: null, loading: false, error: null },
 };
 
-export const fetchBreakdowns = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchBreakdowns = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'breakdown/fetchBreakdowns',
     async (params, { rejectWithValue }) => {
         try {
@@ -106,7 +106,7 @@ const breakdownSlice = createSlice({
                 state.breakdowns.loading = true;
                 state.breakdowns.error = null;
             })
-            .addCase(fetchBreakdowns.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchBreakdowns.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.breakdowns.loading = false;
                 state.breakdowns.data = action.payload;
             })

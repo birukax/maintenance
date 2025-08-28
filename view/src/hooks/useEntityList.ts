@@ -6,7 +6,7 @@ import { AsyncThunk } from "@reduxjs/toolkit";
 import { type Data, type PaginatedData } from "../store/types";
 
 export interface EntityListState {
-  data: PaginatedData<Data[]>;
+  data: PaginatedData<Data[]> | Data[] | [];
   loading: boolean;
   error: any;
 }

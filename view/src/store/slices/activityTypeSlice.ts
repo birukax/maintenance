@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface ActivityTypeState {
-    activityTypes: DataState<Data[]>;
+    activityTypes: DataState<PaginatedData<Data[]> | Data[] | []>;
     activityType: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: ActivityTypeState = {
     activityType: { data: null, loading: false, error: null },
 };
 
-export const fetchActivityTypes = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchActivityTypes = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'activityType/fetchActivityTypes',
     async (params, { rejectWithValue }) => {
         try {
@@ -90,7 +90,7 @@ const activityTypeSlice = createSlice({
                 state.activityTypes.loading = true;
                 state.activityTypes.error = null;
             })
-            .addCase(fetchActivityTypes.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchActivityTypes.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.activityTypes.loading = false;
                 state.activityTypes.data = action.payload;
             })

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface ClearanceState {
-    clearances: DataState<Data[]>;
+    clearances: DataState<PaginatedData<Data[]> | Data[] | []>;
     clearance: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: ClearanceState = {
     clearance: { data: null, loading: false, error: null },
 };
 
-export const fetchClearances = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchClearances = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'clearance/fetchClearances',
     async (params, { rejectWithValue }) => {
         try {
@@ -90,7 +90,7 @@ const clearanceSlice = createSlice({
                 state.clearances.loading = true;
                 state.clearances.error = null;
             })
-            .addCase(fetchClearances.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchClearances.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.clearances.loading = false;
                 state.clearances.data = action.payload;
             })

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface WorkOrderTypeState {
-    workOrderTypes: DataState<Data[]>;
+    workOrderTypes: DataState<PaginatedData<Data[]> | Data[] | []>;
     workOrderType: DataState<Data | null>;
 }
 
@@ -14,7 +14,7 @@ const initialState: WorkOrderTypeState = {
     workOrderType: { data: null, loading: false, error: null },
 };
 
-export const fetchWorkOrderTypes = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchWorkOrderTypes = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'workOrderType/fetchWorkOrderTypes',
     async (params, { rejectWithValue }) => {
         try {
@@ -92,7 +92,7 @@ const WorkOrderTypeSlice = createSlice({
                 state.workOrderTypes.loading = true;
                 state.workOrderTypes.error = null;
             })
-            .addCase(fetchWorkOrderTypes.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchWorkOrderTypes.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.workOrderTypes.loading = false;
                 state.workOrderTypes.data = action.payload;
             })

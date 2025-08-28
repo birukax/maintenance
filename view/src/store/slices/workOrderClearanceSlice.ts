@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 interface WorkOrderClearanceState {
-    workOrderClearances: DataState<Data[]>;
+    workOrderClearances: DataState<PaginatedData<Data[]> | Data[] | []>;
     workOrderClearance: DataState<Data | null>;
 }
 
@@ -13,7 +13,7 @@ const initialState: WorkOrderClearanceState = {
     workOrderClearance: { data: null, loading: false, error: null },
 };
 
-export const fetchWorkOrderClearances = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchWorkOrderClearances = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'workOrderClearance/fetchWorkOrderClearances',
     async (params, { rejectWithValue }) => {
         try {
@@ -93,7 +93,7 @@ const WorkOrderClearanceSlice = createSlice({
                 state.workOrderClearances.loading = true;
                 state.workOrderClearances.error = null;
             })
-            .addCase(fetchWorkOrderClearances.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchWorkOrderClearances.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.workOrderClearances.loading = false;
                 state.workOrderClearances.data = action.payload;
             })

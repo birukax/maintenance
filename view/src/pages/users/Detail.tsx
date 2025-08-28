@@ -5,6 +5,8 @@ import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import { type Data } from '../../store/types';
+
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.profile.profile,
@@ -26,7 +28,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <div className="rw">
         <div className="clmn">

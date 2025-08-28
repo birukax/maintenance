@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from '../../utils/api';
 import { AxiosError } from "axios";
-import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState } from "../types";
+import { type FormData, type FetchParams, type UpdateFormData, type Data, type DataState, PaginatedData } from "../types";
 
 
 interface TransferState {
-    transfers: DataState<Data[]>;
+    transfers: DataState<PaginatedData<Data[]> | Data[] | []>;
     transfer: DataState<Data | null>;
-    transferHistories: DataState<Data[]>;
+    transferHistories: DataState<PaginatedData<Data[]> | Data[] | []>;
 }
 
 const initialState: TransferState = {
@@ -16,7 +16,7 @@ const initialState: TransferState = {
     transferHistories: { data: [], loading: false, error: null },
 };
 
-export const fetchTransfers = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchTransfers = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'transfer/fetchTransfers',
     async (params, { rejectWithValue }) => {
         try {
@@ -109,7 +109,7 @@ export const shipTransfer = createAsyncThunk<Data, UpdateFormData, { rejectValue
     }
 )
 
-export const fetchTransferHistories = createAsyncThunk<Data[], FetchParams, { rejectValue: any }>(
+export const fetchTransferHistories = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
     'transfer/fetchTransferHistories',
     async (params, { rejectWithValue }) => {
         try {
@@ -139,7 +139,7 @@ const TransferSlice = createSlice({
                 state.transfers.loading = true;
                 state.transfers.error = null;
             })
-            .addCase(fetchTransfers.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchTransfers.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.transfers.loading = false;
                 state.transfers.data = action.payload;
             })
@@ -211,7 +211,7 @@ const TransferSlice = createSlice({
                 state.transferHistories.loading = true;
                 state.transferHistories.error = null;
             })
-            .addCase(fetchTransferHistories.fulfilled, (state, action: PayloadAction<Data[]>) => {
+            .addCase(fetchTransferHistories.fulfilled, (state, action: PayloadAction<PaginatedData<Data[]>>) => {
                 state.transferHistories.loading = false;
                 state.transferHistories.data = action.payload;
             })
