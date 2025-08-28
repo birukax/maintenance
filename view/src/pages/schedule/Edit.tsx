@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -15,8 +15,10 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const { id } = useParams();
@@ -48,8 +50,8 @@ const Edit = () => {
       await dispatch(updateWorkOrderType({ id, formData })).unwrap();
       toast.success("Work Order Type edited successfully");
       navigate(`/work-order-type/detail/${workOrderType.data?.id}`);
-    } catch (err) {
-      toast.error(schedule.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(schedule.error?.error || error || "Something Went Wrong");
     }
   };
   return (

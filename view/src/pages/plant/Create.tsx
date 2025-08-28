@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { createPlant } from "../../store/slices/plantSlice";
@@ -12,8 +12,10 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
   });
@@ -31,8 +33,8 @@ const Create = () => {
       await dispatch(createPlant(formData)).unwrap();
       toast.success("Plant created successfully");
       navigate("/plants");
-    } catch (err) {
-      toast.error(plant.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(plant.error?.error || error || "Something Went Wrong");
     }
   };
   return (

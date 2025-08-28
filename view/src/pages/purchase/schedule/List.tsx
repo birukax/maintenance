@@ -60,7 +60,7 @@ const List: React.FC = () => {
   const handleEdit = async (year) => {
     navigate(`/purchase-schedule/edit/${year}?page=1`);
   };
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     let parameters
     // Handle filter action here
     if (field === "year__no") {

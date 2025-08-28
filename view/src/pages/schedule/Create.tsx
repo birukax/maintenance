@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -20,8 +20,10 @@ import {
 } from "@mui/material";
 import { SCHEDULE_TYPES } from "../../utils/choices";
 import { toast } from "react-toastify";
+import { type Data, type FormData } from '../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     type: "",
     description: "",
     machine_id: "",
@@ -81,8 +83,8 @@ const Create = () => {
         await dispatch(createSchedule(formData)).unwrap();
         toast.success("Schedule created successfully");
         navigate("/schedules");
-      } catch (err) {
-        toast.error(schedule.error?.error || "Something Went Wrong");
+      } catch (error) {
+        toast.error(schedule.error?.error || error || "Something Went Wrong");
       }
     } else {
       toast.warning("At least one field of planned time must be greater than 0")
@@ -140,7 +142,7 @@ const Create = () => {
           <Autocomplete
             size='small'
             options={machines.data || []}
-            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
+            getOptionLabel={(option: Data) => `${option?.code} - ${option?.name}`}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -166,7 +168,7 @@ const Create = () => {
             options={Array.isArray(equipments.data) && equipments.data?.filter(
               (equipment) => equipment.machine.id === formData.machine_id
             ) || []}
-            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}`}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -198,7 +200,7 @@ const Create = () => {
                 ? workOrderTypes.data.filter((workOrderType) => workOrderType?.scheduled === true)
                 : []
             }
-            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}`}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -233,7 +235,7 @@ const Create = () => {
                 )
                 : []
             }
-            getOptionLabel={(option) => `${option.code} - ${option.name}` || ""}
+            getOptionLabel={(option) => `${option.code} - ${option.name}`}
             renderInput={(params) => (
               <TextField
                 {...params}

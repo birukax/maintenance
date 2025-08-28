@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
@@ -22,9 +22,11 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { Roles } from "../../utils/choices";
+import { type FormData } from '../../store/types';
+import { SelectChangeEvent } from '../../components/types';
 
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     role: "",
     email: "",
     phone_no: "",
@@ -54,6 +56,12 @@ const Edit = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleSelectChange = (e: SelectChangeEvent<string | number>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,8 +70,8 @@ const Edit = () => {
       await dispatch(updateProfile({ id, formData })).unwrap();
       toast.success("Profile edited successfully");
       navigate(`/user/detail/${profile.data?.id}`);
-    } catch (err) {
-      toast.error(profile.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(profile.error?.error || error || "Something Went Wrong");
     }
   };
 
@@ -114,7 +122,7 @@ const Edit = () => {
             id="role"
             name="role"
             value={formData.role}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Role"
 
           >

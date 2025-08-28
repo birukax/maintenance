@@ -1,15 +1,16 @@
 // src/pages/List.tsx
 import React, { useEffect, useState } from "react";
-import { fetchWorkOrderActivities, deleteWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
+import { fetchWorkOrderActivities } from "../../../store/slices/workOrderActivitySlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useSearchParams, Link } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import CreateActivity from "./Create";
-import DeleteActivity from "./Delete";
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteActivity from "./Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import EditActivity from "./Edit";
+import { type Data, type FetchParams } from '../../../store/types';
+
 const headers = [
   { header: "Description", accessor: "description" },
   { header: "Value", accessor: "value" },
@@ -23,7 +24,7 @@ const List: React.FC = () => {
     (state: AppState) => state.workOrderActivity.workOrderActivities
   );
 
-  const [params, setParams] = useState({
+  const [params] = useState<FetchParams>({
     // search:searchParams.get("search") ||"",
     no_pagination: true,
     work_order__id: id
@@ -40,40 +41,39 @@ const List: React.FC = () => {
 
   }
 
-  const handleDeleteActivity = async (id) => {
-    await dispatch(deleteWorkOrderActivity(id));
-    if (!entityState.error) {
-      handleRefresh()
-      handledeleteModalClose()
-    }
-  }
+  // const handleDeleteActivity = async (id: string | number) => {
+  //   await dispatch(deleteWorkOrderActivity(id));
+  //   if (!entityState.error) {
+  //     handleRefresh()
+  //     handleDeleteModalClose()
+  //   }
+  // }
   const [assignmodalOpen, setAssignModalOpen] = useState(false);
   const [editmodalOpen, setEditModalOpen] = useState(false);
-  const [deletemodalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState("");
-  const [editId, setEditId] = useState("");
+  // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  // const [deleteId, setDeleteId] = useState("");
+  const [editId, setEditId] = useState<string | number | undefined>("");
 
   const handleAssignModalOpen = () => setAssignModalOpen(true);
   const handleAssignModalClose = () => setAssignModalOpen(false);
-  const handledeleteModalOpen = () => setDeleteModalOpen(true);
-  const handledeleteModalClose = () => setDeleteModalOpen(false);
-  const handleeditModalOpen = () => setEditModalOpen(true);
-  const handleeditModalClose = () => setEditModalOpen(false);
+  // const handleDeleteModalOpen = () => setDeleteModalOpen(true);
+  // const handleDeleteModalClose = () => setDeleteModalOpen(false);
+  const handleEditModalOpen = () => setEditModalOpen(true);
+  const handleEditModalClose = () => setEditModalOpen(false);
 
-  const disableActivity = async (id, active) => {
-    const formData = {
-      active: !active
-    }
+  // const disableActivity = async (id: string | number, active: boolean) => {
+  //   const formData = {
+  //     active: !active
+  //   }
+  //   await dispatch(updateActivity({ id, formData }));
+  //   if (!entityState.error) {
+  //     handleRefresh()
+  //   }
+  // }
 
-    await dispatch(updateActivity({ id, formData }));
-    if (!entityState.error) {
-      handleRefresh()
-    }
-  }
 
-
-  const getNestedValue = (obj, path) =>
-    path.split(".").reduce((acc, part) => acc && acc[part], obj);
+  const getNestedValue = (obj: any, path: any) =>
+    path.split(".").reduce((acc: any, part: any) => acc && acc[part], obj);
 
 
   return (
@@ -93,39 +93,37 @@ const List: React.FC = () => {
           aria-describedby="modal-modal-description"
         >
           <CreateActivity
-            entityState={entityState}
             setModalOpen={setAssignModalOpen}
             handleRefresh={handleRefresh}
           />
         </Modal>
         <Modal
           open={editmodalOpen}
-          onClose={handleeditModalClose}
+          onClose={handleEditModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
           <EditActivity
-            entityState={entityState}
             setModalOpen={setEditModalOpen}
             handleRefresh={handleRefresh}
             editId={editId} />
         </Modal>
-        <Modal
-          open={deletemodalOpen}
-          onClose={handledeleteModalClose}
+        {/* <Modal
+          open={deleteModalOpen}
+          onClose={handleDeleteModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
           <DeleteActivity
             handleDeleteActivity={handleDeleteActivity}
-            handledeleteModalClose={handledeleteModalClose}
+            handledeleteModalClose={handleDeleteModalClose}
             deleteId={deleteId}
             workOrderActivity={entityState}
           />
         </Modal>
         <Typography variant="h5" className="font-bold ">
 
-        </Typography>
+        </Typography> */}
         <div >
           {entityState.loading && <CircularProgress size={30} />}
 
@@ -166,7 +164,7 @@ const List: React.FC = () => {
               <TableCell>
                 <Typography >No</Typography>
               </TableCell>
-              {headers.map((header, index) => (
+              {headers.map((header: any, index: number) => (
                 <TableCell key={index}>
                   <Typography >{header.header}</Typography>
                 </TableCell>
@@ -178,7 +176,7 @@ const List: React.FC = () => {
           </TableHead>
           <TableBody>
             {entityState?.data && entityState?.data.length > 0
-              ? entityState?.data?.map((row, index) => (
+              ? entityState?.data?.map((row: Data, index: number) => (
                 <TableRow
                   key={index}
                 >
@@ -191,7 +189,7 @@ const List: React.FC = () => {
                       {index + 1}
                     </Typography>
                   </TableCell>
-                  {headers.map((col) => {
+                  {headers.map((col: any) => {
                     return (
                       <TableCell
                         key={col.header}
@@ -218,13 +216,13 @@ const List: React.FC = () => {
                     >
                       <IconButton aria-label="edit" title="Edit" onClick={() => {
                         setEditId(row.id)
-                        handleeditModalOpen()
+                        handleEditModalOpen()
                       }}>
                         <EditIcon color='primary' />
                       </IconButton>
                       {/* <IconButton aria-label="delete" title="Delete" onClick={() => {
                         setDeleteId(row.id)
-                        handledeleteModalOpen()
+                        handleDeleteModalOpen()
                       }}>
                         <DeleteIcon color='warning' />
                       </IconButton> */}

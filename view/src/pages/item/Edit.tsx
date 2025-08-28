@@ -91,9 +91,9 @@ const Create = () => {
   };
 
 
-  const handleAutocompleteChange = (fieldName: any, newValue: any) => {
+  const handleAutocompleteChange = (fieldName: string, newValue: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item: any) => item.id);
+    const selectedIds = newValue.map((item: Data) => item.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,

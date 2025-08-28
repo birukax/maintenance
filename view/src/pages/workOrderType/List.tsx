@@ -54,9 +54,6 @@ const List: React.FC = () => {
 
   return (
     <GenericListPage
-      onEdit=''
-      onDownload=''
-      yearFilter=''
       title="Work Order Types"
       entityState={entityState}
       columns={workOrderTypeColumns}

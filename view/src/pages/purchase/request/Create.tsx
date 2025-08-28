@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createPurchaseRequest } from "../../../store/slices/purchaseRequestSlice";
 import { fetchItems } from "../../../store/slices/itemSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { fetchLocations } from "../../../store/slices/locationSlice";
-
+import { SelectChangeEvent } from '../../../components/types';
 import { Link } from "react-router-dom";
 import {
   TextField,
@@ -26,9 +26,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type Data, type FormData } from '../../../store/types';
 import { PRIORITIES } from "../../../utils/choices";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     location_id: "",
     priority: "",
     requested_items: [],
@@ -46,25 +47,26 @@ const Create = () => {
     dispatch(fetchItems(params));
   }, []);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSelectChange = (e: SelectChangeEvent<string | number>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(createPurchaseRequest(formData)).unwrap();
       toast.success("Purchase Request created successfully");
       navigate("/purchase-requests");
-    } catch (err) {
-      toast.error(purchaseRequest.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(purchaseRequest.error?.error || error || "Something Went Wrong");
     }
 
   };
 
 
   const selectedItems = formData.requested_items.length > 0
-    ? formData.requested_items.map((el) => {
+    ? formData.requested_items.map((el: Data) => {
       return items.data?.filter((item) => item.id === el.item_id)
     }) : [];
 
@@ -123,7 +125,7 @@ const Create = () => {
             id="priority-select"
             name="priority"
             value={formData.priority}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Priority"
           >
             {PRIORITIES.map((priority, index) => (
@@ -144,7 +146,7 @@ const Create = () => {
               Array.isArray(items.data)
                 ? items.data.filter((item) =>
                   formData.requested_items
-                    .map((el) => el.item_id)
+                    .map((el: Data) => el.item_id)
                     .includes(item.id)
                 )
                 : []
@@ -179,7 +181,7 @@ const Create = () => {
 
           <TableBody>
 
-            {selectedItems?.map((item) => (
+            {selectedItems?.map((item: Data) => (
               <TableRow
                 key={item[0].id}
               >
@@ -197,7 +199,7 @@ const Create = () => {
                       type="number"
                       value={
                         formData.requested_items.filter(
-                          (el) => el.item_id === item[0].id
+                          (el: Data) => el.item_id === item[0].id
                         )[0]?.quantity
                       }
                       required
@@ -212,7 +214,7 @@ const Create = () => {
                           return {
                             ...prev,
                             requested_items: [
-                              ...prev.requested_items.filter((el) => {
+                              ...prev.requested_items.filter((el: Data) => {
                                 if (el.item_id === item[0].id) {
                                   el.quantity = Number(e.target.value);
                                 }

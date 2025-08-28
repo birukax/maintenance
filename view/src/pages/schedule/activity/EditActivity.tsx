@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { FC, useState, useEffect, ChangeEvent, FormEvent, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState, AppDispatch } from "../../../store/store";
 import {
@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import { fetchActivity, updateActivity } from "../../../store/slices/activitySlice";
+import { type FormData } from '../../../store/types';
 
 const style = {
   position: "absolute",
@@ -22,11 +23,17 @@ const style = {
   p: 4,
 };
 
-const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
+interface EditActivityProps {
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  handleRefresh: () => void;
+  editId: string | number;
+}
+
+const EditActivity: FC<EditActivityProps> = ({ setModalOpen, handleRefresh, editId }) => {
 
   const activity = useSelector((state: AppState) => state.activity.activity);
   const dispatch = useDispatch<AppDispatch>();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     description: activity.data?.description || ""
   });
 
@@ -69,7 +76,7 @@ const EditActivity = ({ entityState, setModalOpen, handleRefresh, editId }) => {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        onChange={handleChange}
+        // onChange={handleChange}
         className="form-gap w-full"
       >
         <TextField

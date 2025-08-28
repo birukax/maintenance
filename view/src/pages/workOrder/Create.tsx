@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -24,8 +24,10 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     start_date: "",
     machine_id: "",
     equipment_id: "",
@@ -37,16 +39,12 @@ const Create = () => {
     total_hours: 0,
     total_minutes: 0,
   });
-  const workOrder = useSelector((state: AppState) => state.workOrder.workOrder);
+  const { workOrder } = useSelector((state: AppState) => state.workOrder);
   const { items } = useSelector((state: AppState) => state.item);
   const { machines } = useSelector((state: AppState) => state.machine);
   const { equipments } = useSelector((state: AppState) => state.equipment);
-  const { activityTypes } = useSelector(
-    (state: AppState) => state.activityType
-  );
-  const { workOrderTypes } = useSelector(
-    (state: AppState) => state.workOrderType
-  );
+  const { activityTypes } = useSelector((state: AppState) => state.activityType);
+  const { workOrderTypes } = useSelector((state: AppState) => state.workOrderType);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -100,16 +98,16 @@ const Create = () => {
     }
     setFormData({ ...formData, [name]: value });
   };
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
       start_date: formattedDate,
     });
   };
-  const handleAutocompleteChange = (fieldName, newValue) => {
+  const handleAutocompleteChange = (fieldName: string, value: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item) => item.id);
+    const selectedIds = value.map((item: FormData) => item.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -124,8 +122,8 @@ const Create = () => {
         await dispatch(createWorkOrder(formData)).unwrap();
         toast.success("Work Order created successfully");
         navigate("/work-orders");
-      } catch (err) {
-        toast.error(workOrder.error?.error || "Something Went Wrong");
+      } catch (error) {
+        toast.error(workOrder.error?.error || error || "Something Went Wrong");
       }
     } else {
       toast.warning("At least one field of total time required must be greater than 0 ")
@@ -180,8 +178,8 @@ const Create = () => {
             )}
             id="machine-select"
             value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
-            onChange={(event, newValue) => {
-              setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
+            onChange={(_event, value) => {
+              setFormData({ ...formData, machine_id: value ? value.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
@@ -208,8 +206,8 @@ const Create = () => {
                 (equipment) => equipment.id === formData.equipment_id
               ) || null
             }
-            onChange={(event, newValue) => {
-              setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
+            onChange={(_event, value) => {
+              setFormData({ ...formData, equipment_id: value ? value.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
@@ -248,10 +246,10 @@ const Create = () => {
                 ) || null
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, value) => {
               setFormData({
                 ...formData,
-                work_order_type_id: newValue ? newValue.id : "",
+                work_order_type_id: value ? value.id : "",
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -287,10 +285,10 @@ const Create = () => {
                 ) || null
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, value) => {
               setFormData({
                 ...formData,
-                activity_type_id: newValue ? newValue.id : "",
+                activity_type_id: value ? value.id : "",
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -317,8 +315,8 @@ const Create = () => {
             )}
             id="sparepart-autocomplete"
             value={selectedSpareparts}
-            onChange={(event, newValue) =>
-              handleAutocompleteChange("spareparts_required_id", newValue)
+            onChange={(_event, value) =>
+              handleAutocompleteChange("spareparts_required_id", value)
             }
           ></Autocomplete>
         </FormControl>
@@ -344,8 +342,8 @@ const Create = () => {
             )}
             id="tool-select"
             value={selectedTools}
-            onChange={(event, newValue) =>
-              handleAutocompleteChange("tools_required_id", newValue)
+            onChange={(_event, value) =>
+              handleAutocompleteChange("tools_required_id", value)
             }
           ></Autocomplete>
         </FormControl>

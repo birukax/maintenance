@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { type FormData } from '../../../store/types';
 import {
   fetchShelfBox,
   updateShelfBox,
@@ -18,7 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const { id } = useParams();
@@ -51,8 +52,8 @@ const Edit = () => {
       await dispatch(updateShelfBox({ id, formData })).unwrap();
       toast.success("Shelf edited successfully");
       navigate(`/shelf-box/detail/${shelfBox.data?.id}`);
-    } catch (err) {
-      toast.error(shelfBox.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(shelfBox.error?.error || error || "Something Went Wrong");
     }
   };
   return (

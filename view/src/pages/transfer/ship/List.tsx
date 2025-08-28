@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchTransfer } from "../../../store/slices/transferSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -16,6 +16,7 @@ import {
   TableCell,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { type Data, type FormData } from '../../../store/types';
 
 const ShipList = () => {
   const entityState = useEntityDetail({
@@ -23,7 +24,7 @@ const ShipList = () => {
     fetchDetailAction: fetchTransfer,
   });
   const [errorCount, setErrorCount] = useState([])
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     shipped_items: []
   });
   const { id } = useParams()
@@ -44,11 +45,11 @@ const ShipList = () => {
       <>
         <Button
           size='small'
-          disabled={errorCount.find(el => el === true) || formData.shipped_items.filter((e) => e.quantity > 0).length === 0}
+          disabled={errorCount.find(el => el === true) || formData.shipped_items.filter((e: Data) => e.quantity > 0).length === 0}
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
-          onClick={handleSubmit}
+          onClick={() => handleSubmit}
         >
           Ship
         </Button>
@@ -58,35 +59,56 @@ const ShipList = () => {
 
 
 
-  const handleFormChange = async (data) => {
+  const handleFormChange = async (data: FormData) => {
 
-    let item = formData?.shipped_items?.find(el => el.item_id === data.item_id)
-    if (!item) {
 
-      setFormData(prev => {
+    setFormData(prev => {
+      const existingItem = prev.shipped_items.find((item: Data) => item.item_id === data.item.id);
+      if (!existingItem) {
         return {
           ...prev,
-          shipped_items: [...prev?.shipped_items, data]
+          shipped_items: [...prev.shipped_items, data]
         }
-      })
-    } else {
-
-      setFormData(prev => {
+      } else {
         return {
           ...prev,
-          shipped_items: [...prev?.shipped_items?.filter(el => {
-            if (el.item_id === data.item_id) {
-              el.quantity = data.quantity
+          shipped_items: prev.shipped_items.map((item: Data) => {
+            if (item.item_id === data.item_id) {
+              return { ...item, quantity: data.quantity };
             }
-            return el
-          })]
+            return item;
+          })
         }
-      })
-    }
+      }
+    })
+
+    // let item = formData?.shipped_items?.find(el => el.item_id === data.item_id)
+    // if (!item) {
+
+    //   setFormData(prev => {
+    //     return {
+    //       ...prev,
+    //       shipped_items: [...prev?.shipped_items, data]
+    //     }
+    //   })
+    // } else {
+
+    //   setFormData(prev => {
+    //     return {
+    //       ...prev,
+    //       shipped_items: [...prev?.shipped_items?.filter(el => {
+    //         if (el.item_id === data.item_id) {
+    //           el.quantity = data.quantity
+    //         }
+    //         return el
+    //       })]
+    //     }
+    //   })
+    // }
 
   };
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <Table size='small' sx={{ minWidth: 650 }} aria-label={` table`}>
         <TableHead>
@@ -121,7 +143,7 @@ const ShipList = () => {
         </TableHead>
         <TableBody>
           {data &&
-            data?.transfer_items?.map((row, index) => {
+            data?.transfer_items?.map((row: Data, index: number) => {
               if (row.remaining_quantity > 0) return <ShipListRows
                 setErrorCount={setErrorCount}
                 errorCount={errorCount}
@@ -132,7 +154,7 @@ const ShipList = () => {
               />
             })}
           {
-            data && data?.transfer_items?.every(el => el.remaining_quantity < 1) && <TableRow><Typography>No Shippment Left</Typography></TableRow>
+            data && data?.transfer_items?.every((el: Data) => el.remaining_quantity < 1) && <TableRow><Typography>No Shippment Left</Typography></TableRow>
           }
         </TableBody>
       </Table>

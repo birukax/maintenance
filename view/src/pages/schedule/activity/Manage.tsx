@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -15,8 +15,10 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     description: "",
     activity_type_id: "",
@@ -46,8 +48,8 @@ const Create = () => {
       await dispatch(createActivity(formData)).unwrap();
       toast.success("Activity created successfully");
       navigate("/activities");
-    } catch (err) {
-      toast.error(activity.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(activity.error?.error || error || "Something Went Wrong");
     }
   };
   return (

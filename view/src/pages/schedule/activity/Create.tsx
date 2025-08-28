@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { FC, useState, useEffect, ChangeEvent, FormEvent, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -11,6 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import { createActivity } from "../../../store/slices/activitySlice";
+import { type FormData } from '../../../store/types';
 
 const style = {
   position: "absolute",
@@ -24,9 +25,15 @@ const style = {
   p: 4,
 };
 
-const CreateActivity = ({ entityState, setModalOpen, handleRefresh }) => {
+interface CreateActivityProps {
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  handleRefresh: () => void;
+}
+
+
+const CreateActivity: FC<CreateActivityProps> = ({ setModalOpen, handleRefresh }) => {
   const { id: schedule_id } = useParams();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     schedule_id: schedule_id || "",
     description: ""
   });

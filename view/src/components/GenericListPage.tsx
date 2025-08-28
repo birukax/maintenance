@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { AppState } from "../store/store";
 import { Link, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -25,17 +25,39 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import Pagination from "./Pagination";
 import api from '../utils/api';
+import { type Data, } from '../store/types';
+import { EntityListState } from "../hooks/useEntityList";
 
-export interface ColumnDefination {
+const getNestedValue = (obj: any, path: any) =>
+  path.split(".").reduce((acc: any, part: any) => acc && acc[part], obj);
+
+interface Column {
   header: string;
   accessor?: string;
-  renderCell?: (row) => React.ReactNode;
+  renderCell?: (row: Data) => React.ReactNode;
 }
 
-const getNestedValue = (obj, path) =>
-  path.split(".").reduce((acc, part) => acc && acc[part], obj);
+interface GenericListPageProps {
+  title: string | null;
+  entityState: EntityListState;
+  columns: Column[];
+  createRoute?: string | null;
+  hasDetail?: boolean;
+  hasApproval?: boolean;
+  detailRouteBase?: string | null;
+  keyWord: string | null;
+  onRefresh?: () => void;
+  onEdit?: (year__no: string | null) => void;
+  onDownload?: { urlPath: string, fileName: string };
+  yearFilter?: (field: string, value: any) => void;
+  onApprove?: (id: string | number | undefined) => void;
+  onReject?: (id: string | number | undefined) => void;
+  getKey: (key: Data) => number | string | undefined;
+  searchFilter?: (field: string, value: any) => Promise<void>;
+  setKeyWord: Dispatch<SetStateAction<string>>
+}
 
-export const GenericListPage = ({
+export const GenericListPage: FC<GenericListPageProps> = ({
   title,
   entityState,
   columns,
@@ -43,28 +65,31 @@ export const GenericListPage = ({
   hasDetail = true,
   hasApproval = false,
   detailRouteBase = "",
+  keyWord,
   onRefresh,
   onEdit,
   onDownload,
   yearFilter,
-  onApprove = null,
-  onReject = null,
+  onApprove,
+  onReject,
   getKey,
   searchFilter,
-  keyWord,
   setKeyWord,
 }) => {
-  const headers = columns.map((col) => col.header);
+  const headers = columns.map((col: Column) => col.header);
   const { tokens } = useSelector((state: AppState) => state.auth);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)
   if (!tokens) {
     return <Typography>Unauthorized</Typography>;
   }
+  interface DownloadProps {
+    urlPath: string, fileName: string
 
+  }
 
-  const handleDownload = async ({ urlPath, fileName }) => {
+  const handleDownload = async ({ urlPath, fileName }: DownloadProps) => {
 
     try {
       const response = await api.get(urlPath, {
@@ -232,7 +257,7 @@ export const GenericListPage = ({
               </Button>
             </div>
           )}
-          {onEdit && entityState.data?.count > 0 && (
+          {onEdit && entityState?.data?.results && entityState.data?.count > 0 && (
             <div>
               <Button
                 disabled={entityState.loading}
@@ -255,7 +280,7 @@ export const GenericListPage = ({
         >
           <TableHead >
             <TableRow>
-              {headers.map((header) => (
+              {headers.map((header: string) => (
                 <TableCell size='small' key={header}>
                   <Typography >{header}</Typography>
                 </TableCell>
@@ -269,12 +294,12 @@ export const GenericListPage = ({
           </TableHead>
           <TableBody>
             {entityState?.data?.results && entityState?.data?.count > 0
-              ? entityState?.data?.results?.map((row) => (
+              ? entityState?.data?.results?.map((row: Data) => (
                 <TableRow hover
                   key={getKey(row)}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {columns.map((col) => {
+                  {columns.map((col: Column) => {
                     return (
                       <TableCell
                         key={col.header}
@@ -319,14 +344,14 @@ export const GenericListPage = ({
                       >
                         <Button
                           variant='contained'
-                          onClick={() => onApprove(row.id)}
+                          onClick={() => onApprove?.(row.id)}
                           disabled={entityState.loading}
                         >
                           <CheckIcon />
                         </Button>
                         <Button
                           variant='outlined'
-                          onClick={() => onReject(row.id)}
+                          onClick={() => onReject?.(row.id)}
                           disabled={entityState.loading}
                         >
                           <ClearIcon />

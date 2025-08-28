@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Dispatch, FC, FormEvent, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfiles } from "../../../store/slices/profileSlice";
 import { assignWorkOrderUsers } from "../../../store/slices/workOrderSlice";
@@ -15,6 +15,8 @@ import {
 
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type Data, type FormData } from '../../../store/types';
+import { EntityDetailState } from "../../../hooks/useEntityDetail";
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -29,10 +31,15 @@ const style = {
   p: 4,
 };
 
-const AssignUsers = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
-    user_ids: entityState.data.assigned_users.map(user => user.id) || [],
+interface AssignUserProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+}
+
+const AssignUsers: FC<AssignUserProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
+    user_ids: entityState.data?.assigned_users.map((user: Data) => user.id) || [],
   });
   const { profiles } = useSelector((state: AppState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
@@ -60,8 +67,8 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
   }, [formData.user_ids, userOptions]);
 
 
-  const handleAutocompleteChange = (fieldName, newValue) => {
-    const selectedIds = newValue.map((profile) => profile?.user?.id);
+  const handleAutocompleteChange = (fieldName: string, value: any) => {
+    const selectedIds = value.map((profile: Data) => profile?.user?.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -74,8 +81,8 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
       await dispatch(assignWorkOrderUsers({ id, formData })).unwrap();
       toast.success("Users assigned successfully");
       setModalOpen(false);
-    } catch (err) {
-      toast.error(entityState?.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(entityState?.error?.error || error || "Something Went Wrong");
 
     }
   };
@@ -108,8 +115,8 @@ const AssignUsers = ({ entityState, setModalOpen }) => {
             )}
             id="user-autocomplete"
             value={selectedUsers}
-            onChange={(event, newValue) =>
-              handleAutocompleteChange("user_ids", newValue)
+            onChange={(_event, value) =>
+              handleAutocompleteChange("user_ids", value)
             }
           ></Autocomplete>
         </FormControl>

@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { TableRow, TableCell, Checkbox, TextField, Typography } from "@mui/material";
+import { type Data } from '../../store/types';
 
-const CheckListRows = ({ row, handleUpdateActivity }) => {
+interface CheckListRows {
+  row: Data;
+  handleUpdateActivity: (id: string | number, field: string, newValue: any) => void;
+}
+
+const CheckListRows: FC<CheckListRows> = ({ row, handleUpdateActivity }) => {
   const [remark, setRemark] = useState(row.remark || "");
   const [value, setValue] = useState(row.value || false);
   useEffect(() => {
@@ -22,8 +28,11 @@ const CheckListRows = ({ row, handleUpdateActivity }) => {
           size='large'
           checked={value}
           onChange={(event) => {
-            setValue(event.target.checked);
-            handleUpdateActivity(row.id, "value", event.target.checked);
+            if (row.id) {
+              setValue(event.target.checked);
+              handleUpdateActivity(row.id, "value", event.target.checked);
+
+            }
           }}
           name="value"
         />
@@ -37,7 +46,7 @@ const CheckListRows = ({ row, handleUpdateActivity }) => {
           size="small"
           onChange={(event) => setRemark(event.target.value)}
           onBlur={() => {
-            if (remark !== row.remark) {
+            if (remark !== row.remark && row.id) {
               handleUpdateActivity(row.id, "remark", remark);
             }
           }}

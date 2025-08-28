@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -12,14 +12,15 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
+import { type FormData } from '../../../store/types';
 import { toast } from "react-toastify";
-import { fetchYears } from "../../../store/slices/purchaseScheduleSlice";
+import { fetchYears } from "../../../store/slices/yearSlice";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     year: ""
   });
   const purchaseSchedule = useSelector((state: AppState) => state.purchaseSchedule.purchaseSchedule)
-  const years = useSelector((state: AppState) => state.purchaseSchedule.years);
+  const years = useSelector((state: AppState) => state.year.years);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -31,8 +32,8 @@ const Create = () => {
     dispatch(fetchYears(params))
   }, [])
   useEffect(() => {
-    let current = years?.data;
-    let plan = current[0]
+    const current = years?.data;
+    const plan = current[0]
     setFormData(prev => {
       return {
         ...prev,
@@ -48,8 +49,8 @@ const Create = () => {
       await dispatch(createAnnualSchedule({ formData })).unwrap();
       toast.success("Purchase Schedule created successfully");
       navigate("/purchase-schedules");
-    } catch (err) {
-      toast.error(purchaseSchedule.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(purchaseSchedule.error?.error || error || "Something Went Wrong");
     }
   };
   return (

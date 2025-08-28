@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { FC, useState, useEffect, ChangeEvent, FormEvent, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { receivePurchaseRequest } from "../../../store/slices/purchaseRequestSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -6,6 +6,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { type FormData } from '../../../store/types';
 import {
   Button,
   Typography,
@@ -30,8 +31,15 @@ const style = {
   p: 4,
 };
 
-const Receive = ({ id, setModalOpen }) => {
-  const [formData, setFormData] = useState({
+
+
+interface ReceiveProps {
+  id: string | number;
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+}
+
+const Receive: FC<ReceiveProps> = ({ id, setModalOpen }) => {
+  const [formData, setFormData] = useState<FormData>({
     location_id: "",
     received_quantity: 0,
     received_date: "",
@@ -47,7 +55,7 @@ const Receive = ({ id, setModalOpen }) => {
   const params = {
     no_pagination: "true",
   };
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
 
     setFormData({
@@ -63,8 +71,8 @@ const Receive = ({ id, setModalOpen }) => {
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap();
       toast.success("Item received successfully");
       setModalOpen(false);
-    } catch (err) {
-      toast.error(purchaseRequest.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(purchaseRequest.error?.error || error || "Something Went Wrong");
     }
   };
   useEffect(() => {
@@ -103,7 +111,7 @@ const Receive = ({ id, setModalOpen }) => {
             onChange={(_, newValue) => {
               setFormData({
                 ...formData,
-                location_id: newValue.id,
+                location_id: newValue?.id,
               });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}

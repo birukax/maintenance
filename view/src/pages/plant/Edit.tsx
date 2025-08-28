@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
@@ -15,8 +15,10 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const plant = useSelector((state: AppState) => state.plant.plant)
@@ -24,12 +26,15 @@ const Edit = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(fetchPlant(id));
+    if (id) {
 
-    setFormData({
-      name: plant.data?.name,
-    });
-  }, []);
+      dispatch(fetchPlant(id));
+
+      setFormData({
+        name: plant.data?.name,
+      });
+    }
+  }, [id]);
 
   useEffect(() => {
     setFormData({
@@ -48,8 +53,8 @@ const Edit = () => {
       await dispatch(updatePlant({ id, formData })).unwrap();
       toast.success("Plant edited successfully");
       navigate(`/plant/detail/${plant.data?.id}`);
-    } catch (err) {
-      toast.error(plant.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(plant.error?.error || error || "Something Went Wrong");
     }
   };
   return (

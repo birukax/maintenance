@@ -7,6 +7,7 @@ import { Typography, Button, Modal, Table, TableHead, TableRow, TableCell, Table
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AssignUsers from "./user/Assign";
 import CompleteClearance from './clearance/Complete';
+import { Data } from "../../store/types";
 const Detail = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -117,7 +118,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
 
       <h2>Primary Information</h2>
@@ -242,7 +243,7 @@ const Detail = () => {
         {data?.assigned_users?.length > 0 && (
           <div className="clmn">
             <Typography variant="h6">Assigned Users:</Typography>
-            {data?.assigned_users?.map((assigned_user) => {
+            {data?.assigned_users?.map((assigned_user: Data) => {
               return (
                 <Typography
                   variant="body1"
@@ -259,7 +260,7 @@ const Detail = () => {
         <div className="clmn">
 
           <Typography variant="h6">Spareparts Required:</Typography>
-          {data?.spareparts_required?.map((sparepart) => {
+          {data?.spareparts_required?.map((sparepart: Data) => {
             return (
               <Typography
                 variant="body1"
@@ -274,7 +275,7 @@ const Detail = () => {
         <div className="clmn">
 
           <Typography variant="h6">Tools Required:</Typography>
-          {data?.tools_required?.map((tool) => {
+          {data?.tools_required?.map((tool: Data) => {
             return (
               <Typography
                 variant="body1"
@@ -316,7 +317,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.work_order_activities?.length > 0 ? data?.work_order_activities?.map((work_order_activity) => {
+              {data?.work_order_activities?.length > 0 ? data?.work_order_activities?.map((work_order_activity: Data) => {
                 return (
                   <TableRow key={work_order_activity?.id}>
                     <TableCell>{work_order_activity?.description}</TableCell>
@@ -357,12 +358,12 @@ const Detail = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.work_order_clearances?.length > 0 ? data?.work_order_clearances?.map((work_order_activity) => {
+                {data?.work_order_clearances?.length > 0 ? data?.work_order_clearances?.map((work_order_clearance: Data) => {
                   return (
-                    <TableRow key={work_order_activity?.id}>
-                      <TableCell>{work_order_activity?.description}</TableCell>
-                      <TableCell>{work_order_activity?.value ? <Typography color='success'>Checked</Typography> : <Typography color='error'>Not Checked</Typography>}</TableCell>
-                      <TableCell>{work_order_activity?.remark}</TableCell>
+                    <TableRow key={work_order_clearance?.id}>
+                      <TableCell>{work_order_clearance?.description}</TableCell>
+                      <TableCell>{work_order_clearance?.value ? <Typography color='success'>Checked</Typography> : <Typography color='error'>Not Checked</Typography>}</TableCell>
+                      <TableCell>{work_order_clearance?.remark}</TableCell>
                     </TableRow>
                   );
                 })

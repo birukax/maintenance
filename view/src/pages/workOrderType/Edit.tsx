@@ -18,8 +18,10 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { type FormData } from '../../store/types';
+
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     scheduled: false,
     breakdown: false,

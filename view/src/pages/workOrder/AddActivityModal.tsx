@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Dispatch, FC, FormEvent, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { fetchActivities } from "../../store/slices/activitySlice";
 import { createWorkOrderActivities } from "../../store/slices/workOrderSlice";
 import { AppState, AppDispatch } from "../../store/store";
@@ -16,6 +15,8 @@ import {
 
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+import { EntityDetailState } from "../../hooks/useEntityDetail";
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -30,9 +31,14 @@ const style = {
   p: 4,
 };
 
-const AddActivity = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
+interface AddActivityProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const AddActivity: FC<AddActivityProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
     activity_ids: [],
   });
   const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
@@ -63,9 +69,9 @@ const AddActivity = ({ entityState, setModalOpen }) => {
   }, [formData.activity_ids, activityOptions]);
 
 
-  const handleAutocompleteChange = (fieldName, newValue) => {
+  const handleAutocompleteChange = (fieldName: string, value: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item) => item.id);
+    const selectedIds = value.map((item: FormData) => item.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -79,8 +85,8 @@ const AddActivity = ({ entityState, setModalOpen }) => {
       await dispatch(createWorkOrderActivities({ id, formData })).unwrap();
       toast.success("Work Order Activities created successfully");
       setModalOpen(false);
-    } catch (err) {
-      toast.error(workOrder.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(workOrder.error?.error || error || "Something Went Wrong");
 
     }
   };
@@ -112,8 +118,8 @@ const AddActivity = ({ entityState, setModalOpen }) => {
             )}
             id="activity-autocomplete"
             value={selectedActivities}
-            onChange={(event, newValue) =>
-              handleAutocompleteChange("activity_ids", newValue)
+            onChange={(_event, value) =>
+              handleAutocompleteChange("activity_ids", value)
             }
           ></Autocomplete>
         </FormControl>

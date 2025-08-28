@@ -11,7 +11,8 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { type Data, type FormData } from '../../../store/types';
+import { EntityDetailState } from '../../../hooks/useEntityDetail';
+import { type FormData } from '../../../store/types';
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,12 +26,12 @@ const style = {
 };
 
 interface ActionProps {
-  entityState: Data,
+  entityState: EntityDetailState,
   setModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const Action: FC<ActionProps> = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
+  const id = entityState.data?.id;
   const [action, setAction] = useState('');
   const [formData, setFormData] = useState<FormData>({
     remark: ''
@@ -48,7 +49,9 @@ const Action: FC<ActionProps> = ({ entityState, setModalOpen }) => {
       if (action === 'reject') {
         await dispatch(rejectPurchaseApproval({ id, formData })).unwrap();
       }
-      await dispatch(fetchPurchaseApproval(id)).unwrap();
+      if (id) {
+        await dispatch(fetchPurchaseApproval(id)).unwrap();
+      }
       setModalOpen(false);
       toast.success("Action completed successfully.");
     } catch (error) {

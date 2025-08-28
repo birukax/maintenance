@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -22,8 +22,10 @@ import {
 import { toast } from "react-toastify";
 import { fetchLocations } from "../../store/slices/locationSlice";
 import { createTransfer } from "../../store/slices/transferSlice";
+import { type Data, type FormData } from '../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     from_location_id: null,
     to_location_id: null,
     requested_items: [],
@@ -48,14 +50,14 @@ const Create = () => {
       await dispatch(createTransfer(formData)).unwrap();
       toast.success("Transfer created successfully");
       navigate("/transfers");
-    } catch (err) {
-      toast.error(transfer.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(transfer.error?.error || error || "Something Went Wrong");
     }
   };
 
   const selectedItems =
     formData.requested_items.length > 0
-      ? formData.requested_items.map((el) => {
+      ? formData.requested_items.map((el: FormData) => {
         return items.data?.filter((item) => item.id === el.item_id);
       })
       : [];
@@ -159,7 +161,7 @@ const Create = () => {
               Array.isArray(items.data)
                 ? items.data.filter((item) =>
                   formData.requested_items
-                    .map((el) => el.item_id)
+                    .map((el: FormData) => el.item_id)
                     .includes(item.id)
                 )
                 : []
@@ -195,7 +197,7 @@ const Create = () => {
 
         <TableBody>
 
-          {selectedItems?.map((item) => (
+          {selectedItems?.map((item: Data) => (
             <TableRow
               key={item[0].id}
             >
@@ -213,7 +215,7 @@ const Create = () => {
                     type="number"
                     value={
                       formData.requested_items.filter(
-                        (el) => el.item_id === item[0].id
+                        (el: FormData) => el.item_id === item[0].id
                       )[0]?.quantity
                     }
                     required
@@ -228,7 +230,7 @@ const Create = () => {
                         return {
                           ...prev,
                           requested_items: [
-                            ...prev.requested_items.filter((el) => {
+                            ...prev.requested_items.filter((el: FormData) => {
                               if (el.item_id === item[0].id) {
                                 el.quantity = Number(e.target.value);
                               }
@@ -254,7 +256,7 @@ const Create = () => {
             color="primary"
             fullWidth
             disabled={transfer.loading || selectedItems.length <= 0}
-            onClick={handleSubmit}
+            onClick={() => handleSubmit}
             className="mt-4"
           >
             {transfer.loading ? <CircularProgress size={24} /> : "Create"}

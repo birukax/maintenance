@@ -1,18 +1,19 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../store/store";
-import { SerializedError } from "@reduxjs/toolkit";
+// import { SerializedError } from "@reduxjs/toolkit";
 import { AsyncThunk } from "@reduxjs/toolkit";
+import { type Data, type PaginatedData } from "../store/types";
 
-interface EntityListState {
-  data: [] | null;
+export interface EntityListState {
+  data: PaginatedData<Data[]>;
   loading: boolean;
-  error: string | SerializedError | null;
+  error: any;
 }
 
 interface UseEntityListOptions {
   listSelector: (state: AppState) => EntityListState;
-  fetchListAction: AsyncThunk<any, void, {}>;
+  fetchListAction: AsyncThunk<Data[], void, object>;
   searchParams: "" | null;
 }
 
@@ -39,16 +40,15 @@ export const useEntityList = ({
       dispatch(fetchListAction());
     }
   };
-  const filter = (searchParams: string | null) => {
-    
-    const params=sessionStorage.getItem("params")
-    if (tokens) {
-      if (params){
+  const filter = () => {
 
-        dispatch(fetchListAction(params));
+    const params = sessionStorage.getItem("params")
+    if (tokens) {
+      if (params) {
+
+        dispatch(fetchListAction());
       }
-      else
-      {
+      else {
         dispatch(fetchListAction());
       }
     }

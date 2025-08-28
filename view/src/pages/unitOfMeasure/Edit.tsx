@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -16,9 +16,10 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
+import { type FormData } from '../../store/types';
 
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const { id } = useParams();
@@ -56,8 +57,8 @@ const Edit = () => {
       await dispatch(updateUnitOfMeasure({ id, formData })).unwrap();
       toast.success("Unit of Measure edited successfully");
       navigate(`/unit-of-measure/detail/${unitOfMeasure.data?.id}`);
-    } catch (err) {
-      toast.error(uom.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(uom.error?.error || error || "Something Went Wrong");
     }
   };
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -16,8 +16,10 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const shelf = useSelector((state: AppState) => state.shelf.shelf)
@@ -50,8 +52,8 @@ const Edit = () => {
       await dispatch(updateShelf({ id, formData })).unwrap();
       toast.success("Shelf edited successfully");
       navigate(`/shelf/detail/${shelf.data?.id}`);
-    } catch (err) {
-      toast.error(shelf.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(shelf.error?.error || error || "Something Went Wrong");
     }
   };
   return (

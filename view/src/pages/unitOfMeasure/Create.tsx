@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createUnitOfMeasure } from "../../store/slices/unitOfMeasureSlice";
@@ -13,9 +13,10 @@ import {
   Box,
 } from "@mui/material";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
 
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
   });
@@ -35,8 +36,8 @@ const Create = () => {
       await dispatch(createUnitOfMeasure(formData)).unwrap();
       toast.success("Unit of Measure created successfully");
       navigate("/unit-of-measures");
-    } catch (err) {
-      toast.error(uom.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(uom.error?.error || error || "Something Went Wrong");
     }
   };
   return (

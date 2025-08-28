@@ -4,6 +4,7 @@ import { fetchProfiles } from "../../store/slices/profileSlice";
 import { AppState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
+import { type Data, type FetchParams } from '../../store/types';
 import {
   GenericListPage,
 } from "../../components/GenericListPage";
@@ -21,7 +22,7 @@ const List: React.FC = () => {
   const entityState = useSelector(
     (state: AppState) => state.profile.profiles
   );
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<FetchParams>({
     search: searchParams.get("search") || "",
     page: searchParams.get("page") || 1
   })
@@ -35,7 +36,7 @@ const List: React.FC = () => {
     dispatch(fetchProfiles(params));
   }
 
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     setParams(prev => {
       return {
         ...prev,
@@ -60,7 +61,7 @@ const List: React.FC = () => {
       createRoute="/user/create"
       detailRouteBase="/user/detail"
       onRefresh={handleRefresh}
-      getKey={(profile) => profile.id}
+      getKey={(profile: Data) => profile.id}
       searchFilter={handleFilter}
       keyWord={keyWord}
       setKeyWord={setKeyWord}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createShelf } from "../../store/slices/shelfSlice";
@@ -12,15 +12,14 @@ import {
   Container,
   CircularProgress,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     location_id: "",
     code: "",
     name: "",
@@ -40,8 +39,8 @@ const Create = () => {
       await dispatch(createShelf(formData)).unwrap();
       toast.success("Shelf created successfully");
       navigate("/shelves");
-    } catch (err) {
-      toast.error(shelf.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(shelf.error?.error || error || "Something Went Wrong");
     }
   };
   useEffect(() => {

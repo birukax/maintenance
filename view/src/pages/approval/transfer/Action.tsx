@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC, Dispatch, SetStateAction, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { approveTransferApproval, rejectTransferApproval, fetchTransferApproval } from "../../../store/slices/transferApprovalSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -11,6 +11,8 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../../store/types';
+import { EntityDetailState } from "../../../hooks/useEntityDetail";
 
 const style = {
   position: "absolute",
@@ -24,15 +26,20 @@ const style = {
   p: 4,
 };
 
-const Action = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
+interface ActionProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+const Action: FC<ActionProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
   const [action, setAction] = useState('');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     remark: ''
   });
   const transferApproval = useSelector((state: AppState) => state.transferApproval.transferApproval);
 
   const dispatch = useDispatch<AppDispatch>();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -43,11 +50,14 @@ const Action = ({ entityState, setModalOpen }) => {
       if (action === 'reject') {
         await dispatch(rejectTransferApproval({ id, formData })).unwrap();
       }
-      await dispatch(fetchTransferApproval(id)).unwrap();
+      if (id) {
+        await dispatch(fetchTransferApproval(id)).unwrap();
+      }
       setModalOpen(false);
       toast.success("Action completed successfully.");
-    } catch (err) {
-      toast.error(err);
+    } catch (error) {
+      toast.error(transferApproval.error?.error || error || "Something Went Wrong");
+
     }
   };
   return (

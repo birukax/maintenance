@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
     work_order_type_id: "",
@@ -40,7 +40,7 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(createActivityType(formData)).unwrap();

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -16,8 +16,9 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     phone_no: "",
     address: "",
@@ -55,9 +56,9 @@ const Edit = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateContact({ id, formData })).unwrap();
       toast.success("Contact edited successfully");
-      navigate(`/contact/detail/${contact.data.id}`);
-    } catch (err) {
-      toast.error(contact.error?.error || "Something Went Wrong");
+      navigate(`/contact/detail/${contact.data?.id}`);
+    } catch (error) {
+      toast.error(contact.error?.error || error || "Something Went Wrong");
     }
   };
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createLocation } from "../../store/slices/locationSlice";
@@ -9,16 +9,15 @@ import {
   Typography,
   Container,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
+
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
   });
@@ -36,8 +35,8 @@ const Create = () => {
       await dispatch(createLocation(formData)).unwrap();
       toast.success("Location created successfully");
       navigate("/locations");
-    } catch (err) {
-      toast.error(location.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(location.error?.error || error || "Something Went Wrong");
     }
   };
   return (

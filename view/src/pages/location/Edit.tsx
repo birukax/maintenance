@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -16,8 +16,10 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const location = useSelector((state: AppState) => state.location.location)
@@ -51,8 +53,8 @@ const Edit = () => {
       await dispatch(updateLocation({ id, formData })).unwrap();
       toast.success("Location edited successfully");
       navigate(`/location/detail/${location.data?.id}`);
-    } catch (err) {
-      toast.error(location.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(location.error?.error || error || "Something Went Wrong");
     }
   };
   return (

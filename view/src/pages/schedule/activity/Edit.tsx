@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -14,9 +14,10 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
+import { type FormData } from '../../../store/types';
 import { toast } from "react-toastify";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     description: ""
   });
@@ -53,8 +54,8 @@ const Edit = () => {
       await dispatch(updateActivity({ id, formData })).unwrap();
       toast.success("Activity edited successfully");
       navigate(`/activity/detail/${activity.data?.id}`);
-    } catch (err) {
-      toast.error(activity.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(activity.error?.error || error || "Something Went Wrong");
     }
   };
   return (

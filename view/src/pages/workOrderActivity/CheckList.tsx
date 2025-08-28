@@ -18,6 +18,7 @@ import {
   TableCell,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { type Data } from '../../store/types';
 
 const CheckList = () => {
   const entityState = useEntityDetail({
@@ -65,14 +66,12 @@ const CheckList = () => {
   );
 
   const handleRefresh = async () => {
-    try {
+    if (entityState.id) {
       await dispatch(fetchWorkOrder(entityState.id)).unwrap();
-    } catch (error) {
-      console.error("Failed to refresh work order:", error);
     }
   };
 
-  const handleUpdateActivity = async (id, field, newValue) => {
+  const handleUpdateActivity = async (id: string | number, field: string, newValue: any) => {
     const formData = {
       [field]: newValue,
     };
@@ -84,7 +83,7 @@ const CheckList = () => {
     }
   };
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <Table className='table table-auto' stickyHeader size='small' aria-label={` table`}>
         <TableHead>
@@ -104,7 +103,7 @@ const CheckList = () => {
         </TableHead>
         <TableBody>
           {data &&
-            data.work_order_activities.map((row) => (
+            data.work_order_activities.map((row: Data) => (
               <CheckListRows
                 key={row.id}
                 row={row}

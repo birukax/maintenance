@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, SetStateAction, Dispatch, ChangeEvent, FC, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createBreakdownWorkOrder } from "../../../store/slices/breakdownSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -23,6 +23,9 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type Data, type FormData } from '../../../store/types';
+import { EntityDetailState } from "../../../hooks/useEntityDetail";
+import { SelectChangeEvent } from '../../../components/types';
 
 const style = {
   position: "absolute",
@@ -35,9 +38,14 @@ const style = {
   p: 4,
 };
 
-const Create = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
+interface CreateProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+}
+
+const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
     start_date: "",
     work_order_type_id: "",
     activity_type_id: "",
@@ -107,7 +115,13 @@ const Create = ({ entityState, setModalOpen }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleDateChange = (value) => {
+  const handleSelectChange = (e: SelectChangeEvent<string | number>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
 
     setFormData({
@@ -116,9 +130,9 @@ const Create = ({ entityState, setModalOpen }) => {
     });
   };
 
-  const handleAutocompleteChange = (fieldName, newValue) => {
+  const handleAutocompleteChange = (fieldName: string, newValue: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item) => item.id);
+    const selectedIds = newValue.map((item: Data) => item.id);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: selectedIds,
@@ -132,8 +146,8 @@ const Create = ({ entityState, setModalOpen }) => {
       await dispatch(createBreakdownWorkOrder({ id, formData })).unwrap();
       toast.success("Breakdown Work Order created successfully");
       setModalOpen(false);
-    } catch (err) {
-      toast.error(breakdown?.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(breakdown?.error?.error || error || "Something Went Wrong");
     }
   };
   return (
@@ -175,7 +189,7 @@ const Create = ({ entityState, setModalOpen }) => {
             id="work-order-type-select"
             name="work_order_type_id"
             value={formData.work_order_type_id}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Work Order Type"
           >
             {workOrderTypes.data &&
@@ -194,7 +208,7 @@ const Create = ({ entityState, setModalOpen }) => {
             id="activity-type-select"
             name="activity_type_id"
             value={formData.activity_type_id}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Activity Type"
           >
             {activityTypes.data &&

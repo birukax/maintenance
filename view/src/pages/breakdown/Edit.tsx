@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -14,9 +14,10 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
+import { type FormData } from '../../store/types';
 import { toast } from "react-toastify";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
@@ -53,9 +54,9 @@ const Edit = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateWorkOrderType({ id, formData })).unwrap();
       toast.success("Work Order Type edited successfully");
-      navigate(`/work-order-type/detail/${workOrderType.data.id}`);
-    } catch (err) {
-      toast.error(breakdown.error?.error || "Something Went Wrong");
+      navigate(`/work-order-type/detail/${workOrderType.data?.id}`);
+    } catch (error) {
+      toast.error(breakdown.error?.error || error || "Something Went Wrong");
     }
   };
   return (

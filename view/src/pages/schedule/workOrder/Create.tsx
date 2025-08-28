@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState, FormEvent, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createScheduledWorkOrder } from "../../../store/slices/scheduleSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import { fetchWorkOrders } from "../../../store/slices/workOrderSlice";
 import { toast } from "react-toastify";
+import { type FormData, type FetchParams } from '../../../store/types';
+import { EntityDetailState } from "../../../hooks/useEntityDetail";
 
 const style = {
   position: "absolute",
@@ -28,9 +30,15 @@ const style = {
   p: 4,
 };
 
-const Create = ({ entityState, setModalOpen, params }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
+interface CreateProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  params: FetchParams;
+}
+
+const Create: FC<CreateProps> = ({ entityState, setModalOpen, params }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
     schedule_id: id,
     start_date: "",
   });
@@ -38,7 +46,7 @@ const Create = ({ entityState, setModalOpen, params }) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
@@ -54,9 +62,9 @@ const Create = ({ entityState, setModalOpen, params }) => {
       setModalOpen(false);
       dispatch(fetchWorkOrders(params))
       toast.success("Scheduled Work Order created successfully");
-    } catch (err) {
+    } catch (error) {
       // console.log(scheduledWorkOrder.error.non_field_errors[0])
-      toast.error(Array.isArray(scheduledWorkOrder.error.non_field_errors) ? scheduledWorkOrder.error.non_field_errors.join(' ') : scheduledWorkOrder.error.non_field_errors);
+      toast.error(Array.isArray(scheduledWorkOrder.error.non_field_errors) ? scheduledWorkOrder.error.non_field_errors.join(' ') : error);
 
     }
   };

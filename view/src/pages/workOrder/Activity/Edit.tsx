@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { FC, useState, useEffect, ChangeEvent, FormEvent, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState, AppDispatch } from "../../../store/store";
 import {
@@ -23,7 +23,13 @@ const style = {
   p: 4,
 };
 
-const Edit = ({ setModalOpen, handleRefresh, editId }: any) => {
+interface EditProps {
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  handleRefresh: () => void;
+  editId: number | string | undefined
+}
+
+const Edit: FC<EditProps> = ({ setModalOpen, handleRefresh, editId }) => {
 
   const activity = useSelector((state: AppState) => state.workOrderActivity.workOrderActivity);
   const dispatch = useDispatch<AppDispatch>();
@@ -52,12 +58,14 @@ const Edit = ({ setModalOpen, handleRefresh, editId }: any) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const id = editId.toString()
-    await dispatch(updateWorkOrderActivity({ id, formData })); // Uncomment if needed
-    if (!activity.error) {
-      setModalOpen(false);
+    if (editId) {
+      const id = editId.toString()
+      await dispatch(updateWorkOrderActivity({ id, formData })); // Uncomment if needed
+      if (!activity.error) {
+        setModalOpen(false);
+      }
+      handleRefresh()
     }
-    handleRefresh()
   };
 
 

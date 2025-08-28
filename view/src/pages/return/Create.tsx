@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createReturn } from "../../store/slices/returnSlice";
@@ -21,16 +21,17 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     item_id: "",
     reason: "",
     used: true,
     quantity: "",
     date: '',
   });
-  const retur = useSelector((state: AppState) => state.return.return)
+  const ret = useSelector((state: AppState) => state.return.return)
 
   const { items } = useSelector((state: AppState) => state.item);
   const dispatch = useDispatch<AppDispatch>();
@@ -49,7 +50,7 @@ const Create = () => {
       setFormData({ ...formData, [name]: checked });
     } else setFormData({ ...formData, [name]: value });
   };
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: any) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
@@ -62,8 +63,8 @@ const Create = () => {
       await dispatch(createReturn(formData)).unwrap();
       toast.success("Return created successfully");
       navigate("/returns");
-    } catch (err) {
-      toast.error(retur.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(ret.error?.error || error || "Something Went Wrong");
     }
   };
   return (
@@ -75,13 +76,15 @@ const Create = () => {
         <FormControlLabel
           labelPlacement="start"
           label="Used"
-          onChange={handleChange}
           checked={formData.used}
-          disabled={retur.loading}
+          disabled={ret.loading}
           required
-          control={<Switch name="used" />}
+          control={<Switch
+            onChange={handleChange}
+            name="used"
+          />}
         />
-        <FormControl fullWidth variant="outlined" disabled={retur.loading}>
+        <FormControl fullWidth variant="outlined" disabled={ret.loading}>
           <Autocomplete
             options={items.data || []}
             getOptionLabel={(option) => option.name || ""}
@@ -92,7 +95,7 @@ const Create = () => {
                 label="Item"
                 placeholder="Search items..."
                 required
-                helperText={retur.error?.item_id}
+                helperText={ret.error?.item_id}
 
               />
             )}
@@ -118,8 +121,8 @@ const Create = () => {
           value={formData.quantity}
           onChange={handleChange}
           required
-          disabled={retur.loading}
-          helperText={retur.error?.quantity}
+          disabled={ret.loading}
+          helperText={ret.error?.quantity}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -133,7 +136,7 @@ const Create = () => {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                helperText: error?.date,
+                helperText: ret.error?.date,
               },
             }}
           />
@@ -148,18 +151,18 @@ const Create = () => {
           value={formData.reason}
           onChange={handleChange}
           required
-          disabled={retur.loading}
-          helperText={retur.error?.reason}
+          disabled={ret.loading}
+          helperText={ret.error?.reason}
         />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          disabled={retur.loading}
+          disabled={ret.loading}
           className="mt-4"
         >
-          {retur.loading ? <CircularProgress size={24} /> : "Create Return"}
+          {ret.loading ? <CircularProgress size={24} /> : "Create Return"}
         </Button>
 
       </Box>

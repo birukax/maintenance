@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { fetchPurchaseRequest, receivePurchaseRequest } from "../../../../store/slices/purchaseRequestSlice";
 import { AppState, AppDispatch } from "../../../../store/store";
@@ -20,6 +20,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { type Data, type FormData } from '../../../../store/types';
 
 const ReceiveList = () => {
   const entityState = useEntityDetail({
@@ -27,7 +28,7 @@ const ReceiveList = () => {
     fetchDetailAction: fetchPurchaseRequest,
   });
   const [errorCount, setErrorCount] = useState([])
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     date: '',
     received_items: []
   });
@@ -36,7 +37,7 @@ const ReceiveList = () => {
   const navigate = useNavigate()
 
 
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
@@ -54,30 +55,49 @@ const ReceiveList = () => {
     }
   }
 
-  const handleFormChange = async (data) => {
+  const handleFormChange = async (data: FormData) => {
 
-    let item = formData?.received_items?.find(el => el.item_id === data.item_id)
-    if (!item) {
-
-      setFormData(prev => {
+    setFormData(prev => {
+      const existingItem = prev.received_items.find((item: Data) => item.item_id === data.item.id);
+      if (!existingItem) {
         return {
           ...prev,
-          received_items: [...prev?.received_items, data]
+          received_items: [...prev.received_items, data]
         }
-      })
-    } else {
-      setFormData(prev => {
+      } else {
         return {
           ...prev,
-          received_items: [...prev?.received_items?.filter(el => {
-            if (el.item_id === data.item_id) {
-              el.quantity = data.quantity
+          received_items: prev.received_items.map((item: Data) => {
+            if (item.item_id === data.item_id) {
+              return { ...item, quantity: data.quantity };
             }
-            return el
-          })]
+            return item;
+          })
         }
-      })
-    }
+      }
+    })
+    // const item = formData?.received_items?.find((el: Data) => el.item_id === data.item_id);
+    // if (!item) {
+
+    //   setFormData(prev => {
+    //     return {
+    //       ...prev,
+    //       received_items: [...prev?.received_items, data]
+    //     }
+    //   })
+    // } else {
+    //   setFormData(prev => {
+    //     return {
+    //       ...prev,
+    //       received_items: [...prev?.received_items?.filter(el => {
+    //         if (el.item_id === data.item_id) {
+    //           el.quantity = data.quantity
+    //         }
+    //         return el
+    //       })]
+    //     }
+    //   })
+    // }
 
   };
 
@@ -87,11 +107,11 @@ const ReceiveList = () => {
         <div className='flex gap-4 w-fit'>
           <Button
             size='small'
-            disabled={errorCount.find(el => el === true) && true || formData.date == '' || formData.received_items.filter((e) => e.quantity > 0).length === 0}
+            disabled={errorCount.find(el => el === true) && true || formData.date == '' || formData.received_items.filter((e: Data) => e.quantity > 0).length === 0}
             variant="contained"
             className="bg-slate-700"
             sx={{ marginRight: ".5rem" }}
-            onClick={handleSubmit}
+            onClick={() => handleSubmit}
           >
             Receive
           </Button>
@@ -121,7 +141,7 @@ const ReceiveList = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
 
       <Table size='small' sx={{ minWidth: 650 }} aria-label={` table`}>
@@ -154,7 +174,7 @@ const ReceiveList = () => {
         </TableHead>
         <TableBody>
           {data &&
-            data?.request_items?.map((row, index) => {
+            data?.request_items?.map((row: Data, index: number) => {
               if (row.remaining_quantity > 0) return <Rows
                 setErrorCount={setErrorCount}
                 errorCount={errorCount}
@@ -165,7 +185,7 @@ const ReceiveList = () => {
               />
             })}
           {
-            data && data?.request_items?.every(el => el.remaining_quantity < 1) && <TableRow><Typography>No item left to receive.</Typography></TableRow>
+            data && data?.request_items?.every((el: Data) => el.remaining_quantity < 1) && <TableRow><Typography>No item left to receive.</Typography></TableRow>
           }
         </TableBody>
       </Table>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
@@ -15,9 +15,10 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../../store/types';
 
 const Change = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     old_password: "",
     password: ""
   });
@@ -50,8 +51,8 @@ const Change = () => {
         await dispatch(resetPassword({ formData })).unwrap();
         toast.success("Profile edited successfully");
         navigate(`/profile/`);
-      } catch (err) {
-        toast.error(profile.error?.error || "Something Went Wrong");
+      } catch (error) {
+        toast.error(profile.error?.error || error || "Something Went Wrong");
       }
     } else {
       toast.error("Password and Comfirm Password must be similar");

@@ -78,6 +78,20 @@ export const updateWorkOrderActivity = createAsyncThunk<Data, UpdateFormData, { 
     }
 )
 
+export const deleteWorkOrderActivity = createAsyncThunk<void, number | string, { rejectValue: any }>(
+    'workOrderActivity/deleteWorkOrderActivity',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await api.delete(`/work-order/work-order-activities/${id}/`);
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                return rejectWithValue(error?.response?.data || 'Failed to delete work order activity.');
+            }
+            return rejectWithValue('An error occured')
+        }
+    }
+)
 
 
 
@@ -133,6 +147,18 @@ const WorkOrderActivitySlice = createSlice({
                 state.workOrderActivity.data = action.payload;
             })
             .addCase(updateWorkOrderActivity.rejected, (state, action) => {
+                state.workOrderActivity.loading = false;
+                state.workOrderActivity.error = action.payload || 'Unknown error';
+            })
+            .addCase(deleteWorkOrderActivity.pending, (state) => {
+                state.workOrderActivity.loading = true;
+                state.workOrderActivity.error = null;
+            })
+            .addCase(deleteWorkOrderActivity.fulfilled, (state) => {
+                state.workOrderActivity.loading = false;
+                state.workOrderActivity.data = null;
+            })
+            .addCase(deleteWorkOrderActivity.rejected, (state, action) => {
                 state.workOrderActivity.loading = false;
                 state.workOrderActivity.error = action.payload || 'Unknown error';
             })

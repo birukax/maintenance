@@ -1,10 +1,17 @@
 import { TableRow, TableCell, IconButton, Typography, FormControl, Checkbox, Collapse, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-const Row = ({ row, formData, onRowChange }) => {
+import { type FormData, type Data } from '../../../store/types';
+
+interface RowProps {
+    row: Data;
+    formData: FormData;
+    onRowChange: (id: string | number, field: string, fieldValue: string | boolean | null) => void;
+}
+const Row: FC<RowProps> = ({ row, formData, onRowChange }) => {
     const [open, setOpen] = useState(false);
-    const clearance = formData.work_order_clearances.find(c => c.id === row.id) || {};
+    const clearance = formData.work_order_clearances.find((c: FormData) => c.id === row.id) || {};
 
     return <React.Fragment>
         <TableRow>
@@ -29,7 +36,9 @@ const Row = ({ row, formData, onRowChange }) => {
                         size='large'
                         checked={!!clearance.value}
                         onChange={(e) => {
-                            onRowChange(row.id, 'value', e.target.checked)
+                            if (row.id) {
+                                onRowChange(row.id, 'value', e.target.checked)
+                            }
                         }}
                     />
                 </FormControl>
@@ -47,7 +56,11 @@ const Row = ({ row, formData, onRowChange }) => {
                             fullWidth
                             variant='outlined'
                             value={clearance.remark || ''}
-                            onChange={e => onRowChange(row.id, 'remark', e.target.value)}
+                            onChange={e => {
+                                if (row.id) {
+                                    onRowChange(row.id, 'remark', e.target.value)
+                                }
+                            }}
                         >
                         </TextField>
                     </FormControl>

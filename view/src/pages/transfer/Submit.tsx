@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, Dispatch, FC, FormEvent, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -20,6 +20,8 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+import { EntityDetailState } from "../../hooks/useEntityDetail";
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -34,9 +36,14 @@ const style = {
   p: 4,
 };
 
-const Submit = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
+interface SubmitProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const Submit: FC<SubmitProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
     remark: "",
     start_time: "",
     end_date: dayjs(entityState?.data?.start_date).format("YYYY-MM-DD") || null,
@@ -47,10 +54,13 @@ const Submit = ({ entityState, setModalOpen }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchWorkOrder(id));
-  }, []);
+    if (id) {
 
-  const handleDateChange = (value) => {
+      dispatch(fetchWorkOrder(id));
+    }
+  }, [id]);
+
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
@@ -58,7 +68,7 @@ const Submit = ({ entityState, setModalOpen }) => {
     });
   };
 
-  const handleTimeChange = (field, value) => {
+  const handleTimeChange = (field: string, value: dayjs.Dayjs | null) => {
     const formattedTime = value ? value.format("HH:mm:ss") : null;
     setFormData({
       ...formData,
@@ -79,8 +89,8 @@ const Submit = ({ entityState, setModalOpen }) => {
       setModalOpen(false);
       toast.success("Work Order submitted successfully");
       navigate(`/work-order/detail/${id}`);
-    } catch (err) {
-      toast.error(transfer.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(transfer.error?.error || error || "Something Went Wrong");
     }
   };
 
@@ -141,7 +151,7 @@ const Submit = ({ entityState, setModalOpen }) => {
             label="End Time"
             name="end_time"
             minTime={dayjs(
-              formData.end_date === entityState.data.start_date
+              formData.end_date === entityState.data?.start_date
                 ? formData.start_time
                 : null
             )}

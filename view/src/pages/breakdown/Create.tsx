@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { type FormData } from '../../store/types';
 import {
   TextField,
   Button,
@@ -22,7 +23,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     start_date: "",
     machine_id: "",
     equipment_id: "",
@@ -50,14 +51,14 @@ const Create = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
       start_date: formattedDate,
     });
   };
-  const handleTimeChange = (value) => {
+  const handleTimeChange = (value: dayjs.Dayjs | null) => {
     const formattedTime = value ? value.format("HH:mm:ss") : null;
     setFormData({
       ...formData,
@@ -70,8 +71,8 @@ const Create = () => {
       await dispatch(createBreakdown(formData)).unwrap();
       toast.success("Breakdown created successfully");
       navigate("/breakdowns");
-    } catch (err) {
-      toast.error(breakdown?.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(breakdown?.error?.error || error || "Something Went Wrong");
     }
   };
   return (

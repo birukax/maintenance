@@ -4,6 +4,7 @@ import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { type Data } from '../../store/types';
 import EditIcon from '@mui/icons-material/Edit';
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -25,7 +26,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <h2>Primary Information</h2>
       <div className="rw">

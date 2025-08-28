@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { createProfile } from "../../store/slices/profileSlice";
@@ -17,9 +17,12 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
+import { SelectChangeEvent } from '../../components/types';
+
 const Create = () => {
   const countryCode = "+251"
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     phone_no: "",
     email: "",
@@ -36,6 +39,11 @@ const Create = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleSelectChange = (e: SelectChangeEvent<string | number>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (comfirmpas === formData.password) {
@@ -44,8 +52,8 @@ const Create = () => {
         await dispatch(createProfile(formData)).unwrap();
         toast.success("Profile created successfully");
         navigate("/users");
-      } catch (err) {
-        toast.error(profile?.error?.error || "Something Went Wrong");
+      } catch (error) {
+        toast.error(profile?.error?.error || error || "Something Went Wrong");
       }
     } else {
       toast.error("Password and Comfirm Password must be similar");
@@ -124,7 +132,7 @@ const Create = () => {
             id="role"
             name="role"
             value={formData.role}
-            onChange={handleChange}
+            onChange={handleSelectChange}
             label="Role"
           >
             {Roles.map((role) => (

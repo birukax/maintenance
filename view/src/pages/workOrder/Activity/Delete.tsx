@@ -6,6 +6,8 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { FC } from "react";
+import { EntityDetailState } from "../../../hooks/useEntityDetail";
 
 const style = {
   position: "absolute",
@@ -18,7 +20,14 @@ const style = {
   p: 4,
 };
 
-const Delete = ({ handleDeleteActivity, handledeleteModalClose, deleteId, workOrderActivity }) => {
+interface DeleteProps {
+  handleDeleteActivity: (deleteId: string | number) => void;
+  handleDeleteModalClose: () => void;
+  deleteId: string | number;
+  workOrderActivity: EntityDetailState;
+}
+
+const Delete: FC<DeleteProps> = ({ handleDeleteActivity, handleDeleteModalClose, deleteId, workOrderActivity }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
@@ -35,7 +44,7 @@ const Delete = ({ handleDeleteActivity, handledeleteModalClose, deleteId, workOr
           <Button
             size='small'
             variant="contained"
-            onClick={handledeleteModalClose}
+            onClick={handleDeleteModalClose}
           >
             {workOrderActivity.loading ? (
               <CircularProgress size={24} />

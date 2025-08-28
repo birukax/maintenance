@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const area = useSelector((state: AppState) => state.area.area);

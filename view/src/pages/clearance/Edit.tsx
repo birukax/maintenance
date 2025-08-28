@@ -12,7 +12,7 @@ import {
   Switch,
   FormControlLabel,
 } from "@mui/material";
-import { type Data, type FormData } from '../../store/types.ts';
+import { type FormData } from '../../store/types.ts';
 import { toast } from "react-toastify";
 import { fetchClearance, updateClearance } from "../../store/slices/clearanceSlice";
 const Edit = () => {
@@ -37,14 +37,13 @@ const Edit = () => {
       active: clearance?.data?.active
     });
   }, [clearance])
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLButtonElement>) => {
-    console.log("changing", typeof (e.target.value), e.target.value);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 
     const { name, checked } = e.target;
-    setFormData({ active: checked });
+    setFormData({ [name]: checked });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -53,8 +52,8 @@ const Edit = () => {
       await dispatch(updateClearance({ id, formData })).unwrap();
       toast.success("Clearance edited successfully");
       navigate(`/clearance/detail/${clearance.data?.id}`);
-    } catch (err) {
-      toast.error(clearance.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(clearance.error?.error || error || "Something Went Wrong");
     }
   };
 

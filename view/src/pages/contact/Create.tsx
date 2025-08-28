@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createContact } from "../../store/slices/contactSlice";
@@ -13,9 +13,10 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 const Create = () => {
   const contact = useSelector((state: AppState) => state.contact.contact)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone_no: "",
@@ -35,8 +36,8 @@ const Create = () => {
       await dispatch(createContact(formData)).unwrap();
       toast.success("Contact created successfully");
       navigate("/contacts");
-    } catch (err) {
-      toast.error(contact.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(contact.error?.error || error || "Something Went Wrong");
     }
   };
   return (

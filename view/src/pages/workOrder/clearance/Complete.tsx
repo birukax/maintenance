@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppState, AppDispatch } from "../../../store/store";
+import { useState, useEffect, Dispatch, FC, FormEvent, SetStateAction } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store/store";
 import { completeWorkOrder } from '../../../store/slices/workOrderSlice';
 import Row from './Rows';
 import {
@@ -13,6 +13,9 @@ import {
 
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { EntityDetailState } from "../../../hooks/useEntityDetail";
+import { type Data, type FormData } from '../../../store/types';
+
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -27,23 +30,22 @@ const style = {
   p: 4,
 };
 
-
-
-const CompleteClearance = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
+interface CompleteClearanceProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>
+}
+const CompleteClearance: FC<CompleteClearanceProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
     work_order_clearances: [{}]
   });
 
   const dispatch = useDispatch<AppDispatch>();
-  const params = {
-    no_pagination: "true",
-  };
 
   useEffect(() => {
     if (entityState?.data?.work_order_clearances) {
       setFormData({
-        work_order_clearances: entityState.data?.work_order_clearances?.map(wo_clearance => ({
+        work_order_clearances: entityState.data?.work_order_clearances?.map((wo_clearance: FormData) => ({
           id: wo_clearance.id,
           description: wo_clearance.description,
           value: wo_clearance.value,
@@ -54,9 +56,9 @@ const CompleteClearance = ({ entityState, setModalOpen }) => {
 
   }, [entityState?.data?.work_order_clearances])
 
-  const handleRowChange = (id, field, fieldValue) => {
+  const handleRowChange = (id: string | number, field: string, fieldValue: string | boolean | null) => {
     setFormData(prev => ({
-      work_order_clearances: prev.work_order_clearances.map(clearance =>
+      work_order_clearances: prev.work_order_clearances.map((clearance: FormData) =>
         clearance?.id === id
           ? { ...clearance, [field]: fieldValue }
           : clearance
@@ -71,8 +73,8 @@ const CompleteClearance = ({ entityState, setModalOpen }) => {
       await dispatch(completeWorkOrder({ id, formData })).unwrap();
       toast.success("Work Order Completed successfully");
       setModalOpen(false);
-    } catch (err) {
-      toast.error(entityState?.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(entityState?.error?.error || error || "Something Went Wrong");
 
     }
   };
@@ -90,7 +92,7 @@ const CompleteClearance = ({ entityState, setModalOpen }) => {
       >
         <Table size='small' sx={{ width: '100%' }}>
           {formData.work_order_clearances &&
-            formData.work_order_clearances?.map((wo_clearance) => (
+            formData.work_order_clearances?.map((wo_clearance: Data) => (
               <Row
                 key={wo_clearance.id}
                 row={wo_clearance}

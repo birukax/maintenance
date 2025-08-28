@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
@@ -15,16 +15,16 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     old_password: "",
     password: "",
     phone_no: '',
   });
   const { id } = useParams();
   const profile = useSelector((state: AppState) => state.profile.profile);
-  const [comfirmpas, setComfirmPas] = useState("")
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,19 +43,14 @@ const Edit = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (comfirmpas === formData.password) {
 
-      try {
-        // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-        await dispatch(updateProfile({ formData })).unwrap();
-        toast.success("Profile edited successfully");
-        navigate(`/profile/${id}`);
-      } catch (err) {
-        toast.error(profile.error?.error || "Something Went Wrong");
-
-      }
-    } else {
-      toast.error("Password and Comfirm Password must be similar");
+    try {
+      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
+      await dispatch(updateProfile({ id, formData })).unwrap();
+      toast.success("Profile edited successfully");
+      navigate(`/profile/${id}`);
+    } catch (error) {
+      toast.error(profile.error?.error || error || "Something Went Wrong");
     }
   };
 

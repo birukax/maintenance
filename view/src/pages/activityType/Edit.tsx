@@ -17,7 +17,7 @@ import {
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
   });
   const activityType = useSelector((state: AppState) => state.activityType.activityType)

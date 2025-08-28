@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { AppState, AppDispatch } from '../store/store';
-import { SerializedError } from '@reduxjs/toolkit';
+// import { SerializedError } from '@reduxjs/toolkit';
 import { AsyncThunk } from '@reduxjs/toolkit';
 import { type Data } from '../store/types';
 
@@ -11,12 +11,12 @@ import { type Data } from '../store/types';
 export interface EntityDetailState {
   data: Data | null;
   loading: boolean;
-  error: string | SerializedError | null;
+  error: any;
 }
 
 export interface UseEntityDetailOptions {
   detailSelector: (state: AppState) => EntityDetailState;
-  fetchDetailAction: AsyncThunk<Data, string | number, {}>; // Thunk takes string ID
+  fetchDetailAction: AsyncThunk<Data, string | number, object>; // Thunk takes string ID
 }
 
 

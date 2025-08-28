@@ -16,11 +16,12 @@ import {
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { toast } from "react-toastify";
 import AddIcon from '@mui/icons-material/Add';
+import { type FormData } from '../../../store/types';
 
 const ManageActivityPage = () => {
   const { id } = useParams();
-  const [formData, setFormData] = useState({
-    description_list: [""]
+  const [formData, setFormData] = useState<FormData>({
+    description_list: []
   })
   const workOrder = useSelector((state: AppState) => state.workOrder.workOrder)
   const navigate = useNavigate()
@@ -51,7 +52,7 @@ const ManageActivityPage = () => {
       >
         <>
           {
-            formData?.description_list?.map((el, index) => {
+            formData?.description_list?.map((el: FormData, index: number) => {
               return <Card className="flex gap-1" elevation={0}>
                 <TextField
                   key={index}
@@ -66,7 +67,7 @@ const ManageActivityPage = () => {
                     setFormData(prev => {
                       return {
                         ...prev,
-                        description_list: prev.description_list.map((item, i) => i === index ? e.target.value : item)
+                        description_list: prev.description_list.map((item: FormData, i: number) => i === index ? e.target.value : item)
                       }
                     })
                   }}
@@ -75,7 +76,7 @@ const ManageActivityPage = () => {
                 <IconButton onClick={() => {
                   setFormData(prev => ({
                     ...prev,
-                    description_list: prev.description_list.filter((_, i) => i !== index)
+                    description_list: prev.description_list.filter((_: FormData, i: number) => i !== index)
                   }))
                 }}>
                   <CloseOutlinedIcon />
@@ -107,7 +108,7 @@ const ManageActivityPage = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={workOrder.loading || formData.description_list?.length <= 0 || formData.description_list.some(el => el === "")}
+            disabled={workOrder.loading || formData.description_list?.length <= 0 || formData.description_list.some((el: any) => el === "")}
             className="mt-4"
           >
             {workOrder.loading ? <CircularProgress size={24} /> : "Save"}
@@ -127,7 +128,7 @@ const ManageActivityPage = () => {
 
         </div>
       </Box>
-    </Container>
+    </Container >
   );
 };
 

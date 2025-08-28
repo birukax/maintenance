@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -15,16 +15,17 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 
 const Edit = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     phone_no: "",
     location: "",
   });
 
   const { id } = useParams();
-  const { ret } = useSelector((state: AppState) => state.ret.return);
+  const ret = useSelector((state: AppState) => state.return.return);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
@@ -32,9 +33,9 @@ const Edit = () => {
       dispatch(fetchReturn(id));
     }
     setFormData({
-      email: ret.data.email,
-      phone_no: ret.data.phone_no,
-      location: ret.data.location,
+      email: ret.data?.email,
+      phone_no: ret.data?.phone_no,
+      location: ret.data?.location,
     });
   }, []);
 
@@ -50,9 +51,9 @@ const Edit = () => {
       // await api.patch(`/inventory/items/${item.data.id}/`, formData);
       await dispatch(updateReturn({ id, formData })).unwrap();
       toast.success("Return edited successfully");
-      navigate(`/return/detail/${ret.data.id}`);
-    } catch (err) {
-      toast.error(ret.error?.error || "Something Went Wrong");
+      navigate(`/return/detail/${ret.data?.id}`);
+    } catch (error) {
+      toast.error(ret.error?.error || error || "Something Went Wrong");
     }
   };
   return (

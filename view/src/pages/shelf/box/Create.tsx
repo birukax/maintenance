@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createShelfBox } from "../../../store/slices/shelfBoxSlice";
@@ -17,8 +17,10 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../../store/types';
+
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     row_id: "",
     code: "",
     name: "",
@@ -38,8 +40,8 @@ const Create = () => {
       await dispatch(createShelfBox(formData)).unwrap();
       toast.success("ShelfBox created successfully");
       navigate("/shelf-boxes");
-    } catch (err) {
-      toast.error(shelfBox.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(shelfBox.error?.error || error || "Something Went Wrong");
     }
   };
   useEffect(() => {

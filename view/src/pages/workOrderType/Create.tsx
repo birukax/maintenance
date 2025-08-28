@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createWorkOrderType } from "../../store/slices/workOrderTypeSlice";
@@ -15,9 +15,10 @@ import {
   Box,
 } from "@mui/material";
 import { AppState, AppDispatch } from "../../store/store";
+import { type FormData } from '../../store/types';
 
 const Create = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     code: "",
     name: "",
     scheduled: false,
@@ -32,14 +33,14 @@ const Create = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await dispatch(createWorkOrderType(formData)).unwrap();
       toast.success("Work Order Type created successfully");
       navigate("/work-order-types");
-    } catch (err) {
-      toast.error(workOrderType.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(workOrderType.error?.error || error || "Something Went Wrong");
     }
   };
 

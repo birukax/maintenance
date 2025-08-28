@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, Dispatch, FC, FormEvent, SetStateAction, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateBreakdown } from "../../store/slices/breakdownSlice";
@@ -17,6 +17,8 @@ import {
   Box,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
+import { EntityDetailState } from "../../hooks/useEntityDetail";
 const style = {
   boxSizing: "border-box",
   position: "absolute",
@@ -31,9 +33,14 @@ const style = {
   p: 4,
 };
 
-const Update = ({ entityState, setModalOpen }) => {
-  const id = entityState.data.id;
-  const [formData, setFormData] = useState({
+interface UpdateProps {
+  entityState: EntityDetailState;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const Update: FC<UpdateProps> = ({ entityState, setModalOpen }) => {
+  const id = entityState.data?.id;
+  const [formData, setFormData] = useState<FormData>({
     remark: "",
     end_date: dayjs(entityState?.data?.start_date).format("YYYY-MM-DD") || null,
     end_time: "",
@@ -42,7 +49,7 @@ const Update = ({ entityState, setModalOpen }) => {
   const breakdown = useSelector((state: AppState) => state.breakdown.breakdown);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const handleDateChange = (value) => {
+  const handleDateChange = (value: dayjs.Dayjs | null) => {
     const formattedDate = value ? value.format("YYYY-MM-DD") : null;
     setFormData({
       ...formData,
@@ -50,7 +57,7 @@ const Update = ({ entityState, setModalOpen }) => {
     });
   };
 
-  const handleTimeChange = (field, value) => {
+  const handleTimeChange = (field: string, value: dayjs.Dayjs | null) => {
     const formattedTime = value ? value.format("HH:mm:ss") : null;
     setFormData({
       ...formData,
@@ -70,8 +77,8 @@ const Update = ({ entityState, setModalOpen }) => {
       setModalOpen(false);
       toast.success("Breakdown updated successfully");
       navigate(`/breakdown/detail/${id}`);
-    } catch (err) {
-      toast.error(breakdown.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(breakdown.error?.error || error || "Something Went Wrong");
     }
   };
 
@@ -109,8 +116,8 @@ const Update = ({ entityState, setModalOpen }) => {
             label="End Time"
             name="end_time"
             minTime={dayjs(
-              formData.end_date === entityState.data.start_date
-                ? entityState.data.start_time
+              formData.end_date === entityState.data?.start_date
+                ? entityState.data?.start_time
                 : null
             )}
             value={

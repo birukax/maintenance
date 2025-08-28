@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, Dispatch, FC, FormEvent, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -11,7 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import { createWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
-
+import { type FormData } from '../../../store/types';
 const style = {
   position: "absolute",
   top: "50%",
@@ -24,9 +24,14 @@ const style = {
   p: 4,
 };
 
-const Create = ({ entityState, setModalOpen, handleRefresh }) => {
+interface CreateProps {
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  handleRefresh: () => void;
+}
+
+const Create: FC<CreateProps> = ({ setModalOpen, handleRefresh }) => {
   const { id: work_order_id } = useParams();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     work_order_id: work_order_id || "",
     description: "",
   });

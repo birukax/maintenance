@@ -17,7 +17,7 @@ import {
 import { toast } from "react-toastify";
 const Create = () => {
   const clearance = useSelector((state: AppState) => state.clearance.clearance)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     description: "",
     breakdown: false,
     scheduled: false,
