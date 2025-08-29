@@ -1,9 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { TableRow, TableCell, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../../../store/store";
+import { Data } from "../../../store/types";
 
-const EditRows = ({ row, handleUpdateSchedule }) => {
+interface EditRowsProps {
+  row: Data;
+  handleUpdateSchedule: (id: string | number | undefined, field: string, value: any) => void;
+}
+
+const EditRows: FC<EditRowsProps> = ({ row, handleUpdateSchedule }) => {
   const [quantity, setQuantity] = useState(row.quantity || 0);
   const [monthValue, setMonthValue] = useState({
     january: row.january || 0,
@@ -53,13 +59,13 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
 
   return (
     <TableRow key={row.id}>
-      <TableCell align="left" nowrap="true">
+      <TableCell align="left" className='whitespace-nowrap' >
         {row.item.no}
       </TableCell>
-      <TableCell align="left" nowrap="true">
+      <TableCell align="left" className='whitespace-nowrap'>
         {row.item.name}
       </TableCell>
-      <TableCell align="left" nowrap="true">
+      <TableCell align="left" className='whitespace-nowrap'>
         {row.item.uom.name}
       </TableCell>
       <TableCell align="left">{row.item?.inventory?.balance}</TableCell>
@@ -74,14 +80,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           value={monthValue.january}
           helperText={purchaseSchedule.error?.january || ""}
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, january: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "january",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -96,14 +102,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.february || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, february: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "february",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -118,14 +124,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.march || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, march: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "march",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -140,14 +146,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.april || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, april: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "april",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -162,14 +168,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.may || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, may: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "may",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -184,14 +190,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.june || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, june: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "june",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -206,14 +212,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.july || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, july: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "july",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -228,14 +234,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.august || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, august: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "august",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -250,14 +256,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.september || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, september: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "september",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -272,14 +278,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.october || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, october: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "october",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -294,14 +300,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.november || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, november: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "november",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'
@@ -316,14 +322,14 @@ const EditRows = ({ row, handleUpdateSchedule }) => {
           helperText={purchaseSchedule.error?.december || ""}
 
           onChange={(event) => {
-            const value = Math.max(0, event?.target?.value);
+            const value = Math.max(0, Number(event?.target?.value));
             setMonthValue({ ...monthValue, december: value });
           }}
           onBlur={(event) => {
             handleUpdateSchedule(
               row.id,
               "december",
-              Math.max(0, event?.target?.value)
+              Math.max(0, Number(event?.target?.value))
             );
           }}
           className='w-28'

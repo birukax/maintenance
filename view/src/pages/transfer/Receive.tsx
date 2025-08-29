@@ -1,20 +1,18 @@
 // src/pages/List.tsx
-import React, { useState } from "react";
-import { fetchTransfer, fetchTransfers } from "../../store/slices/transferSlice";
-import { AppState, AppDispatch } from "../../store/store";
-import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom"
+import { FC } from "react";
+import { fetchTransfer } from "../../store/slices/transferSlice";
+import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { type Data } from '../../store/types';
 
-const List: React.FC = () => {
-  const { tokens } = useSelector((state: AppState) => state.auth);
+
+const List: FC = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.transfer.transfer,
     fetchDetailAction: fetchTransfer,
   });
 
-  const dispatch = useDispatch<AppDispatch>();
 
 
   return (
@@ -42,7 +40,7 @@ const List: React.FC = () => {
       </TableHead>
       <TableBody>
         {entityState &&
-          entityState.data?.transfer_items?.map((row) => (
+          entityState.data?.transfer_items?.map((row: Data) => (
             <TableRow>
               <TableCell>
                 <Typography noWrap>{row.item.name}</Typography>

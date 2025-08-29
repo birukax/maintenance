@@ -94,7 +94,7 @@ const Receive: FC<ReceiveProps> = ({ id, setModalOpen }) => {
         <FormControl fullWidth variant="outlined" disabled={purchaseRequest.loading}>
           <Autocomplete
             size='small'
-            options={locations.data || []}
+            options={Array.isArray(locations.data) ? locations.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField

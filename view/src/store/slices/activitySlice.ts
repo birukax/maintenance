@@ -76,7 +76,7 @@ export const updateActivity = createAsyncThunk<Data, UpdateFormData, { rejectVal
         }
     }
 )
-export const deleteActivity = createAsyncThunk<Data, { rejectValue: any }>(
+export const deleteActivity = createAsyncThunk<Data, number | string, { rejectValue: any }>(
     'activity/deleteActivity',
     async (id, { rejectWithValue }) => {
         try {

@@ -82,7 +82,7 @@ const Create = () => {
                 ? locations.data.find((location) => location.id === formData.location_id)
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, location_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}

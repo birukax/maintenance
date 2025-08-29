@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchWorkOrder } from "../../../store/slices/workOrderSlice";
-import { updateWorkOrderActivity } from "../../../store/slices/workOrderActivitySlice";
 import { AppState, AppDispatch } from "../../../store/store";
-import { useEntityDetail } from "../../../hooks/useEntityDetail";
-import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import EditRows from "./EditRows";
 import Pagination from "../../../components/Pagination";
 // import Submit from "./Submit";
@@ -20,23 +16,24 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { fetchPurchaseSchedules, updatePurchaseSchedule } from "../../../store/slices/purchaseScheduleSlice";
+import { Data, DataState, FetchParams, PaginatedData } from "../../../store/types";
 const Edit = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1)
   const { year } = useParams()
-  const [params, setParams] = useState({
+  const [params] = useState({
     year__no: year || new Date().getFullYear(),
     search: searchParams.get("search") || "",
     page: searchParams.get("page") || 1,
   });
 
   const navigate = useNavigate()
-  const { purchaseSchedules } = useSelector(
-    (state: AppState) => state.purchaseSchedule
+  const purchaseSchedules: DataState<PaginatedData<Data[]>> | any = useSelector(
+    (state: AppState) => state.purchaseSchedule.purchaseSchedules
   );
   const dispatch = useDispatch<AppDispatch>();
 
-  const renderButtons = () => <></>;
+  // const renderButtons = () => <></>;
 
   const fetch = async () => {
     await dispatch(fetchPurchaseSchedules(params)).unwrap();
@@ -45,9 +42,9 @@ const Edit = () => {
     fetch()
   }, []);
 
-  const searchFilter = async (field, value) => {
+  const searchFilter = async (field: string, value: any) => {
     // Handle filter action here
-    const parameters = {
+    const parameters: FetchParams = {
       year__no: year,
       page: 1,
       [field]: value,
@@ -67,9 +64,9 @@ const Edit = () => {
     }
   };
 
-  const handlePurchaseSchedule = async (id, field, newValue) => {
+  const handlePurchaseSchedule = async (id: string | number | undefined, field: string, value: any) => {
     const formData = {
-      [field]: newValue,
+      [field]: value,
     };
     try {
       await dispatch(updatePurchaseSchedule({ id, formData })).unwrap();
@@ -138,9 +135,9 @@ const Edit = () => {
           </TableHead>
           <TableBody>
             {!purchaseSchedules.loading &&
-              purchaseSchedules?.data?.results?.map((row) => (
+              Array.isArray(purchaseSchedules?.data?.results) &&
+              purchaseSchedules?.data?.results?.map((row: Data) => (
                 <EditRows
-                  key={row.id}
                   row={row}
                   handleUpdateSchedule={handlePurchaseSchedule}
                 />

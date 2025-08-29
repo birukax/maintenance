@@ -25,13 +25,12 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import Pagination from "./Pagination";
 import api from '../utils/api';
-import { type Data, } from '../store/types';
-import { EntityListState } from "../hooks/useEntityList";
+import { DataState, type Data, type PaginatedData } from '../store/types';
 
 const getNestedValue = (obj: any, path: any) =>
   path.split(".").reduce((acc: any, part: any) => acc && acc[part], obj);
 
-interface Column {
+export interface Column {
   header: string;
   accessor?: string;
   renderCell?: (row: Data) => React.ReactNode;
@@ -39,7 +38,7 @@ interface Column {
 
 interface GenericListPageProps {
   title: string | null;
-  entityState: EntityListState;
+  entityState: DataState<PaginatedData<Data[]> | any>;
   columns: Column[];
   createRoute?: string | null;
   hasDetail?: boolean;
@@ -47,7 +46,7 @@ interface GenericListPageProps {
   detailRouteBase?: string | null;
   keyWord: string | null;
   onRefresh?: () => void;
-  onEdit?: (year__no: string | null) => void;
+  onEdit?: (year: string | number | null) => Promise<void>;
   onDownload?: { urlPath: string, fileName: string };
   yearFilter?: (field: string, value: any) => void;
   onApprove?: (id: string | number | undefined) => void;
@@ -293,7 +292,7 @@ export const GenericListPage: FC<GenericListPageProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {entityState?.data?.results && entityState?.data?.count > 0
+            {Array.isArray(entityState?.data?.results) && entityState?.data?.count > 0
               ? entityState?.data?.results?.map((row: Data) => (
                 <TableRow hover
                   key={getKey(row)}

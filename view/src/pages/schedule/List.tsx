@@ -5,6 +5,7 @@ import { AppState, AppDispatch } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom"
 import { GenericListPage } from "../../components/GenericListPage";
+import { FetchParams } from "../../store/types";
 
 const scheduleColumns = [
   { header: 'ID', accessor: 'id' },
@@ -25,7 +26,7 @@ const List: React.FC = () => {
   const entityState = useSelector(
     (state: AppState) => state.schedule.schedules
   );
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<FetchParams>({
     search: searchParams.get("search") || "",
     category: searchParams.get("category") || "",
     type: searchParams.get("type") || "",
@@ -41,8 +42,8 @@ const List: React.FC = () => {
     dispatch(fetchSchedules(params));
   }
 
-  const handleFilter = async (field, value) => {
-    setSearchParams({ ...params, page: 1 });
+  const handleFilter = async (field: string, value: any) => {
+    setSearchParams({ ...params, page: '1' });
 
     setParams(prev => {
       return {

@@ -6,6 +6,8 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { FC } from "react";
+import { Data, DataState } from "../../../store/types";
 
 const style = {
   position: "absolute",
@@ -18,7 +20,14 @@ const style = {
   p: 4,
 };
 
-const DeleteActivity = ({ handleDeleteActivity, handledeleteModalClose, deleteId, activity }) => {
+interface DeleteActivityProps {
+  handleDeleteActivity: (deleteId: string | number | undefined) => Promise<void>;
+  handleDeleteModalClose: () => void;
+  deleteId: string | number | undefined;
+  activity: DataState<Data | null>;
+}
+
+const DeleteActivity: FC<DeleteActivityProps> = ({ handleDeleteActivity, handleDeleteModalClose, deleteId, activity }) => {
 
   return (
     <Container sx={style} className="flex flex-col items-center justify-center">
@@ -35,7 +44,7 @@ const DeleteActivity = ({ handleDeleteActivity, handledeleteModalClose, deleteId
           <Button
             size='small'
             variant="contained"
-            onClick={handledeleteModalClose}
+            onClick={handleDeleteModalClose}
           >
             {activity.loading ? (
               <CircularProgress size={24} />

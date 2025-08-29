@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { TableRow, TableCell, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../../../../store/store";
+import { type Data, type FormData } from "../../../../store/types";
 
-const ReceiveListRows = ({ row, handleFormChange, index, errorCount, setErrorCount }) => {
+interface ReceiveListRowsProps {
+  row: Data;
+  handleFormChange: (data: FormData) => Promise<void>;
+  index: number;
+  setErrorCount: Dispatch<SetStateAction<any>>
+  errorCount: any;
+}
+
+const ReceiveListRows: FC<ReceiveListRowsProps> = ({ row, handleFormChange, index, errorCount, setErrorCount }) => {
 
   const [error, setError] = useState(false);
   const errorList = errorCount
@@ -13,7 +22,7 @@ const ReceiveListRows = ({ row, handleFormChange, index, errorCount, setErrorCou
 
   return (
     <TableRow key={row.id}>
-      <TableCell align="left" title={row.id}>
+      <TableCell align="left" >
         {row?.item?.no}
       </TableCell>
       <TableCell align="left">

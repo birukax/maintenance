@@ -12,7 +12,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-import { type FormData } from '../../../store/types';
+import { type Data, type FormData } from '../../../store/types';
 import { toast } from "react-toastify";
 import { fetchYears } from "../../../store/slices/yearSlice";
 const Create = () => {
@@ -32,7 +32,7 @@ const Create = () => {
     dispatch(fetchYears(params))
   }, [])
   useEffect(() => {
-    const current = years?.data;
+    const current: Data | any = years?.data;
     const plan = current[0]
     setFormData(prev => {
       return {
@@ -74,10 +74,12 @@ const Create = () => {
           value={formData.year}
           helperText={purchaseSchedule.error?.year}
           onChange={(e) => {
-            const currentYear = years.data?.length > 0 && years.data[0]["no"] ? years.data[0]["no"] + 1 : new Date().getFullYear();
-            const selectedYear = parseInt(e.target.value, 10);
-            if (selectedYear >= currentYear && selectedYear <= 9999) {
-              setFormData({ ...formData, year: Number(e.target.value) });
+            if (Array.isArray(years.data)) {
+              const currentYear = years.data?.length > 0 && years.data[0]["no"] ? years.data[0]["no"] + 1 : new Date().getFullYear();
+              const selectedYear = parseInt(e.target.value, 10);
+              if (selectedYear >= currentYear && selectedYear <= 9999) {
+                setFormData({ ...formData, year: Number(e.target.value) });
+              }
             }
           }}
           inputProps={{

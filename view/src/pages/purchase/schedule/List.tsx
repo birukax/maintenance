@@ -5,6 +5,7 @@ import { fetchPurchaseSchedules } from "../../../store/slices/purchaseScheduleSl
 import { AppState, AppDispatch } from "../../../store/store";
 import { GenericListPage } from "../../../components/GenericListPage";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { FetchParams } from "../../../store/types";
 
 const purchaseScheduleColumns = [
   { header: "Item ID", accessor: "item.no" },
@@ -32,7 +33,7 @@ const purchaseScheduleColumns = [
 const List: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [params, setParams] = useState({
+  const [params] = useState<FetchParams>({
     year__no: searchParams.get("year__no") && searchParams.get("year__no") !== "null" ? searchParams.get("year__no") : new Date().getFullYear(),
     page: searchParams.get("page") || 1
 
@@ -57,11 +58,11 @@ const List: React.FC = () => {
 
   };
 
-  const handleEdit = async (year) => {
+  const handleEdit = async (year: string | number | null) => {
     navigate(`/purchase-schedule/edit/${year}?page=1`);
   };
   const handleFilter = async (field: string, value: any) => {
-    let parameters
+    let parameters: FetchParams
     // Handle filter action here
     if (field === "year__no") {
       if (!searchParams.get("search")) {
@@ -78,8 +79,8 @@ const List: React.FC = () => {
       await dispatch(fetchPurchaseSchedules(parameters));
     }
   };
-  const handleSearchFilter = async (field, value) => {
-    const parameters = {
+  const handleSearchFilter = async (field: string, value: any) => {
+    const parameters: FetchParams = {
       year__no: searchParams.get("year__no"),
       page: 1,
       [field]: value,

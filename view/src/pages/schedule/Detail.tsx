@@ -8,6 +8,7 @@ import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import Create from "./workOrder/Create";
+import { Data } from "../../store/types";
 
 const Detail = () => {
   const { id } = useParams()
@@ -50,7 +51,7 @@ const Detail = () => {
           size='small'
           onClick={handleModalOpen}
           variant="contained"
-          disabled={entityState?.data?.activities?.filter((activity) => activity.active === true).length === 0}
+          disabled={entityState?.data?.activities?.filter((activity: Data) => activity.active === true).length === 0}
         >
           Create Work Order
         </Button>
@@ -66,7 +67,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <h2>Primary Information</h2>
       <div className="rw">
@@ -116,7 +117,7 @@ const Detail = () => {
       <div className="rw">
         <div className="clmn">
           <Typography variant="h6">Spareparts Required:</Typography>
-          {data?.spareparts_required?.map((sparepart) => {
+          {data?.spareparts_required?.map((sparepart: Data) => {
             return (
               <Typography
                 key={sparepart.id}
@@ -130,7 +131,7 @@ const Detail = () => {
         </div>
         <div className="clmn">
           <Typography variant="h6">Tools Required:</Typography>
-          {data?.tools_required?.map((tool) => {
+          {data?.tools_required?.map((tool: Data) => {
             return (
               <Typography
                 key={tool.id}
@@ -163,7 +164,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.activities?.length > 0 ? data?.activities?.map((activity) => {
+              {data?.activities?.length > 0 ? data?.activities?.map((activity: Data) => {
                 return (
                   <TableRow key={activity?.id}>
                     <TableCell><Link to={`/work-order/detail/${activity?.id}`} type="link"> {activity?.id}</Link></TableCell>
@@ -210,7 +211,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {work_orders?.data?.length > 0 ? work_orders?.data?.map((work_order) => {
+              {Array.isArray(work_orders?.data) && work_orders?.data?.length > 0 ? work_orders?.data?.map((work_order: Data) => {
                 return (
                   <TableRow key={work_order?.id}>
                     <TableCell><Link to={`/work-order/detail/${work_order?.id}`} type="link"> {work_order?.id}</Link></TableCell>

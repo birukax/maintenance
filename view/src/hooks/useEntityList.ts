@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../store/store";
 // import { SerializedError } from "@reduxjs/toolkit";
 import { AsyncThunk } from "@reduxjs/toolkit";
-import { type Data, type PaginatedData } from "../store/types";
+import { type Data, type PaginatedData, type DataState } from "../store/types";
 
 export interface EntityListState {
-  data: PaginatedData<Data[]> | Data[] | [];
+  data: DataState<PaginatedData<Data[]> | any>;
   loading: boolean;
   error: any;
 }

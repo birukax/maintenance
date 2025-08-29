@@ -2,7 +2,8 @@ import { fetchReturn } from "../../store/slices/returnSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Data } from "../../store/types";
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.return.return,
@@ -14,7 +15,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <h2>Primary Information</h2>
       <div className="rw">

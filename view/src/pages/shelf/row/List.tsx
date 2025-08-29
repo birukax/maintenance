@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
 } from "../../../components/GenericListPage";
+import { type FetchParams } from '../../../store/types';
 
 const shelfColumns = [
   { header: "Code", accessor: "code" },
@@ -34,14 +35,14 @@ const List: React.FC = () => {
   const handleRefresh = () => {
     dispatch(fetchShelfRows(params));
   }
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     setParams(prev => {
       return {
         ...prev,
         [field]: value
       }
     })
-    const parameters = {
+    const parameters: FetchParams = {
       ...params,
       page: 1,
       [field]: value

@@ -89,7 +89,7 @@ const Create = () => {
 
         <FormControl fullWidth variant="outlined" disabled={activity.loading}>
           <Autocomplete
-            options={activityTypes.data || []}
+            options={Array.isArray(activityTypes.data) ? activityTypes.data : []}
             getOptionLabel={(option) => (option.code ? `${option.code} - ${option.name}` : option.name || "")}
             renderInput={(params) => (
               <TextField
@@ -107,7 +107,7 @@ const Create = () => {
                 (activityType) => activityType.id === formData.activity_type_id
               ) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({
                 ...formData,
                 activity_type_id: newValue ? newValue.id : "",

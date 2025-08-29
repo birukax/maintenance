@@ -20,6 +20,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { Data, type FormData } from '../../store/types';
 const Edit = () => {
   const { areas } = useSelector((state: AppState) => state.area);
   const { plants } = useSelector((state: AppState) => state.plant);
@@ -105,8 +106,8 @@ const Edit = () => {
               />
             )}
             id="plant-select"
-            value={plants.data?.find((plant) => plant.id === selectedPlant) || null}
-            onChange={(event, newValue: any) => {
+            value={Array.isArray(plants.data) && plants.data?.find((plant: Data) => plant.id === selectedPlant) || null}
+            onChange={(_event, newValue: any) => {
               setSelectedPlant(newValue ? newValue.id : "");
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -116,7 +117,7 @@ const Edit = () => {
           <Autocomplete
             size='small'
             options={
-              areas.data
+              Array.isArray(areas.data)
                 ? areas.data.filter((area) => area.plant.id === selectedPlant)
                 : []
             }
@@ -133,10 +134,10 @@ const Edit = () => {
               />
             )}
             id="area-select"
-            value={
+            value={Array.isArray(areas.data) &&
               areas.data?.find((area: any) => area.id === formData.area_id) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({
                 ...formData,
                 area_id: newValue ? String(newValue.id) : "",

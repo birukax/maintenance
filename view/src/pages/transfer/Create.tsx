@@ -55,10 +55,12 @@ const Create = () => {
     }
   };
 
-  const selectedItems =
-    formData.requested_items.length > 0
+  const selectedItems: FormData =
+    (Array.isArray(formData.requested_items) && formData.requested_items.length > 0)
       ? formData.requested_items.map((el: FormData) => {
-        return items.data?.filter((item) => item.id === el.item_id);
+        if (Array.isArray(items.data)) {
+          return items.data?.filter((item) => item.id === el.item_id);
+        }
       })
       : [];
 
@@ -99,7 +101,7 @@ const Create = () => {
                   )
                   : null
               }
-              onChange={(event, newValue) => {
+              onChange={(_event, newValue) => {
                 setFormData({
                   ...formData,
                   from_location_id: newValue ? newValue.id : "",
@@ -138,7 +140,7 @@ const Create = () => {
                   )
                   : null
               }
-              onChange={(event, newValue) => {
+              onChange={(_event, newValue) => {
                 setFormData({
                   ...formData,
                   to_location_id: newValue ? newValue.id : "",
@@ -166,7 +168,7 @@ const Create = () => {
                 )
                 : []
             }
-            onChange={(_, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({
                 ...formData,
                 requested_items: newValue.map((item) => {

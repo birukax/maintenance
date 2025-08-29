@@ -34,7 +34,7 @@ const List: React.FC = () => {
 
   }
 
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     setParams(prev => {
       return {
         ...prev,

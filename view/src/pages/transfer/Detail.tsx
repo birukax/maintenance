@@ -6,6 +6,8 @@ import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { Link } from "react-router-dom";
 import ReceiveModal from "./receive/Modal"
+import { type Data } from '../../store/types';
+
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.transfer.transfer,
@@ -37,12 +39,12 @@ const Detail = () => {
             onClick={() => setReceiveModalOpen(true)}
             variant="contained"
             sx={{ mr: 1 }}
-            disabled={entityState?.data && entityState?.data?.transfer_items?.every(el => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data && entityState?.data?.transfer_items?.every(el => el.shipped_quantity === 0) ? true : false}
+            disabled={entityState?.data && entityState?.data?.transfer_items?.every((el: Data) => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data && entityState?.data?.transfer_items?.every((el: Data) => el.shipped_quantity === 0) ? true : false}
           >
             Receive
           </Button>
 
-          {entityState?.data && entityState?.data?.transfer_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
+          {entityState?.data && entityState?.data?.transfer_items?.every((el: Data) => el.remaining_quantity < 1) ? "" : <Button
             size='small'
             component={Link}
             to={`/transfer/${entityState.data.id}/ship`}
@@ -58,7 +60,7 @@ const Detail = () => {
 
 
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
 
       <h2>Primary Information</h2>
@@ -169,7 +171,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.transfer_items?.map((item) => {
+              {data?.transfer_items?.map((item: Data) => {
                 return (
                   <TableRow key={item.id}>
                     <TableCell>{item?.item?.no}</TableCell>

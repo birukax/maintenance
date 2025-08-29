@@ -4,6 +4,7 @@ import { useEntityDetail } from "../../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import { Typography, Button, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Data } from "../../../store/types";
 
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -14,7 +15,7 @@ const Detail = () => {
     <>
       {entityState.data?.status == "APPROVED" && (
         <>
-          {entityState?.data && entityState?.data?.request_items?.every(el => el.remaining_quantity < 1) ? "" : <Button
+          {entityState?.data && entityState?.data?.request_items?.every((el: Data) => el.remaining_quantity < 1) ? "" : <Button
             size='small'
             component={Link}
             to={`/purchase-request/${entityState.data?.id}/receive`}
@@ -30,7 +31,7 @@ const Detail = () => {
 
 
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
 
       <h2>Primary Information</h2>
@@ -129,7 +130,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.request_items?.map((item) => {
+              {data?.request_items?.map((item: Data) => {
                 return (
                   <TableRow key={item.id}>
                     <TableCell>{item?.item?.no}</TableCell>

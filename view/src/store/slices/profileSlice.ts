@@ -46,7 +46,7 @@ export const fetchProfile = createAsyncThunk<Data, number | string, { rejectValu
         }
     }
 )
-export const fetchUserProfile = createAsyncThunk<Data, { rejectValue: any }>(
+export const fetchUserProfile = createAsyncThunk<Data, void, { rejectValue: any }>(
     'profile/fetchUserProfile',
     async (_, { rejectWithValue }) => {
         try {

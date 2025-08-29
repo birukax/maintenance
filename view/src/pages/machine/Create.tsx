@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createMachine } from "../../store/slices/machineSlice";
@@ -17,6 +17,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type Data, type FormData } from "../../store/types";
 const Create = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -50,8 +51,8 @@ const Create = () => {
       await dispatch(createMachine(formData)).unwrap();
       toast.success("Machine created successfully");
       navigate("/machines");
-    } catch (err) {
-      toast.error(machine.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(machine.error?.error || error || "Something Went Wrong");
     }
   };
 
@@ -69,7 +70,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={machine.loading}>
           <Autocomplete
             size='small'
-            options={plants.data || []}
+            options={Array.isArray(plants.data) ? plants.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
@@ -83,7 +84,7 @@ const Create = () => {
             )}
             id="plant-select"
             value={Array.isArray(plants.data) && plants.data?.find((plant) => plant.id === selectedPlant) || null}
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue: any) => {
               setSelectedPlant(newValue ? newValue.id : "");
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -93,8 +94,8 @@ const Create = () => {
           <Autocomplete
             size='small'
             options={
-              areas.data
-                ? areas?.data?.filter((area) => area?.plant?.id === selectedPlant)
+              Array.isArray(areas.data)
+                ? areas?.data?.filter((area: Data) => area?.plant?.id === selectedPlant)
                 : []
             }
             getOptionLabel={(option) => option.name || ""}
@@ -109,10 +110,10 @@ const Create = () => {
               />
             )}
             id="area-select"
-            value={
-              areas.data?.find((area) => area.id === formData.area_id) || null
+            value={Array.isArray(areas.data) &&
+              areas.data?.find((area: Data) => area.id === formData.area_id) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue: any) => {
               setFormData({
                 ...formData,
                 area_id: newValue ? newValue.id : "",

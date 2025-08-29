@@ -1,62 +1,76 @@
-// src/pages/List.tsx
 import React, { useEffect, useState } from "react";
 import { fetchActivities } from "../../../store/slices/activitySlice";
-import { updateActivity, deleteActivity } from "../../../store/slices/activitySlice";
+import {
+  updateActivity,
+  deleteActivity,
+} from "../../../store/slices/activitySlice";
 import { AppState, AppDispatch } from "../../../store/store";
-import { GenericListPage } from "../../../components/GenericListPage";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useSearchParams, Link } from "react-router-dom"
-import { Button, ButtonGroup, CircularProgress, IconButton, Modal, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import BlockIcon from '@mui/icons-material/Block';
+import { useParams, Link } from "react-router-dom";
+import {
+  Button,
+  ButtonGroup,
+  CircularProgress,
+  IconButton,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import BlockIcon from "@mui/icons-material/Block";
 import CreateActivity from "./Create";
 import DeleteActivity from "./Delete";
-import DeleteIcon from '@mui/icons-material/Delete';
-import LayersClearIcon from '@mui/icons-material/LayersClear';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import EditActivity from "./EditActivity";
+import { Column } from '../../../components/GenericListPage';
+import { Data } from "../../../store/types";
+
 const headers = [
   { header: "Description", accessor: "description" },
   { header: "Status", accessor: "active" },
 ];
 
-
 const List: React.FC = () => {
-
-  const { id } = useParams()
+  const { id } = useParams();
   const entityState = useSelector(
     (state: AppState) => state.activity.activities
   );
   const activity = useSelector((state: AppState) => state.activity.activity);
 
-  const [params, setParams] = useState({
+  const [params] = useState({
     // search:searchParams.get("search") ||"",
     no_pagination: true,
-    schedule__id: id
-  })
+    schedule__id: id,
+  });
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(fetchActivities(params));
-
   }, []);
 
   const handleRefresh = () => {
     dispatch(fetchActivities(params));
+  };
 
-  }
+  const handleDeleteActivity = async (id: string | number | undefined) => {
+    if (id) {
 
-  const handleDeleteActivity = async (id) => {
-    await dispatch(deleteActivity(id));
-    if (!activity.error) {
-      handleRefresh()
-      handledeleteModalClose()
+      await dispatch(deleteActivity(id));
+      if (!activity.error) {
+        handleRefresh();
+        handledeleteModalClose();
+      }
     }
-  }
+  };
   const [assignmodalOpen, setAssignModalOpen] = useState(false);
   const [editmodalOpen, setEditModalOpen] = useState(false);
   const [deletemodalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState("");
-  const [editId, setEditId] = useState("");
+  const [deleteId, setDeleteId] = useState<string | number | undefined>("");
+  const [editId, setEditId] = useState<string | number | undefined>("");
 
   const handleAssignModalOpen = () => setAssignModalOpen(true);
   const handleAssignModalClose = () => setAssignModalOpen(false);
@@ -65,20 +79,19 @@ const List: React.FC = () => {
   const handleeditModalOpen = () => setEditModalOpen(true);
   const handleeditModalClose = () => setEditModalOpen(false);
 
-  const disableActivity = async (id, active) => {
+  const disableActivity = async (id: string | number | undefined, active: boolean) => {
     const formData = {
-      active: !active
-    }
+      active: !active,
+    };
 
     await dispatch(updateActivity({ id, formData }));
     if (!activity.error) {
-      handleRefresh()
+      handleRefresh();
     }
-  }
+  };
 
-
-  const getNestedValue = (obj, path) =>
-    path.split(".").reduce((acc, part) => acc && acc[part], obj);
+  const getNestedValue = (obj: any, path: any) =>
+    path.split(".").reduce((acc: any, part: any) => acc && acc[part], obj);
   return (
     <>
       <div
@@ -96,7 +109,6 @@ const List: React.FC = () => {
           aria-describedby="modal-modal-description"
         >
           <CreateActivity
-            entityState={entityState}
             setModalOpen={setAssignModalOpen}
             handleRefresh={handleRefresh}
           />
@@ -108,10 +120,10 @@ const List: React.FC = () => {
           aria-describedby="modal-modal-description"
         >
           <EditActivity
-            entityState={entityState}
             setModalOpen={setEditModalOpen}
             handleRefresh={handleRefresh}
-            editId={editId} />
+            editId={editId}
+          />
         </Modal>
         <Modal
           open={deletemodalOpen}
@@ -121,19 +133,17 @@ const List: React.FC = () => {
         >
           <DeleteActivity
             handleDeleteActivity={handleDeleteActivity}
-            handledeleteModalClose={handledeleteModalClose}
+            handleDeleteModalClose={handledeleteModalClose}
             deleteId={deleteId}
             activity={activity}
           />
         </Modal>
-        <Typography variant="h5" className="font-bold ">
-
-        </Typography>
-        <div >
+        <Typography variant="h5" className="font-bold "></Typography>
+        <div>
           {entityState.loading && <CircularProgress size={30} />}
 
           <Button
-            size='small'
+            size="small"
             variant="outlined"
             onClick={handleAssignModalOpen}
           >
@@ -142,12 +152,11 @@ const List: React.FC = () => {
           <Button
             component={Link}
             to={`/schedule/detail/${id}`}
-            type='button'
-            size='small'
-            variant='contained'
+            type="button"
+            size="small"
+            variant="contained"
             fullWidth
             disabled={entityState.loading}
-
           >
             Save
           </Button>
@@ -160,42 +169,30 @@ const List: React.FC = () => {
       )}
 
       <div className="table-container">
-        <Table
-          size='small'
-          aria-label={`Activity table`}
-          className="table"
-        >
+        <Table size="small" aria-label={`Activity table`} className="table">
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography >No</Typography>
+                <Typography>No</Typography>
               </TableCell>
               {headers.map((header, index) => (
                 <TableCell key={index}>
-                  <Typography >{header.header}</Typography>
+                  <Typography>{header.header}</Typography>
                 </TableCell>
               ))}
               <TableCell align="left">
-                <Typography >Action</Typography>
+                <Typography>Action</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {entityState?.data && entityState?.data.length > 0
-              ? entityState?.data?.map((row, index) => (
-                <TableRow
-                  key={index}
-                >
-                  <TableCell
-                    scope="row"
-                    align="left"
-                    size="small"
-                  >
-                    <Typography noWrap>
-                      {index + 1}
-                    </Typography>
+            {Array.isArray(entityState?.data) && entityState?.data.length > 0
+              ? entityState?.data?.map((row: Data, index: number) => (
+                <TableRow key={index}>
+                  <TableCell scope="row" align="left" size="small">
+                    <Typography noWrap>{index + 1}</Typography>
                   </TableCell>
-                  {headers.map((col) => {
+                  {headers.map((col: Column) => {
                     return (
                       <TableCell
                         key={col.header}
@@ -203,11 +200,18 @@ const List: React.FC = () => {
                         align="left"
                         size="small"
                       >
-                        <Typography className={`${col.header === "Description" && !row?.active ? "Disable" : ""}`} >
+                        <Typography
+                          className={`${col.header === "Description" && !row?.active
+                            ? "Disable"
+                            : ""
+                            }`}
+                        >
                           {col.renderCell
                             ? col.renderCell(row)
                             : col.accessor
-                              ? String(getNestedValue(row, String(col.accessor)))
+                              ? String(
+                                getNestedValue(row, String(col.accessor))
+                              )
                               : "N/A"}
                         </Typography>
                       </TableCell>
@@ -220,26 +224,37 @@ const List: React.FC = () => {
                       size="small"
                       sx={{ display: "flex", gap: 1, boxShadow: 0 }}
                     >
-                      <IconButton aria-label="disable" title="Disable" onClick={() => {
-                        disableActivity(row.id, row.active)
-                      }}>
-                        <BlockIcon color='action' />
+                      <IconButton
+                        aria-label="disable"
+                        title="Disable"
+                        onClick={() => {
+                          disableActivity(row.id, row.active);
+                        }}
+                      >
+                        <BlockIcon color="action" />
                       </IconButton>
-                      <IconButton aria-label="edit" title="Edit" onClick={() => {
-                        setEditId(row.id)
-                        handleeditModalOpen()
-                      }}>
-                        <EditIcon color='primary' />
+                      <IconButton
+                        aria-label="edit"
+                        title="Edit"
+                        onClick={() => {
+                          setEditId(row.id);
+                          handleeditModalOpen();
+                        }}
+                      >
+                        <EditIcon color="primary" />
                       </IconButton>
-                      <IconButton aria-label="delete" title="Delete" onClick={() => {
-                        setDeleteId(row.id)
-                        handledeleteModalOpen()
-                      }}>
-                        <DeleteIcon color='warning' />
+                      <IconButton
+                        aria-label="delete"
+                        title="Delete"
+                        onClick={() => {
+                          setDeleteId(row.id);
+                          handledeleteModalOpen();
+                        }}
+                      >
+                        <DeleteIcon color="warning" />
                       </IconButton>
                     </ButtonGroup>
                   </TableCell>
-
                 </TableRow>
               ))
               : !entityState.loading && (

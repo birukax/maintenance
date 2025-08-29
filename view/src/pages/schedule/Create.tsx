@@ -117,7 +117,7 @@ const Create = () => {
             )}
             id="types-select"
             value={SCHEDULE_TYPES.find((type) => type[0] === formData.type) || null}
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, type: newValue ? newValue[0] : "" });
             }}
             isOptionEqualToValue={(option, value) => option[0] === value[0]}
@@ -141,7 +141,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={schedule.loading}>
           <Autocomplete
             size='small'
-            options={machines.data || []}
+            options={Array.isArray(machines.data) ? machines.data : []}
             getOptionLabel={(option: Data) => `${option?.code} - ${option?.name}`}
             renderInput={(params) => (
               <TextField
@@ -156,7 +156,7 @@ const Create = () => {
             )}
             id="machine-select"
             value={Array.isArray(machines.data) && machines.data?.find((machine) => machine.id === formData.machine_id) || null}
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, machine_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -185,7 +185,7 @@ const Create = () => {
                 (equipment) => equipment.id === formData.equipment_id
               ) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, equipment_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -218,7 +218,7 @@ const Create = () => {
                 ? workOrderTypes.data.find((workOrderType) => workOrderType?.id === formData.work_order_type_id) || null
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, work_order_type_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -255,7 +255,7 @@ const Create = () => {
                 ) || null
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, activity_type_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}

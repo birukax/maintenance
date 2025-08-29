@@ -34,7 +34,7 @@ const List: React.FC = () => {
     dispatch(fetchContacts(params));
   }
 
-  const handleFilter = async (field, value) => {
+  const handleFilter = async (field: string, value: any) => {
     setSearchParams({ ...params, page: 1 });
     setParams(prev => {
       return {

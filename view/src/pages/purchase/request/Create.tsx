@@ -35,7 +35,7 @@ const Create = () => {
     requested_items: [],
   });
   const { purchaseRequest } = useSelector((state: AppState) => state.purchaseRequest)
-  const { items } = useSelector((state: AppState) => state.item);
+  const items: Data[] | any = useSelector((state: AppState) => state.item.items);
   const { locations } = useSelector((state: AppState) => state.location)
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -65,9 +65,9 @@ const Create = () => {
   };
 
 
-  const selectedItems = formData.requested_items.length > 0
+  const selectedItems = (Array.isArray(items.data) && formData.requested_items.length > 0)
     ? formData.requested_items.map((el: Data) => {
-      return items.data?.filter((item) => item.id === el.item_id)
+      return items.data?.filter((item: Data) => item.id === el.item_id)
     }) : [];
 
   return (
@@ -107,7 +107,7 @@ const Create = () => {
                 )
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({
                 ...formData,
                 location_id: newValue ? newValue.id : "",
@@ -144,7 +144,7 @@ const Create = () => {
             getOptionLabel={(option) => option.name || ""}
             value={
               Array.isArray(items.data)
-                ? items.data.filter((item) =>
+                ? items.data.filter((item: Data) =>
                   formData.requested_items
                     .map((el: Data) => el.item_id)
                     .includes(item.id)

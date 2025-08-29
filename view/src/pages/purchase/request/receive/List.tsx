@@ -176,12 +176,11 @@ const ReceiveList = () => {
           {data &&
             data?.request_items?.map((row: Data, index: number) => {
               if (row.remaining_quantity > 0) return <Rows
+                row={row}
+                handleFormChange={handleFormChange}
+                index={index}
                 setErrorCount={setErrorCount}
                 errorCount={errorCount}
-                key={row.id}
-                row={row}
-                index={index}
-                handleFormChange={handleFormChange}
               />
             })}
           {

@@ -4,6 +4,7 @@ import { fetchUserProfile } from "../../store/slices/profileSlice";
 import { AppDispatch, AppState } from "../../store/store";
 import { Typography, Button, Container, Box, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Data } from "../../store/types";
 
 const Detail = () => {
   // const { id } = useParams()
@@ -29,7 +30,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
 
 
     <>

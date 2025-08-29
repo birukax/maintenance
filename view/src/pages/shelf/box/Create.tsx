@@ -81,7 +81,7 @@ const Create = () => {
                 ? shelfRows.data.find((row) => row.id === formData.row_id)
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}

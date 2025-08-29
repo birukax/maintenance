@@ -26,7 +26,7 @@ const style = {
 interface EditActivityProps {
   setModalOpen: Dispatch<SetStateAction<boolean>>;
   handleRefresh: () => void;
-  editId: string | number;
+  editId: string | number | undefined;
 }
 
 const EditActivity: FC<EditActivityProps> = ({ setModalOpen, handleRefresh, editId }) => {
@@ -57,12 +57,15 @@ const EditActivity: FC<EditActivityProps> = ({ setModalOpen, handleRefresh, edit
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const id = editId.toString()
-    await dispatch(updateActivity({ id, formData })); // Uncomment if needed
-    if (!activity.error) {
-      setModalOpen(false);
+    if (editId) {
+
+      const id = editId.toString()
+      await dispatch(updateActivity({ id, formData })); // Uncomment if needed
+      if (!activity.error) {
+        setModalOpen(false);
+      }
+      handleRefresh()
     }
-    handleRefresh()
   };
 
 
