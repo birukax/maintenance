@@ -36,33 +36,37 @@ const Detail = () => {
     <>
       {entityState.data?.status !== "FIXED" && (
         <>
-          <Modal
-            open={modalOpen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <CreateWorkOrder
-              entityState={entityState}
-              setModalOpen={setModalOpen}
-            />
-          </Modal>
-          <Button
-            size='small'
-            onClick={handleModalOpen}
-            variant="contained"
-            sx={{ mr: 1 }}
+          {entityState.data?.has_active_work_order === false &&
+            (<>
+              <Modal
+                open={modalOpen}
+                onClose={handleModalClose}
+                aria-labelledby="create-wo-modal-title"
+                aria-describedby="create-wo-modal-description"
+              >
+                <CreateWorkOrder
+                  entityState={entityState}
+                  setModalOpen={setModalOpen}
+                />
+              </Modal>
+              <Button
+                size='small'
+                onClick={handleModalOpen}
+                variant="contained"
+                sx={{ mr: 1 }}
 
-          >
-            Create Work Order
-          </Button>
+              >
+                Create Work Order
+              </Button>
+            </>)
+          }
           {(entityState?.data?.status === "WORK-ORDER CREATED" && entityState?.data?.has_active_work_order === false) ? (
             <>
               <Modal
                 open={updateModalOpen}
                 onClose={handleUpdateModalClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+                aria-labelledby="update-breakdown-modal-title"
+                aria-describedby="update-breakdown-modal-description"
               >
                 <Update
                   entityState={entityState}

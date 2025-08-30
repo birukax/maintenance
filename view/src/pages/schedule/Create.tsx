@@ -78,7 +78,7 @@ const Create = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.planned_days > 0 || formData.planned_hours > 0 || formData.planned_minutes > 0) {
+    if (formData.planned_days < 1 || formData.planned_hours < 1 || formData.planned_minutes < 1) {
       try {
         await dispatch(createSchedule(formData)).unwrap();
         toast.success("Schedule created successfully");

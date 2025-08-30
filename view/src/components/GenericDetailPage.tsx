@@ -41,7 +41,8 @@ export const GenericDetailPage: FC<GenericDetailPageProps> = ({
 
       {(entityState.loading && !formDetail) && <CircularProgress />}
 
-      {(!entityState.loading || formDetail) && !entityState.error && entityState.data && (
+      {/* {(!entityState.loading || formDetail) && !entityState.error && entityState.data && ( */}
+      {(!entityState.loading || formDetail) && entityState.data && (
         <>
           <Box>{renderButtons()}</Box>
           <Box className="detail-container">{renderDetails(entityState.data)}</Box>

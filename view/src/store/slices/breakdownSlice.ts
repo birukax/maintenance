@@ -6,11 +6,13 @@ import { type FormData, type FetchParams, type UpdateFormData, type Data, type D
 interface BreakdownState {
     breakdowns: DataState<PaginatedData<Data[]> | Data[] | []>;
     breakdown: DataState<Data | null>;
+    breakdownWorkOrder: DataState<Data | null>;
 }
 
 const initialState: BreakdownState = {
     breakdowns: { data: [], loading: false, error: null },
     breakdown: { data: null, loading: false, error: null },
+    breakdownWorkOrder: { data: null, loading: false, error: null },
 };
 
 export const fetchBreakdowns = createAsyncThunk<PaginatedData<Data[]>, FetchParams, { rejectValue: any }>(
@@ -151,16 +153,16 @@ const breakdownSlice = createSlice({
                 state.breakdown.error = action.payload || 'Unknown error';
             })
             .addCase(createBreakdownWorkOrder.pending, (state) => {
-                state.breakdown.loading = true;
-                state.breakdown.error = null;
+                state.breakdownWorkOrder.loading = true;
+                state.breakdownWorkOrder.error = null;
             })
-            .addCase(createBreakdownWorkOrder.fulfilled, (state, action: PayloadAction<Data>) => {
-                state.breakdown.loading = false;
-                state.breakdown.data = action.payload;
+            .addCase(createBreakdownWorkOrder.fulfilled, (state) => {
+                state.breakdownWorkOrder.loading = false;
+                // state.breakdownWorkOrder.data = action.payload;
             })
             .addCase(createBreakdownWorkOrder.rejected, (state, action) => {
-                state.breakdown.loading = false;
-                state.breakdown.error = action.payload || 'Unknown error';
+                state.breakdownWorkOrder.loading = false;
+                state.breakdownWorkOrder.error = action.payload || 'Unknown error';
             })
     }
 })

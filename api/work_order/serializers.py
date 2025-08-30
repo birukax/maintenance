@@ -185,9 +185,9 @@ class CreateWorkOrderSerializer(serializers.ModelSerializer):
         source="spareparts_required",
         required=False,
     )
-    total_days = serializers.IntegerField(required=False)
-    total_hours = serializers.IntegerField(required=False)
-    total_minutes = serializers.IntegerField(required=False)
+    total_days = serializers.IntegerField(write_only=True, required=False)
+    total_hours = serializers.IntegerField(write_only=True, required=False)
+    total_minutes = serializers.IntegerField(write_only=True, required=False)
 
     class Meta:
         model = WorkOrder
@@ -214,7 +214,7 @@ class CreateWorkOrderSerializer(serializers.ModelSerializer):
             total_minutes = validated_data.pop("total_minutes", 0)
             if total_days == 0 and total_hours == 0 and total_minutes == 0:
                 raise serializers.ValidationError(
-                    "The total time required cannot be null."
+                    {"error": "The total time required cannot be null."}
                 )
             validated_data["total_time_required"] = datetime.timedelta(
                 days=int(total_days) or 0,
@@ -225,7 +225,7 @@ class CreateWorkOrderSerializer(serializers.ModelSerializer):
             validated_data["equipment"] = breakdown_data.equipment or None
             tools_required = validated_data.pop("tools_required", [])
             spareparts_required = validated_data.pop("spareparts_required", [])
-            clearances = Clearance.objects.filter(active=True, breadown=True)
+            clearances = Clearance.objects.exclude(scheduled=True).filter(active=True)
             if clearances.exists():
                 work_order = WorkOrder.objects.create(**validated_data)
                 for c in clearances.all():
@@ -238,7 +238,7 @@ class CreateWorkOrderSerializer(serializers.ModelSerializer):
                 work_order.save()
             else:
                 raise serializers.ValidationError(
-                    "You must create at least one clearance for breakdown."
+                    {"error": "You must create at least one clearance for breakdown."}
                 )
             breakdown_data.status = "WORK-ORDER CREATED"
             breakdown_data.save()
@@ -264,7 +264,7 @@ class CreateWorkOrderSerializer(serializers.ModelSerializer):
             tools_required = schedule_data.tools_required.all() or []
             spareparts_required = schedule_data.spareparts_required.all() or []
             activities = Activity.objects.filter(schedule=schedule_data, active=True)
-            clearances = Clearance.objects.filter(active=True, scheduled=True)
+            clearances = Clearance.objects.exclude(breakdown=True).filter(active=True)
             if activities.exists() and clearances.exists():
                 work_order = WorkOrder.objects.create(**validated_data)
                 for a in activities.all():

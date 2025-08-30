@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["localhost", "172.16.18.22"]
 # Application definition
 
 INSTALLED_APPS = [
+    "clearcache",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

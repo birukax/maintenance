@@ -156,7 +156,6 @@ const Edit = () => {
           fullWidth
           value={formData.phone_no}
           onChange={handleChange}
-          required
           disabled={profile.loading}
           helperText={profile?.error?.phone_no}
         />

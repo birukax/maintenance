@@ -17,11 +17,15 @@ class ProfileViewset(viewsets.ModelViewSet):
     filterset_fields = ["role", "user__is_active", "user__id"]
 
     def get_queryset(self):
-        queryset = Profile.objects.exclude(user=self.request.user)
+        queryset = Profile.objects.exclude(role="ADMIN").exclude(user=self.request.user)
         return queryset
 
     def perform_create(self, serializer):
         try:
+            if not self.request.user.is_superuser:
+                raise serializers.ValidationError(
+                    {"error": "You don't have a permission."}
+                )
             username = serializer.validated_data.pop("username")
             email = serializer.validated_data.pop("email")
             password = serializer.validated_data.pop("password")
@@ -47,6 +51,10 @@ class ProfileViewset(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         try:
+            if not self.request.user.is_superuser:
+                raise serializers.ValidationError(
+                    {"error": "You don't have a permission."}
+                )
             is_active = serializer.validated_data.pop("is_active")
             email = serializer.validated_data.pop("email")
             user = User.objects.get(id=serializer.instance.user_id)

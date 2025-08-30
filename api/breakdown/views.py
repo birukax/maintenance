@@ -38,8 +38,8 @@ class BreakdownViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 "Error while creating breakdown work order."
             )
-        serializer = self.serializer_class(self.queryset)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # serializer = self.serializer_class(self.queryset)
+        return Response(status=status.HTTP_200_OK)
 
         # start_date = request.data.get("start_date")
         # spareparts_required_id = request.data.get("spareparts_required_id")

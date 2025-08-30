@@ -56,7 +56,7 @@ const Detail = () => {
           </Typography>
         </div>
         <div className="clmn">
-          <Typography variant="h6">Is Active:</Typography>
+          <Typography variant="h6">Status:</Typography>
           <Typography variant="body1" className="text-slate-500 mb-2">
             {data?.user?.is_active ? "Active" : "Inactive"}
           </Typography>

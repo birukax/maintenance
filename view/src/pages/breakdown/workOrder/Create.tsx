@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, SetStateAction, Dispatch, ChangeEvent, FC, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createBreakdownWorkOrder } from "../../../store/slices/breakdownSlice";
+import { createBreakdownWorkOrder, fetchBreakdown } from "../../../store/slices/breakdownSlice";
 import { AppState, AppDispatch } from "../../../store/store";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -55,7 +55,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
     tools_required_id: [],
     spareparts_required_id: []
   });
-  const { breakdown } = useSelector((state: AppState) => state.breakdown);
+  const { breakdownWorkOrder } = useSelector((state: AppState) => state.breakdown);
   const { items } = useSelector((state: AppState) => state.item);
   const { activityTypes } = useSelector(
     (state: AppState) => state.activityType
@@ -105,7 +105,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
     // setFormData({ ...formData, [name]: value });
     if (['total_days', 'total_hours', 'total_minutes'].includes(name)) {
       const num = Number(value);
-      if (value === '' || isNaN(num)) {
+      if (value === '' || isNaN(num) || num < 0) {
         setFormData({ ...formData, [name]: 0 });
       } else {
         setFormData({ ...formData, [name]: num });
@@ -140,14 +140,22 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
   }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setModalOpen(true);
-    try {
-      // await api.patch(`/inventory/items/${item.data.id}/`, formData);
-      await dispatch(createBreakdownWorkOrder({ id, formData })).unwrap();
-      toast.success("Breakdown Work Order created successfully");
-      setModalOpen(false);
-    } catch (error) {
-      toast.error(breakdown?.error?.error || error || "Something Went Wrong");
+    // setModalOpen(true);
+    if (formData.total_days < 1 || formData.total_hours < 1 || formData.total_minutes < 1) {
+      try {
+        // await api.patch(`/inventory/items/${item.data.id}/`, formData);
+        await dispatch(createBreakdownWorkOrder({ id, formData })).unwrap();
+        toast.success("Breakdown Work Order created successfully");
+        if (id) {
+          dispatch(fetchBreakdown(id))
+        }
+        setModalOpen(false);
+
+      } catch (error) {
+        toast.error(breakdownWorkOrder?.error?.error || error || "Something Went Wrong");
+      }
+    } else {
+      toast.warning("At least one field of planned time must be greater than 0")
     }
   };
   return (
@@ -162,7 +170,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            minDate={dayjs(breakdown?.data?.start_date)}
+            minDate={dayjs(breakdownWorkOrder?.data?.start_date)}
             label="Start Date"
             name="start_date"
             value={formData.start_date ? dayjs(formData.start_date) : null}
@@ -173,13 +181,13 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
                 variant: "outlined",
                 fullWidth: true,
                 required: true,
-                disabled: breakdown?.loading,
-                helperText: breakdown?.error?.start_date || "",
+                disabled: breakdownWorkOrder?.loading,
+                helperText: breakdownWorkOrder?.error?.start_date || "",
               },
             }}
           />
         </LocalizationProvider>
-        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown?.loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdownWorkOrder?.loading}>
           <InputLabel id="work-order-type-select-label">
             Work Order Type
           </InputLabel>
@@ -200,7 +208,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
               ))}
           </Select>
         </FormControl>
-        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdown?.loading}>
+        <FormControl size='small' fullWidth variant="outlined" required disabled={breakdownWorkOrder?.loading}>
           <InputLabel id="activity-type-select-label">Activity Type</InputLabel>
           <Select
             size='small'
@@ -225,7 +233,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
                 ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="outlined" disabled={breakdown?.loading}>
+        <FormControl fullWidth variant="outlined" disabled={breakdownWorkOrder?.loading}>
           <Autocomplete
             multiple
             size='small'
@@ -237,7 +245,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
                 variant="outlined"
                 label="Spareparts Required"
                 placeholder="Search spareparts..."
-                helperText={breakdown?.error?.spareparts_required_id || ""}
+                helperText={breakdownWorkOrder?.error?.spareparts_required_id || ""}
               />
             )}
             id="sparepart-autocomplete"
@@ -247,7 +255,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             }
           ></Autocomplete>
         </FormControl>
-        <FormControl size='small' fullWidth variant="outlined" disabled={breakdown?.loading}>
+        <FormControl size='small' fullWidth variant="outlined" disabled={breakdownWorkOrder?.loading}>
           <Autocomplete
             size='small'
             multiple
@@ -259,7 +267,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
                 variant="outlined"
                 label="tools Required"
                 placeholder="Search tools..."
-                helperText={breakdown?.error?.tools_required_id || ""}
+                helperText={breakdownWorkOrder?.error?.tools_required_id || ""}
               />
             )}
             id="tool-select"
@@ -281,7 +289,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             fullWidth
             value={formData.total_days}
             onChange={handleChange}
-            disabled={breakdown.loading}
+            disabled={breakdownWorkOrder.loading}
           />
           <TextField
             size='small'
@@ -293,7 +301,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             fullWidth
             value={formData.total_hours}
             onChange={handleChange}
-            disabled={breakdown.loading}
+            disabled={breakdownWorkOrder.loading}
           />
           <TextField
             size='small'
@@ -305,7 +313,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             fullWidth
             value={formData.total_minutes}
             onChange={handleChange}
-            disabled={breakdown.loading}
+            disabled={breakdownWorkOrder.loading}
           />
         </div>
 
@@ -315,10 +323,10 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
           variant="contained"
           color="primary"
           fullWidth
-          disabled={breakdown?.loading}
+          disabled={breakdownWorkOrder?.loading}
           className="mt-4"
         >
-          {breakdown?.loading ? (
+          {breakdownWorkOrder?.loading ? (
             <CircularProgress size={24} />
           ) : (
             "Create"

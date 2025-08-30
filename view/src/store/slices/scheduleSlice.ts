@@ -81,7 +81,7 @@ export const updateSchedule = createAsyncThunk<Data, UpdateFormData, { rejectVal
 )
 
 
-export const createScheduledWorkOrder = createAsyncThunk<any, UpdateFormData, { rejectValue: any }>(
+export const createScheduledWorkOrder = createAsyncThunk<void, UpdateFormData, { rejectValue: any }>(
     'schedule/createScheduledWorkOrder',
     async ({ id, formData }, { rejectWithValue }) => {
         try {
