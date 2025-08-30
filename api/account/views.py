@@ -30,8 +30,8 @@ class ProfileViewset(viewsets.ModelViewSet):
                 username=username,
                 email=email,
             )
-            user.save()
             user.set_password(password)
+            user.save()
 
         except DjangoValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})

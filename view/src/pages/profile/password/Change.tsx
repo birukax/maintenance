@@ -1,8 +1,8 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
-  fetchProfile,
+  fetchUserProfile,
   resetPassword,
 } from "../../../store/slices/profileSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -22,16 +22,13 @@ const Change = () => {
     old_password: "",
     password: ""
   });
-  const { id } = useParams();
   const profile = useSelector((state: AppState) => state.profile.profile);
   const [comfirmpas, setComfirmPas] = useState("")
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (id) {
-      dispatch(fetchProfile(id));
-    }
+    dispatch(fetchUserProfile());
   }, []);
 
 
@@ -129,7 +126,7 @@ const Change = () => {
           </Button>
           <Button
             component={Link}
-            to={`/profile/${id}`}
+            to={`/profile/`}
             type='button'
             size='small'
             variant='outlined'

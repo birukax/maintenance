@@ -88,7 +88,6 @@ const Edit = () => {
           onChange={handleChange}
           disabled={profile.loading}
           type="phone_no"
-          required
           helperText={profile.error?.phone_no || ""}
         />
         <div className='flex gap-4'>
