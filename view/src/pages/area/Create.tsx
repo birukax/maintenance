@@ -65,7 +65,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" required disabled={area.loading}>
           <Autocomplete
             size='small'
-            options={plants.data || []}
+            options={Array.isArray(plants.data) ? plants.data : []}
             getOptionLabel={(option) => option.name || ""}
             renderInput={(params) => (
               <TextField
@@ -79,7 +79,7 @@ const Create = () => {
             )}
             id="plant-select"
             value={Array.isArray(plants.data) && plants.data?.find((plant) => plant.id === formData.plant_id) || null}
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, plant_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}

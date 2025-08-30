@@ -46,7 +46,7 @@ const Edit = () => {
     // Handle filter action here
     const parameters: FetchParams = {
       year__no: year,
-      page: 1,
+      page: '1',
       [field]: value,
     };
 

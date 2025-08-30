@@ -74,7 +74,7 @@ const Create = () => {
   }, [contacts.data]);
 
   const selectedSuppliers = useMemo(() => {
-    return supplierOptions ? supplierOptions.filter((option: Data) =>
+    return Array.isArray(supplierOptions) ? supplierOptions.filter((option: Data) =>
       formData.suppliers_id?.includes(option?.id)
     ) : [];
   }, [formData.suppliers_id, supplierOptions]);
@@ -213,7 +213,7 @@ const Create = () => {
           <Autocomplete
             size='small'
             multiple
-            options={supplierOptions}
+            options={Array.isArray(supplierOptions) ? supplierOptions : []}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
               <TextField
@@ -226,7 +226,7 @@ const Create = () => {
             )}
             id="supplier-autocomplete"
             value={selectedSuppliers}
-            onChange={(event, newValue) =>
+            onChange={(_event, newValue) =>
               handleAutocompleteChange("suppliers_id", newValue)
             }
           ></Autocomplete>

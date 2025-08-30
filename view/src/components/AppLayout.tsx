@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC, ReactNode } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, AppDispatch } from "../store/store";
 import {
@@ -51,8 +51,18 @@ import PlaceIcon from "@mui/icons-material/Place";
 import ChecklistIcon from '@mui/icons-material/Checklist';
 const drawerWidth = 260;
 
-const AppLayout = ({ children }) => {
-  const [openSections, setOpenSections] = useState({
+interface AppLayoutProps {
+  children: ReactNode;
+}
+interface SectionType {
+  [key: string]: boolean;
+}
+interface SectionPathType {
+  [key: string]: any;
+}
+
+const AppLayout: FC<AppLayoutProps> = ({ children }) => {
+  const [openSections, setOpenSections] = useState<SectionType>({
     inventory: false,
     approval: false,
     purchase: false,
@@ -61,7 +71,7 @@ const AppLayout = ({ children }) => {
     asset: false,
     shelf: false,
   });
-  const toggleSection = (section) => {
+  const toggleSection = (section: string) => {
     setOpenSections((prev) => ({
       ...prev,
       [section]: !prev[section],
@@ -80,7 +90,7 @@ const AppLayout = ({ children }) => {
   useEffect(() => {
     const path = location.pathname;
 
-    const sectionPaths = {
+    const sectionPaths: SectionPathType = {
       shelf: ["/shelves", "/shelf-rows", "/shelf-boxes"],
       inventory: [
         "/item",
@@ -113,7 +123,7 @@ const AppLayout = ({ children }) => {
       ],
     }
     const activeSectionKey = Object.keys(sectionPaths).find((section) =>
-      sectionPaths[section].some((p) => path.startsWith(p))
+      sectionPaths[section].some((p: string) => path.startsWith(p))
     )
     if (activeSectionKey) {
       setOpenSections((prevOpenSections) => {

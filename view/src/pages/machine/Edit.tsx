@@ -92,7 +92,7 @@ const Edit = () => {
         <FormControl fullWidth variant="outlined" disabled={machine.loading}>
           <Autocomplete
             size='small'
-            options={plants.data || []}
+            options={Array.isArray(plants.data) ? plants.data : []}
             getOptionLabel={(option) => option.name || ""}
             getOptionKey={(option) => option.id || ''}
             renderInput={(params) => (
@@ -135,7 +135,7 @@ const Edit = () => {
             )}
             id="area-select"
             value={Array.isArray(areas.data) &&
-              areas.data?.find((area: any) => area.id === formData.area_id) || null
+              areas.data?.find((area: Data) => area.id === formData.area_id) || null
             }
             onChange={(_event, newValue) => {
               setFormData({

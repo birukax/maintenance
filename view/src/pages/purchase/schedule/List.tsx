@@ -82,7 +82,7 @@ const List: React.FC = () => {
   const handleSearchFilter = async (field: string, value: any) => {
     const parameters: FetchParams = {
       year__no: searchParams.get("year__no"),
-      page: 1,
+      page: '1',
       [field]: value,
     };
     setSearchParams({ ...parameters });

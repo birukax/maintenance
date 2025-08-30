@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AppState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { TextField, Box, Button } from '@mui/material';
+import { FetchParams } from '../store/types';
 
 const WorkOrderChart = () => {
     const { workOrders } = useSelector((state: AppState) => state.workOrder);
@@ -16,7 +17,7 @@ const WorkOrderChart = () => {
         }
     );
 
-    let params = {
+    const params: FetchParams = {
         no_pagination: 'true',
         start_date__gte: null,
         start_date__lte: null,
@@ -61,7 +62,7 @@ const WorkOrderChart = () => {
         stack: 'true'
     }))
 
-    
+
 
 
     return (

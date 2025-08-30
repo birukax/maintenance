@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
 } from "../../components/GenericListPage";
+import { FetchParams } from "../../store/types";
 
 const locationColumns = [
   { header: "Code", accessor: "code" },
@@ -41,9 +42,9 @@ const List: React.FC = () => {
         [field]: value
       }
     })
-    const parameters = {
+    const parameters: FetchParams = {
       ...params,
-      page: 1,
+      page: '1',
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });

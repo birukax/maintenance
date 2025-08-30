@@ -82,7 +82,7 @@ const Create = () => {
             )}
             id="item-select"
             value={Array.isArray(items.data) && items.data?.find((item) => item.id === formData.item_id) || null}
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({
                 ...formData,
                 item_id: newValue ? newValue.id : "",

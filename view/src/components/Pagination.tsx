@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 
-function Pagination(props) {
+function Pagination(props: any) {
   const [searchParams, setSearchParams] = useSearchParams();
   const ContainerStyle = {
     marginTop: '1rem',
@@ -32,7 +32,7 @@ function Pagination(props) {
     return [1, '...', props.cur - 1, props.cur, props.cur + 1, '...', totalPages];
   };
 
-  const currentPagin = (pgNum) => {
+  const currentPagin = (pgNum: any) => {
     props.setCur(pgNum);
   };
   useEffect(() => {
@@ -44,7 +44,7 @@ function Pagination(props) {
     <div className='pagination' style={ContainerStyle}>
       {props?.prev !== null &&
         <IconButton onClick={() => {
-          setSearchParams({ ...Object.fromEntries(searchParams), page: props?.cur - 1 });
+          setSearchParams({ ...Object.fromEntries(searchParams), page: (Number(props?.cur) - 1).toString() });
           props.searchByPage("page", props.cur - 1);
           currentPagin(props.cur - 1);
         }}
@@ -52,38 +52,42 @@ function Pagination(props) {
         >
           <ArrowBackIosNewOutlinedIcon sx={{ fontSize: "16px" }} />
         </IconButton>}
-      {getDisplayPages().map((pgNumber, idx) =>
-        pgNumber === '...' ? (
-          <li key={`dots-${idx}`} className="disabled" style={{ pointerEvents: 'none', listStyle: "none" }}>
-            <span className="page-link">...</span>
-          </li>
-        ) : (
-          <li
-            key={pgNumber}
-            className={`page-item ${props.cur === pgNumber ? "active" : ""} `}
-            onClick={() => {
-              currentPagin(pgNumber);
-              props.searchByPage("page", pgNumber);
-            }}
-          >
-            <a
-              className="page-link"
-              id={`pages pagination${pgNumber}`}
+      {
+        getDisplayPages().map((pgNumber, idx) =>
+          pgNumber === '...' ? (
+            <li key={`dots-${idx}`} className="disabled" style={{ pointerEvents: 'none', listStyle: "none" }}>
+              <span className="page-link">...</span>
+            </li>
+          ) : (
+            <li
+              key={pgNumber}
+              className={`page-item ${props.cur === pgNumber ? "active" : ""} `}
+              onClick={() => {
+                currentPagin(pgNumber);
+                props.searchByPage("page", pgNumber);
+              }}
             >
-              {pgNumber}
-            </a>
-          </li>
+              <a
+                className="page-link"
+                id={`pages pagination${pgNumber}`}
+              >
+                {pgNumber}
+              </a>
+            </li>
+          )
         )
-      )}
-      {props.next !== null &&
+      }
+      {
+        props.next !== null &&
         <IconButton size='small' onClick={() => {
           setSearchParams({ ...Object.fromEntries(searchParams), page: props?.cur + 1 });
           props.searchByPage("page", props.cur + 1);
           currentPagin(props.cur + 1);
         }} sx={{ border: "1px solid #5d4037", borderRadius: "5px", padding: "3px", height: "30px", width: "30px" }}>
           <ArrowForwardIosOutlinedIcon sx={{ fontSize: "16px" }} />
-        </IconButton>}
-    </div>
+        </IconButton>
+      }
+    </div >
   )
 }
 

@@ -10,9 +10,9 @@ interface OriginalRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 const api: AxiosInstance = axios.create({
-  // baseURL: '/api'
+  baseURL: '/api'
   // baseURL: 'http://localhost:8009',
-  baseURL: 'http://localhost:8000',
+  // baseURL: 'http://localhost:8000',
 });
 
 let isLoggingOut = false;

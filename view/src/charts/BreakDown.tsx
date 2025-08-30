@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AppState, AppDispatch } from "../store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { TextField, Box, Button } from '@mui/material';
+import { FetchParams } from '../store/types';
 
 const BreakdownChart = () => {
     const { breakdowns } = useSelector((state: AppState) => state.breakdown);
@@ -16,7 +17,7 @@ const BreakdownChart = () => {
         }
     );
 
-    let params = {
+    const params: FetchParams = {
         no_pagination: 'true',
         start_date__gte: null,
         start_date__lte: null,
@@ -30,9 +31,9 @@ const BreakdownChart = () => {
         dispatch(fetchBreakdowns(params));
     }, [dispatch, dateFilter]);
 
-    
+
     console.log(breakdowns);
-    
+
 
     return (
         <>
@@ -72,19 +73,19 @@ const BreakdownChart = () => {
                 </div>
 
             </Box>
-             <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 10, label: 'series A' },
-            { id: 1, value: 15, label: 'series B' },
-            { id: 2, value: 20, label: 'series C' },
-          ],
-        },
-      ]}
-      width={200}
-      height={200}
-    />
+            <PieChart
+                series={[
+                    {
+                        data: [
+                            { id: 0, value: 10, label: 'series A' },
+                            { id: 1, value: 15, label: 'series B' },
+                            { id: 2, value: 20, label: 'series C' },
+                        ],
+                    },
+                ]}
+                width={200}
+                height={200}
+            />
         </>
     )
 }

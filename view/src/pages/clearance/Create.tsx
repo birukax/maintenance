@@ -15,6 +15,7 @@ import {
   Switch,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 const Create = () => {
   const clearance = useSelector((state: AppState) => state.clearance.clearance)
   const [formData, setFormData] = useState<FormData>({

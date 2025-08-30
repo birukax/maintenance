@@ -2,7 +2,8 @@ import { fetchConsumption } from "../../store/slices/consumptionSlice";
 import { AppState } from "../../store/store";
 import { useEntityDetail } from "../../hooks/useEntityDetail";
 import { GenericDetailPage } from "../../components/GenericDetailPage";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Data } from "../../store/types";
 
 const Detail = () => {
   const entityState = useEntityDetail({
@@ -12,53 +13,53 @@ const Detail = () => {
   const renderButtons = () => <></>;
 
 
-  
-  const renderDetails = (data) => (
+
+  const renderDetails = (data: Data) => (
     <>
 
-    <h2>Primary Information</h2>
-    <div className="rw">
-      <div className="clmn">
-        <Typography variant="h6">Name:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
+      <h2>Primary Information</h2>
+      <div className="rw">
+        <div className="clmn">
+          <Typography variant="h6">Name:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
             {data?.item?.name}
-      </Typography>
-      </div>
-      <div className="clmn">
-        <Typography variant="h6">UoM:</Typography>
-      <Typography variant="body1" className="text-slate-500 mb-2">
+          </Typography>
+        </div>
+        <div className="clmn">
+          <Typography variant="h6">UoM:</Typography>
+          <Typography variant="body1" className="text-slate-500 mb-2">
             {data?.item?.uom?.name}
-      </Typography>
+          </Typography>
+        </div>
       </div>
-    </div>
-      
+
       <h2>Detail</h2>
       <div className="rw">
         <div className="clmn">
-<Typography variant="h6">Quantity:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data?.quantity}
-      </Typography>
+          <Typography variant="h6">Quantity:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.quantity}
+          </Typography>
 
         </div>
         <div className="clmn">
-<Typography variant="h6">Reason:</Typography>
-      <Typography variant="body1" className="text-slate-500">
+          <Typography variant="h6">Reason:</Typography>
+          <Typography variant="body1" className="text-slate-500">
             {data?.reason}
-      </Typography>
+          </Typography>
 
         </div>
         <div className="clmn">
 
-<Typography variant="h6">Consumption Date:</Typography>
-      <Typography variant="body1" className="text-slate-500">
-        {data?.date}
-      </Typography>
+          <Typography variant="h6">Consumption Date:</Typography>
+          <Typography variant="body1" className="text-slate-500">
+            {data?.date}
+          </Typography>
         </div>
       </div>
-      
-      
-      
+
+
+
     </>
   );
   return (

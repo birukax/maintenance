@@ -68,12 +68,12 @@ const Create = () => {
   };
 
 
-  const handleAutocompleteChange = (fieldName: any, newValue: any) => {
+  const handleAutocompleteChange = (field: string, value: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item: any) => item.id);
+    const selectedIds = value.map((item: Data) => item.id);
     setFormData((prevData) => ({
       ...prevData,
-      [fieldName]: selectedIds,
+      [field]: selectedIds,
     }));
   };
 
@@ -147,7 +147,7 @@ const Create = () => {
                 ? unitOfMeasures.data.find((uom) => uom.id === formData.uom_id || null)
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, uom_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -172,7 +172,7 @@ const Create = () => {
             value={
               ITEM_TYPES.find((item_type) => item_type === formData.type) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, type: newValue ? newValue : "" });
             }}
             isOptionEqualToValue={(option, value) => option === value}
@@ -198,7 +198,7 @@ const Create = () => {
             value={
               ITEM_CATEGORIES.find((item_category) => item_category === formData.category) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, category: newValue ? newValue : "" });
             }}
             isOptionEqualToValue={(option, value) => option === value}
@@ -226,7 +226,7 @@ const Create = () => {
                 ? shelves.data.find((shelf) => shelf.id === formData.shelf_id || null)
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, shelf_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -257,7 +257,7 @@ const Create = () => {
                 ? shelfRows.data.find((row) => row.id === formData.row_id || null)
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, row_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -288,7 +288,7 @@ const Create = () => {
                 ? shelfBoxes.data.find((box) => box.id === formData.box_id || null)
                 : null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({ ...formData, box_id: newValue ? newValue.id : "" });
             }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -332,7 +332,7 @@ const Create = () => {
             )}
             id="supplier-autocomplete"
             value={Array.isArray(selectedSuppliers) ? selectedSuppliers : []}
-            onChange={(event, newValue) =>
+            onChange={(_event, newValue) =>
               handleAutocompleteChange("suppliers_id", newValue)
             }
           ></Autocomplete>

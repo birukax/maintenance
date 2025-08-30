@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
 } from "../../components/GenericListPage";
+import { FetchParams } from "../../store/types";
 
 const itemColumns = [
   { header: "ID", accessor: "no" },
@@ -23,7 +24,7 @@ const List: React.FC = () => {
   const entityState = useSelector(
     (state: AppState) => state.item.items
   );
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<FetchParams>({
     search: searchParams.get("search") || "",
     // category:searchParams.get("category") ||"",
     // type:searchParams.get("type") ||"",
@@ -50,7 +51,7 @@ const List: React.FC = () => {
     })
     const parameters = {
       ...params,
-      page: 1,
+      page: '1',
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });

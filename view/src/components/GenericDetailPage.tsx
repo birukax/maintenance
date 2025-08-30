@@ -2,15 +2,26 @@
 import { Container, Typography, CircularProgress, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AppState } from "../store/store";
+import { FC, ReactNode } from "react";
+import { Data } from "../store/types";
 
-export function GenericDetailPage({
+interface GenericDetailPageProps {
+  titleBase: string | null;
+  entityState: Data;
+  id: string | number | undefined;
+  renderButtons: () => ReactNode;
+  renderDetails: (data: Data) => ReactNode;
+  formDetail?: boolean;
+}
+
+export const GenericDetailPage: FC<GenericDetailPageProps> = ({
   titleBase,
   entityState,
   id,
   renderButtons,
   renderDetails,
   formDetail = false,
-}) {
+}) => {
   const { tokens } = useSelector((state: AppState) => state.auth);
 
   if (!tokens) {

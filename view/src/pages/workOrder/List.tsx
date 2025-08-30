@@ -46,7 +46,7 @@ const List: React.FC = () => {
       }
     })
     const parameters: FetchParams = {
-      ...params, page: 1,
+      ...params, page: '1',
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });

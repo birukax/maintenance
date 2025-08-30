@@ -77,14 +77,14 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
   }, []);
 
   const toolOptions = useMemo(() => {
-    return items.data
-      ? items.data.filter((item) => item.category === "TOOL")
+    return Array.isArray(items.data)
+      ? items.data.filter((item: Data) => item.category === "TOOL")
       : [];
   }, [items.data]);
 
   const sparepartOptions = useMemo(() => {
-    return items.data
-      ? items.data.filter((item) => item.category === "SPAREPART")
+    return Array.isArray(items.data)
+      ? items.data.filter((item: Data) => item.category === "SPAREPART")
       : [];
   }, [items.data]);
 
@@ -130,12 +130,12 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
     });
   };
 
-  const handleAutocompleteChange = (fieldName: string, newValue: any) => {
+  const handleAutocompleteChange = (field: string, value: any) => {
     // Extract only the IDs from the selected objects
-    const selectedIds = newValue.map((item: Data) => item.id);
+    const selectedIds = value.map((item: Data) => item.id);
     setFormData((prevData) => ({
       ...prevData,
-      [fieldName]: selectedIds,
+      [field]: selectedIds,
     }));
   }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -192,8 +192,8 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             onChange={handleSelectChange}
             label="Work Order Type"
           >
-            {workOrderTypes.data &&
-              workOrderTypes.data.filter((workOrderType) => workOrderType.breakdown === true).map((workOrderType) => (
+            {Array.isArray(workOrderTypes.data) &&
+              workOrderTypes.data.filter((workOrderType: Data) => workOrderType.breakdown === true).map((workOrderType: Data) => (
                 <MenuItem key={workOrderType.id} value={workOrderType.id}>
                   {workOrderType.name}
                 </MenuItem>
@@ -211,7 +211,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             onChange={handleSelectChange}
             label="Activity Type"
           >
-            {activityTypes.data &&
+            {Array.isArray(activityTypes.data) &&
               activityTypes.data
                 .filter(
                   (activityType) =>
@@ -242,7 +242,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             )}
             id="sparepart-autocomplete"
             value={selectedSpareparts}
-            onChange={(event, newValue) =>
+            onChange={(_event, newValue) =>
               handleAutocompleteChange("spareparts_required_id", newValue)
             }
           ></Autocomplete>
@@ -264,7 +264,7 @@ const Create: FC<CreateProps> = ({ entityState, setModalOpen }) => {
             )}
             id="tool-select"
             value={selectedTools}
-            onChange={(event, newValue) =>
+            onChange={(_event, newValue) =>
               handleAutocompleteChange("tools_required_id", newValue)
             }
           ></Autocomplete>

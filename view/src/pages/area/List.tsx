@@ -43,7 +43,7 @@ const List: React.FC = () => {
   }
 
   const handleFilter = async (field: string, value: any) => {
-    setSearchParams({ ...params, page: 1 });
+    setSearchParams({ ...params, page: '1' });
 
     setParams(prev => {
       return {
@@ -53,7 +53,7 @@ const List: React.FC = () => {
     })
     const parameters = {
       ...params,
-      page: 1,
+      page: '1',
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });

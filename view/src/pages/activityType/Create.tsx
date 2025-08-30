@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -16,6 +16,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import { type FormData } from '../../store/types';
 const Create = () => {
   const [formData, setFormData] = useState<FormData>({
     code: "",
@@ -46,8 +47,8 @@ const Create = () => {
       await dispatch(createActivityType(formData)).unwrap();
       toast.success("Activity Type created successfully");
       navigate("/activity-types");
-    } catch (err) {
-      toast.error(activityType.error?.error || "Something Went Wrong");
+    } catch (error) {
+      toast.error(activityType.error?.error || error || "Something Went Wrong");
 
     }
 
@@ -66,7 +67,7 @@ const Create = () => {
         <FormControl fullWidth variant="outlined" disabled={activityType.loading}>
           <Autocomplete
             size='small'
-            options={workOrderTypes?.data || []}
+            options={Array.isArray(workOrderTypes?.data) ? workOrderTypes?.data : []}
             getOptionLabel={(option) =>
               option.code ? `${option.code} - ${option.name}` : option.name || ""
             }
@@ -86,7 +87,7 @@ const Create = () => {
                 (workOrderType) => workOrderType.id === formData.work_order_type_id
               ) || null
             }
-            onChange={(event, newValue) => {
+            onChange={(_event, newValue) => {
               setFormData({
                 ...formData,
                 work_order_type_id: newValue ? newValue.id : "",

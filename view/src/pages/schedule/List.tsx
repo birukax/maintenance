@@ -53,7 +53,7 @@ const List: React.FC = () => {
     })
     const parameters = {
       ...params,
-      page: 1,
+      page: '1',
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });

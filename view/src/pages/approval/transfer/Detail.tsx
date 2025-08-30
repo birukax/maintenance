@@ -6,6 +6,7 @@ import { GenericDetailPage } from "../../../components/GenericDetailPage";
 import { Typography, Button, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Link } from "react-router-dom";
 import Action from './Action';
+import { Data } from "../../../store/types";
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.transferApproval.transferApproval,
@@ -46,7 +47,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <div className="rw">
         <div className="clmn">
@@ -119,7 +120,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.transfer?.transfer_items?.length > 0 ? data?.transfer?.transfer_items?.map((transfer_item) => {
+              {data?.transfer?.transfer_items?.length > 0 ? data?.transfer?.transfer_items?.map((transfer_item: Data) => {
                 return (
                   <TableRow key={transfer_item?.id}>
                     <TableCell><Link to={`/work-order/detail/${transfer_item?.id}`} type="link"> {transfer_item?.item?.no}</Link></TableCell>

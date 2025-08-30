@@ -5,6 +5,7 @@ import { GenericDetailPage } from "../../components/GenericDetailPage";
 import { Typography, Button, Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import { Data } from "../../store/types";
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.item.item,
@@ -25,7 +26,7 @@ const Detail = () => {
   );
 
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
       <h2>Primary Information</h2>
       <div className="rw">
@@ -110,7 +111,7 @@ const Detail = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.suppliers?.length > 0 ? data.suppliers?.map((supplier, index) => {
+              {data?.suppliers?.length > 0 ? data.suppliers?.map((supplier: Data) => {
                 return (
                   <TableRow key={supplier.id}>
                     <TableCell>{supplier.name}</TableCell>

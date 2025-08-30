@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom"
 import {
   GenericListPage,
 } from "../../components/GenericListPage";
+import { FetchParams } from "../../store/types";
 
 const equipmentColumns = [
   { header: "Code", accessor: "code" },
@@ -21,17 +22,15 @@ const List: React.FC = () => {
   const entityState = useSelector(
     (state: AppState) => state.equipment.equipments
   );
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<FetchParams>({
     search: searchParams.get("search") || "",
     page: searchParams.get("page") || 1
   })
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (tokens) {
-      dispatch(fetchEquipments(params));
-      // setSearchParams(params)
-    }
+    dispatch(fetchEquipments(params));
+    // setSearchParams(params)
   }, []);
 
   const handleRefresh = () => {
@@ -41,7 +40,7 @@ const List: React.FC = () => {
   }
 
   const handleFilter = async (field: string, value: any) => {
-    setSearchParams({ ...params, page: 1 });
+    setSearchParams({ ...params, page: '1' });
 
     setParams(prev => {
       return {
@@ -50,7 +49,7 @@ const List: React.FC = () => {
       }
     })
     const parameters = {
-      ...params, page: 1,
+      ...params, page: '1',
       [field]: value
     }
     setSearchParams({ ...parameters, [field]: value });

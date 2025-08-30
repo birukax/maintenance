@@ -7,6 +7,7 @@ import { Typography, Button, Modal } from "@mui/material";
 import dayjs from "dayjs";
 import CreateWorkOrder from "./workOrder/Create";
 import Update from "./Update";
+import { Data } from "../../store/types";
 const Detail = () => {
   const entityState = useEntityDetail({
     detailSelector: (state: AppState) => state.breakdown.breakdown,
@@ -14,12 +15,12 @@ const Detail = () => {
   });
   const start = () => {
     return dayjs(
-      `${entityState.data.start_date}T${entityState.data.start_time}`
+      `${entityState.data?.start_date}T${entityState.data?.start_time}`
     ).format("YYYY/MM/DD HH:mm a");
   };
   const end = () => {
     return dayjs(
-      `${entityState.data.end_date}T${entityState.data.end_time}`
+      `${entityState.data?.end_date}T${entityState.data?.end_time}`
     ).format("YYYY/MM/DD HH:mm a");
   };
 
@@ -84,7 +85,7 @@ const Detail = () => {
     </>
   );
 
-  const renderDetails = (data) => (
+  const renderDetails = (data: Data) => (
     <>
 
       <h2>
