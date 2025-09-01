@@ -29,6 +29,7 @@ import PurchaseRequestRoutes from "./routes/PurchaseRequestRoutes";
 import PurchaseScheduleRoutes from "./routes/PurchaseScheduleRoutes";
 
 import "./App.css";
+import NotFound from "./components/NotFound";
 
 const App: React.FC = () => {
   return (
@@ -61,6 +62,7 @@ const App: React.FC = () => {
       {PurchaseRequestRoutes}
       {PurchaseScheduleRoutes}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   );
 };
