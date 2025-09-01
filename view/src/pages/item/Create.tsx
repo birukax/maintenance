@@ -215,7 +215,6 @@ const Create = () => {
                 variant="outlined"
                 label="Shelf"
                 placeholder="Search shelves..."
-                required
                 helperText={item.error?.shelf}
 
               />
@@ -246,7 +245,6 @@ const Create = () => {
                 variant="outlined"
                 label="Shelf Row"
                 placeholder="Search shelf rows..."
-                required
                 helperText={item.error?.row}
 
               />
@@ -277,7 +275,6 @@ const Create = () => {
                 variant="outlined"
                 label="Shelf Box"
                 placeholder="Search shelf boxes..."
-                required
                 helperText={item.error?.box}
 
               />

@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppState, AppDispatch } from "../../store/store";
@@ -43,8 +43,8 @@ const Create = () => {
     dispatch(fetchItems(params));
   }, []);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
 
     try {
       await dispatch(createTransfer(formData)).unwrap();
@@ -258,7 +258,7 @@ const Create = () => {
             color="primary"
             fullWidth
             disabled={transfer.loading || selectedItems.length <= 0}
-            onClick={() => handleSubmit}
+            onClick={() => handleSubmit()}
             className="mt-4"
           >
             {transfer.loading ? <CircularProgress size={24} /> : "Create"}

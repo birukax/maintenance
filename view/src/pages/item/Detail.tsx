@@ -94,7 +94,7 @@ const Detail = () => {
       </div>
       <h2>Detail</h2>
       <div className="rw">
-        <div className="clmn" style={{ width: "100%", overflow: "scroll" }}>
+        <div className="clmn" style={{ width: "100%", overflow: "auto" }}>
           <Typography variant="h6">Suppliers:</Typography>
           <Table sx={{ width: "100%" }} className="table">
             <TableHead>

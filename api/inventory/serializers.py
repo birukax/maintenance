@@ -117,15 +117,27 @@ class ItemSerializer(serializers.ModelSerializer):
     )
     shelf = ShelfSerializer(read_only=True)
     shelf_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=Shelf.objects.all(), source="shelf"
+        write_only=True,
+        queryset=Shelf.objects.all(),
+        source="shelf",
+        required=False,
+        allow_null=True,
     )
     row = ShelfRowSerializer(read_only=True)
     row_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=ShelfRow.objects.all(), source="row"
+        write_only=True,
+        queryset=ShelfRow.objects.all(),
+        source="row",
+        required=False,
+        allow_null=True,
     )
     box = ShelfBoxSerializer(read_only=True)
     box_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=ShelfBox.objects.all(), source="box"
+        write_only=True,
+        queryset=ShelfBox.objects.all(),
+        source="box",
+        required=False,
+        allow_null=True,
     )
     # inventory = serializers.SerializerMethodField(read_only=True)
     suppliers = ContactSerializer(read_only=True, many=True, required=False)

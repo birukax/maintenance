@@ -63,7 +63,7 @@ class Activity(BaseCreatedUpdated):
     )
 
     class Meta:
-        ordering = ["description"]
+        ordering = ["created_at"]
         verbose_name_plural = "Activities"
 
     def __str__(self):

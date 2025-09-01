@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchPurchaseRequest, receivePurchaseRequest } from "../../../../store/slices/purchaseRequestSlice";
 import { AppState, AppDispatch } from "../../../../store/store";
@@ -45,8 +45,7 @@ const ReceiveList = () => {
     });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     try {
       await dispatch(receivePurchaseRequest({ id, formData })).unwrap()
       navigate(`/purchase-request/detail/${id}`)
@@ -58,7 +57,7 @@ const ReceiveList = () => {
   const handleFormChange = async (data: FormData) => {
 
     setFormData(prev => {
-      const existingItem = prev.received_items.find((item: Data) => item.item_id === data.item.id);
+      const existingItem = prev.received_items.find((item: Data) => item.item_id === data.item_id);
       if (!existingItem) {
         return {
           ...prev,
@@ -111,7 +110,7 @@ const ReceiveList = () => {
             variant="contained"
             className="bg-slate-700"
             sx={{ marginRight: ".5rem" }}
-            onClick={() => handleSubmit}
+            onClick={() => handleSubmit()}
           >
             Receive
           </Button>

@@ -81,7 +81,6 @@ const Action: FC<ActionProps> = ({ entityState, setModalOpen }) => {
           fullWidth
           value={formData.remark}
           onChange={(e) => setFormData({ ...formData, remark: e.target.value })}
-          required
           disabled={transferApproval.loading}
           helperText={transferApproval?.error?.remark}
         />

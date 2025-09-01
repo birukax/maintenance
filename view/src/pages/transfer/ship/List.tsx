@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchTransfer } from "../../../store/slices/transferSlice";
 import { AppState, AppDispatch } from "../../../store/store";
@@ -31,8 +31,7 @@ const ShipList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate()
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     try {
       await dispatch(shipTransfer({ id, formData })).unwrap()
       navigate(`/transfer/detail/${id}`)
@@ -49,7 +48,7 @@ const ShipList = () => {
           variant="contained"
           className="bg-slate-700"
           sx={{ marginRight: ".5rem" }}
-          onClick={() => handleSubmit}
+          onClick={() => handleSubmit()}
         >
           Ship
         </Button>
@@ -63,7 +62,7 @@ const ShipList = () => {
 
 
     setFormData(prev => {
-      const existingItem = prev.shipped_items.find((item: Data) => item.item_id === data.item.id);
+      const existingItem = prev.shipped_items.find((item: Data) => item.item_id === data.item_id);
       if (!existingItem) {
         return {
           ...prev,

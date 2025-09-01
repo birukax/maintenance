@@ -42,7 +42,7 @@ class Request(BaseCreatedUpdated):
         on_delete=models.RESTRICT,
         related_name="purchase_requests",
     )
-    requested_date = models.DateField(default=datetime.date.today)
+    requested_date = models.DateField(default=datetime.date.today())
     approved_date = models.DateField(null=True, blank=True)
     priority = models.CharField(
         choices=choices.PRIORITIES, max_length=25, default="MEDIUM"

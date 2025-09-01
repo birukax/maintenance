@@ -362,7 +362,7 @@ const Detail = () => {
                   return (
                     <TableRow key={work_order_clearance?.id}>
                       <TableCell>{work_order_clearance?.description}</TableCell>
-                      <TableCell>{work_order_clearance?.value ? <Typography color='success'>Checked</Typography> : <Typography color='error'>Not Checked</Typography>}</TableCell>
+                      <TableCell>{work_order_clearance?.value ? <Typography color='success'>Yes</Typography> : <Typography color='error'>No</Typography>}</TableCell>
                       <TableCell>{work_order_clearance?.remark}</TableCell>
                     </TableRow>
                   );

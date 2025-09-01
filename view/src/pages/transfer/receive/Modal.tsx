@@ -53,9 +53,9 @@ const Receive: FC<ReceiveProps> = ({ entityState, setReceiveModalOpen }) => {
         Receive Transfer
       </Typography>
       <Box
-        sx={{ maxWidth: "100%", height: "100%", overflow: "scroll" }}
+        sx={{ maxWidth: "100%", height: "100%" }}
       >
-        <Table className='my-3!' size='small' sx={{ maxWidth: "100%" }} aria-label={` table`}>
+        <Table className='py-6! my-3!' size='small' sx={{ maxWidth: "100%", overflow: "scroll" }} aria-label={` table`}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -97,20 +97,22 @@ const Receive: FC<ReceiveProps> = ({ entityState, setReceiveModalOpen }) => {
 
           </TableBody>
         </Table>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          disabled={entityState.loading}
-          className="mt-4"
-          onClick={() => handlereceiveTransfer(entityState.data.id)}
-        >
-          {entityState.loading ? (
-            <CircularProgress size={24} />
-          ) : (
-            "Receive All"
-          )}
-        </Button>
+        <div className='w-fit! ml-auto'>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={entityState.loading}
+            className="mt-4"
+            onClick={() => handlereceiveTransfer(entityState.data.id)}
+          >
+            {entityState.loading ? (
+              <CircularProgress size={24} />
+            ) : (
+              "Receive"
+            )}
+          </Button>
+        </div>
         {entityState.error && (
           <Typography variant="body2" className="mt-4 text-red-500">
             {entityState.error?.detail}

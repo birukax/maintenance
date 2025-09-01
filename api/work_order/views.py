@@ -87,6 +87,7 @@ class WorkOrderViewSet(viewsets.ModelViewSet):
         "status": ["exact"],
         "start_date": ["exact", "gte", "lte"],
         "end_date": ["exact", "gte", "lte"],
+        "schedule__id": ["exact"],
     }
 
     def perform_create(self, serializer):

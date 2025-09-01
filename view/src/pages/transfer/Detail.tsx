@@ -33,18 +33,18 @@ const Detail = () => {
               />
             </Modal>
           </>
+          {entityState?.data && (entityState?.data?.transfer_items?.every((el: Data) => Number(el.requested_quantity) > Number(el.received_quantity))) &&
+            <Button
+              size='small'
+              onClick={() => setReceiveModalOpen(true)}
+              variant="contained"
+              sx={{ mr: 1 }}
+              disabled={entityState?.data && (entityState?.data?.transfer_items?.every((el: Data) => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data?.transfer_items?.every((el: Data) => el.shipped_quantity === 0)) ? true : false}
+            >
+              Receive
+            </Button>}
 
-          <Button
-            size='small'
-            onClick={() => setReceiveModalOpen(true)}
-            variant="contained"
-            sx={{ mr: 1 }}
-            disabled={entityState?.data && entityState?.data?.transfer_items?.every((el: Data) => Number(el.requested_quantity) === Number(el.received_quantity)) || entityState?.data && entityState?.data?.transfer_items?.every((el: Data) => el.shipped_quantity === 0) ? true : false}
-          >
-            Receive
-          </Button>
-
-          {entityState?.data && entityState?.data?.transfer_items?.every((el: Data) => el.remaining_quantity < 1) ? "" : <Button
+          {entityState?.data && (entityState?.data?.transfer_items?.every((el: Data) => (el.remaining_quantity <= 0)) || entityState?.data?.transfer_items?.every((el: Data) => ((el.requested_quantity - el.shipped_quantity - el.total_shipped_quantity) <= 0))) ? <> </> : <Button
             size='small'
             component={Link}
             to={`/transfer/${entityState.data.id}/ship`}

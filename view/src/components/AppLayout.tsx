@@ -97,6 +97,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
         "/items",
         "/inventories",
         "/locations",
+        '/contacts',
         "/unit-of-measures",
         "/transfers",
       ],
@@ -159,12 +160,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItemButton>
-        <ListItemButton selected={location.pathname === "/contacts"} component={Link} to="/contacts">
-          <ListItemIcon>
-            <ContactsIcon color="primary" />
-          </ListItemIcon>
-          <ListItemText primary="Contacts" />
-        </ListItemButton>
+
         <ListItemButton onClick={() => toggleSection("shelf")}>
           <ListItemText primary="Shelf" />
           {openSections.shelf ? (
@@ -235,6 +231,13 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
                 primary="Location"
                 sx={{ minWidth: "fit-content" }}
               />
+            </ListItemButton>
+            <ListItemButton selected={location.pathname === "/contacts"} component={Link} to="/contacts" sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <ContactsIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary="Contacts"
+                sx={{ minWidth: "fit-content" }} />
             </ListItemButton>
             <ListItemButton selected={location.pathname === "/unit-of-measures"}
               component={Link}
